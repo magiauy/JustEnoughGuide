@@ -56,7 +56,7 @@ import java.util.Optional;
 import java.util.logging.Level;
 
 @SuppressWarnings("deprecation")
-public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements SlimefunGuideImplementation, MyGuideImplementation {
+public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements SlimefunGuideImplementation {
 
     private static final int MAX_ITEM_GROUPS = 36;
 

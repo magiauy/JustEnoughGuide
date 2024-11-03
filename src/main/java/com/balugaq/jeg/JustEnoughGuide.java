@@ -39,12 +39,15 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
     public static ConfigManager getConfigManager() {
         return getInstance().configManager;
     }
+
     public static ListenerManager getListenerManager() {
         return getInstance().listenerManager;
     }
+
     public static JustEnoughGuide getInstance() {
         return JustEnoughGuide.instance;
     }
+
     @Override
     public void onEnable() {
         instance = this;

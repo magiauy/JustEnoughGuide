@@ -21,6 +21,7 @@ public final class ItemStackUtil {
 
         return cloneItem;
     }
+
     @Nonnull
     public static ItemStack getCleanItem(@Nullable ItemStack item) {
         if (item == null) {

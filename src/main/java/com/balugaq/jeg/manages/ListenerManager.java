@@ -9,15 +9,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListenerManager {
-    private JustEnoughGuide plugin;
     List<Listener> listeners = new ArrayList<>();
+    private JustEnoughGuide plugin;
+
     public ListenerManager(JustEnoughGuide plugin) {
         listeners.add(new GuideListener());
         registerListeners();
     }
 
     private void registerListeners() {
-        for(Listener listener : listeners) {
+        for (Listener listener : listeners) {
             Bukkit.getServer().getPluginManager().registerEvents(listener, plugin.getInstance());
         }
     }

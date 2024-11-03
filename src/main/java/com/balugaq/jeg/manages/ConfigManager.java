@@ -14,6 +14,7 @@ import java.io.Reader;
 
 public class ConfigManager {
     private final JustEnoughGuide plugin;
+
     public ConfigManager(JustEnoughGuide plugin) {
         this.plugin = plugin;
         setupDefaultConfig();
@@ -63,12 +64,15 @@ public class ConfigManager {
     public boolean isDebug() {
         return plugin.getConfig().getBoolean("debug");
     }
+
     public boolean isSurvivalImprovement() {
         return plugin.getConfig().getBoolean("guide.survival-improvements");
     }
+
     public boolean isCheatImprovement() {
         return plugin.getConfig().getBoolean("guide.cheat-improvements");
     }
+
     public boolean isPinyinSearch() {
         return plugin.getConfig().getBoolean("guide.pinyin-search");
     }
