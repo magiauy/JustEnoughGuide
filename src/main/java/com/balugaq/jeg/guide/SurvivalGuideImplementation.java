@@ -2,6 +2,7 @@ package com.balugaq.jeg.guide;
 
 import city.norain.slimefun4.VaultIntegration;
 import com.balugaq.jeg.JustEnoughGuide;
+import com.balugaq.jeg.group.SearchGroup;
 import com.balugaq.jeg.utils.ItemStackUtil;
 import com.github.houbb.pinyin.constant.enums.PinyinStyleEnum;
 import com.github.houbb.pinyin.util.PinyinHelper;
@@ -56,7 +57,7 @@ import java.util.Optional;
 import java.util.logging.Level;
 
 @SuppressWarnings("deprecation")
-public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implements SlimefunGuideImplementation {
+public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implements SlimefunGuideImplementation, MyGuideImplementation {
 
     private static final int MAX_ITEM_GROUPS = 36;
 
@@ -402,14 +403,14 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
             return;
         }
 
+        String searchTerm = ChatColor.stripColor(input.toLowerCase(Locale.ROOT));
+        SearchGroup group = new SearchGroup(this, p, searchTerm, JustEnoughGuide.getConfigManager().isPinyinSearch());
+        group.open(p, profile, getMode());
+
+        /*
+
         ChestMenu menu = new ChestMenu("你正在搜索: %item%"
                 .replace("%item%", ChatUtils.crop(ChatColor.WHITE, input)));
-        String searchTerm = ChatColor.stripColor(input.toLowerCase(Locale.ROOT));
-
-        if (addToHistory) {
-            profile.getGuideHistory().add(searchTerm);
-        }
-
         menu.setEmptySlotsClickable(false);
         createHeader(p, profile, menu);
         addBackButton(menu, 1, p, profile);
@@ -470,6 +471,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         });
 
         menu.open(p);
+         */
     }
 
     private List<SlimefunItem> getAllMatchedItems(Player p, String searchTerm, boolean pinyin) {

@@ -10,6 +10,7 @@ import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.groups.FlexItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.groups.LockedItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.groups.SubItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.api.researches.Research;
@@ -55,7 +56,7 @@ import java.util.Optional;
 import java.util.logging.Level;
 
 @SuppressWarnings("deprecation")
-public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements SlimefunGuideImplementation {
+public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements SlimefunGuideImplementation, MyGuideImplementation {
 
     private static final int MAX_ITEM_GROUPS = 36;
 
@@ -128,12 +129,28 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
 
         for (ItemGroup group : Slimefun.getRegistry().getAllItemGroups()) {
             try {
+                SlimefunAddon addon = group.getAddon();
+                String name;
+                boolean customedGui = false;
+                if (addon == null) {
+                    name = group.getKey().getKey();
+                } else {
+                    name = addon.getName();
+                }
+                if (name.equals("Networks") || name.equals("FinalTECH") || name.equals("FinalTECH-Changed")) {
+                    customedGui = true;
+                }
                 if (group instanceof FlexItemGroup flexItemGroup) {
-                    if (flexItemGroup.isVisible(p, profile, SlimefunGuideMode.SURVIVAL_MODE)) {
+                    if (!customedGui && flexItemGroup.isVisible(p, profile, SlimefunGuideMode.SURVIVAL_MODE)) {
                         groups.add(group);
                     }
                 } else if (!group.isHidden(p)) {
                     groups.add(group);
+                }
+                if (group instanceof SubItemGroup subItemGroup) {
+                    if (customedGui) {
+                        groups.add(group);
+                    }
                 }
             } catch (Exception | LinkageError x) {
                 SlimefunAddon addon = group.getAddon();
@@ -253,7 +270,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
         }
 
         if (itemGroup instanceof FlexItemGroup flexItemGroup) {
-            flexItemGroup.open(p, profile, SlimefunGuideMode.SURVIVAL_MODE);
+            flexItemGroup.open(p, profile, SlimefunGuideMode.CHEAT_MODE);
             return;
         }
 

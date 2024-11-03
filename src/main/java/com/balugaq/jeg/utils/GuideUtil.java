@@ -12,8 +12,11 @@ import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Deque;
 
 /**
  * @author Final_ROOT, balugaq
@@ -53,6 +56,33 @@ public class GuideUtil {
             getLastEntry.setAccessible(true);
             getLastEntry.invoke(guideHistory, true);
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void addEntry(@Nonnull GuideHistory history, @Nonnull Object object, int page) {
+        try {
+            Class<?> guideEntryClass = Class.forName("io.github.thebusybiscuit.slimefun4.core.guide.GuideEntry");
+
+            Constructor<?> constructor = guideEntryClass.getDeclaredConstructor(Object.class, int.class);
+
+            constructor.setAccessible(true);
+
+            Object newEntry = constructor.newInstance(object, page);
+
+            Class<?> guideHistoryClass = history.getClass();
+            Field queueField = guideHistoryClass.getDeclaredField("queue");
+
+            queueField.setAccessible(true);
+
+            Deque<Object> queue = (Deque<Object>) queueField.get(history);
+
+            queue.add(guideEntryClass.cast(newEntry));
+
+            constructor.setAccessible(false);
+            queueField.setAccessible(false);
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
