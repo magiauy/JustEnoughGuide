@@ -1,0 +1,13 @@
+# Auto update from Guizhan Build is enabled by default.
+auto-update: true
+
+guide:
+  survival-improvements: true
+  cheat-improvements: true
+  pinyin-search: true
+
+# Do not change this value unless you know what you are doing.
+config-version: 1.0
+
+# Do not change this value unless you know what you are doing.
+debug: false
