@@ -3,6 +3,10 @@ package com.balugaq.jeg.guide;
 import city.norain.slimefun4.VaultIntegration;
 import com.balugaq.jeg.JustEnoughGuide;
 import com.balugaq.jeg.group.SearchGroup;
+import com.balugaq.jeg.interfaces.DisplayInCheatMode;
+import com.balugaq.jeg.interfaces.DisplayInSurvivalMode;
+import com.balugaq.jeg.interfaces.NotDisplayInCheatMode;
+import com.balugaq.jeg.interfaces.NotDisplayInSurvivalMode;
 import com.github.houbb.pinyin.constant.enums.PinyinStyleEnum;
 import com.github.houbb.pinyin.util.PinyinHelper;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
@@ -123,6 +127,12 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
 
         for (ItemGroup group : Slimefun.getRegistry().getAllItemGroups()) {
             try {
+                if (group.getClass().isAnnotationPresent(NotDisplayInSurvivalMode.class)) {
+                    continue;
+                }
+                if (group.getClass().isAnnotationPresent(DisplayInSurvivalMode.class)) {
+                    groups.add(group);
+                }
                 if (group instanceof FlexItemGroup flexItemGroup) {
                     if (flexItemGroup.isVisible(p, profile, getMode())) {
                         groups.add(group);

@@ -2,6 +2,8 @@ package com.balugaq.jeg.guide;
 
 import city.norain.slimefun4.VaultIntegration;
 import com.balugaq.jeg.JustEnoughGuide;
+import com.balugaq.jeg.interfaces.DisplayInCheatMode;
+import com.balugaq.jeg.interfaces.NotDisplayInCheatMode;
 import com.balugaq.jeg.utils.ItemStackUtil;
 import com.github.houbb.pinyin.constant.enums.PinyinStyleEnum;
 import com.github.houbb.pinyin.util.PinyinHelper;
@@ -10,6 +12,7 @@ import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.groups.FlexItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.groups.LockedItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.groups.NestedItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.groups.SubItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
@@ -38,6 +41,7 @@ import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu.MenuClickHandler;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
@@ -57,7 +61,6 @@ import java.util.logging.Level;
 
 @SuppressWarnings("deprecation")
 public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements SlimefunGuideImplementation {
-
     private static final int MAX_ITEM_GROUPS = 36;
 
     private final int[] recipeSlots = {3, 4, 5, 12, 13, 14, 21, 22, 23};
@@ -129,28 +132,38 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
 
         for (ItemGroup group : Slimefun.getRegistry().getAllItemGroups()) {
             try {
-                SlimefunAddon addon = group.getAddon();
-                String name;
-                boolean customedGui = false;
-                if (addon == null) {
-                    name = group.getKey().getKey();
-                } else {
-                    name = addon.getName();
+                if (group.getClass().isAnnotationPresent(NotDisplayInCheatMode.class)) {
+                    continue;
                 }
-                if (name.equals("Networks") || name.equals("FinalTECH") || name.equals("FinalTECH-Changed")) {
-                    customedGui = true;
+                if (group.getClass().isAnnotationPresent(DisplayInCheatMode.class)) {
+                    groups.add(group);
                 }
                 if (group instanceof FlexItemGroup flexItemGroup) {
-                    if (!customedGui && flexItemGroup.isVisible(p, profile, SlimefunGuideMode.SURVIVAL_MODE)) {
+                    NamespacedKey key = group.getKey();
+                    String namespace = key.getNamespace();
+                    if (namespace.equalsIgnoreCase("networks") || namespace.equalsIgnoreCase("networks-changed")) {
+                        if (group.getClass().getName().equalsIgnoreCase("com.balugaq.netex.api.groups.MainItemGroup")) {
+                            continue;
+                        }
+                        if (group instanceof NestedItemGroup) {
+                            groups.add(group);
+                            continue;
+                        }
+                    }
+                    if (namespace.equalsIgnoreCase("finaltech") || namespace.equalsIgnoreCase("finaltech-changed")) {
+                        if (group.getClass().getName().equalsIgnoreCase("io.taraxacum.finaltech.core.group.MainItemGroup")) {
+                            continue;
+                        }
+                        if (group instanceof NestedItemGroup) {
+                            groups.add(group);
+                            continue;
+                        }
+                    }
+                    if (flexItemGroup.isVisible(p, profile, SlimefunGuideMode.SURVIVAL_MODE)) {
                         groups.add(group);
                     }
                 } else if (!group.isHidden(p)) {
                     groups.add(group);
-                }
-                if (group instanceof SubItemGroup subItemGroup) {
-                    if (customedGui) {
-                        groups.add(group);
-                    }
                 }
             } catch (Exception | LinkageError x) {
                 SlimefunAddon addon = group.getAddon();
