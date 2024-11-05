@@ -117,7 +117,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
     }
 
     protected boolean isCheatMode() {
-        return false;
+        return true;
     }
 
     /**
@@ -129,7 +129,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
      */
     protected @Nonnull List<ItemGroup> getVisibleItemGroups(@Nonnull Player p, @Nonnull PlayerProfile profile) {
         List<ItemGroup> groups = new LinkedList<>();
-        List<ItemGroup> hiddenGroups = new LinkedList<>();
+        List<ItemGroup> specialGroups = new LinkedList<>();
 
         for (ItemGroup group : Slimefun.getRegistry().getAllItemGroups()) {
             try {
@@ -166,11 +166,15 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                 } else if (!group.isHidden(p)) {
                     groups.add(group);
                 } else if (group instanceof SeasonalItemGroup || group instanceof LockedItemGroup) {
-                    groups.add(group);
+                    specialGroups.add(group);
                 } else {
-                    if (group.getClass().getName().equalsIgnoreCase("io.github.mooy1.infinitylib.groups.SubGroup")) {
-                        if (group.getKey().getKey().equalsIgnoreCase("infinity_cheat") || group.getKey().getKey().equalsIgnoreCase("omc_forge_cheat")) {
-                            groups.add(group);
+                    if (group.getClass().getName().equalsIgnoreCase("io.github.mooy1.infinityexpansion.infinitylib.groups.SubGroup")) {
+                        if (group.getKey().getKey().equalsIgnoreCase("infinity_cheat")) {
+                            specialGroups.add(group);
+                        }
+                    } else if (group.getClass().getName().equalsIgnoreCase("me.lucasgithuber.obsidianexpansion.infinitylib.groups.SubGroup")) {
+                        if (group.getKey().getKey().equalsIgnoreCase("omc_forge_cheat")) {
+                            specialGroups.add(group);
                         }
                     }
                 }
@@ -185,7 +189,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             }
         }
 
-        groups.addAll(hiddenGroups);
+        groups.addAll(specialGroups);
 
         return groups;
     }
