@@ -1,6 +1,8 @@
 package com.balugaq.jeg.group;
 
 import com.balugaq.jeg.JustEnoughGuide;
+import com.balugaq.jeg.interfaces.NotDisplayInCheatMode;
+import com.balugaq.jeg.interfaces.NotDisplayInSurvivalMode;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
 import com.github.houbb.pinyin.constant.enums.PinyinStyleEnum;
@@ -38,6 +40,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 
+@NotDisplayInSurvivalMode
+@NotDisplayInCheatMode
 public class SearchGroup extends FlexItemGroup {
     private static final int BACK_SLOT = 1;
     private static final int SEARCH_SLOT = 7;

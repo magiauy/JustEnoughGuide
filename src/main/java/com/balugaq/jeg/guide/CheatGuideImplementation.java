@@ -13,6 +13,7 @@ import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.groups.FlexItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.groups.LockedItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.groups.NestedItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.groups.SeasonalItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.api.researches.Research;
@@ -58,7 +59,7 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.logging.Level;
 
-@SuppressWarnings("deprecation")
+@SuppressWarnings({"deprecation", "unused"})
 public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements SlimefunGuideImplementation {
     private static final int MAX_ITEM_GROUPS = 36;
 
@@ -128,6 +129,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
      */
     protected @Nonnull List<ItemGroup> getVisibleItemGroups(@Nonnull Player p, @Nonnull PlayerProfile profile) {
         List<ItemGroup> groups = new LinkedList<>();
+        List<ItemGroup> hiddenGroups = new LinkedList<>();
 
         for (ItemGroup group : Slimefun.getRegistry().getAllItemGroups()) {
             try {
@@ -163,6 +165,14 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                     }
                 } else if (!group.isHidden(p)) {
                     groups.add(group);
+                } else if (group instanceof SeasonalItemGroup || group instanceof LockedItemGroup) {
+                    groups.add(group);
+                } else {
+                    if (group.getClass().getName().equalsIgnoreCase("io.github.mooy1.infinitylib.groups.SubGroup")) {
+                        if (group.getKey().getKey().equalsIgnoreCase("infinity_cheat") || group.getKey().getKey().equalsIgnoreCase("omc_forge_cheat")) {
+                            groups.add(group);
+                        }
+                    }
                 }
             } catch (Exception | LinkageError x) {
                 SlimefunAddon addon = group.getAddon();
@@ -174,6 +184,8 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                 }
             }
         }
+
+        groups.addAll(hiddenGroups);
 
         return groups;
     }
