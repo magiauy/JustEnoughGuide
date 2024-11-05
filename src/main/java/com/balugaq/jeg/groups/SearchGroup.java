@@ -1,4 +1,4 @@
-package com.balugaq.jeg.group;
+package com.balugaq.jeg.groups;
 
 import com.balugaq.jeg.JustEnoughGuide;
 import com.balugaq.jeg.interfaces.NotDisplayInCheatMode;
@@ -65,7 +65,7 @@ public class SearchGroup extends FlexItemGroup {
     private Map<Integer, SearchGroup> pageMap = new LinkedHashMap<>();
 
     public SearchGroup(SlimefunGuideImplementation implementation, Player player, String searchTerm, boolean pinyin) {
-        super(new NamespacedKey(JAVA_PLUGIN, "jeg_search_group_" + UUID.randomUUID().toString()), new ItemStack(Material.STONE));
+        super(new NamespacedKey(JAVA_PLUGIN, "jeg_search_group_" + UUID.randomUUID()), new ItemStack(Material.STONE));
         this.page = 1;
         this.searchTerm = searchTerm;
         this.pinyin = pinyin;

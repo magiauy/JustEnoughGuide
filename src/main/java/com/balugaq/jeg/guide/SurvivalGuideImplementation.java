@@ -2,7 +2,7 @@ package com.balugaq.jeg.guide;
 
 import city.norain.slimefun4.VaultIntegration;
 import com.balugaq.jeg.JustEnoughGuide;
-import com.balugaq.jeg.group.SearchGroup;
+import com.balugaq.jeg.groups.SearchGroup;
 import com.balugaq.jeg.interfaces.DisplayInSurvivalMode;
 import com.balugaq.jeg.interfaces.NotDisplayInSurvivalMode;
 import com.github.houbb.pinyin.constant.enums.PinyinStyleEnum;
@@ -410,83 +410,6 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         String searchTerm = ChatColor.stripColor(input.toLowerCase(Locale.ROOT));
         SearchGroup group = new SearchGroup(this, p, searchTerm, JustEnoughGuide.getConfigManager().isPinyinSearch());
         group.open(p, profile, getMode());
-
-        /*
-
-        ChestMenu menu = new ChestMenu("你正在搜索: %item%"
-                .replace("%item%", ChatUtils.crop(ChatColor.WHITE, input)));
-        menu.setEmptySlotsClickable(false);
-        createHeader(p, profile, menu);
-        addBackButton(menu, 1, p, profile);
-
-        List<SlimefunItem> items = getAllMatchedItems(p, searchTerm, JustEnoughGuide.getConfigManager().isPinyinSearch());
-
-        int size = items.size();
-        List<SlimefunItem> showed = items.subList(page * 36, Math.min(size, (page + 1) * 36));
-
-        int index = 9;
-        for (int i = 0; i < 36 && i < showed.size(); i++) {
-
-            SlimefunItem slimefunItem = showed.get(i);
-            ItemStack itemstack = new CustomItemStack(slimefunItem.getItem(), meta -> {
-                ItemGroup itemGroup = slimefunItem.getItemGroup();
-                List<String> additionLore = List.of("", ChatColor.DARK_GRAY + "\u21E8 " + ChatColor.WHITE + (itemGroup.getAddon() == null ? "Slimefun" : itemGroup.getAddon().getName()) + " - " + itemGroup.getDisplayName(p));
-                if (meta.hasLore() && meta.getLore() != null) {
-                    List<String> lore = meta.getLore();
-                    lore.addAll(additionLore);
-                    meta.setLore(lore);
-                } else {
-                    meta.setLore(additionLore);
-                }
-
-                meta.addItemFlags(
-                        ItemFlag.HIDE_ATTRIBUTES,
-                        ItemFlag.HIDE_ENCHANTS,
-                        VersionedItemFlag.HIDE_ADDITIONAL_TOOLTIP);
-            });
-            menu.addItem(index, ItemStackUtil.getCleanItem(itemstack), (pl, slot, itm, action) -> {
-                try {
-                    if (!isSurvivalMode()) {
-                        pl.getInventory().addItem(slimefunItem.getItem().clone());
-                    } else {
-                        displayItem(profile, slimefunItem, true);
-                    }
-                } catch (Exception | LinkageError x) {
-                    printErrorMessage(pl, slimefunItem, x);
-                }
-
-                return false;
-            });
-            index++;
-        }
-
-        menu.addItem(46, ChestMenuUtils.getPreviousButton(p, page + 1, size / 36 + 1), (pl, slot, action, stack) -> {
-            if (page > 0) {
-                openSearch(profile, input, page - 1, false);
-            }
-            return false;
-        });
-
-        menu.addItem(52, ChestMenuUtils.getNextButton(p, page + 1, size / 36 + 1), (pl, slot, action, stack) -> {
-            if (page < size / 36) {
-                openSearch(profile, input, page + 1, false);
-            }
-            return false;
-        });
-
-        menu.open(p);
-         */
-    }
-
-    private List<SlimefunItem> getAllMatchedItems(Player p, String searchTerm, boolean pinyin) {
-        return Slimefun.getRegistry().getEnabledSlimefunItems()
-                .stream()
-                .filter(slimefunItem -> {
-                    return !slimefunItem.isHidden()
-                            && isItemGroupAccessible(p, slimefunItem)
-                            && isSearchFilterApplicable(slimefunItem, searchTerm, pinyin);
-                })
-                .toList();
     }
 
     @ParametersAreNonnullByDefault
