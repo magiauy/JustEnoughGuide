@@ -107,8 +107,12 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
     }
 
     public void tryUpdate() {
-        if (getConfigManager().isAutoUpdate() && getDescription().getVersion().startsWith("Build")) {
-            GuizhanUpdater.start(this, getFile(), username, repo, branch);
+        try {
+            if (getConfigManager().isAutoUpdate() && getDescription().getVersion().startsWith("Build")) {
+                GuizhanUpdater.start(this, getFile(), username, repo, branch);
+            }
+        } catch (UnsupportedClassVersionError ignored) {
+            getLogger().warning("自动更新失败！");
         }
     }
 
