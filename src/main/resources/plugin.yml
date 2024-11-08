@@ -9,3 +9,10 @@ depend:
   - Slimefun
 softdepend:
   - GuizhanLibPlugin
+commands:
+  justenoughguide:
+    aliases:
+      - jeg
+      - justenoughguide
+    description: /justenoughguide
+    usage: /justenoughguide <sub>

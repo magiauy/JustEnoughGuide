@@ -1,5 +1,6 @@
 package com.balugaq.jeg.implementation;
 
+import com.balugaq.jeg.core.commands.JEGCommands;
 import com.balugaq.jeg.core.managers.BookmarkManager;
 import com.balugaq.jeg.core.managers.CommandManager;
 import com.balugaq.jeg.core.managers.ConfigManager;

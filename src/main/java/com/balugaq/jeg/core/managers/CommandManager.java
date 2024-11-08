@@ -1,6 +1,7 @@
 package com.balugaq.jeg.core.managers;
 
 import com.balugaq.jeg.core.commands.JEGCommands;
+import com.balugaq.jeg.implementation.JustEnoughGuide;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -8,9 +9,9 @@ import java.util.List;
 
 public class CommandManager {
 
-    private final JavaPlugin plugin;
+    private final JustEnoughGuide plugin;
 
-    public CommandManager(JavaPlugin plugin) {
+    public CommandManager(JustEnoughGuide plugin) {
         this.plugin = plugin;
     }
 
