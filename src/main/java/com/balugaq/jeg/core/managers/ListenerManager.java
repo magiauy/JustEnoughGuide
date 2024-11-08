@@ -13,6 +13,7 @@ public class ListenerManager {
     private JavaPlugin plugin;
 
     public ListenerManager(JavaPlugin plugin) {
+        this.plugin = plugin;
         listeners.add(new GuideListener());
         registerListeners();
     }
