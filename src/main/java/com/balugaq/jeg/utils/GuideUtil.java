@@ -34,6 +34,7 @@ public class GuideUtil {
             Material.WRITABLE_BOOK,
             "&e&l收藏物品"
     ));
+
     @ParametersAreNonnullByDefault
     public static void openMainMenuAsync(Player player, SlimefunGuideMode mode, int selectedPage) {
         if (!PlayerProfile.get(player, profile -> Slimefun.runSync(() -> openMainMenu(player, profile, mode, selectedPage)))) {

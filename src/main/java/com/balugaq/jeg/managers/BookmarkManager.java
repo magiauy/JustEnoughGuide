@@ -1,11 +1,9 @@
 package com.balugaq.jeg.managers;
 
-import com.balugaq.jeg.JustEnoughGuide;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerBackpack;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import lombok.Getter;
 import org.bukkit.Material;
@@ -20,7 +18,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -30,6 +27,7 @@ public class BookmarkManager {
     private static final String BACKPACK_NAME = "JEGBookmarkBackpack";
     private final NamespacedKey BOOKMARKS_KEY;
     private final Plugin plugin;
+
     public BookmarkManager(@Nonnull Plugin plugin) {
         this.plugin = plugin;
         this.BOOKMARKS_KEY = new NamespacedKey(plugin, "bookmarks");

@@ -63,6 +63,7 @@ public class ItemMarkGroup extends FlexItemGroup {
     public ItemMarkGroup(JEGSlimefunGuideImplementation implementation, ItemGroup itemGroup, Player player) {
         this(implementation, itemGroup, player, 1);
     }
+
     public ItemMarkGroup(JEGSlimefunGuideImplementation implementation, ItemGroup itemGroup, Player player, int page) {
         super(new NamespacedKey(JAVA_PLUGIN, "jeg_item_mark_group_" + UUID.randomUUID()), new ItemStack(Material.BARRIER));
         this.page = page;

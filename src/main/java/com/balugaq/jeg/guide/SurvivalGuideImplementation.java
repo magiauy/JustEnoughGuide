@@ -2,8 +2,6 @@ package com.balugaq.jeg.guide;
 
 import city.norain.slimefun4.VaultIntegration;
 import com.balugaq.jeg.JustEnoughGuide;
-import com.balugaq.jeg.groups.BookmarkGroup;
-import com.balugaq.jeg.groups.ItemMarkGroup;
 import com.balugaq.jeg.groups.SearchGroup;
 import com.balugaq.jeg.interfaces.BookmarkRelocation;
 import com.balugaq.jeg.interfaces.DisplayInSurvivalMode;
@@ -27,7 +25,6 @@ import io.github.thebusybiscuit.slimefun4.api.researches.Research;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.core.guide.GuideHistory;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuide;
-import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
 import io.github.thebusybiscuit.slimefun4.core.guide.options.SlimefunGuideSettings;
 import io.github.thebusybiscuit.slimefun4.core.multiblocks.MultiBlock;

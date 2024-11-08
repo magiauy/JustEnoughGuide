@@ -14,7 +14,9 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 public interface JEGSlimefunGuideImplementation extends SlimefunGuideImplementation {
-    @Nonnull ChestMenu create(@Nonnull Player p);
+    @Nonnull
+    ChestMenu create(@Nonnull Player p);
+
     default void openBookMarkGroup(Player player, PlayerProfile profile) {
         List<SlimefunItem> items = JustEnoughGuide.getBookmarkManager().getBookmarkedItems(player);
         if (items == null || items.isEmpty()) {

@@ -37,9 +37,11 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
         this.repo = "JustEnoughGuide";
         this.branch = "master";
     }
+
     public static BookmarkManager getBookmarkManager() {
         return getInstance().bookmarkManager;
     }
+
     public static ConfigManager getConfigManager() {
         return getInstance().configManager;
     }
