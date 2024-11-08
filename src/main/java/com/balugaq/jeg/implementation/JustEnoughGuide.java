@@ -1,10 +1,11 @@
-package com.balugaq.jeg;
+package com.balugaq.jeg.implementation;
 
-import com.balugaq.jeg.guide.CheatGuideImplementation;
-import com.balugaq.jeg.guide.SurvivalGuideImplementation;
-import com.balugaq.jeg.managers.BookmarkManager;
-import com.balugaq.jeg.managers.ConfigManager;
-import com.balugaq.jeg.managers.ListenerManager;
+import com.balugaq.jeg.implementation.guide.CheatGuideImplementation;
+import com.balugaq.jeg.implementation.guide.SurvivalGuideImplementation;
+import com.balugaq.jeg.core.managers.BookmarkManager;
+import com.balugaq.jeg.core.managers.CommandManager;
+import com.balugaq.jeg.core.managers.ConfigManager;
+import com.balugaq.jeg.core.managers.ListenerManager;
 import com.balugaq.jeg.utils.ReflectionUtil;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation;
@@ -22,12 +23,14 @@ import java.text.MessageFormat;
 import java.util.EnumMap;
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
     private static JustEnoughGuide instance;
     private final String username;
     private final String repo;
     private final String branch;
     private BookmarkManager bookmarkManager;
+    private CommandManager commandManager;
     private ConfigManager configManager;
     private ListenerManager listenerManager;
 
@@ -41,7 +44,9 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
     public static BookmarkManager getBookmarkManager() {
         return getInstance().bookmarkManager;
     }
-
+    public static CommandManager getCommandManager() {
+        return getInstance().commandManager;
+    }
     public static ConfigManager getConfigManager() {
         return getInstance().configManager;
     }
@@ -67,6 +72,12 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
 
         getLogger().info("尝试自动更新...");
         tryUpdate();
+
+        getLogger().info("正在注册指令");
+        this.commandManager = new CommandManager(this);
+        if (!commandManager.registerCommands()) {
+            getLogger().warning("注册指令失败！");
+        }
 
         final boolean survivalOverride = getConfigManager().isSurvivalImprovement();
         final boolean cheatOverride = getConfigManager().isCheatImprovement();

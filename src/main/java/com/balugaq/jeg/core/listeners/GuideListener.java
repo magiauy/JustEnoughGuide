@@ -1,6 +1,6 @@
-package com.balugaq.jeg.listeners;
+package com.balugaq.jeg.core.listeners;
 
-import com.balugaq.jeg.JustEnoughGuide;
+import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.GuideUtil;
 import io.github.thebusybiscuit.slimefun4.api.events.SlimefunGuideOpenEvent;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;

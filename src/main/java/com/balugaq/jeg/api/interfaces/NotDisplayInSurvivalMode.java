@@ -1,4 +1,4 @@
-package com.balugaq.jeg.interfaces;
+package com.balugaq.jeg.api.interfaces;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,13 +7,13 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface DisplayInCheatMode {
+public @interface NotDisplayInSurvivalMode {
 }
 
 /*
  * Usage:
  * <p>
- * @DisplayInCheatMode
+ * @NotDisplayInSurvivalMode
  * public class MyGroup extends ItemGroup {
  *     //...
  * }

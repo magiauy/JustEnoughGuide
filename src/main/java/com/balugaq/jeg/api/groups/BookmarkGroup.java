@@ -1,9 +1,9 @@
-package com.balugaq.jeg.groups;
+package com.balugaq.jeg.api.groups;
 
 import city.norain.slimefun4.VaultIntegration;
-import com.balugaq.jeg.JustEnoughGuide;
-import com.balugaq.jeg.interfaces.NotDisplayInCheatMode;
-import com.balugaq.jeg.interfaces.NotDisplayInSurvivalMode;
+import com.balugaq.jeg.implementation.JustEnoughGuide;
+import com.balugaq.jeg.api.interfaces.NotDisplayInCheatMode;
+import com.balugaq.jeg.api.interfaces.NotDisplayInSurvivalMode;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
@@ -39,6 +39,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 
+@SuppressWarnings({"deprecation", "unused"})
 @NotDisplayInSurvivalMode
 @NotDisplayInCheatMode
 public class BookmarkGroup extends FlexItemGroup {

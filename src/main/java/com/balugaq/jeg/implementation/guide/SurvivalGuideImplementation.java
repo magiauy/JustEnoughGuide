@@ -1,12 +1,12 @@
-package com.balugaq.jeg.guide;
+package com.balugaq.jeg.implementation.guide;
 
 import city.norain.slimefun4.VaultIntegration;
-import com.balugaq.jeg.JustEnoughGuide;
-import com.balugaq.jeg.groups.SearchGroup;
-import com.balugaq.jeg.interfaces.BookmarkRelocation;
-import com.balugaq.jeg.interfaces.DisplayInSurvivalMode;
-import com.balugaq.jeg.interfaces.JEGSlimefunGuideImplementation;
-import com.balugaq.jeg.interfaces.NotDisplayInSurvivalMode;
+import com.balugaq.jeg.implementation.JustEnoughGuide;
+import com.balugaq.jeg.api.groups.SearchGroup;
+import com.balugaq.jeg.api.interfaces.BookmarkRelocation;
+import com.balugaq.jeg.api.interfaces.DisplayInSurvivalMode;
+import com.balugaq.jeg.api.interfaces.JEGSlimefunGuideImplementation;
+import com.balugaq.jeg.api.interfaces.NotDisplayInSurvivalMode;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
 import com.github.houbb.pinyin.constant.enums.PinyinStyleEnum;

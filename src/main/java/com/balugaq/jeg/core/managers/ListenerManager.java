@@ -1,25 +1,25 @@
-package com.balugaq.jeg.managers;
+package com.balugaq.jeg.core.managers;
 
-import com.balugaq.jeg.JustEnoughGuide;
-import com.balugaq.jeg.listeners.GuideListener;
+import com.balugaq.jeg.core.listeners.GuideListener;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ListenerManager {
     List<Listener> listeners = new ArrayList<>();
-    private JustEnoughGuide plugin;
+    private JavaPlugin plugin;
 
-    public ListenerManager(JustEnoughGuide plugin) {
+    public ListenerManager(JavaPlugin plugin) {
         listeners.add(new GuideListener());
         registerListeners();
     }
 
     private void registerListeners() {
         for (Listener listener : listeners) {
-            Bukkit.getServer().getPluginManager().registerEvents(listener, plugin.getInstance());
+            Bukkit.getServer().getPluginManager().registerEvents(listener, plugin);
         }
     }
 }

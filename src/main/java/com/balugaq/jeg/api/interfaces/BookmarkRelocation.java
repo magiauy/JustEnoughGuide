@@ -1,4 +1,4 @@
-package com.balugaq.jeg.interfaces;
+package com.balugaq.jeg.api.interfaces;
 
 import org.bukkit.entity.Player;
 

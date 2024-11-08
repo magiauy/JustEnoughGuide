@@ -1,9 +1,10 @@
-package com.balugaq.jeg.proxy;
+package com.balugaq.jeg.deprecated.proxy;
 
-import com.balugaq.jeg.interfaces.BookmarkRelocation;
+import com.balugaq.jeg.api.interfaces.BookmarkRelocation;
 
 import java.lang.reflect.Proxy;
 
+@SuppressWarnings("unused")
 @Deprecated
 public class ProxyFactory {
     public static BookmarkRelocation createProxy(Object targetInstance) {

@@ -1,4 +1,4 @@
-package com.balugaq.jeg.managers;
+package com.balugaq.jeg.core.managers;
 
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerBackpack;
@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+@SuppressWarnings("unused")
 @Getter
 public class BookmarkManager {
     private static final int DATA_ITEM_SLOT = 0;

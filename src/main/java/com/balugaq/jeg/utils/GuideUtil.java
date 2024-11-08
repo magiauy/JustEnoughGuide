@@ -1,7 +1,7 @@
 package com.balugaq.jeg.utils;
 
-import com.balugaq.jeg.guide.CheatGuideImplementation;
-import com.balugaq.jeg.guide.SurvivalGuideImplementation;
+import com.balugaq.jeg.implementation.guide.CheatGuideImplementation;
+import com.balugaq.jeg.implementation.guide.SurvivalGuideImplementation;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.core.guide.GuideHistory;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation;
@@ -23,7 +23,7 @@ import java.lang.reflect.Method;
  * @since 2.0
  */
 @UtilityClass
-public class GuideUtil {
+public final class GuideUtil {
     private static final SurvivalGuideImplementation SURVIVAL_GUIDE_IMPLEMENTATION = new SurvivalGuideImplementation();
     private static final CheatGuideImplementation CHEAT_GUIDE_IMPLEMENTATION = new CheatGuideImplementation();
     private static final ItemStack BOOK_MARK_MENU_BUTTON = ItemStackUtil.getCleanItem(new CustomItemStack(

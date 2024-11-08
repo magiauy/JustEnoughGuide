@@ -5,9 +5,9 @@ import lombok.experimental.UtilityClass;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+@SuppressWarnings({"unchecked", "unused"})
 @UtilityClass
-public class ReflectionUtil {
-
+public final class ReflectionUtil {
     public static boolean setValue(Object object, String field, Object value) {
         try {
             Field declaredField = object.getClass().getDeclaredField(field);

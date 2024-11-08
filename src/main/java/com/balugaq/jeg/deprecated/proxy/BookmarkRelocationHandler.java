@@ -1,8 +1,9 @@
-package com.balugaq.jeg.proxy;
+package com.balugaq.jeg.deprecated.proxy;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
+@SuppressWarnings("unused")
 @Deprecated
 public class BookmarkRelocationHandler implements InvocationHandler {
     private final Object targetInstance;

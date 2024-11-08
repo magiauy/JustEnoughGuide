@@ -1,11 +1,13 @@
 package com.balugaq.jeg.utils;
 
+import lombok.experimental.UtilityClass;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@UtilityClass
 public final class ItemStackUtil {
     @Nonnull
     public static ItemStack getCleanItem(@Nullable ItemStack item) {

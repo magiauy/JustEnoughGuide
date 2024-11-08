@@ -1,6 +1,6 @@
-package com.balugaq.jeg.managers;
+package com.balugaq.jeg.core.managers;
 
-import com.balugaq.jeg.JustEnoughGuide;
+import com.balugaq.jeg.implementation.JustEnoughGuide;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
