@@ -1,8 +1,8 @@
 package com.balugaq.jeg.api.groups;
 
-import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.api.interfaces.NotDisplayInCheatMode;
 import com.balugaq.jeg.api.interfaces.NotDisplayInSurvivalMode;
+import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
 import com.github.houbb.pinyin.constant.enums.PinyinStyleEnum;

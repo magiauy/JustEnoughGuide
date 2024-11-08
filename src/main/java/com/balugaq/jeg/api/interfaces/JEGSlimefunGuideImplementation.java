@@ -1,8 +1,8 @@
 package com.balugaq.jeg.api.interfaces;
 
-import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.api.groups.BookmarkGroup;
 import com.balugaq.jeg.api.groups.ItemMarkGroup;
+import com.balugaq.jeg.implementation.JustEnoughGuide;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;

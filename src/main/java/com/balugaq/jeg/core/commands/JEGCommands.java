@@ -20,6 +20,7 @@ public class JEGCommands implements TabExecutor {
     public JEGCommands(JavaPlugin plugin) {
         this.plugin = plugin;
     }
+
     @Override
     public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args) {
         if (args.length == 0) {

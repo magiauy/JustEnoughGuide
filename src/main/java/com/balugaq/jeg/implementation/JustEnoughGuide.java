@@ -1,11 +1,11 @@
 package com.balugaq.jeg.implementation;
 
-import com.balugaq.jeg.implementation.guide.CheatGuideImplementation;
-import com.balugaq.jeg.implementation.guide.SurvivalGuideImplementation;
 import com.balugaq.jeg.core.managers.BookmarkManager;
 import com.balugaq.jeg.core.managers.CommandManager;
 import com.balugaq.jeg.core.managers.ConfigManager;
 import com.balugaq.jeg.core.managers.ListenerManager;
+import com.balugaq.jeg.implementation.guide.CheatGuideImplementation;
+import com.balugaq.jeg.implementation.guide.SurvivalGuideImplementation;
 import com.balugaq.jeg.utils.ReflectionUtil;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation;
@@ -44,9 +44,11 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
     public static BookmarkManager getBookmarkManager() {
         return getInstance().bookmarkManager;
     }
+
     public static CommandManager getCommandManager() {
         return getInstance().commandManager;
     }
+
     public static ConfigManager getConfigManager() {
         return getInstance().configManager;
     }
