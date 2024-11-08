@@ -3,8 +3,13 @@ package com.balugaq.jeg.guide;
 import city.norain.slimefun4.VaultIntegration;
 import com.balugaq.jeg.JustEnoughGuide;
 import com.balugaq.jeg.groups.SearchGroup;
+import com.balugaq.jeg.interfaces.BookmarkRelocation;
 import com.balugaq.jeg.interfaces.DisplayInCheatMode;
+import com.balugaq.jeg.interfaces.JEGSlimefunGuideImplementation;
 import com.balugaq.jeg.interfaces.NotDisplayInCheatMode;
+import com.balugaq.jeg.proxy.ProxyFactory;
+import com.balugaq.jeg.utils.GuideUtil;
+import com.balugaq.jeg.utils.ItemStackUtil;
 import com.github.houbb.pinyin.constant.enums.PinyinStyleEnum;
 import com.github.houbb.pinyin.util.PinyinHelper;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
@@ -14,6 +19,7 @@ import io.github.thebusybiscuit.slimefun4.api.items.groups.FlexItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.groups.LockedItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.groups.NestedItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.groups.SeasonalItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.groups.SubItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.api.researches.Research;
@@ -58,7 +64,7 @@ import java.util.Optional;
 import java.util.logging.Level;
 
 @SuppressWarnings({"deprecation", "unused"})
-public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements SlimefunGuideImplementation {
+public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements JEGSlimefunGuideImplementation {
     private static final int MAX_ITEM_GROUPS = 36;
 
     private final int[] recipeSlots = {3, 4, 5, 12, 13, 14, 21, 22, 23};
@@ -247,6 +253,13 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             return false;
         });
 
+        if (JustEnoughGuide.getConfigManager().isBookmark()) {
+            menu.addItem(49, ItemStackUtil.getCleanItem(GuideUtil.getBookMarkMenuButton()), (pl, slot, itemstack, action) -> {
+                openBookMarkGroup(pl, profile);
+                return false;
+            });
+        }
+
         menu.open(p);
     }
 
@@ -305,7 +318,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
         }
 
         ChestMenu menu = create(p);
-        createHeader(p, profile, menu);
+        createHeader(p, profile, menu, itemGroup);
 
         addBackButton(menu, 1, p, profile);
 
@@ -705,7 +718,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             ChatInput.waitForPlayer(
                     JustEnoughGuide.getInstance(),
                     pl,
-                    msg -> openSearch(profile, msg, !isCheatMode()));
+                    msg -> openSearch(profile, msg, isSurvivalMode()));
 
             return false;
         });
@@ -713,6 +726,77 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
         for (int i = 45; i < 54; i++) {
             menu.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
         }
+
+        if (JustEnoughGuide.getConfigManager().isBookmark()) {
+            menu.addItem(49, ItemStackUtil.getCleanItem(GuideUtil.getBookMarkMenuButton()), (pl, slot, itemstack, action) -> {
+                openBookMarkGroup(pl, profile);
+                return false;
+            });
+        }
+    }
+
+    @ParametersAreNonnullByDefault
+    public void createHeader(Player p, PlayerProfile profile, ChestMenu menu, ItemGroup itemGroup) {
+        for (int i = 0; i < 9; i++) {
+            menu.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
+        }
+
+        // Settings Panel
+        menu.addItem(1, ChestMenuUtils.getMenuButton(p));
+        menu.addMenuClickHandler(1, (pl, slot, item, action) -> {
+            SlimefunGuideSettings.openSettings(pl, pl.getInventory().getItemInMainHand());
+            return false;
+        });
+
+        // Search feature!
+        menu.addItem(7, ChestMenuUtils.getSearchButton(p));
+        menu.addMenuClickHandler(7, (pl, slot, item, action) -> {
+            pl.closeInventory();
+
+            Slimefun.getLocalization().sendMessage(pl, "guide.search.message");
+            ChatInput.waitForPlayer(
+                    JustEnoughGuide.getInstance(),
+                    pl,
+                    msg -> openSearch(profile, msg, isSurvivalMode()));
+
+            return false;
+        });
+
+        for (int i = 45; i < 54; i++) {
+            menu.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
+        }
+
+        if (JustEnoughGuide.getConfigManager().isBookmark()) {
+            BookmarkRelocation b = null;
+            if (itemGroup instanceof BookmarkRelocation bookmarkRelocation) {
+                b = bookmarkRelocation;
+            }
+
+            menu.addItem(b != null ? b.getBookMark(this, p) : 49, ItemStackUtil.getCleanItem(GuideUtil.getBookMarkMenuButton()), (pl, slot, itemstack, action) -> {
+                openBookMarkGroup(pl, profile);
+                return false;
+            });
+
+            if (isTaggedGroupType(itemGroup)) {
+                menu.addItem(b != null ? b.getItemMark(this, p) : 48, ItemStackUtil.getCleanItem(GuideUtil.getItemMarkMenuButton()), (pl, slot, itemstack, action) -> {
+                    openItemMarkGroup(itemGroup, pl, profile);
+                    return false;
+                });
+            }
+        }
+    }
+
+    private boolean isTaggedGroupType(ItemGroup itemGroup) {
+        Class<?> clazz = itemGroup.getClass();
+        return clazz == ItemGroup.class
+                || clazz == SubItemGroup.class
+                || clazz == NestedItemGroup.class
+                || clazz == LockedItemGroup.class
+                || clazz == SeasonalItemGroup.class
+                || itemGroup instanceof BookmarkRelocation
+                || clazz.getName().equalsIgnoreCase("me.voper.slimeframe.implementation.groups.ChildGroup")
+                || clazz.getName().endsWith("DummyItemGroup")
+                || clazz.getName().endsWith("SubGroup");
     }
 
     private void addBackButton(ChestMenu menu, int slot, Player p, PlayerProfile profile) {
@@ -827,7 +911,8 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
         }
     }
 
-    private @Nonnull ChestMenu create(@Nonnull Player p) {
+    @Nonnull
+    public ChestMenu create(@Nonnull Player p) {
         ChestMenu menu = new ChestMenu("Slimefun 指南 (作弊模式) - JEG");
 
         menu.setEmptySlotsClickable(false);

@@ -1,6 +1,9 @@
 package com.balugaq.jeg.groups;
 
+import city.norain.slimefun4.VaultIntegration;
 import com.balugaq.jeg.JustEnoughGuide;
+import com.balugaq.jeg.interfaces.BookmarkRelocation;
+import com.balugaq.jeg.interfaces.JEGSlimefunGuideImplementation;
 import com.balugaq.jeg.interfaces.NotDisplayInCheatMode;
 import com.balugaq.jeg.interfaces.NotDisplayInSurvivalMode;
 import com.balugaq.jeg.utils.GuideUtil;
@@ -11,14 +14,14 @@ import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.groups.FlexItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
+import io.github.thebusybiscuit.slimefun4.api.researches.Research;
 import io.github.thebusybiscuit.slimefun4.core.guide.GuideHistory;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuide;
-import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.chat.ChatInput;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
-import io.github.thebusybiscuit.slimefun4.utils.ChatUtils;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.items.ItemUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import io.github.thebusybiscuit.slimefun4.utils.compatibility.VersionedItemFlag;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
@@ -42,48 +45,57 @@ import java.util.logging.Level;
 
 @NotDisplayInSurvivalMode
 @NotDisplayInCheatMode
-public class SearchGroup extends FlexItemGroup {
-    private static final int BACK_SLOT = 1;
-    private static final int SEARCH_SLOT = 7;
-    private static final int PREVIOUS_SLOT = 46;
-    private static final int NEXT_SLOT = 52;
-    private static final int[] BORDER = new int[]{0, 2, 3, 4, 5, 6, 8, 45, 47, 48, 49, 50, 51, 53};
-    private static final int[] MAIN_CONTENT = new int[]{
-            9, 10, 11, 12, 13, 14, 15, 16, 17,
-            18, 19, 20, 21, 22, 23, 24, 25, 26,
-            27, 28, 29, 30, 31, 32, 33, 34, 35,
-            36, 37, 38, 39, 40, 41, 42, 43, 44
-    };
-
+public class ItemMarkGroup extends FlexItemGroup {
     private static final JavaPlugin JAVA_PLUGIN = JustEnoughGuide.getInstance();
-    private final SlimefunGuideImplementation implementation;
+    private final int BACK_SLOT;
+    private final int SEARCH_SLOT;
+    private final int PREVIOUS_SLOT;
+    private final int NEXT_SLOT;
+    private final int[] BORDER;
+    private final int[] MAIN_CONTENT;
+    private final JEGSlimefunGuideImplementation implementation;
     private final Player player;
-    private final String searchTerm;
-    private final boolean pinyin;
+    private final ItemGroup itemGroup;
     private final int page;
     private final List<SlimefunItem> slimefunItemList;
-    private Map<Integer, SearchGroup> pageMap = new LinkedHashMap<>();
+    private Map<Integer, ItemMarkGroup> pageMap = new LinkedHashMap<>();
 
-    public SearchGroup(SlimefunGuideImplementation implementation, Player player, String searchTerm, boolean pinyin) {
-        super(new NamespacedKey(JAVA_PLUGIN, "jeg_search_group_" + UUID.randomUUID()), new ItemStack(Material.BARRIER));
-        this.page = 1;
-        this.searchTerm = searchTerm;
-        this.pinyin = pinyin;
+    public ItemMarkGroup(JEGSlimefunGuideImplementation implementation, ItemGroup itemGroup, Player player) {
+        this(implementation, itemGroup, player, 1);
+    }
+    public ItemMarkGroup(JEGSlimefunGuideImplementation implementation, ItemGroup itemGroup, Player player, int page) {
+        super(new NamespacedKey(JAVA_PLUGIN, "jeg_item_mark_group_" + UUID.randomUUID()), new ItemStack(Material.BARRIER));
+        this.page = page;
         this.player = player;
+        this.itemGroup = itemGroup;
+        this.slimefunItemList = itemGroup.getItems();
         this.implementation = implementation;
-        this.slimefunItemList = getAllMatchedItems(player, searchTerm, pinyin);
-        this.pageMap.put(1, this);
+        this.pageMap.put(page, this);
+
+        if (itemGroup instanceof BookmarkRelocation bookmarkRelocation) {
+            BACK_SLOT = bookmarkRelocation.getBackButton(implementation, player);
+            SEARCH_SLOT = bookmarkRelocation.getSearchButton(implementation, player);
+            PREVIOUS_SLOT = bookmarkRelocation.getPreviousButton(implementation, player);
+            NEXT_SLOT = bookmarkRelocation.getNextButton(implementation, player);
+            BORDER = bookmarkRelocation.getBorder(implementation, player);
+            MAIN_CONTENT = bookmarkRelocation.getMainContents(implementation, player);
+        } else {
+            BACK_SLOT = 1;
+            SEARCH_SLOT = 7;
+            PREVIOUS_SLOT = 46;
+            NEXT_SLOT = 52;
+            BORDER = new int[]{0, 2, 3, 4, 5, 6, 8, 45, 47, 48, 49, 50, 51, 53};
+            MAIN_CONTENT = new int[]{
+                    9, 10, 11, 12, 13, 14, 15, 16, 17,
+                    18, 19, 20, 21, 22, 23, 24, 25, 26,
+                    27, 28, 29, 30, 31, 32, 33, 34, 35,
+                    36, 37, 38, 39, 40, 41, 42, 43, 44
+            };
+        }
     }
 
-    protected SearchGroup(SearchGroup searchGroup, int page) {
-        super(searchGroup.key, new ItemStack(Material.BARRIER));
-        this.page = page;
-        this.searchTerm = searchGroup.searchTerm;
-        this.pinyin = searchGroup.pinyin;
-        this.player = searchGroup.player;
-        this.implementation = searchGroup.implementation;
-        this.slimefunItemList = searchGroup.slimefunItemList;
-        this.pageMap.put(page, this);
+    protected ItemMarkGroup(ItemMarkGroup itemMarkGroup, int page) {
+        this(itemMarkGroup.implementation, itemMarkGroup.itemGroup, itemMarkGroup.player, page);
     }
 
     @Override
@@ -104,7 +116,7 @@ public class SearchGroup extends FlexItemGroup {
 
     @Nonnull
     private ChestMenu generateMenu(@Nonnull Player player, @Nonnull PlayerProfile playerProfile, @Nonnull SlimefunGuideMode slimefunGuideMode) {
-        ChestMenu chestMenu = new ChestMenu("你正在搜索: %item%".replace("%item%", ChatUtils.crop(ChatColor.WHITE, searchTerm)));
+        ChestMenu chestMenu = new ChestMenu("添加收藏物 - JEG");
 
         chestMenu.setEmptySlotsClickable(false);
         chestMenu.addMenuOpeningHandler(pl -> pl.playSound(pl.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1, 1));
@@ -137,16 +149,16 @@ public class SearchGroup extends FlexItemGroup {
         chestMenu.addItem(PREVIOUS_SLOT, ItemStackUtil.getCleanItem(ChestMenuUtils.getPreviousButton(player, this.page, (this.slimefunItemList.size() - 1) / MAIN_CONTENT.length + 1)));
         chestMenu.addMenuClickHandler(PREVIOUS_SLOT, (p, slot, item, action) -> {
             GuideUtil.removeLastEntry(playerProfile.getGuideHistory());
-            SearchGroup searchGroup = this.getByPage(Math.max(this.page - 1, 1));
-            searchGroup.open(player, playerProfile, slimefunGuideMode);
+            ItemMarkGroup itemMarkGroup = this.getByPage(Math.max(this.page - 1, 1));
+            itemMarkGroup.open(player, playerProfile, slimefunGuideMode);
             return false;
         });
 
         chestMenu.addItem(NEXT_SLOT, ItemStackUtil.getCleanItem(ChestMenuUtils.getNextButton(player, this.page, (this.slimefunItemList.size() - 1) / MAIN_CONTENT.length + 1)));
         chestMenu.addMenuClickHandler(NEXT_SLOT, (p, slot, item, action) -> {
             GuideUtil.removeLastEntry(playerProfile.getGuideHistory());
-            SearchGroup searchGroup = this.getByPage(Math.min(this.page + 1, (this.slimefunItemList.size() - 1) / MAIN_CONTENT.length + 1));
-            searchGroup.open(player, playerProfile, slimefunGuideMode);
+            ItemMarkGroup itemMarkGroup = this.getByPage(Math.min(this.page + 1, (this.slimefunItemList.size() - 1) / MAIN_CONTENT.length + 1));
+            itemMarkGroup.open(player, playerProfile, slimefunGuideMode);
             return false;
         });
 
@@ -159,43 +171,92 @@ public class SearchGroup extends FlexItemGroup {
             int index = i + this.page * MAIN_CONTENT.length - MAIN_CONTENT.length;
             if (index < this.slimefunItemList.size()) {
                 SlimefunItem slimefunItem = slimefunItemList.get(index);
-                ItemStack itemstack = new CustomItemStack(slimefunItem.getItem(), meta -> {
-                    ItemGroup itemGroup = slimefunItem.getItemGroup();
-                    List<String> additionLore = List.of("", ChatColor.DARK_GRAY + "\u21E8 " + ChatColor.WHITE + (itemGroup.getAddon() == null ? "Slimefun" : itemGroup.getAddon().getName()) + " - " + itemGroup.getDisplayName(player));
-                    if (meta.hasLore() && meta.getLore() != null) {
-                        List<String> lore = meta.getLore();
-                        lore.addAll(additionLore);
-                        meta.setLore(lore);
+                Research research = slimefunItem.getResearch();
+                ItemStack itemstack;
+                ChestMenu.MenuClickHandler handler;
+                if (implementation.getMode() == SlimefunGuideMode.SURVIVAL_MODE && research != null && !playerProfile.hasUnlocked(research)) {
+                    String lore;
+
+                    if (VaultIntegration.isEnabled()) {
+                        lore = String.format("%.2f", research.getCurrencyCost()) + " 游戏币";
                     } else {
-                        meta.setLore(additionLore);
+                        lore = research.getLevelCost() + " 级经验";
                     }
 
-                    meta.addItemFlags(
-                            ItemFlag.HIDE_ATTRIBUTES,
-                            ItemFlag.HIDE_ENCHANTS,
-                            VersionedItemFlag.HIDE_ADDITIONAL_TOOLTIP);
-                });
-                chestMenu.addItem(MAIN_CONTENT[i], ItemStackUtil.getCleanItem(itemstack), (pl, slot, itm, action) -> {
-                    try {
-                        if (implementation.getMode() != SlimefunGuideMode.SURVIVAL_MODE) {
-                            pl.getInventory().addItem(slimefunItem.getItem().clone());
+                    itemstack = new CustomItemStack(new CustomItemStack(
+                            ChestMenuUtils.getNoPermissionItem(),
+                            "&f" + ItemUtils.getItemName(slimefunItem.getItem()),
+                            "&7" + slimefunItem.getId(),
+                            "&4&l" + Slimefun.getLocalization().getMessage(player, "guide.locked"),
+                            "",
+                            "&a> 单击解锁",
+                            "",
+                            "&7需要 &b",
+                            lore));
+                    handler = (pl, slot, item, action) -> {
+                        research.unlockFromGuide(implementation, pl, playerProfile, slimefunItem, itemGroup, page);
+                        return false;
+                    };
+                } else {
+                    itemstack = new CustomItemStack(slimefunItem.getItem(), meta -> {
+                        ItemGroup itemGroup = slimefunItem.getItemGroup();
+                        List<String> additionLore = List.of("",
+                                ChatColor.DARK_GRAY + "\u21E8 " + ChatColor.WHITE + (itemGroup.getAddon() == null ? "Slimefun" : itemGroup.getAddon().getName()) + " - " + itemGroup.getDisplayName(player),
+                                ChatColor.YELLOW + "左键点击以收藏物品");
+                        if (meta.hasLore() && meta.getLore() != null) {
+                            List<String> lore = meta.getLore();
+                            lore.addAll(additionLore);
+                            meta.setLore(lore);
                         } else {
-                            implementation.displayItem(playerProfile, slimefunItem, true);
+                            meta.setLore(additionLore);
                         }
-                    } catch (Exception | LinkageError x) {
-                        printErrorMessage(pl, slimefunItem, x);
-                    }
 
-                    return false;
-                });
+                        meta.addItemFlags(
+                                ItemFlag.HIDE_ATTRIBUTES,
+                                ItemFlag.HIDE_ENCHANTS,
+                                VersionedItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+                    });
+                    handler = (pl, slot, itm, action) -> {
+                        try {
+                            if (implementation.getMode() != SlimefunGuideMode.SURVIVAL_MODE) {
+                                pl.getInventory().addItem(slimefunItem.getItem().clone());
+                            } else {
+                                JustEnoughGuide.getBookmarkManager().addBookmark(pl, slimefunItem);
+                            }
+                        } catch (Exception | LinkageError x) {
+                            printErrorMessage(pl, slimefunItem, x);
+                        }
+
+                        return false;
+                    };
+                }
+
+                chestMenu.addItem(MAIN_CONTENT[i], ItemStackUtil.getCleanItem(itemstack), handler);
             }
         }
+
+        chestMenu.addItem(48, ItemStackUtil.getCleanItem(GuideUtil.getItemMarkMenuButton()));
+        chestMenu.addMenuClickHandler(48, (pl, s, is, action) -> {
+            GuideHistory guideHistory = playerProfile.getGuideHistory();
+            if (action.isShiftClicked()) {
+                SlimefunGuide.openMainMenu(playerProfile, slimefunGuideMode, guideHistory.getMainMenuPage());
+            } else {
+                guideHistory.goBack(Slimefun.getRegistry().getSlimefunGuide(SlimefunGuideMode.SURVIVAL_MODE));
+            }
+            return false;
+        });
+
+        chestMenu.addItem(49, ItemStackUtil.getCleanItem(GuideUtil.getBookMarkMenuButton()));
+        chestMenu.addMenuClickHandler(49, (pl, s, is, action) -> {
+            implementation.openBookMarkGroup(pl, playerProfile);
+            return false;
+        });
 
         return chestMenu;
     }
 
     @Nonnull
-    private SearchGroup getByPage(int page) {
+    private ItemMarkGroup getByPage(int page) {
         if (this.pageMap.containsKey(page)) {
             return this.pageMap.get(page);
         } else {
@@ -204,10 +265,10 @@ public class SearchGroup extends FlexItemGroup {
                     return this.pageMap.get(page);
                 }
 
-                SearchGroup searchGroup = new SearchGroup(this, page);
-                searchGroup.pageMap = this.pageMap;
-                this.pageMap.put(page, searchGroup);
-                return searchGroup;
+                ItemMarkGroup itemMarkGroup = new ItemMarkGroup(this, page);
+                itemMarkGroup.pageMap = this.pageMap;
+                this.pageMap.put(page, itemMarkGroup);
+                return itemMarkGroup;
             }
         }
     }

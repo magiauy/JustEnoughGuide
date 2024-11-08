@@ -1,4 +1,4 @@
-package com.balugaq.jeg.manages;
+package com.balugaq.jeg.managers;
 
 import com.balugaq.jeg.JustEnoughGuide;
 import com.balugaq.jeg.listeners.GuideListener;

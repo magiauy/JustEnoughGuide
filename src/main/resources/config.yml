@@ -4,7 +4,10 @@ auto-update: true
 guide:
   survival-improvements: true
   cheat-improvements: true
+
+improvements:
   pinyin-search: true
+  bookmark: true
 
 # Do not change this value unless you know what you are doing.
 config-version: 1.0

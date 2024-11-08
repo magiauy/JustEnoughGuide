@@ -1,4 +1,4 @@
-package com.balugaq.jeg.manages;
+package com.balugaq.jeg.managers;
 
 import com.balugaq.jeg.JustEnoughGuide;
 import org.bukkit.configuration.ConfigurationSection;
@@ -13,11 +13,23 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 
 public class ConfigManager {
+    private final boolean AUTO_UPDATE;
+    private final boolean DEBUG;
+    private final boolean SURVIVAL_IMPROVEMENTS;
+    private final boolean CHEAT_IMPROVEMENTS;
+    private final boolean PINYIN_SEARCH;
+    private final boolean BOOKMARK;
     private final JustEnoughGuide plugin;
 
     public ConfigManager(JustEnoughGuide plugin) {
         this.plugin = plugin;
         setupDefaultConfig();
+        this.AUTO_UPDATE = plugin.getConfig().getBoolean("auto-update");
+        this.DEBUG = plugin.getConfig().getBoolean("debug");
+        this.SURVIVAL_IMPROVEMENTS = plugin.getConfig().getBoolean("guide.survival-improvements");
+        this.CHEAT_IMPROVEMENTS = plugin.getConfig().getBoolean("guide.cheat-improvements");
+        this.PINYIN_SEARCH = plugin.getConfig().getBoolean("improvements.pinyin-search");
+        this.BOOKMARK = plugin.getConfig().getBoolean("improvements.bookmark");
     }
 
     private void setupDefaultConfig() {
@@ -58,22 +70,26 @@ public class ConfigManager {
     }
 
     public boolean isAutoUpdate() {
-        return plugin.getConfig().getBoolean("auto-update");
+        return AUTO_UPDATE;
     }
 
     public boolean isDebug() {
-        return plugin.getConfig().getBoolean("debug");
+        return DEBUG;
     }
 
     public boolean isSurvivalImprovement() {
-        return plugin.getConfig().getBoolean("guide.survival-improvements");
+        return SURVIVAL_IMPROVEMENTS;
     }
 
     public boolean isCheatImprovement() {
-        return plugin.getConfig().getBoolean("guide.cheat-improvements");
+        return CHEAT_IMPROVEMENTS;
     }
 
     public boolean isPinyinSearch() {
-        return plugin.getConfig().getBoolean("guide.pinyin-search");
+        return PINYIN_SEARCH;
+    }
+
+    public boolean isBookmark() {
+        return BOOKMARK;
     }
 }

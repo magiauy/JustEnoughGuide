@@ -7,8 +7,11 @@ import io.github.thebusybiscuit.slimefun4.core.guide.GuideHistory;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import lombok.experimental.UtilityClass;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -23,7 +26,14 @@ import java.lang.reflect.Method;
 public class GuideUtil {
     private static final SurvivalGuideImplementation SURVIVAL_GUIDE_IMPLEMENTATION = new SurvivalGuideImplementation();
     private static final CheatGuideImplementation CHEAT_GUIDE_IMPLEMENTATION = new CheatGuideImplementation();
-
+    private static final ItemStack BOOK_MARK_MENU_BUTTON = ItemStackUtil.getCleanItem(new CustomItemStack(
+            Material.NETHER_STAR,
+            "&e&l收藏物列表"
+    ));
+    private static final ItemStack ITEM_MARK_MENU_BUTTON = ItemStackUtil.getCleanItem(new CustomItemStack(
+            Material.WRITABLE_BOOK,
+            "&e&l收藏物品"
+    ));
     @ParametersAreNonnullByDefault
     public static void openMainMenuAsync(Player player, SlimefunGuideMode mode, int selectedPage) {
         if (!PlayerProfile.get(player, profile -> Slimefun.runSync(() -> openMainMenu(player, profile, mode, selectedPage)))) {
@@ -55,5 +65,13 @@ public class GuideUtil {
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    public ItemStack getBookMarkMenuButton() {
+        return BOOK_MARK_MENU_BUTTON;
+    }
+
+    public ItemStack getItemMarkMenuButton() {
+        return ITEM_MARK_MENU_BUTTON;
     }
 }

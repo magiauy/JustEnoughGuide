@@ -2,8 +2,9 @@ package com.balugaq.jeg;
 
 import com.balugaq.jeg.guide.CheatGuideImplementation;
 import com.balugaq.jeg.guide.SurvivalGuideImplementation;
-import com.balugaq.jeg.manages.ConfigManager;
-import com.balugaq.jeg.manages.ListenerManager;
+import com.balugaq.jeg.managers.BookmarkManager;
+import com.balugaq.jeg.managers.ConfigManager;
+import com.balugaq.jeg.managers.ListenerManager;
 import com.balugaq.jeg.utils.ReflectionUtil;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation;
@@ -26,6 +27,7 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
     private final String username;
     private final String repo;
     private final String branch;
+    private BookmarkManager bookmarkManager;
     private ConfigManager configManager;
     private ListenerManager listenerManager;
 
@@ -35,7 +37,9 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
         this.repo = "JustEnoughGuide";
         this.branch = "master";
     }
-
+    public static BookmarkManager getBookmarkManager() {
+        return getInstance().bookmarkManager;
+    }
     public static ConfigManager getConfigManager() {
         return getInstance().configManager;
     }
@@ -82,6 +86,9 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
             }
             getLogger().info(survivalOverride ? "已开启替换生存指南" : "未开启替换生存指南");
             getLogger().info(cheatOverride ? "已开启替换作弊指南" : "未开启替换作弊指南");
+
+            getLogger().info("正在加载书签...");
+            this.bookmarkManager = new BookmarkManager(this);
         }
         getLogger().info("成功启用此附属");
     }
