@@ -1,6 +1,6 @@
 name: JustEnoughGuide
 author: balugaq
-description: This is a Slimefun addon and improved the guide's search module.
+description: This is a Slimefun addon and improved the guide.
 main: com.balugaq.jeg.implementation.JustEnoughGuide
 website: https://github.com/balugaq/JustEnoughGuide
 version: ${project.version}
