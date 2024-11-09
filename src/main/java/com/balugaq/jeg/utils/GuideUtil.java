@@ -51,7 +51,7 @@ public final class GuideUtil {
         if (mode == SlimefunGuideMode.SURVIVAL_MODE) {
             return SURVIVAL_GUIDE_IMPLEMENTATION;
         }
-        if (player.isOp() && mode == SlimefunGuideMode.CHEAT_MODE) {
+        if ((player.isOp() || player.hasPermission("slimefun.cheat.items")) && mode == SlimefunGuideMode.CHEAT_MODE) {
             return CHEAT_GUIDE_IMPLEMENTATION;
         }
 
