@@ -220,11 +220,7 @@ public class ItemMarkGroup extends FlexItemGroup {
                     });
                     handler = (pl, slot, itm, action) -> {
                         try {
-                            if (implementation.getMode() != SlimefunGuideMode.SURVIVAL_MODE) {
-                                pl.getInventory().addItem(slimefunItem.getItem().clone());
-                            } else {
-                                JustEnoughGuide.getBookmarkManager().addBookmark(pl, slimefunItem);
-                            }
+                            JustEnoughGuide.getBookmarkManager().addBookmark(pl, slimefunItem);
                         } catch (Exception | LinkageError x) {
                             printErrorMessage(pl, slimefunItem, x);
                         }
