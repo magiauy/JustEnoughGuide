@@ -87,8 +87,9 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
                 return item;
             }
 
+            ItemGroup itemGroup = slimefunItem.getItemGroup();
             String lore = hasPermission(p, slimefunItem)
-                    ? String.format("&f需要在 %s 中解锁", slimefunItem.getItemGroup().getDisplayName(p))
+                    ? String.format("&f需要在 %s 中解锁", (itemGroup.getAddon() == null ? "Slimefun" : itemGroup.getAddon().getName()) + " - " + itemGroup.getDisplayName(p))
                     : "&f无权限";
             return slimefunItem.canUse(p, false)
                     ? item
