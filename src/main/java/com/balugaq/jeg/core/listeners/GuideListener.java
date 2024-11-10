@@ -16,7 +16,7 @@ public class GuideListener implements Listener {
     @EventHandler
     public void onGuideOpen(SlimefunGuideOpenEvent e) {
         JustEnoughGuide.getInstance().debug("Listened to SlimefunGuideOpenEvent. Player: " + e.getPlayer().getName() + ", Layout: " + e.getGuideLayout());
-        if (!e.isCancelled() && (e.getGuideLayout() == SlimefunGuideMode.SURVIVAL_MODE && JustEnoughGuide.getConfigManager().isSurvivalImprovement()) && (e.getGuideLayout() == SlimefunGuideMode.CHEAT_MODE && JustEnoughGuide.getConfigManager().isCheatImprovement())) {
+        if (!e.isCancelled()) {
             e.setCancelled(true);
 
             openGuide(e.getPlayer(), e.getGuideLayout());

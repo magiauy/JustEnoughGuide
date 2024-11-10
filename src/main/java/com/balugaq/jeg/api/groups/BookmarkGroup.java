@@ -212,7 +212,7 @@ public class BookmarkGroup extends FlexItemGroup {
                                 }
                                 new BookmarkGroup(this.implementation, this.player, items).open(player, playerProfile, slimefunGuideMode);
                             } else {
-                                if (implementation.getMode() != SlimefunGuideMode.SURVIVAL_MODE) {
+                                if (implementation.getMode() != SlimefunGuideMode.SURVIVAL_MODE && (pl.isOp() || pl.hasPermission("slimefun.cheat.items"))) {
                                     pl.getInventory().addItem(slimefunItem.getItem().clone());
                                 } else {
                                     implementation.displayItem(playerProfile, slimefunItem, true);

@@ -378,7 +378,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
                 try {
                     if (isSurvivalMode()) {
                         displayItem(profile, sfitem, true);
-                    } else if (pl.hasPermission("slimefun.cheat.items")) {
+                    } else if (pl.isOp() || pl.hasPermission("slimefun.cheat.items")) {
                         if (sfitem instanceof MultiBlockMachine) {
                             Slimefun.getLocalization().sendMessage(pl, "guide.cheat.no-multiblocks");
                         } else {

@@ -178,7 +178,7 @@ public class SearchGroup extends FlexItemGroup {
                 });
                 chestMenu.addItem(MAIN_CONTENT[i], ItemStackUtil.getCleanItem(itemstack), (pl, slot, itm, action) -> {
                     try {
-                        if (implementation.getMode() != SlimefunGuideMode.SURVIVAL_MODE) {
+                        if (implementation.getMode() != SlimefunGuideMode.SURVIVAL_MODE && (pl.isOp() || pl.hasPermission("slimefun.cheat.items"))) {
                             pl.getInventory().addItem(slimefunItem.getItem().clone());
                         } else {
                             implementation.displayItem(playerProfile, slimefunItem, true);

@@ -414,7 +414,9 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             menu.addItem(index, sfitem.getItem());
             menu.addMenuClickHandler(index, (pl, slot, item, action) -> {
                 try {
-                    if (pl.isOp() || pl.hasPermission("slimefun.cheat.items")) {
+                    if (isSurvivalMode()) {
+                        displayItem(profile, sfitem, true);
+                    } else if (pl.isOp() || pl.hasPermission("slimefun.cheat.items")) {
                         if (sfitem instanceof MultiBlockMachine) {
                             Slimefun.getLocalization().sendMessage(pl, "guide.cheat.no-multiblocks");
                         } else {
