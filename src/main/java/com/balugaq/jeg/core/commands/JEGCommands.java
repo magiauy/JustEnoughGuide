@@ -36,6 +36,9 @@ public class JEGCommands implements TabExecutor {
             case "reload" -> {
                 onReload(sender);
             }
+            default -> {
+                onHelp(sender);
+            }
         }
 
         return true;
