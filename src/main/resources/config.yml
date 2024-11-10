@@ -10,7 +10,7 @@ improvements:
   bookmark: true
 
 # Do not change this value unless you know what you are doing.
-config-version: 1.0
+config-version: 1.1
 
 # Do not change this value unless you know what you are doing.
 debug: false
