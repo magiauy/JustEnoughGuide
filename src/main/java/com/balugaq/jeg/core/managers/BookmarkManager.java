@@ -5,6 +5,7 @@ import com.xzavier0722.mc.plugin.slimefun4.storage.controller.ProfileDataControl
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerBackpack;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
+import io.github.thebusybiscuit.slimefun4.core.config.SlimefunDatabaseManager;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import lombok.Getter;
@@ -25,6 +26,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+/**
+ * This class is responsible for managing bookmarks.
+ * It provides methods to add, remove, get, and clear bookmarks.
+ * This feature is based on CN-Slimefun4's {@link SlimefunDatabaseManager}
+ * to create a backpack for each player and store their bookmarks in it.
+ *
+ * @author balugaq
+ * @since 1.1
+ */
 @SuppressWarnings("unused")
 @Getter
 public class BookmarkManager extends AbstractManager {

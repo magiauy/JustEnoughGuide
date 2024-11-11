@@ -14,6 +14,12 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is the command system of JEG. It handles all the commands and tab-completions.
+ *
+ * @author balugaq
+ * @since 1.1
+ */
 @SuppressWarnings("unused")
 @Getter
 public class JEGCommands implements TabExecutor {

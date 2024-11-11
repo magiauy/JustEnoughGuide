@@ -5,6 +5,12 @@ import lombok.experimental.UtilityClass;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+/**
+ * This class provides some useful methods for reflection.
+ *
+ * @author Final_ROOT, balugaq
+ * @since 1.0
+ */
 @SuppressWarnings({"unchecked", "unused"})
 @UtilityClass
 public final class ReflectionUtil {

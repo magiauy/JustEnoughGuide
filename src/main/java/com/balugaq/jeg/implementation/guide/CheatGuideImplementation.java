@@ -32,6 +32,7 @@ import io.github.thebusybiscuit.slimefun4.core.multiblocks.MultiBlockMachine;
 import io.github.thebusybiscuit.slimefun4.core.services.sounds.SoundEffect;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.implementation.guide.CheatSheetSlimefunGuide;
+import io.github.thebusybiscuit.slimefun4.implementation.guide.SurvivalSlimefunGuide;
 import io.github.thebusybiscuit.slimefun4.implementation.tasks.AsyncRecipeChoiceTask;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.chat.ChatInput;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
@@ -62,6 +63,17 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.logging.Level;
 
+/**
+ * This is JEG's implementation of the Cheat Guide.
+ * It extends {@link CheatSheetSlimefunGuide} to compatibly
+ * with the Slimefun API and other plugins.
+ * It also implements the {@link JEGSlimefunGuideImplementation}
+ * to provide a common interface for both
+ * {@link SurvivalGuideImplementation} and {@link CheatGuideImplementation}.
+ *
+ * @author balugaq
+ * @since 1.0
+ */
 @SuppressWarnings({"deprecation", "unused"})
 public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements JEGSlimefunGuideImplementation {
     private static final int MAX_ITEM_GROUPS = 36;

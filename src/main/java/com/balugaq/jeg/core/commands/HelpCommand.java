@@ -10,6 +10,15 @@ import org.bukkit.plugin.Plugin;
 import javax.annotation.Nonnull;
 import java.util.List;
 
+/**
+ * This is the implementation of the "/jeg help" command.
+ * It shows the list of available commands and their usage.
+ * <p>
+ * This command is also the default command when no other command is specified.
+ *
+ * @author balugaq
+ * @since 1.1
+ */
 @Getter
 public class HelpCommand implements JEGCommand {
     private final Plugin plugin;

@@ -7,8 +7,16 @@ import org.bukkit.inventory.ItemStack;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * This class provides utility methods for working with ItemStacks.
+ */
 @UtilityClass
 public final class ItemStackUtil {
+    /**
+     * This method is used to convert an {@code MyItemStack extends ItemStack} to a pure {@code ItemStack}.
+     * @param item The MyItemStack to be converted.
+     * @return A pure ItemStack.
+     */
     @Nonnull
     public static ItemStack getCleanItem(@Nullable ItemStack item) {
         if (item == null) {

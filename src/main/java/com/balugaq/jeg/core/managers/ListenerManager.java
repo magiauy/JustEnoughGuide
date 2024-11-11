@@ -10,6 +10,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is responsible for managing the listeners of the plugin.
+ *
+ * @author balugaq
+ * @since 1.0
+ */
 @Getter
 public class ListenerManager extends AbstractManager {
     private final JavaPlugin plugin;

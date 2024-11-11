@@ -10,6 +10,12 @@ import org.bukkit.command.PluginCommand;
 
 import java.util.List;
 
+/**
+ * This class is responsible for managing the commands of JEG.
+ *
+ * @author balugaq
+ * @since 1.0
+ */
 @Getter
 public class CommandManager extends AbstractManager {
 

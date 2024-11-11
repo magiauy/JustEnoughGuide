@@ -10,6 +10,14 @@ import org.bukkit.plugin.Plugin;
 import javax.annotation.Nonnull;
 import java.util.List;
 
+/**
+ * This is the implementation of the "/jeg reload" command.
+ * It reloads the JEG plugin configuration.
+ * **NOT RELOAD THE PLUGIN ITSELF**.
+ *
+ * @author balugaq
+ * @since 1.1
+ */
 @Getter
 public class ReloadCommand implements JEGCommand {
     private final Plugin plugin;

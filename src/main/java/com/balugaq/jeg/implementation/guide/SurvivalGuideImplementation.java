@@ -29,6 +29,7 @@ import io.github.thebusybiscuit.slimefun4.core.multiblocks.MultiBlock;
 import io.github.thebusybiscuit.slimefun4.core.multiblocks.MultiBlockMachine;
 import io.github.thebusybiscuit.slimefun4.core.services.sounds.SoundEffect;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
+import io.github.thebusybiscuit.slimefun4.implementation.guide.CheatSheetSlimefunGuide;
 import io.github.thebusybiscuit.slimefun4.implementation.guide.SurvivalSlimefunGuide;
 import io.github.thebusybiscuit.slimefun4.implementation.tasks.AsyncRecipeChoiceTask;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.chat.ChatInput;
@@ -59,6 +60,17 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.logging.Level;
 
+/**
+ * This is JEG's implementation of the Survival Guide.
+ * It extends {@link SurvivalSlimefunGuide} to compatibly
+ * with the Slimefun API and other plugins.
+ * It also implements the {@link JEGSlimefunGuideImplementation}
+ * to provide a common interface for both
+ * {@link SurvivalGuideImplementation} and {@link CheatGuideImplementation}.
+ *
+ * @author balugaq
+ * @since 1.0
+ */
 @SuppressWarnings({"deprecation", "unused"})
 public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implements JEGSlimefunGuideImplementation {
 

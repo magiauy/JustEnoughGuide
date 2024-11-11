@@ -13,6 +13,19 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
+/**
+ * This class is responsible for managing the configuration of the plugin.
+ * Includes the following features' configuration:
+ * - Auto-update: Whether the plugin should check for updates and download them automatically.
+ * - Debug: Whether the plugin should print debug messages to the console.
+ * - Survival Improvements: Whether the plugin should include survival improvements in the guide.
+ * - Cheat Improvements: Whether the plugin should include cheat improvements in the guide.
+ * - Pinyin Search: Whether the plugin should enable pinyin search in the guide.
+ * - Bookmark: Whether the plugin should enable bookmark in the guide.
+ *
+ * @author balugaq
+ * @since 1.0
+ */
 public class ConfigManager extends AbstractManager {
     private final boolean AUTO_UPDATE;
     private final boolean DEBUG;

@@ -13,6 +13,7 @@ import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.implementation.guide.CheatSheetSlimefunGuide;
 import io.github.thebusybiscuit.slimefun4.implementation.guide.SurvivalSlimefunGuide;
+import lombok.Getter;
 import net.guizhanss.guizhanlibplugin.updater.GuizhanUpdater;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -23,7 +24,15 @@ import java.text.MessageFormat;
 import java.util.EnumMap;
 import java.util.Map;
 
+/**
+ * This is the main class of the JustEnoughGuide plugin.
+ * It depends on the Slimefun4 plugin and provides a set of features to improve the game experience.
+ *
+ * @author balugaq
+ * @since 1.0
+ */
 @SuppressWarnings("unused")
+@Getter
 public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
     private static JustEnoughGuide instance;
     private final String username;

@@ -12,6 +12,13 @@ import org.bukkit.event.Listener;
 
 import java.util.Optional;
 
+/**
+ * This class listens to {@link SlimefunGuideOpenEvent}
+ * and opens the corresponding guide for the player.
+ *
+ * @author balugaq
+ * @since 1.0
+ */
 public class GuideListener implements Listener {
     @EventHandler
     public void onGuideOpen(SlimefunGuideOpenEvent e) {
