@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 public final class ItemStackUtil {
     /**
      * This method is used to convert an {@code MyItemStack extends ItemStack} to a pure {@code ItemStack}.
+     *
      * @param item The MyItemStack to be converted.
      * @return A pure ItemStack.
      */

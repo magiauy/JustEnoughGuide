@@ -22,9 +22,11 @@ import java.util.List;
 @Getter
 public class HelpCommand implements JEGCommand {
     private final Plugin plugin;
+
     public HelpCommand(Plugin plugin) {
         this.plugin = plugin;
     }
+
     @Override
     public @Nonnull List<String> onTabCompleteRaw(@Nonnull CommandSender sender, @Nonnull String[] args) {
         switch (args.length) {

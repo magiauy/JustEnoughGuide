@@ -1,7 +1,5 @@
 package com.balugaq.jeg.utils;
 
-import com.balugaq.jeg.implementation.guide.CheatGuideImplementation;
-import com.balugaq.jeg.implementation.guide.SurvivalGuideImplementation;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.core.guide.GuideHistory;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation;
@@ -39,8 +37,9 @@ public final class GuideUtil {
 
     /**
      * Open the main menu of the guide for the given player and mode.
-     * @param player The player to open the guide for.
-     * @param mode The mode to open the guide for.
+     *
+     * @param player       The player to open the guide for.
+     * @param mode         The mode to open the guide for.
      * @param selectedPage The page to open the guide to.
      */
     @ParametersAreNonnullByDefault
@@ -52,9 +51,10 @@ public final class GuideUtil {
 
     /**
      * Open the main menu of the guide for the given player and mode.
-     * @param player The player to open the guide for.
-     * @param profile The player's profile.
-     * @param mode The mode to open the guide for.
+     *
+     * @param player       The player to open the guide for.
+     * @param profile      The player's profile.
+     * @param mode         The mode to open the guide for.
      * @param selectedPage The page to open the guide to.
      */
     @ParametersAreNonnullByDefault
@@ -64,8 +64,9 @@ public final class GuideUtil {
 
     /**
      * Get the guide implementation for the given player and mode.
+     *
      * @param player The player to get the guide for.
-     * @param mode The mode to get the guide for.
+     * @param mode   The mode to get the guide for.
      * @return The guide implementation for the given player and mode.
      */
     public static SlimefunGuideImplementation getGuide(Player player, SlimefunGuideMode mode) {

@@ -26,13 +26,16 @@ public class JEGCommands implements TabExecutor {
     private final JavaPlugin plugin;
     private final List<JEGCommand> commands = new ArrayList<>();
     private final JEGCommand defaultCommand;
+
     public JEGCommands(JavaPlugin plugin) {
         this.plugin = plugin;
         this.defaultCommand = new HelpCommand(this.plugin);
     }
+
     public void addCommand(JEGCommand command) {
         this.commands.add(command);
     }
+
     @Override
     public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args) {
         if (args.length == 0) {

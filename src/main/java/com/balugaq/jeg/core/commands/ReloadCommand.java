@@ -21,9 +21,11 @@ import java.util.List;
 @Getter
 public class ReloadCommand implements JEGCommand {
     private final Plugin plugin;
+
     public ReloadCommand(Plugin plugin) {
         this.plugin = plugin;
     }
+
     @Override
     public @Nonnull List<String> onTabCompleteRaw(@Nonnull CommandSender sender, @Nonnull String[] args) {
         switch (args.length) {
