@@ -51,6 +51,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.RecipeChoice.MaterialChoice;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -64,18 +65,27 @@ import java.util.logging.Level;
 @SuppressWarnings({"deprecation", "unused"})
 public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements JEGSlimefunGuideImplementation {
     private static final int MAX_ITEM_GROUPS = 36;
-
     private final int[] recipeSlots = {3, 4, 5, 12, 13, 14, 21, 22, 23};
     private final ItemStack item;
 
     public CheatGuideImplementation() {
-        item = new SlimefunGuideItem(this, SlimefunGuide.getItem(getMode()).getItemMeta().getDisplayName());
+        ItemMeta meta = SlimefunGuide.getItem(getMode()).getItemMeta();
+        String name = "";
+        if (meta != null) {
+            name = meta.getDisplayName();
+        }
+        item = new SlimefunGuideItem(this, name);
     }
 
     // fallback
     @Deprecated
     public CheatGuideImplementation(boolean v1, boolean v2) {
-        item = new SlimefunGuideItem(this, SlimefunGuide.getItem(getMode()).getItemMeta().getDisplayName());
+        ItemMeta meta = SlimefunGuide.getItem(getMode()).getItemMeta();
+        String name = "";
+        if (meta != null) {
+            name = meta.getDisplayName();
+        }
+        item = new SlimefunGuideItem(this, name);
     }
 
     @ParametersAreNonnullByDefault
@@ -282,7 +292,16 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             lore.add("");
 
             for (ItemGroup parent : ((LockedItemGroup) group).getParents()) {
-                lore.add(parent.getItem(p).getItemMeta().getDisplayName());
+                ItemMeta meta = parent.getItem(p).getItemMeta();
+                if (meta == null) {
+                    continue;
+                }
+                lore.add(meta.getDisplayName());
+            }
+
+            ItemMeta meta = group.getItem(p).getItemMeta();
+            if (meta == null) {
+                return;
             }
 
             menu.addItem(
@@ -292,7 +311,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                             "&4"
                                     + Slimefun.getLocalization().getMessage(p, "guide.locked")
                                     + " &7- &f"
-                                    + group.getItem(p).getItemMeta().getDisplayName(),
+                                    + meta.getDisplayName(),
                             lore.toArray(new String[0])));
             menu.addMenuClickHandler(index, ChestMenuUtils.getEmptyClickHandler());
         }

@@ -1,5 +1,7 @@
 package com.balugaq.jeg.core.managers;
 
+import com.balugaq.jeg.api.managers.AbstractManager;
+import com.xzavier0722.mc.plugin.slimefun4.storage.controller.ProfileDataController;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerBackpack;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
@@ -20,12 +22,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 @SuppressWarnings("unused")
 @Getter
-public class BookmarkManager {
+public class BookmarkManager extends AbstractManager {
     private static final int DATA_ITEM_SLOT = 0;
     private static final String BACKPACK_NAME = "JEGBookmarkBackpack";
+    private static final ProfileDataController controller = Slimefun.getDatabaseManager().getProfileDataController();
     private final NamespacedKey BOOKMARKS_KEY;
     private final Plugin plugin;
 
@@ -61,7 +66,9 @@ public class BookmarkManager {
         });
 
         backpack.getInventory().setItem(DATA_ITEM_SLOT, new ItemStack(customItemStack));
-        Slimefun.getDatabaseManager().getProfileDataController().saveBackpackInventory(backpack, DATA_ITEM_SLOT);
+        operateController(controller -> {
+            controller.saveBackpackInventory(backpack, DATA_ITEM_SLOT);
+        });
     }
 
     @Nullable
@@ -122,7 +129,9 @@ public class BookmarkManager {
         });
 
         backpack.getInventory().setItem(DATA_ITEM_SLOT, new ItemStack(customItemStack));
-        Slimefun.getDatabaseManager().getProfileDataController().saveBackpackInventory(backpack, DATA_ITEM_SLOT);
+        operateController(controller -> {
+            controller.saveBackpackInventory(backpack, DATA_ITEM_SLOT);
+        });
     }
 
     public void clearBookmarks(Player player) {
@@ -145,7 +154,9 @@ public class BookmarkManager {
         });
 
         backpack.getInventory().setItem(DATA_ITEM_SLOT, new ItemStack(customItemStack));
-        Slimefun.getDatabaseManager().getProfileDataController().saveBackpackInventory(backpack, DATA_ITEM_SLOT);
+        operateController(controller -> {
+            controller.saveBackpackInventory(backpack, DATA_ITEM_SLOT);
+        });
     }
 
     @Nullable
@@ -160,28 +171,40 @@ public class BookmarkManager {
 
     @Nullable
     public PlayerBackpack createBackpack(Player player) {
-        PlayerProfile profile = Slimefun.getDatabaseManager().getProfileDataController().getProfile(player);
+        PlayerProfile profile = operateController(controller -> {
+            return controller.getProfile(player);
+        });
         if (profile == null) {
             return null;
         }
 
-        PlayerBackpack backpack = Slimefun.getDatabaseManager()
-                .getProfileDataController()
-                .createBackpack(player, BACKPACK_NAME, profile.nextBackpackNum(), 9);
+        PlayerBackpack backpack = operateController(controller -> {
+            return controller.createBackpack(player, BACKPACK_NAME, profile.nextBackpackNum(), 9);
+        });
+        if (backpack == null) {
+            return null;
+        }
+
         backpack.getInventory().setItem(DATA_ITEM_SLOT, markItemAsBookmarksItem(new ItemStack(Material.DIRT), player));
-        Slimefun.getDatabaseManager().getProfileDataController().saveBackpackInventory(backpack, DATA_ITEM_SLOT);
+        operateController(controller -> {
+            controller.saveBackpackInventory(backpack, DATA_ITEM_SLOT);
+        });
         return backpack;
     }
 
     @Nullable
     public PlayerBackpack getBookmarkBackpack(Player player) {
-        PlayerProfile profile = Slimefun.getDatabaseManager().getProfileDataController().getProfile(player);
+        PlayerProfile profile = operateController(controller -> {
+            return controller.getProfile(player);
+        });
         if (profile == null) {
             return null;
         }
 
-        Set<PlayerBackpack> backpacks = Slimefun.getDatabaseManager().getProfileDataController().getBackpacks(profile.getUUID().toString());
-        if (backpacks.isEmpty()) {
+        Set<PlayerBackpack> backpacks = operateController(controller -> {
+            return controller.getBackpacks(profile.getUUID().toString());
+        });
+        if (backpacks == null || backpacks.isEmpty()) {
             return null;
         }
 
@@ -236,5 +259,18 @@ public class BookmarkManager {
         new CustomItemStack(itemStack, itemMeta -> {
             itemMeta.getPersistentDataContainer().remove(BOOKMARKS_KEY);
         });
+    }
+
+    private void operateController(Consumer<ProfileDataController> consumer) {
+        if (controller != null) {
+            consumer.accept(controller);
+        }
+    }
+
+    private <T, R> R operateController(Function<ProfileDataController, R> function) {
+        if (controller != null) {
+            return function.apply(controller);
+        }
+        return null;
     }
 }

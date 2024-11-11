@@ -13,6 +13,7 @@ import com.github.houbb.pinyin.util.PinyinHelper;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.groups.FlexItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.groups.NestedItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.api.researches.Research;
 import io.github.thebusybiscuit.slimefun4.core.guide.GuideHistory;
@@ -43,6 +44,13 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 
+/**
+ * This class used to create groups to mark items into {@link BookmarkGroup} in the guide.
+ * Will not display Item Mark Button in {@link NestedItemGroup}
+ *
+ * @author balugaq
+ * @since 1.1
+ */
 @SuppressWarnings({"deprecation", "unused"})
 @NotDisplayInSurvivalMode
 @NotDisplayInCheatMode

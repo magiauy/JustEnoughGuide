@@ -1,6 +1,8 @@
 package com.balugaq.jeg.core.managers;
 
+import com.balugaq.jeg.api.managers.AbstractManager;
 import com.balugaq.jeg.core.listeners.GuideListener;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -8,9 +10,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListenerManager {
+@Getter
+public class ListenerManager extends AbstractManager {
+    private final JavaPlugin plugin;
     List<Listener> listeners = new ArrayList<>();
-    private JavaPlugin plugin;
 
     public ListenerManager(JavaPlugin plugin) {
         this.plugin = plugin;

@@ -9,8 +9,6 @@ import com.balugaq.jeg.api.interfaces.NotDisplayInSurvivalMode;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
-import com.github.houbb.pinyin.constant.enums.PinyinStyleEnum;
-import com.github.houbb.pinyin.util.PinyinHelper;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
@@ -50,6 +48,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.RecipeChoice.MaterialChoice;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -60,7 +59,7 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.logging.Level;
 
-@SuppressWarnings("deprecation")
+@SuppressWarnings({"deprecation", "unused"})
 public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implements JEGSlimefunGuideImplementation {
 
     private static final int MAX_ITEM_GROUPS = 36;
@@ -69,13 +68,23 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
     private final ItemStack item;
 
     public SurvivalGuideImplementation() {
-        item = new SlimefunGuideItem(this, SlimefunGuide.getItem(getMode()).getItemMeta().getDisplayName());
+        ItemMeta meta = SlimefunGuide.getItem(getMode()).getItemMeta();
+        String name = "";
+        if (meta != null) {
+            name = meta.getDisplayName();
+        }
+        item = new SlimefunGuideItem(this, name);
     }
 
     // fallback
     @Deprecated
     public SurvivalGuideImplementation(boolean v1, boolean v2) {
-        item = new SlimefunGuideItem(this, SlimefunGuide.getItem(getMode()).getItemMeta().getDisplayName());
+        ItemMeta meta = SlimefunGuide.getItem(getMode()).getItemMeta();
+        String name = "";
+        if (meta != null) {
+            name = meta.getDisplayName();
+        }
+        item = new SlimefunGuideItem(this, name);
     }
 
     @ParametersAreNonnullByDefault
@@ -244,7 +253,16 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
             lore.add("");
 
             for (ItemGroup parent : ((LockedItemGroup) group).getParents()) {
-                lore.add(parent.getItem(p).getItemMeta().getDisplayName());
+                ItemMeta meta = parent.getItem(p).getItemMeta();
+                if (meta == null) {
+                    continue;
+                }
+                lore.add(meta.getDisplayName());
+            }
+
+            ItemMeta meta = group.getItem(p).getItemMeta();
+            if (meta == null) {
+                return;
             }
 
             menu.addItem(
@@ -254,7 +272,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
                             "&4"
                                     + Slimefun.getLocalization().getMessage(p, "guide.locked")
                                     + " &7- &f"
-                                    + group.getItem(p).getItemMeta().getDisplayName(),
+                                    + meta.getDisplayName(),
                             lore.toArray(new String[0])));
             menu.addMenuClickHandler(index, ChestMenuUtils.getEmptyClickHandler());
         }
@@ -424,27 +442,6 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         String searchTerm = ChatColor.stripColor(input.toLowerCase(Locale.ROOT));
         SearchGroup group = new SearchGroup(this, p, searchTerm, JustEnoughGuide.getConfigManager().isPinyinSearch());
         group.open(p, profile, getMode());
-    }
-
-    @ParametersAreNonnullByDefault
-    private boolean isItemGroupAccessible(Player p, SlimefunItem slimefunItem) {
-        return Slimefun.getConfigManager().isShowHiddenItemGroupsInSearch()
-                || slimefunItem.getItemGroup().isAccessible(p);
-    }
-
-    @ParametersAreNonnullByDefault
-    private boolean isSearchFilterApplicable(SlimefunItem slimefunItem, String searchTerm, boolean pinyin) {
-        String itemName = ChatColor.stripColor(slimefunItem.getItemName()).toLowerCase(Locale.ROOT);
-        if (itemName.isEmpty()) {
-            return false;
-        }
-        if (pinyin) {
-            final String pinyinName = PinyinHelper.toPinyin(itemName, PinyinStyleEnum.INPUT, "");
-            final String pinyinFirstLetter = PinyinHelper.toPinyin(itemName, PinyinStyleEnum.FIRST_LETTER, "");
-            return itemName.contains(searchTerm) || pinyinName.contains(searchTerm) || pinyinFirstLetter.contains(searchTerm);
-        } else {
-            return itemName.contains(searchTerm);
-        }
     }
 
     @Override

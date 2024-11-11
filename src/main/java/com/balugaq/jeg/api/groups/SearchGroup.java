@@ -40,6 +40,13 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 
+/**
+ * This group is used to display the search results of the search feature.
+ * Supports Pinyin search and page turning.
+ *
+ * @author balugaq
+ * @since 1.0
+ */
 @SuppressWarnings({"deprecation", "unused"})
 @NotDisplayInSurvivalMode
 @NotDisplayInCheatMode

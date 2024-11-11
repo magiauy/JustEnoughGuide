@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import javax.annotation.Nonnull;
 import java.util.List;
 
+@SuppressWarnings("deprecation")
 public interface JEGSlimefunGuideImplementation extends SlimefunGuideImplementation {
     @Nonnull
     ChestMenu create(@Nonnull Player p);

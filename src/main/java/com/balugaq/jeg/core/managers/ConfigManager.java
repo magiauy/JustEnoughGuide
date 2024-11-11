@@ -1,5 +1,6 @@
 package com.balugaq.jeg.core.managers;
 
+import com.balugaq.jeg.api.managers.AbstractManager;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -12,7 +13,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
-public class ConfigManager {
+public class ConfigManager extends AbstractManager {
     private final boolean AUTO_UPDATE;
     private final boolean DEBUG;
     private final boolean SURVIVAL_IMPROVEMENTS;

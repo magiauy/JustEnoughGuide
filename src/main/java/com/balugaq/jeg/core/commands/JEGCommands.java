@@ -30,9 +30,6 @@ public class JEGCommands implements TabExecutor {
 
         // Player or console
         switch (args[0].toLowerCase(Locale.ROOT)) {
-            case "help" -> {
-                onHelp(sender);
-            }
             case "reload" -> {
                 onReload(sender);
             }
