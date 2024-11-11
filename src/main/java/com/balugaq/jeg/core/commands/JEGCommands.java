@@ -1,5 +1,7 @@
 package com.balugaq.jeg.core.commands;
 
+import com.balugaq.jeg.api.interfaces.JEGCommand;
+import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -11,16 +13,20 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 @SuppressWarnings("unused")
+@Getter
 public class JEGCommands implements TabExecutor {
     private final JavaPlugin plugin;
-
+    private final List<JEGCommand> commands = new ArrayList<>();
+    private final JEGCommand defaultCommand;
     public JEGCommands(JavaPlugin plugin) {
         this.plugin = plugin;
+        this.defaultCommand = new HelpCommand(this.plugin);
     }
-
+    public void addCommand(JEGCommand command) {
+        this.commands.add(command);
+    }
     @Override
     public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args) {
         if (args.length == 0) {
@@ -29,31 +35,28 @@ public class JEGCommands implements TabExecutor {
         }
 
         // Player or console
-        switch (args[0].toLowerCase(Locale.ROOT)) {
-            case "reload" -> {
-                onReload(sender);
-            }
-            default -> {
-                onHelp(sender);
+        for (JEGCommand jegCommand : this.commands) {
+            if (jegCommand.canCommand(sender, command, label, args)) {
+                jegCommand.onCommand(sender, command, label, args);
+                return true;
             }
         }
+
+        this.defaultCommand.onCommand(sender, command, label, args);
 
         return true;
     }
 
     public @Nonnull List<String> onTabCompleteRaw(@Nonnull CommandSender sender, @Nonnull String[] args) {
-        switch (args.length) {
-            case 1 -> {
-                return List.of(
-                        "help",
-                        "reload"
-                );
-            }
-
-            default -> {
-                return List.of();
+        List<String> result = new ArrayList<>();
+        for (JEGCommand jegCommand : this.commands) {
+            List<String> partial = jegCommand.onTabCompleteRaw(sender, args);
+            if (partial != null) {
+                result.addAll(partial);
             }
         }
+
+        return result;
     }
 
     @Override
@@ -61,23 +64,5 @@ public class JEGCommands implements TabExecutor {
             @Nonnull CommandSender sender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args) {
         List<String> raw = onTabCompleteRaw(sender, args);
         return StringUtil.copyPartialMatches(args[args.length - 1], raw, new ArrayList<>());
-    }
-
-    private void onHelp(CommandSender sender) {
-        sender.sendMessage(ChatColor.GREEN + "JEG Commands:");
-        sender.sendMessage(ChatColor.GREEN + "/jeg help - Show this help message");
-        sender.sendMessage(ChatColor.GREEN + "/jeg reload - Reload JEG plugin");
-    }
-
-    private void onReload(CommandSender sender) {
-        sender.sendMessage(ChatColor.GREEN + "Reloading JEG plugin...");
-        try {
-            plugin.reloadConfig();
-            sender.sendMessage(ChatColor.GREEN + "JEG plugin has been reloaded.");
-        } catch (Throwable e) {
-            sender.sendMessage(ChatColor.RED + "Failed to reload JEG plugin.");
-            e.printStackTrace();
-            return;
-        }
     }
 }
