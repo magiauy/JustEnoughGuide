@@ -44,9 +44,11 @@ public class HelpCommand implements JEGCommand {
 
     @Override
     public boolean canCommand(@Nonnull CommandSender sender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args) {
-        if (args.length == 1) {
-            if ("help".equalsIgnoreCase(args[0])) {
-                return true;
+        if (sender.isOp()) {
+            if (args.length == 1) {
+                if ("help".equalsIgnoreCase(args[0])) {
+                    return true;
+                }
             }
         }
         return false;
