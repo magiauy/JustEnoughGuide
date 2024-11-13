@@ -57,12 +57,16 @@ public class ReloadCommand implements JEGCommand {
     }
 
     private void onReload(CommandSender sender) {
-        sender.sendMessage(ChatColor.GREEN + "Reloading JEG plugin...");
+        sender.sendMessage(ChatColor.GREEN + "Reloading plugin...");
         try {
+            plugin.onDisable();
+            sender.sendMessage(ChatColor.GREEN + "plugin has been disabled.");
+            plugin.onEnable();
+            sender.sendMessage(ChatColor.GREEN + "plugin has been enabled.");
             plugin.reloadConfig();
-            sender.sendMessage(ChatColor.GREEN + "JEG plugin has been reloaded.");
+            sender.sendMessage(ChatColor.GREEN + "plugin has been reloaded.");
         } catch (Throwable e) {
-            sender.sendMessage(ChatColor.RED + "Failed to reload JEG plugin.");
+            sender.sendMessage(ChatColor.RED + "Failed to reload plugin.");
             e.printStackTrace();
             return;
         }

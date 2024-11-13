@@ -133,6 +133,10 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
             }
         }
 
+        bookmarkManager = null;
+        commandManager = null;
+        configManager = null;
+        listenerManager = null;
         instance = null;
         getLogger().info("成功禁用此附属");
     }
