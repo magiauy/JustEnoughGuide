@@ -1,10 +1,10 @@
 package com.balugaq.jeg.core.managers;
 
 import com.balugaq.jeg.api.managers.AbstractManager;
-import com.balugaq.jeg.implementation.JustEnoughGuide;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
@@ -33,9 +33,9 @@ public class ConfigManager extends AbstractManager {
     private final boolean CHEAT_IMPROVEMENTS;
     private final boolean PINYIN_SEARCH;
     private final boolean BOOKMARK;
-    private final JustEnoughGuide plugin;
+    private final JavaPlugin plugin;
 
-    public ConfigManager(JustEnoughGuide plugin) {
+    public ConfigManager(JavaPlugin plugin) {
         this.plugin = plugin;
         setupDefaultConfig();
         this.AUTO_UPDATE = plugin.getConfig().getBoolean("auto-update");

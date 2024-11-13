@@ -75,8 +75,8 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
         instance = this;
 
         getLogger().info("正在加载配置文件...");
-        this.configManager = new ConfigManager(this);
         saveDefaultConfig();
+        this.configManager = new ConfigManager(this);
 
         getLogger().info("正在注册监听器...");
         this.listenerManager = new ListenerManager(this);
@@ -133,10 +133,10 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
             }
         }
 
-        bookmarkManager = null;
-        commandManager = null;
-        configManager = null;
-        listenerManager = null;
+        this.bookmarkManager = null;
+        this.commandManager = null;
+        this.configManager = null;
+        this.listenerManager = null;
         instance = null;
         getLogger().info("成功禁用此附属");
     }

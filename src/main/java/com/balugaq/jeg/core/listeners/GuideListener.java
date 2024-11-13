@@ -8,6 +8,7 @@ import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 import java.util.Optional;
@@ -20,7 +21,7 @@ import java.util.Optional;
  * @since 1.0
  */
 public class GuideListener implements Listener {
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void onGuideOpen(SlimefunGuideOpenEvent e) {
         JustEnoughGuide.getInstance().debug("Listened to SlimefunGuideOpenEvent. Player: " + e.getPlayer().getName() + ", Layout: " + e.getGuideLayout());
         if (!e.isCancelled()) {

@@ -13,7 +13,6 @@ import java.util.List;
 /**
  * This is the implementation of the "/jeg reload" command.
  * It reloads the JEG plugin configuration.
- * **NOT RELOAD THE PLUGIN ITSELF**.
  *
  * @author balugaq
  * @since 1.1
@@ -61,10 +60,13 @@ public class ReloadCommand implements JEGCommand {
     private void onReload(CommandSender sender) {
         sender.sendMessage(ChatColor.GREEN + "Reloading plugin...");
         try {
+            if (plugin == null) {
+                sender.sendMessage(ChatColor.RED + "Failed to reload plugin.");
+                return;
+            }
+
             plugin.onDisable();
-            sender.sendMessage(ChatColor.GREEN + "plugin has been disabled.");
             plugin.onEnable();
-            sender.sendMessage(ChatColor.GREEN + "plugin has been enabled.");
             plugin.reloadConfig();
             sender.sendMessage(ChatColor.GREEN + "plugin has been reloaded.");
         } catch (Throwable e) {

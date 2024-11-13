@@ -24,8 +24,6 @@ import java.lang.reflect.Method;
  */
 @UtilityClass
 public final class GuideUtil {
-    private static final SlimefunGuideImplementation SURVIVAL_GUIDE_IMPLEMENTATION = Slimefun.getRegistry().getSlimefunGuide(SlimefunGuideMode.SURVIVAL_MODE);
-    private static final SlimefunGuideImplementation CHEAT_GUIDE_IMPLEMENTATION = Slimefun.getRegistry().getSlimefunGuide(SlimefunGuideMode.CHEAT_MODE);
     private static final ItemStack BOOK_MARK_MENU_BUTTON = ItemStackUtil.getCleanItem(new CustomItemStack(
             Material.NETHER_STAR,
             "&e&l收藏物列表"
@@ -71,16 +69,16 @@ public final class GuideUtil {
      */
     public static SlimefunGuideImplementation getGuide(Player player, SlimefunGuideMode mode) {
         if (mode == SlimefunGuideMode.SURVIVAL_MODE) {
-            return SURVIVAL_GUIDE_IMPLEMENTATION;
+            return Slimefun.getRegistry().getSlimefunGuide(SlimefunGuideMode.SURVIVAL_MODE);
         }
 
         // Player must be op or have the permission "slimefun.cheat.items" to access the cheat guide
         if ((player.isOp() || player.hasPermission("slimefun.cheat.items")) && mode == SlimefunGuideMode.CHEAT_MODE) {
-            return CHEAT_GUIDE_IMPLEMENTATION;
+            return Slimefun.getRegistry().getSlimefunGuide(SlimefunGuideMode.CHEAT_MODE);
         }
 
         // Fallback to survival guide if no permission is given
-        return SURVIVAL_GUIDE_IMPLEMENTATION;
+        return Slimefun.getRegistry().getSlimefunGuide(SlimefunGuideMode.SURVIVAL_MODE);
     }
 
     public static void removeLastEntry(@Nonnull GuideHistory guideHistory) {
