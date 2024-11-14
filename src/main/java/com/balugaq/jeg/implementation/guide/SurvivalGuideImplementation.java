@@ -638,6 +638,21 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
 
         MenuClickHandler clickHandler = (pl, slot, itemstack, action) -> {
             try {
+                if (!action.isRightClicked() && action.isShiftClicked()) {
+                    // Open the item's item group if exists
+                    final SlimefunItem sfItem = SlimefunItem.getByItem(itemstack);
+                    if (sfItem != null) {
+                        final ItemGroup itemGroup = sfItem.getItemGroup();
+                        if (itemGroup != null) {
+                            int page = 1;
+                            if (isTaggedGroupType(itemGroup)) {
+                                page = itemGroup.getItems().indexOf(sfItem) / 36;
+                            }
+                            openItemGroup(profile, itemGroup, page);
+                            return false;
+                        }
+                    }
+                }
                 if (itemstack != null && itemstack.getType() != Material.BARRIER) {
                     displayItem(profile, itemstack, 0, true);
                 }
