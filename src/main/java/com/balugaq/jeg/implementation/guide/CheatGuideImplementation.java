@@ -706,7 +706,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                         if (itemGroup != null) {
                             int page = 1;
                             if (isTaggedGroupType(itemGroup)) {
-                                page = itemGroup.getItems().indexOf(sfItem) / 36;
+                                page = (itemGroup.getItems().indexOf(sfItem) / 36) + 1;
                             }
                             openItemGroup(profile, itemGroup, page);
                             return false;
@@ -968,7 +968,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
 
     @ParametersAreNonnullByDefault
     private void printErrorMessage(Player p, Throwable x) {
-        p.sendMessage("&4服务器发生了一个内部错误. 请联系管理员处理.");
+        p.sendMessage(ChatColor.DARK_RED + "服务器发生了一个内部错误. 请联系管理员处理.");
         JustEnoughGuide.getInstance().getLogger().log(Level.SEVERE, "在打开指南书里的 Slimefun 物品时发生了意外!", x);
     }
 
