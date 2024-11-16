@@ -4,6 +4,7 @@ import com.balugaq.jeg.api.managers.AbstractManager;
 import com.balugaq.jeg.core.listeners.GuideListener;
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -24,12 +25,27 @@ public class ListenerManager extends AbstractManager {
     public ListenerManager(JavaPlugin plugin) {
         this.plugin = plugin;
         listeners.add(new GuideListener());
-        registerListeners();
     }
 
     private void registerListeners() {
         for (Listener listener : listeners) {
             Bukkit.getServer().getPluginManager().registerEvents(listener, plugin);
         }
+    }
+
+    private void unregisterListeners() {
+        for (Listener listener : listeners) {
+            HandlerList.unregisterAll(listener);
+        }
+    }
+
+    @Override
+    public void onLoad() {
+        registerListeners();
+    }
+
+    @Override
+    public void onUnload() {
+        unregisterListeners();
     }
 }

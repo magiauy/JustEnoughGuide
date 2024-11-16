@@ -6,6 +6,7 @@ import com.balugaq.jeg.api.interfaces.NotDisplayInSurvivalMode;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
+import com.balugaq.jeg.utils.JEGVersionedItemFlag;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.groups.FlexItemGroup;
@@ -20,7 +21,6 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.chat.ChatInput;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.ItemUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import io.github.thebusybiscuit.slimefun4.utils.compatibility.VersionedItemFlag;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -205,7 +205,7 @@ public class BookmarkGroup extends FlexItemGroup {
                         meta.addItemFlags(
                                 ItemFlag.HIDE_ATTRIBUTES,
                                 ItemFlag.HIDE_ENCHANTS,
-                                VersionedItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+                                JEGVersionedItemFlag.HIDE_ADDITIONAL_TOOLTIP);
                     });
                     handler = (pl, slot, itm, action) -> {
                         try {

@@ -5,6 +5,7 @@ import com.balugaq.jeg.api.interfaces.NotDisplayInSurvivalMode;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
+import com.balugaq.jeg.utils.JEGVersionedItemFlag;
 import com.github.houbb.pinyin.constant.enums.PinyinStyleEnum;
 import com.github.houbb.pinyin.util.PinyinHelper;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
@@ -20,7 +21,6 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.chat.ChatInput;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import io.github.thebusybiscuit.slimefun4.utils.ChatUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import io.github.thebusybiscuit.slimefun4.utils.compatibility.VersionedItemFlag;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -181,7 +181,7 @@ public class SearchGroup extends FlexItemGroup {
                     meta.addItemFlags(
                             ItemFlag.HIDE_ATTRIBUTES,
                             ItemFlag.HIDE_ENCHANTS,
-                            VersionedItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+                            JEGVersionedItemFlag.HIDE_ADDITIONAL_TOOLTIP);
                 });
                 chestMenu.addItem(MAIN_CONTENT[i], ItemStackUtil.getCleanItem(itemstack), (pl, slot, itm, action) -> {
                     try {

@@ -9,6 +9,8 @@ depend:
   - Slimefun
 softdepend:
   - GuizhanLibPlugin
+  - Networks
+  - OreWorkshop
 commands:
   justenoughguide:
     aliases:

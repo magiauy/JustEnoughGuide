@@ -7,6 +7,7 @@ package com.balugaq.jeg.core.managers;
  * @see com.balugaq.jeg.core.managers.BookmarkManager
  * @see com.balugaq.jeg.core.managers.CommandManager
  * @see com.balugaq.jeg.core.managers.ConfigManager
+ * @see com.balugaq.jeg.core.managers.IntegrationManager
  * @see com.balugaq.jeg.core.managers.ListenerManager
  * @since 1.1
  */

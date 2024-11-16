@@ -3,16 +3,20 @@ package com.balugaq.jeg.implementation;
 import com.balugaq.jeg.core.managers.BookmarkManager;
 import com.balugaq.jeg.core.managers.CommandManager;
 import com.balugaq.jeg.core.managers.ConfigManager;
+import com.balugaq.jeg.core.managers.IntegrationManager;
 import com.balugaq.jeg.core.managers.ListenerManager;
 import com.balugaq.jeg.implementation.guide.CheatGuideImplementation;
 import com.balugaq.jeg.implementation.guide.SurvivalGuideImplementation;
+import com.balugaq.jeg.utils.MCVersion;
 import com.balugaq.jeg.utils.ReflectionUtil;
+import com.google.common.base.Preconditions;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.implementation.guide.CheatSheetSlimefunGuide;
 import io.github.thebusybiscuit.slimefun4.implementation.guide.SurvivalSlimefunGuide;
+import io.github.thebusybiscuit.slimefun4.utils.NumberUtils;
 import lombok.Getter;
 import net.guizhanss.guizhanlibplugin.updater.GuizhanUpdater;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -34,6 +38,8 @@ import java.util.Map;
 @SuppressWarnings("unused")
 @Getter
 public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
+    private static final int RECOMMENDED_JAVA_VERSION = 17;
+    private static final MCVersion RECOMMENDED_MC_VERSION = MCVersion.MINECRAFT_1_16;
     private static JustEnoughGuide instance;
     private final String username;
     private final String repo;
@@ -41,7 +47,10 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
     private BookmarkManager bookmarkManager;
     private CommandManager commandManager;
     private ConfigManager configManager;
+    private IntegrationManager integrationManager;
     private ListenerManager listenerManager;
+    private MCVersion mcVersion;
+    private int javaVersion;
 
 
     public JustEnoughGuide() {
@@ -62,30 +71,57 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
         return getInstance().configManager;
     }
 
+    public static IntegrationManager getIntegrationManager() {
+        return getInstance().integrationManager;
+    }
+
     public static ListenerManager getListenerManager() {
         return getInstance().listenerManager;
     }
 
+    public static MCVersion getMCVersion() {
+        return getInstance().mcVersion;
+    }
+
     public static JustEnoughGuide getInstance() {
+        Preconditions.checkArgument(instance != null, "JustEnoughGuide 未被启用！");
         return JustEnoughGuide.instance;
     }
 
     @Override
     public void onEnable() {
+        Preconditions.checkArgument(instance == null, "JustEnoughGuide 已被启用！");
         instance = this;
 
         getLogger().info("正在加载配置文件...");
         saveDefaultConfig();
         this.configManager = new ConfigManager(this);
+        this.configManager.onLoad();
+
+        // Checking environment compatibility
+        boolean isCompatible = environmentCheck();
+
+        if (!isCompatible) {
+            getLogger().warning("环境不兼容！插件已被禁用！");
+            onDisable();
+            return;
+        }
+
+        getLogger().info("正在适配其他插件...");
+        this.integrationManager = new IntegrationManager(this);
+        this.integrationManager.onLoad();
 
         getLogger().info("正在注册监听器...");
         this.listenerManager = new ListenerManager(this);
+        this.listenerManager.onLoad();
 
         getLogger().info("尝试自动更新...");
         tryUpdate();
 
         getLogger().info("正在注册指令");
         this.commandManager = new CommandManager(this);
+        this.commandManager.onLoad();
+
         if (!commandManager.registerCommands()) {
             getLogger().warning("注册指令失败！");
         }
@@ -113,12 +149,14 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
 
             getLogger().info("正在加载书签...");
             this.bookmarkManager = new BookmarkManager(this);
+            this.bookmarkManager.onLoad();
         }
         getLogger().info("成功启用此附属");
     }
 
     @Override
     public void onDisable() {
+        Preconditions.checkArgument(instance != null, "JustEnoughGuide 未被启用！");
         Field field = ReflectionUtil.getField(Slimefun.getRegistry().getClass(), "guides");
         if (field != null) {
             field.setAccessible(true);
@@ -133,10 +171,24 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
             }
         }
 
+        // Managers
+        this.bookmarkManager.onUnload();
+        this.integrationManager.onUnload();
+        this.commandManager.onUnload();
+        this.listenerManager.onUnload();
+        this.configManager.onUnload();
+
         this.bookmarkManager = null;
+        this.integrationManager = null;
         this.commandManager = null;
-        this.configManager = null;
         this.listenerManager = null;
+        this.configManager = null;
+
+        // Other fields
+        this.mcVersion = null;
+        this.javaVersion = 0;
+
+        // Clear instance
         instance = null;
         getLogger().info("成功禁用此附属");
     }
@@ -167,5 +219,34 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
         if (getConfigManager().isDebug()) {
             getLogger().warning("[DEBUG] " + message);
         }
+    }
+
+    public String getVersion() {
+        return getDescription().getVersion();
+    }
+
+    private boolean environmentCheck() {
+        this.mcVersion = MCVersion.getCurrentVersion();
+        this.javaVersion = NumberUtils.getJavaVersion();
+        if (mcVersion == null) {
+            getLogger().warning("无法获取到 Minecraft 版本！");
+            return false;
+        }
+
+        if (mcVersion == MCVersion.UNKNOWN) {
+            getLogger().warning("无法识别到 Minecraft 版本！");
+            return false;
+        }
+
+        if (!mcVersion.isAtLeast(RECOMMENDED_MC_VERSION)) {
+            return false;
+        }
+
+        if (javaVersion < RECOMMENDED_JAVA_VERSION) {
+            getLogger().warning("Java 版本过低，请使用 Java " + RECOMMENDED_JAVA_VERSION + " 或以上版本！");
+            return false;
+        }
+
+        return true;
     }
 }

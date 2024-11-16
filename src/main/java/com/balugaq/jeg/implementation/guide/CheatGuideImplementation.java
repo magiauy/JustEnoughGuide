@@ -839,6 +839,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                 || clazz == NestedItemGroup.class
                 || clazz == LockedItemGroup.class
                 || clazz == SeasonalItemGroup.class
+                || clazz == SearchGroup.class
                 || itemGroup instanceof BookmarkRelocation
                 || clazz.getName().equalsIgnoreCase("me.voper.slimeframe.implementation.groups.ChildGroup")
                 || clazz.getName().endsWith("DummyItemGroup")

@@ -7,4 +7,9 @@ package com.balugaq.jeg.api.managers;
  * @since 1.1
  */
 public abstract class AbstractManager {
+    public void onLoad() {
+    }
+
+    public void onUnload() {
+    }
 }
