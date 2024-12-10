@@ -9,6 +9,7 @@ import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -18,7 +19,7 @@ public interface JEGSlimefunGuideImplementation extends SlimefunGuideImplementat
     @Nonnull
     ChestMenu create(@Nonnull Player p);
 
-    default void openBookMarkGroup(Player player, PlayerProfile profile) {
+    default void openBookMarkGroup(@NotNull Player player, @NotNull PlayerProfile profile) {
         List<SlimefunItem> items = JustEnoughGuide.getBookmarkManager().getBookmarkedItems(player);
         if (items == null || items.isEmpty()) {
             return;
@@ -26,7 +27,7 @@ public interface JEGSlimefunGuideImplementation extends SlimefunGuideImplementat
         new BookmarkGroup(this, player, items).open(player, profile, getMode());
     }
 
-    default void openItemMarkGroup(ItemGroup itemGroup, Player player, PlayerProfile profile) {
+    default void openItemMarkGroup(@NotNull ItemGroup itemGroup, @NotNull Player player, @NotNull PlayerProfile profile) {
         new ItemMarkGroup(this, itemGroup, player).open(player, profile, getMode());
     }
 }

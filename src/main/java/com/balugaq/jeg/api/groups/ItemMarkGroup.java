@@ -34,6 +34,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -66,14 +67,14 @@ public class ItemMarkGroup extends FlexItemGroup {
     private final Player player;
     private final ItemGroup itemGroup;
     private final int page;
-    private final List<SlimefunItem> slimefunItemList;
+    private final @NotNull List<SlimefunItem> slimefunItemList;
     private Map<Integer, ItemMarkGroup> pageMap = new LinkedHashMap<>();
 
-    public ItemMarkGroup(JEGSlimefunGuideImplementation implementation, ItemGroup itemGroup, Player player) {
+    public ItemMarkGroup(JEGSlimefunGuideImplementation implementation, @NotNull ItemGroup itemGroup, Player player) {
         this(implementation, itemGroup, player, 1);
     }
 
-    public ItemMarkGroup(JEGSlimefunGuideImplementation implementation, ItemGroup itemGroup, Player player, int page) {
+    public ItemMarkGroup(JEGSlimefunGuideImplementation implementation, @NotNull ItemGroup itemGroup, Player player, int page) {
         super(new NamespacedKey(JAVA_PLUGIN, "jeg_item_mark_group_" + UUID.randomUUID()), new ItemStack(Material.BARRIER));
         this.page = page;
         this.player = player;
@@ -104,7 +105,7 @@ public class ItemMarkGroup extends FlexItemGroup {
         }
     }
 
-    protected ItemMarkGroup(ItemMarkGroup itemMarkGroup, int page) {
+    protected ItemMarkGroup(@NotNull ItemMarkGroup itemMarkGroup, int page) {
         this(itemMarkGroup.implementation, itemMarkGroup.itemGroup, itemMarkGroup.player, page);
     }
 
@@ -114,7 +115,7 @@ public class ItemMarkGroup extends FlexItemGroup {
     }
 
     @Override
-    public void open(Player player, PlayerProfile playerProfile, SlimefunGuideMode slimefunGuideMode) {
+    public void open(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
         playerProfile.getGuideHistory().add(this, this.page);
         this.generateMenu(player, playerProfile, slimefunGuideMode).open(player);
     }
@@ -143,7 +144,7 @@ public class ItemMarkGroup extends FlexItemGroup {
         });
 
         // Search feature!
-        chestMenu.addItem(SEARCH_SLOT, ChestMenuUtils.getSearchButton(player));
+        chestMenu.addItem(SEARCH_SLOT, ItemStackUtil.getCleanItem(ChestMenuUtils.getSearchButton(player)));
         chestMenu.addMenuClickHandler(SEARCH_SLOT, (pl, slot, item, action) -> {
             pl.closeInventory();
 
@@ -193,7 +194,7 @@ public class ItemMarkGroup extends FlexItemGroup {
                         lore = research.getLevelCost() + " 级经验";
                     }
 
-                    itemstack = new CustomItemStack(new CustomItemStack(
+                    itemstack = ItemStackUtil.getCleanItem(new CustomItemStack(
                             ChestMenuUtils.getNoPermissionItem(),
                             "&f" + ItemUtils.getItemName(slimefunItem.getItem()),
                             "&7" + slimefunItem.getId(),
@@ -208,7 +209,7 @@ public class ItemMarkGroup extends FlexItemGroup {
                         return false;
                     };
                 } else {
-                    itemstack = new CustomItemStack(slimefunItem.getItem(), meta -> {
+                    itemstack = ItemStackUtil.getCleanItem(new CustomItemStack(slimefunItem.getItem(), meta -> {
                         ItemGroup itemGroup = slimefunItem.getItemGroup();
                         List<String> additionLore = List.of("",
                                 ChatColor.DARK_GRAY + "\u21E8 " + ChatColor.WHITE + (itemGroup.getAddon() == null ? "Slimefun" : itemGroup.getAddon().getName()) + " - " + itemGroup.getDisplayName(player),
@@ -225,7 +226,7 @@ public class ItemMarkGroup extends FlexItemGroup {
                                 ItemFlag.HIDE_ATTRIBUTES,
                                 ItemFlag.HIDE_ENCHANTS,
                                 JEGVersionedItemFlag.HIDE_ADDITIONAL_TOOLTIP);
-                    });
+                    }));
                     handler = (pl, slot, itm, action) -> {
                         try {
                             JustEnoughGuide.getBookmarkManager().addBookmark(pl, slimefunItem);
@@ -279,7 +280,7 @@ public class ItemMarkGroup extends FlexItemGroup {
         }
     }
 
-    private List<SlimefunItem> getAllMatchedItems(Player p, String searchTerm, boolean pinyin) {
+    private @NotNull List<SlimefunItem> getAllMatchedItems(@NotNull Player p, @NotNull String searchTerm, boolean pinyin) {
         return Slimefun.getRegistry().getEnabledSlimefunItems()
                 .stream()
                 .filter(slimefunItem -> {

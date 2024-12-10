@@ -7,6 +7,7 @@ import com.balugaq.jeg.core.commands.ReloadCommand;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import lombok.Getter;
 import org.bukkit.command.PluginCommand;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ import java.util.List;
 public class CommandManager extends AbstractManager {
 
     private final JustEnoughGuide plugin;
-    private final JEGCommands commands;
+    private final @NotNull JEGCommands commands;
 
     public CommandManager(JustEnoughGuide plugin) {
         this.plugin = plugin;

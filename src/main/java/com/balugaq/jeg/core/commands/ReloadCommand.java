@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -57,7 +58,7 @@ public class ReloadCommand implements JEGCommand {
         onReload(sender);
     }
 
-    private void onReload(CommandSender sender) {
+    private void onReload(@NotNull CommandSender sender) {
         sender.sendMessage(ChatColor.GREEN + "Reloading plugin...");
         try {
             if (plugin == null) {

@@ -2,6 +2,7 @@ package com.balugaq.jeg.utils;
 
 import io.github.thebusybiscuit.slimefun4.libraries.paperlib.PaperLib;
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * This class represents a Minecraft version. It contains a major and minor version number, and provides methods to compare
@@ -11,7 +12,7 @@ import lombok.Getter;
  */
 @SuppressWarnings("unused")
 @Getter
-public enum MCVersion {
+public enum MinecraftVersion {
     MINECRAFT_1_16(16, 0),
     MINECRAFT_1_16_1(16, 1),
     MINECRAFT_1_16_2(16, 2),
@@ -59,13 +60,13 @@ public enum MCVersion {
     private final int major;
     private final int minor;
 
-    MCVersion(int major, int minor) {
+    MinecraftVersion(int major, int minor) {
         this.major = major;
         this.minor = minor;
     }
 
-    public static MCVersion of(int major, int minor) {
-        for (MCVersion version : values()) {
+    public static @NotNull MinecraftVersion of(int major, int minor) {
+        for (MinecraftVersion version : values()) {
             if (version.major == major && version.minor == minor) {
                 return version;
             }
@@ -73,17 +74,17 @@ public enum MCVersion {
         return UNKNOWN;
     }
 
-    public static MCVersion getCurrentVersion() {
+    public static MinecraftVersion getCurrentVersion() {
         int major = PaperLib.getMinecraftVersion();
         int minor = PaperLib.getMinecraftPatchVersion();
         return of(major, minor);
     }
 
-    public boolean isAtLeast(MCVersion version) {
+    public boolean isAtLeast(@NotNull MinecraftVersion version) {
         return this.major > version.major || (this.major == version.major && this.minor >= version.minor);
     }
 
-    public boolean isBelow(MCVersion version) {
+    public boolean isBelow(@NotNull MinecraftVersion version) {
         return this.major < version.major || (this.major == version.major && this.minor < version.minor);
     }
 

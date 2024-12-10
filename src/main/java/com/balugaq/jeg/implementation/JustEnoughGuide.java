@@ -7,7 +7,7 @@ import com.balugaq.jeg.core.managers.IntegrationManager;
 import com.balugaq.jeg.core.managers.ListenerManager;
 import com.balugaq.jeg.implementation.guide.CheatGuideImplementation;
 import com.balugaq.jeg.implementation.guide.SurvivalGuideImplementation;
-import com.balugaq.jeg.utils.MCVersion;
+import com.balugaq.jeg.utils.MinecraftVersion;
 import com.balugaq.jeg.utils.ReflectionUtil;
 import com.google.common.base.Preconditions;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
@@ -20,6 +20,7 @@ import io.github.thebusybiscuit.slimefun4.utils.NumberUtils;
 import lombok.Getter;
 import net.guizhanss.guizhanlibplugin.updater.GuizhanUpdater;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -39,17 +40,17 @@ import java.util.Map;
 @Getter
 public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
     private static final int RECOMMENDED_JAVA_VERSION = 17;
-    private static final MCVersion RECOMMENDED_MC_VERSION = MCVersion.MINECRAFT_1_16;
-    private static JustEnoughGuide instance;
-    private final String username;
-    private final String repo;
-    private final String branch;
-    private BookmarkManager bookmarkManager;
-    private CommandManager commandManager;
-    private ConfigManager configManager;
-    private IntegrationManager integrationManager;
-    private ListenerManager listenerManager;
-    private MCVersion mcVersion;
+    private static final MinecraftVersion RECOMMENDED_MC_VERSION = MinecraftVersion.MINECRAFT_1_16;
+    private static @org.jetbrains.annotations.Nullable JustEnoughGuide instance;
+    private final @NotNull String username;
+    private final @NotNull String repo;
+    private final @NotNull String branch;
+    private @org.jetbrains.annotations.Nullable BookmarkManager bookmarkManager;
+    private @org.jetbrains.annotations.Nullable CommandManager commandManager;
+    private @org.jetbrains.annotations.Nullable ConfigManager configManager;
+    private @org.jetbrains.annotations.Nullable IntegrationManager integrationManager;
+    private @org.jetbrains.annotations.Nullable ListenerManager listenerManager;
+    private @org.jetbrains.annotations.Nullable MinecraftVersion minecraftVersion;
     private int javaVersion;
 
 
@@ -79,11 +80,11 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
         return getInstance().listenerManager;
     }
 
-    public static MCVersion getMCVersion() {
-        return getInstance().mcVersion;
+    public static MinecraftVersion getMCVersion() {
+        return getInstance().minecraftVersion;
     }
 
-    public static JustEnoughGuide getInstance() {
+    public static @NotNull JustEnoughGuide getInstance() {
         Preconditions.checkArgument(instance != null, "JustEnoughGuide 未被启用！");
         return JustEnoughGuide.instance;
     }
@@ -185,7 +186,7 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
         this.configManager = null;
 
         // Other fields
-        this.mcVersion = null;
+        this.minecraftVersion = null;
         this.javaVersion = 0;
 
         // Clear instance
@@ -221,24 +222,24 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
         }
     }
 
-    public String getVersion() {
+    public @NotNull String getVersion() {
         return getDescription().getVersion();
     }
 
     private boolean environmentCheck() {
-        this.mcVersion = MCVersion.getCurrentVersion();
+        this.minecraftVersion = MinecraftVersion.getCurrentVersion();
         this.javaVersion = NumberUtils.getJavaVersion();
-        if (mcVersion == null) {
+        if (minecraftVersion == null) {
             getLogger().warning("无法获取到 Minecraft 版本！");
             return false;
         }
 
-        if (mcVersion == MCVersion.UNKNOWN) {
+        if (minecraftVersion == MinecraftVersion.UNKNOWN) {
             getLogger().warning("无法识别到 Minecraft 版本！");
             return false;
         }
 
-        if (!mcVersion.isAtLeast(RECOMMENDED_MC_VERSION)) {
+        if (!minecraftVersion.isAtLeast(RECOMMENDED_MC_VERSION)) {
             return false;
         }
 

@@ -10,6 +10,7 @@ import lombok.experimental.UtilityClass;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -67,7 +68,7 @@ public final class GuideUtil {
      * @param mode   The mode to get the guide for.
      * @return The guide implementation for the given player and mode.
      */
-    public static SlimefunGuideImplementation getGuide(Player player, SlimefunGuideMode mode) {
+    public static @NotNull SlimefunGuideImplementation getGuide(@NotNull Player player, SlimefunGuideMode mode) {
         if (mode == SlimefunGuideMode.SURVIVAL_MODE) {
             return Slimefun.getRegistry().getSlimefunGuide(SlimefunGuideMode.SURVIVAL_MODE);
         }
@@ -91,11 +92,11 @@ public final class GuideUtil {
         }
     }
 
-    public ItemStack getBookMarkMenuButton() {
+    public @NotNull ItemStack getBookMarkMenuButton() {
         return BOOK_MARK_MENU_BUTTON;
     }
 
-    public ItemStack getItemMarkMenuButton() {
+    public @NotNull ItemStack getItemMarkMenuButton() {
         return ITEM_MARK_MENU_BUTTON;
     }
 }

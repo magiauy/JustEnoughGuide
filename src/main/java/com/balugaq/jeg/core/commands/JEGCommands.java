@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.StringUtil;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -25,7 +26,7 @@ import java.util.List;
 public class JEGCommands implements TabExecutor {
     private final JavaPlugin plugin;
     private final List<JEGCommand> commands = new ArrayList<>();
-    private final JEGCommand defaultCommand;
+    private final @NotNull JEGCommand defaultCommand;
 
     public JEGCommands(JavaPlugin plugin) {
         this.plugin = plugin;

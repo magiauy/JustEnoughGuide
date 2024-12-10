@@ -1,6 +1,8 @@
 package com.balugaq.jeg.utils;
 
 import lombok.experimental.UtilityClass;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -14,7 +16,7 @@ import java.lang.reflect.Method;
 @SuppressWarnings({"unchecked", "unused"})
 @UtilityClass
 public final class ReflectionUtil {
-    public static boolean setValue(Object object, String field, Object value) {
+    public static boolean setValue(@NotNull Object object, @NotNull String field, Object value) {
         try {
             Field declaredField = object.getClass().getDeclaredField(field);
             declaredField.setAccessible(true);
@@ -26,7 +28,7 @@ public final class ReflectionUtil {
         return true;
     }
 
-    public static <T> boolean setStaticValue(Class<T> clazz, String field, Object value) {
+    public static <T> boolean setStaticValue(@NotNull Class<T> clazz, @NotNull String field, Object value) {
         try {
             Field declaredField = clazz.getDeclaredField(field);
             declaredField.setAccessible(true);
@@ -38,7 +40,7 @@ public final class ReflectionUtil {
         return true;
     }
 
-    public static Method getMethod(Class<?> clazz, String methodName) {
+    public static @Nullable Method getMethod(@NotNull Class<?> clazz, String methodName) {
         while (clazz != Object.class) {
             for (Method method : clazz.getDeclaredMethods()) {
                 if (method.getName().equals(methodName)) {
@@ -50,7 +52,7 @@ public final class ReflectionUtil {
         return null;
     }
 
-    public static Field getField(Class<?> clazz, String fieldName) {
+    public static @Nullable Field getField(@NotNull Class<?> clazz, String fieldName) {
         while (clazz != Object.class) {
             for (Field field : clazz.getDeclaredFields()) {
                 if (field.getName().equals(fieldName)) {
@@ -62,7 +64,7 @@ public final class ReflectionUtil {
         return null;
     }
 
-    public static <T, V> T getProperty(Object o, Class<V> clazz, String fieldName) throws IllegalAccessException {
+    public static <T, V> @Nullable T getProperty(Object o, @NotNull Class<V> clazz, String fieldName) throws IllegalAccessException {
         Field field = getField(clazz, fieldName);
         if (field != null) {
             boolean b = field.canAccess(o);

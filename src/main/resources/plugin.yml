@@ -11,6 +11,9 @@ softdepend:
   - GuizhanLibPlugin
   - Networks
   - OreWorkshop
+  - FinalTECH
+  - FinalTECH-Changed
+  - LogiTech
 commands:
   justenoughguide:
     aliases:

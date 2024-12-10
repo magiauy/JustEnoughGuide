@@ -30,6 +30,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -72,7 +73,7 @@ public class SearchGroup extends FlexItemGroup {
     private final List<SlimefunItem> slimefunItemList;
     private Map<Integer, SearchGroup> pageMap = new LinkedHashMap<>();
 
-    public SearchGroup(SlimefunGuideImplementation implementation, Player player, String searchTerm, boolean pinyin) {
+    public SearchGroup(SlimefunGuideImplementation implementation, @NotNull Player player, @NotNull String searchTerm, boolean pinyin) {
         super(new NamespacedKey(JAVA_PLUGIN, "jeg_search_group_" + UUID.randomUUID()), new ItemStack(Material.BARRIER));
         this.page = 1;
         this.searchTerm = searchTerm;
@@ -83,7 +84,7 @@ public class SearchGroup extends FlexItemGroup {
         this.pageMap.put(1, this);
     }
 
-    protected SearchGroup(SearchGroup searchGroup, int page) {
+    protected SearchGroup(@NotNull SearchGroup searchGroup, int page) {
         super(searchGroup.key, new ItemStack(Material.BARRIER));
         this.page = page;
         this.searchTerm = searchGroup.searchTerm;
@@ -100,7 +101,7 @@ public class SearchGroup extends FlexItemGroup {
     }
 
     @Override
-    public void open(Player player, PlayerProfile playerProfile, SlimefunGuideMode slimefunGuideMode) {
+    public void open(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
         playerProfile.getGuideHistory().add(this, this.page);
         this.generateMenu(player, playerProfile, slimefunGuideMode).open(player);
     }
@@ -129,7 +130,7 @@ public class SearchGroup extends FlexItemGroup {
         });
 
         // Search feature!
-        chestMenu.addItem(SEARCH_SLOT, ChestMenuUtils.getSearchButton(player));
+        chestMenu.addItem(SEARCH_SLOT, ItemStackUtil.getCleanItem(ChestMenuUtils.getSearchButton(player)));
         chestMenu.addMenuClickHandler(SEARCH_SLOT, (pl, slot, item, action) -> {
             pl.closeInventory();
 
@@ -167,7 +168,7 @@ public class SearchGroup extends FlexItemGroup {
             int index = i + this.page * MAIN_CONTENT.length - MAIN_CONTENT.length;
             if (index < this.slimefunItemList.size()) {
                 SlimefunItem slimefunItem = slimefunItemList.get(index);
-                ItemStack itemstack = new CustomItemStack(slimefunItem.getItem(), meta -> {
+                ItemStack itemstack = ItemStackUtil.getCleanItem(new CustomItemStack(slimefunItem.getItem(), meta -> {
                     ItemGroup itemGroup = slimefunItem.getItemGroup();
                     List<String> additionLore = List.of("", ChatColor.DARK_GRAY + "\u21E8 " + ChatColor.WHITE + (itemGroup.getAddon() == null ? "Slimefun" : itemGroup.getAddon().getName()) + " - " + itemGroup.getDisplayName(player));
                     if (meta.hasLore() && meta.getLore() != null) {
@@ -182,7 +183,7 @@ public class SearchGroup extends FlexItemGroup {
                             ItemFlag.HIDE_ATTRIBUTES,
                             ItemFlag.HIDE_ENCHANTS,
                             JEGVersionedItemFlag.HIDE_ADDITIONAL_TOOLTIP);
-                });
+                }));
                 chestMenu.addItem(MAIN_CONTENT[i], ItemStackUtil.getCleanItem(itemstack), (pl, slot, itm, action) -> {
                     try {
                         if (implementation.getMode() != SlimefunGuideMode.SURVIVAL_MODE && (pl.isOp() || pl.hasPermission("slimefun.cheat.items"))) {
@@ -220,7 +221,7 @@ public class SearchGroup extends FlexItemGroup {
         }
     }
 
-    private List<SlimefunItem> getAllMatchedItems(Player p, String searchTerm, boolean pinyin) {
+    private @NotNull List<SlimefunItem> getAllMatchedItems(@NotNull Player p, @NotNull String searchTerm, boolean pinyin) {
         return Slimefun.getRegistry().getEnabledSlimefunItems()
                 .stream()
                 .filter(slimefunItem -> {

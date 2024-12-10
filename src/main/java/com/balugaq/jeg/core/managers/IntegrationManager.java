@@ -3,6 +3,7 @@ package com.balugaq.jeg.core.managers;
 import com.balugaq.jeg.api.managers.AbstractManager;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * This class is responsible for managing integrations with other plugins.
@@ -16,7 +17,7 @@ public class IntegrationManager extends AbstractManager {
     private final boolean enabledNetworksExpansion;
     private final boolean enabledOreWorkshop;
 
-    public IntegrationManager(JavaPlugin plugin) {
+    public IntegrationManager(@NotNull JavaPlugin plugin) {
         boolean tmp;
         this.plugin = plugin;
 

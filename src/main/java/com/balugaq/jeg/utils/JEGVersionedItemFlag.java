@@ -17,11 +17,11 @@ import java.lang.reflect.Field;
  */
 @UtilityClass
 public class JEGVersionedItemFlag {
-    public static final ItemFlag HIDE_ADDITIONAL_TOOLTIP;
+    public static final @org.jetbrains.annotations.Nullable ItemFlag HIDE_ADDITIONAL_TOOLTIP;
 
     static {
-        MCVersion version = JustEnoughGuide.getMCVersion();
-        HIDE_ADDITIONAL_TOOLTIP = version.isAtLeast(MCVersion.MINECRAFT_1_20_5) ? getKey("HIDE_ADDITIONAL_TOOLTIP") : getKey("HIDE_POTION_EFFECTS");
+        MinecraftVersion version = JustEnoughGuide.getMCVersion();
+        HIDE_ADDITIONAL_TOOLTIP = version.isAtLeast(MinecraftVersion.MINECRAFT_1_20_5) ? getKey("HIDE_ADDITIONAL_TOOLTIP") : getKey("HIDE_POTION_EFFECTS");
     }
 
     @Nullable

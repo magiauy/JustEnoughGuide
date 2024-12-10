@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,7 @@ import java.util.List;
 @Getter
 public class ListenerManager extends AbstractManager {
     private final JavaPlugin plugin;
-    List<Listener> listeners = new ArrayList<>();
+    @NotNull List<Listener> listeners = new ArrayList<>();
 
     public ListenerManager(JavaPlugin plugin) {
         this.plugin = plugin;

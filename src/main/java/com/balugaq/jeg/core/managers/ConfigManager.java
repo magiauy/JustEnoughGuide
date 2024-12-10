@@ -5,6 +5,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
@@ -35,7 +36,7 @@ public class ConfigManager extends AbstractManager {
     private final boolean BOOKMARK;
     private final JavaPlugin plugin;
 
-    public ConfigManager(JavaPlugin plugin) {
+    public ConfigManager(@NotNull JavaPlugin plugin) {
         this.plugin = plugin;
         setupDefaultConfig();
         this.AUTO_UPDATE = plugin.getConfig().getBoolean("auto-update");
