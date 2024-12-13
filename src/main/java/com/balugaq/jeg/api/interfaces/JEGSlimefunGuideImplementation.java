@@ -8,6 +8,7 @@ import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,6 +23,7 @@ public interface JEGSlimefunGuideImplementation extends SlimefunGuideImplementat
     default void openBookMarkGroup(@NotNull Player player, @NotNull PlayerProfile profile) {
         List<SlimefunItem> items = JustEnoughGuide.getBookmarkManager().getBookmarkedItems(player);
         if (items == null || items.isEmpty()) {
+            player.sendMessage(ChatColor.RED + "你还没有收藏任何物品!");
             return;
         }
         new BookmarkGroup(this, player, items).open(player, profile, getMode());

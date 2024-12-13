@@ -56,6 +56,12 @@ import java.util.logging.Level;
 @NotDisplayInSurvivalMode
 @NotDisplayInCheatMode
 public class ItemMarkGroup extends FlexItemGroup {
+    private static final ItemStack ICON_BACKGROUND = new CustomItemStack(
+            Material.GREEN_STAINED_GLASS_PANE,
+            "&a&l添加收藏物",
+            "",
+            "&7左键物品添加到收藏中"
+    );
     private static final JavaPlugin JAVA_PLUGIN = JustEnoughGuide.getInstance();
     private final int BACK_SLOT;
     private final int SEARCH_SLOT;
@@ -174,7 +180,7 @@ public class ItemMarkGroup extends FlexItemGroup {
         });
 
         for (int slot : BORDER) {
-            chestMenu.addItem(slot, ItemStackUtil.getCleanItem(ChestMenuUtils.getBackground()));
+            chestMenu.addItem(slot, ItemStackUtil.getCleanItem(ICON_BACKGROUND));
             chestMenu.addMenuClickHandler(slot, ChestMenuUtils.getEmptyClickHandler());
         }
 
@@ -230,6 +236,8 @@ public class ItemMarkGroup extends FlexItemGroup {
                     handler = (pl, slot, itm, action) -> {
                         try {
                             JustEnoughGuide.getBookmarkManager().addBookmark(pl, slimefunItem);
+                            pl.sendMessage(ChatColor.GREEN + "已添加到收藏列表!");
+                            pl.playSound(pl.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
                         } catch (Exception | LinkageError x) {
                             printErrorMessage(pl, slimefunItem, x);
                         }
