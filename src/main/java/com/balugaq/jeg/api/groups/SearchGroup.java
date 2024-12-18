@@ -12,6 +12,7 @@ import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.groups.FlexItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
+import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.core.guide.GuideHistory;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuide;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation;
@@ -22,6 +23,9 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import io.github.thebusybiscuit.slimefun4.utils.ChatUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
+import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.AContainer;
+import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.MachineRecipe;
+import net.guizhanss.guizhanlib.minecraft.helper.inventory.ItemStackHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -34,6 +38,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -222,14 +227,42 @@ public class SearchGroup extends FlexItemGroup {
     }
 
     private @NotNull List<SlimefunItem> getAllMatchedItems(@NotNull Player p, @NotNull String searchTerm, boolean pinyin) {
-        return Slimefun.getRegistry().getEnabledSlimefunItems()
+        List<SlimefunItem> allItems = new ArrayList<>(Slimefun.getRegistry().getEnabledSlimefunItems()
                 .stream()
                 .filter(slimefunItem -> {
-                    return !slimefunItem.isHidden()
-                            && isItemGroupAccessible(p, slimefunItem)
-                            && isSearchFilterApplicable(slimefunItem, searchTerm, pinyin);
+                    if (!slimefunItem.isHidden() && isItemGroupAccessible(p, slimefunItem) && isSearchFilterApplicable(slimefunItem, searchTerm, pinyin)) {
+                        return true;
+                    }
+                    return false;
                 })
-                .toList();
+                .toList());
+
+        List<SlimefunItem> relatedMachines = new ArrayList<>(Slimefun.getRegistry().getEnabledSlimefunItems()
+                .stream()
+                .filter(slimefunItem -> {
+                    if (slimefunItem.isHidden() || !isItemGroupAccessible(p, slimefunItem)) {
+                        return false;
+                    }
+
+                    if (allItems.contains(slimefunItem)) {
+                        return false;
+                    }
+
+                    if (slimefunItem instanceof RecipeDisplayItem displayItem) {
+                        List<ItemStack> displayRecipes = displayItem.getDisplayRecipes();
+                        for (ItemStack displayItemStack : displayRecipes) {
+                            if (isSearchFilterApplicable(displayItemStack, searchTerm, pinyin)) {
+                                return true;
+                            }
+                        }
+                    }
+
+                    return false;
+                })
+                .toList());
+
+        allItems.addAll(relatedMachines);
+        return allItems;
     }
 
     @ParametersAreNonnullByDefault
@@ -241,6 +274,17 @@ public class SearchGroup extends FlexItemGroup {
     @ParametersAreNonnullByDefault
     private boolean isSearchFilterApplicable(SlimefunItem slimefunItem, String searchTerm, boolean pinyin) {
         String itemName = ChatColor.stripColor(slimefunItem.getItemName()).toLowerCase(Locale.ROOT);
+        return isSearchFilterApplicable(itemName, searchTerm, pinyin);
+    }
+
+    @ParametersAreNonnullByDefault
+    private boolean isSearchFilterApplicable(ItemStack itemStack, String searchTerm, boolean pinyin) {
+        String itemName = ChatColor.stripColor(ItemStackHelper.getDisplayName(itemStack)).toLowerCase(Locale.ROOT);
+        return isSearchFilterApplicable(itemName, searchTerm, pinyin);
+    }
+
+    @ParametersAreNonnullByDefault
+    private boolean isSearchFilterApplicable(String itemName, String searchTerm, boolean pinyin) {
         if (itemName.isEmpty()) {
             return false;
         }
