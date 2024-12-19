@@ -155,26 +155,9 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
             this.bookmarkManager.onLoad();
         }
 
-        getLogger().info("正在加载 Metrics...");
-        loadMetrics();
-
         getLogger().info("成功启用此附属");
     }
 
-    private void loadMetrics() {
-        try {
-            Metrics metrics = new Metrics(this, 49594);
-            boolean enableAutoUpdate = getConfigManager().isAutoUpdate();
-            boolean enableDebug = getConfigManager().isDebug();
-            String autoUpdates = String.valueOf(enableAutoUpdate);
-            String debug = String.valueOf(enableDebug);
-            metrics.addCustomChart(new SimplePie("auto_updates", () -> autoUpdates));
-            metrics.addCustomChart(new SimplePie("debug", () -> debug));
-        } catch (NoClassDefFoundError | NullPointerException | UnsupportedClassVersionError e) {
-            getLogger().info("Metrics 加载失败: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
     public void tryUpdate() {
         try {
             if (configManager.isAutoUpdate() && getDescription().getVersion().startsWith("Build")) {
