@@ -12,11 +12,11 @@ import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.groups.FlexItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
-import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.core.guide.GuideHistory;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuide;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
+import io.github.thebusybiscuit.slimefun4.core.multiblocks.MultiBlockMachine;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.chat.ChatInput;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
@@ -24,7 +24,6 @@ import io.github.thebusybiscuit.slimefun4.utils.ChatUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.AContainer;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.MachineRecipe;
 import net.guizhanss.guizhanlib.minecraft.helper.inventory.ItemStackHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -38,7 +37,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -57,6 +56,14 @@ import java.util.logging.Level;
 @NotDisplayInSurvivalMode
 @NotDisplayInCheatMode
 public class SearchGroup extends FlexItemGroup {
+    private static final Map<SlimefunItem, Integer> ENABLED_ITEMS = new HashMap<>();
+    static {
+        int i = 0;
+        for (SlimefunItem slimefunItem : Slimefun.getRegistry().getEnabledSlimefunItems()) {
+            ENABLED_ITEMS.put(slimefunItem, i);
+            i += 1;
+        }
+    }
     private static final int BACK_SLOT = 1;
     private static final int SEARCH_SLOT = 7;
     private static final int PREVIOUS_SLOT = 46;
@@ -227,50 +234,40 @@ public class SearchGroup extends FlexItemGroup {
     }
 
     private @NotNull List<SlimefunItem> getAllMatchedItems(@NotNull Player p, @NotNull String searchTerm, boolean pinyin) {
-        List<SlimefunItem> allItems = new ArrayList<>(Slimefun.getRegistry().getEnabledSlimefunItems()
+        return ENABLED_ITEMS
+                .keySet()
                 .stream()
-                .filter(slimefunItem -> {
-                    if (!slimefunItem.isHidden() && isItemGroupAccessible(p, slimefunItem) && isSearchFilterApplicable(slimefunItem, searchTerm, pinyin)) {
+                .filter(item -> {
+                    if (item.isHidden() || !isItemGroupAccessible(p, item)) {
+                        return false;
+                    }
+
+                    if (item instanceof MultiBlockMachine) {
+                        return false;
+                    }
+
+                    if (item instanceof AContainer ac) {
+                        try {
+                            for (ItemStack itemStack : ac.getDisplayRecipes()) {
+                                if (isSearchFilterApplicable(itemStack, searchTerm, false)) {
+                                    return true;
+                                }
+                            }
+                        } catch (Throwable ignored) {
+                            return false;
+                        }
+                    }
+
+                    if (isSearchFilterApplicable(item, searchTerm, pinyin)) {
                         return true;
                     }
-                    return false;
-                })
-                .toList());
-
-        List<SlimefunItem> relatedMachines = new ArrayList<>(Slimefun.getRegistry().getEnabledSlimefunItems()
-                .stream()
-                .filter(slimefunItem -> {
-                    if (slimefunItem.isHidden() || !isItemGroupAccessible(p, slimefunItem)) {
-                        return false;
-                    }
-
-                    if (allItems.contains(slimefunItem)) {
-                        return false;
-                    }
-
-                    if (slimefunItem instanceof RecipeDisplayItem displayItem) {
-                        List<ItemStack> displayRecipes = new ArrayList<>();
-                        try {
-                            displayRecipes = displayItem.getDisplayRecipes();
-                        } catch (IllegalArgumentException ignored) {
-                        }
-                        for (ItemStack displayItemStack : displayRecipes) {
-                            if (displayItemStack == null || displayItemStack.getType() == Material.AIR) {
-                                continue;
-                            }
-
-                            if (isSearchFilterApplicable(displayItemStack, searchTerm, pinyin)) {
-                                return true;
-                            }
-                        }
-                    }
 
                     return false;
                 })
-                .toList());
-
-        allItems.addAll(relatedMachines);
-        return allItems;
+                .sorted((a, b) -> {
+                    return ENABLED_ITEMS.get(a) > ENABLED_ITEMS.get(b) ? 1 : -1;
+                })
+                .toList();
     }
 
     @ParametersAreNonnullByDefault

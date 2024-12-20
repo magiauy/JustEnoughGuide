@@ -288,17 +288,6 @@ public class ItemMarkGroup extends FlexItemGroup {
         }
     }
 
-    private @NotNull List<SlimefunItem> getAllMatchedItems(@NotNull Player p, @NotNull String searchTerm, boolean pinyin) {
-        return Slimefun.getRegistry().getEnabledSlimefunItems()
-                .stream()
-                .filter(slimefunItem -> {
-                    return !slimefunItem.isHidden()
-                            && isItemGroupAccessible(p, slimefunItem)
-                            && isSearchFilterApplicable(slimefunItem, searchTerm, pinyin);
-                })
-                .toList();
-    }
-
     @ParametersAreNonnullByDefault
     private boolean isItemGroupAccessible(Player p, SlimefunItem slimefunItem) {
         return Slimefun.getConfigManager().isShowHiddenItemGroupsInSearch()
