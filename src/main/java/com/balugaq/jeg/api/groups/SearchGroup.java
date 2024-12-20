@@ -249,7 +249,11 @@ public class SearchGroup extends FlexItemGroup {
                     }
 
                     if (slimefunItem instanceof RecipeDisplayItem displayItem) {
-                        List<ItemStack> displayRecipes = displayItem.getDisplayRecipes();
+                        List<ItemStack> displayRecipes = new ArrayList<>();
+                        try {
+                            displayRecipes = displayItem.getDisplayRecipes();
+                        } catch (IllegalArgumentException ignored) {
+                        }
                         for (ItemStack displayItemStack : displayRecipes) {
                             if (displayItemStack == null || displayItemStack.getType() == Material.AIR) {
                                 continue;
