@@ -6,15 +6,14 @@ import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import javax.annotation.ParametersAreNonnullByDefault;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 /**
  * This class contains utility methods for the guide system.
@@ -24,14 +23,10 @@ import java.lang.reflect.Method;
  */
 @UtilityClass
 public final class GuideUtil {
-    private static final ItemStack BOOK_MARK_MENU_BUTTON = ItemStackUtil.getCleanItem(new CustomItemStack(
-            Material.NETHER_STAR,
-            "&e&l收藏物列表"
-    ));
-    private static final ItemStack ITEM_MARK_MENU_BUTTON = ItemStackUtil.getCleanItem(new CustomItemStack(
-            Material.WRITABLE_BOOK,
-            "&e&l收藏物品"
-    ));
+    private static final ItemStack BOOK_MARK_MENU_BUTTON =
+            ItemStackUtil.getCleanItem(new CustomItemStack(Material.NETHER_STAR, "&e&l收藏物列表"));
+    private static final ItemStack ITEM_MARK_MENU_BUTTON =
+            ItemStackUtil.getCleanItem(new CustomItemStack(Material.WRITABLE_BOOK, "&e&l收藏物品"));
 
     /**
      * Open the main menu of the guide for the given player and mode.
@@ -42,7 +37,8 @@ public final class GuideUtil {
      */
     @ParametersAreNonnullByDefault
     public static void openMainMenuAsync(Player player, SlimefunGuideMode mode, int selectedPage) {
-        if (!PlayerProfile.get(player, profile -> Slimefun.runSync(() -> openMainMenu(player, profile, mode, selectedPage)))) {
+        if (!PlayerProfile.get(
+                player, profile -> Slimefun.runSync(() -> openMainMenu(player, profile, mode, selectedPage)))) {
             Slimefun.getLocalization().sendMessage(player, "messages.opening-guide");
         }
     }

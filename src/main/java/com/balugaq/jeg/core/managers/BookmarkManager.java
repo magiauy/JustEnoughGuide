@@ -9,6 +9,11 @@ import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.core.config.SlimefunDatabaseManager;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -20,12 +25,6 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 /**
  * This class is responsible for managing bookmarks.
@@ -41,7 +40,8 @@ import java.util.function.Function;
 public class BookmarkManager extends AbstractManager {
     private static final int DATA_ITEM_SLOT = 0;
     private static final String BACKPACK_NAME = "JEGBookmarkBackpack";
-    private static final @Nullable ProfileDataController controller = Slimefun.getDatabaseManager().getProfileDataController();
+    private static final @Nullable ProfileDataController controller =
+            Slimefun.getDatabaseManager().getProfileDataController();
     private final @NotNull NamespacedKey BOOKMARKS_KEY;
     private final @NotNull Plugin plugin;
 
@@ -59,7 +59,8 @@ public class BookmarkManager extends AbstractManager {
         addBookmark0(player, backpack, slimefunItem);
     }
 
-    private void addBookmark0(@NotNull Player player, @NotNull PlayerBackpack backpack, @NotNull SlimefunItem slimefunItem) {
+    private void addBookmark0(
+            @NotNull Player player, @NotNull PlayerBackpack backpack, @NotNull SlimefunItem slimefunItem) {
         ItemStack bookmarksItem = backpack.getInventory().getItem(DATA_ITEM_SLOT);
         if (bookmarksItem == null || bookmarksItem.getType() == Material.AIR) {
             bookmarksItem = markItemAsBookmarksItem(new ItemStack(Material.DIRT), player);
@@ -82,8 +83,7 @@ public class BookmarkManager extends AbstractManager {
         });
     }
 
-    @Nullable
-    public List<SlimefunItem> getBookmarkedItems(@NotNull Player player) {
+    @Nullable public List<SlimefunItem> getBookmarkedItems(@NotNull Player player) {
         PlayerBackpack backpack = getBookmarkBackpack(player);
         if (backpack == null) {
             return null;
@@ -172,8 +172,7 @@ public class BookmarkManager extends AbstractManager {
         });
     }
 
-    @Nullable
-    public PlayerBackpack getOrCreateBookmarkBackpack(@NotNull Player player) {
+    @Nullable public PlayerBackpack getOrCreateBookmarkBackpack(@NotNull Player player) {
         PlayerBackpack backpack = getBookmarkBackpack(player);
         if (backpack == null) {
             backpack = createBackpack(player);
@@ -182,8 +181,7 @@ public class BookmarkManager extends AbstractManager {
         return backpack;
     }
 
-    @Nullable
-    public PlayerBackpack createBackpack(@NotNull Player player) {
+    @Nullable public PlayerBackpack createBackpack(@NotNull Player player) {
         PlayerProfile profile = operateController(controller -> {
             return controller.getProfile(player);
         });
@@ -205,8 +203,7 @@ public class BookmarkManager extends AbstractManager {
         return backpack;
     }
 
-    @Nullable
-    public PlayerBackpack getBookmarkBackpack(@NotNull Player player) {
+    @Nullable public PlayerBackpack getBookmarkBackpack(@NotNull Player player) {
         PlayerProfile profile = operateController(controller -> {
             return controller.getProfile(player);
         });
@@ -248,10 +245,13 @@ public class BookmarkManager extends AbstractManager {
         return null;
     }
 
-    @NotNull
-    public ItemStack markItemAsBookmarksItem(@NotNull ItemStack itemStack, @NotNull Player player) {
+    @NotNull public ItemStack markItemAsBookmarksItem(@NotNull ItemStack itemStack, @NotNull Player player) {
         return ItemStackUtil.getCleanItem(new CustomItemStack(itemStack, itemMeta -> {
-            itemMeta.getPersistentDataContainer().set(BOOKMARKS_KEY, PersistentDataType.STRING, player.getUniqueId().toString());
+            itemMeta.getPersistentDataContainer()
+                    .set(
+                            BOOKMARKS_KEY,
+                            PersistentDataType.STRING,
+                            player.getUniqueId().toString());
         }));
     }
 

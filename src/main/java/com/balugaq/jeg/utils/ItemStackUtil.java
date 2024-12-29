@@ -17,8 +17,7 @@ public final class ItemStackUtil {
      * @param item The MyItemStack to be converted.
      * @return A pure ItemStack.
      */
-    @NotNull
-    public static ItemStack getCleanItem(@Nullable ItemStack item) {
+    @NotNull public static ItemStack getCleanItem(@Nullable ItemStack item) {
         if (item == null) {
             return new ItemStack(Material.AIR);
         }

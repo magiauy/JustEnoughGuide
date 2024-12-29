@@ -1,11 +1,10 @@
 package com.balugaq.jeg.utils;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 /**
  * This class provides some useful methods for reflection.
@@ -64,7 +63,8 @@ public final class ReflectionUtil {
         return null;
     }
 
-    public static <T, V> @Nullable T getProperty(@NotNull Object o, @NotNull Class<V> clazz, @NotNull String fieldName) throws IllegalAccessException {
+    public static <T, V> @Nullable T getProperty(@NotNull Object o, @NotNull Class<V> clazz, @NotNull String fieldName)
+            throws IllegalAccessException {
         Field field = getField(clazz, fieldName);
         if (field != null) {
             boolean b = field.canAccess(o);

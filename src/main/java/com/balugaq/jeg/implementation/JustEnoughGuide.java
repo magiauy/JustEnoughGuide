@@ -18,16 +18,15 @@ import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.implementation.guide.CheatSheetSlimefunGuide;
 import io.github.thebusybiscuit.slimefun4.implementation.guide.SurvivalSlimefunGuide;
 import io.github.thebusybiscuit.slimefun4.utils.NumberUtils;
+import java.lang.reflect.Field;
+import java.text.MessageFormat;
+import java.util.EnumMap;
+import java.util.Map;
 import lombok.Getter;
 import net.guizhanss.guizhanlibplugin.updater.GuizhanUpdater;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.lang.reflect.Field;
-import java.text.MessageFormat;
-import java.util.EnumMap;
-import java.util.Map;
 
 /**
  * This is the main class of the JustEnoughGuide plugin.
@@ -52,7 +51,6 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
     private ListenerManager listenerManager;
     private MinecraftVersion minecraftVersion;
     private int javaVersion;
-
 
     public JustEnoughGuide() {
         this.username = "balugaq";
@@ -137,8 +135,12 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
                 field.setAccessible(true);
 
                 Map<SlimefunGuideMode, SlimefunGuideImplementation> newGuides = new EnumMap<>(SlimefunGuideMode.class);
-                newGuides.put(SlimefunGuideMode.SURVIVAL_MODE, survivalOverride ? new SurvivalGuideImplementation() : new SurvivalSlimefunGuide());
-                newGuides.put(SlimefunGuideMode.CHEAT_MODE, cheatOverride ? new CheatGuideImplementation() : new CheatSheetSlimefunGuide());
+                newGuides.put(
+                        SlimefunGuideMode.SURVIVAL_MODE,
+                        survivalOverride ? new SurvivalGuideImplementation() : new SurvivalSlimefunGuide());
+                newGuides.put(
+                        SlimefunGuideMode.CHEAT_MODE,
+                        cheatOverride ? new CheatGuideImplementation() : new CheatSheetSlimefunGuide());
                 try {
                     field.set(Slimefun.getRegistry(), newGuides);
                 } catch (IllegalAccessException ignored) {
@@ -226,14 +228,12 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
         getLogger().info("成功禁用此附属");
     }
 
-    @NotNull
-    @Override
+    @NotNull @Override
     public JavaPlugin getJavaPlugin() {
         return this;
     }
 
-    @Nullable
-    @Override
+    @Nullable @Override
     public String getBugTrackerURL() {
         return MessageFormat.format("https://github.com/{0}/{1}/issues/", this.username, this.repo);
     }

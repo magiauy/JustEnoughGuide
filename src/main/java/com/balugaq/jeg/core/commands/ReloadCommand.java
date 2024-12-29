@@ -1,14 +1,13 @@
 package com.balugaq.jeg.core.commands;
 
 import com.balugaq.jeg.api.interfaces.JEGCommand;
+import java.util.List;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 /**
  * This is the implementation of the "/jeg reload" command.
@@ -29,9 +28,7 @@ public class ReloadCommand implements JEGCommand {
     public @NotNull List<String> onTabCompleteRaw(@NotNull CommandSender sender, @NotNull String @NotNull [] args) {
         switch (args.length) {
             case 1 -> {
-                return List.of(
-                        "reload"
-                );
+                return List.of("reload");
             }
 
             default -> {
@@ -41,7 +38,11 @@ public class ReloadCommand implements JEGCommand {
     }
 
     @Override
-    public boolean canCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
+    public boolean canCommand(
+            @NotNull CommandSender sender,
+            @NotNull Command command,
+            @NotNull String label,
+            @NotNull String @NotNull [] args) {
         if (sender.isOp()) {
             if (args.length == 1) {
                 if ("reload".equalsIgnoreCase(args[0])) {
@@ -53,7 +54,8 @@ public class ReloadCommand implements JEGCommand {
     }
 
     @Override
-    public void onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public void onCommand(
+            @NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         onReload(sender);
     }
 

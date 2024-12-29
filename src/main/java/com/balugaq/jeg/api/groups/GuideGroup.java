@@ -13,6 +13,10 @@ import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import lombok.Getter;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import org.bukkit.Material;
@@ -21,11 +25,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * This is the base class for all guide groups.
@@ -76,14 +75,17 @@ public abstract class GuideGroup extends FlexItemGroup {
      * @param handler   The click handler for the guide.
      * @return The group itself.
      */
-    @NotNull
-    public GuideGroup addGuide(@Range(from = 9, to = 44) int slot, @NotNull ItemStack itemStack, @NotNull ChestMenu.MenuClickHandler handler) {
+    @NotNull public GuideGroup addGuide(
+            @Range(from = 9, to = 44) int slot,
+            @NotNull ItemStack itemStack,
+            @NotNull ChestMenu.MenuClickHandler handler) {
         Preconditions.checkArgument(slot >= 9 && slot <= 44, "Slot must be between 9 and 44");
         Preconditions.checkArgument(itemStack != null, "Item must not be null");
         Preconditions.checkArgument(handler != null, "Handler must not be null");
         Preconditions.checkArgument(itemStack.getType() != Material.AIR, "Item must not be air");
         Preconditions.checkArgument(itemStack.getType().isItem(), "Item must be an item");
-        Preconditions.checkArgument(slots.size() <= getContentSlots().length, "Too many guides in this group. Maximum of 36 allowed.");
+        Preconditions.checkArgument(
+                slots.size() <= getContentSlots().length, "Too many guides in this group. Maximum of 36 allowed.");
 
         slots.add(slot);
         contents.put(slot, itemStack);
@@ -98,8 +100,7 @@ public abstract class GuideGroup extends FlexItemGroup {
      * @param itemStack The item stack representing the guide.
      * @return The group itself.
      */
-    @NotNull
-    public GuideGroup addGuide(@Range(from = 9, to = 44) int slot, @NotNull ItemStack itemStack) {
+    @NotNull public GuideGroup addGuide(@Range(from = 9, to = 44) int slot, @NotNull ItemStack itemStack) {
         return addGuide(slot, itemStack, ChestMenuUtils.getEmptyClickHandler());
     }
 
@@ -110,8 +111,7 @@ public abstract class GuideGroup extends FlexItemGroup {
      * @param handler   The click handler for the guide.
      * @return The group itself.
      */
-    @NotNull
-    public GuideGroup addGuide(@NotNull ItemStack itemStack, @NotNull ChestMenu.MenuClickHandler handler) {
+    @NotNull public GuideGroup addGuide(@NotNull ItemStack itemStack, @NotNull ChestMenu.MenuClickHandler handler) {
         return addGuide(findEmptySlot(), itemStack, handler);
     }
 
@@ -121,8 +121,7 @@ public abstract class GuideGroup extends FlexItemGroup {
      * @param itemStack The item stack representing the guide.
      * @return The group itself.
      */
-    @NotNull
-    public GuideGroup addGuide(@NotNull ItemStack itemStack) {
+    @NotNull public GuideGroup addGuide(@NotNull ItemStack itemStack) {
         return addGuide(itemStack, ChestMenuUtils.getEmptyClickHandler());
     }
 
@@ -149,7 +148,10 @@ public abstract class GuideGroup extends FlexItemGroup {
      * @return Whether the group is visible to the given player.
      */
     @Override
-    public boolean isVisible(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
+    public boolean isVisible(
+            @NotNull Player player,
+            @NotNull PlayerProfile playerProfile,
+            @NotNull SlimefunGuideMode slimefunGuideMode) {
         return true;
     }
 
@@ -161,7 +163,10 @@ public abstract class GuideGroup extends FlexItemGroup {
      * @param slimefunGuideMode The guide mode of the player.
      */
     @Override
-    public void open(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
+    public void open(
+            @NotNull Player player,
+            @NotNull PlayerProfile playerProfile,
+            @NotNull SlimefunGuideMode slimefunGuideMode) {
         SlimefunGuideImplementation guide = GuideUtil.getGuide(player, slimefunGuideMode);
         playerProfile.getGuideHistory().add(this, 1);
         if (guide instanceof JEGSlimefunGuideImplementation jeg) {
@@ -207,7 +212,6 @@ public abstract class GuideGroup extends FlexItemGroup {
      *
      * @return Whether the chest menu should be generated in classic mode.
      */
-
     public abstract boolean isClassic();
 
     /**

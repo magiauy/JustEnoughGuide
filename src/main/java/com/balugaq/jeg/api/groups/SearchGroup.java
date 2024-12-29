@@ -22,6 +22,14 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.chat.ChatInput;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import io.github.thebusybiscuit.slimefun4.utils.ChatUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
+import java.util.logging.Level;
+import javax.annotation.ParametersAreNonnullByDefault;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.AContainer;
 import net.guizhanss.guizhanlib.minecraft.helper.inventory.ItemStackHelper;
@@ -34,15 +42,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
-import java.util.logging.Level;
 
 /**
  * This group is used to display the search results of the search feature.
@@ -60,12 +59,12 @@ public class SearchGroup extends FlexItemGroup {
     private static final int SEARCH_SLOT = 7;
     private static final int PREVIOUS_SLOT = 46;
     private static final int NEXT_SLOT = 52;
-    private static final int[] BORDER = new int[]{0, 2, 3, 4, 5, 6, 8, 45, 47, 48, 49, 50, 51, 53};
-    private static final int[] MAIN_CONTENT = new int[]{
-            9, 10, 11, 12, 13, 14, 15, 16, 17,
-            18, 19, 20, 21, 22, 23, 24, 25, 26,
-            27, 28, 29, 30, 31, 32, 33, 34, 35,
-            36, 37, 38, 39, 40, 41, 42, 43, 44
+    private static final int[] BORDER = new int[] {0, 2, 3, 4, 5, 6, 8, 45, 47, 48, 49, 50, 51, 53};
+    private static final int[] MAIN_CONTENT = new int[] {
+        9, 10, 11, 12, 13, 14, 15, 16, 17,
+        18, 19, 20, 21, 22, 23, 24, 25, 26,
+        27, 28, 29, 30, 31, 32, 33, 34, 35,
+        36, 37, 38, 39, 40, 41, 42, 43, 44
     };
     private static final JavaPlugin JAVA_PLUGIN = JustEnoughGuide.getInstance();
 
@@ -93,7 +92,11 @@ public class SearchGroup extends FlexItemGroup {
      * @param searchTerm     The search term.
      * @param pinyin         Whether the search term is in Pinyin.
      */
-    public SearchGroup(SlimefunGuideImplementation implementation, @NotNull Player player, @NotNull String searchTerm, boolean pinyin) {
+    public SearchGroup(
+            SlimefunGuideImplementation implementation,
+            @NotNull Player player,
+            @NotNull String searchTerm,
+            boolean pinyin) {
         super(new NamespacedKey(JAVA_PLUGIN, "jeg_search_group_" + UUID.randomUUID()), new ItemStack(Material.BARRIER));
         this.page = 1;
         this.searchTerm = searchTerm;
@@ -130,7 +133,10 @@ public class SearchGroup extends FlexItemGroup {
      * @return false.
      */
     @Override
-    public boolean isVisible(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
+    public boolean isVisible(
+            @NotNull Player player,
+            @NotNull PlayerProfile playerProfile,
+            @NotNull SlimefunGuideMode slimefunGuideMode) {
         return false;
     }
 
@@ -142,7 +148,10 @@ public class SearchGroup extends FlexItemGroup {
      * @param slimefunGuideMode The Slimefun guide mode.
      */
     @Override
-    public void open(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
+    public void open(
+            @NotNull Player player,
+            @NotNull PlayerProfile playerProfile,
+            @NotNull SlimefunGuideMode slimefunGuideMode) {
         playerProfile.getGuideHistory().add(this, this.page);
         this.generateMenu(player, playerProfile, slimefunGuideMode).open(player);
     }
@@ -154,7 +163,10 @@ public class SearchGroup extends FlexItemGroup {
      * @param playerProfile     The player profile.
      * @param slimefunGuideMode The Slimefun guide mode.
      */
-    public void refresh(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
+    public void refresh(
+            @NotNull Player player,
+            @NotNull PlayerProfile playerProfile,
+            @NotNull SlimefunGuideMode slimefunGuideMode) {
         GuideUtil.removeLastEntry(playerProfile.getGuideHistory());
         this.open(player, playerProfile, slimefunGuideMode);
     }
@@ -167,9 +179,12 @@ public class SearchGroup extends FlexItemGroup {
      * @param slimefunGuideMode The Slimefun guide mode.
      * @return The generated menu.
      */
-    @NotNull
-    private ChestMenu generateMenu(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
-        ChestMenu chestMenu = new ChestMenu("你正在搜索: %item%".replace("%item%", ChatUtils.crop(ChatColor.WHITE, searchTerm)));
+    @NotNull private ChestMenu generateMenu(
+            @NotNull Player player,
+            @NotNull PlayerProfile playerProfile,
+            @NotNull SlimefunGuideMode slimefunGuideMode) {
+        ChestMenu chestMenu =
+                new ChestMenu("你正在搜索: %item%".replace("%item%", ChatUtils.crop(ChatColor.WHITE, searchTerm)));
 
         chestMenu.setEmptySlotsClickable(false);
         chestMenu.addMenuOpeningHandler(pl -> pl.playSound(pl.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1, 1));
@@ -194,12 +209,16 @@ public class SearchGroup extends FlexItemGroup {
             ChatInput.waitForPlayer(
                     JAVA_PLUGIN,
                     pl,
-                    msg -> implementation.openSearch(playerProfile, msg, implementation.getMode() == SlimefunGuideMode.SURVIVAL_MODE));
+                    msg -> implementation.openSearch(
+                            playerProfile, msg, implementation.getMode() == SlimefunGuideMode.SURVIVAL_MODE));
 
             return false;
         });
 
-        chestMenu.addItem(PREVIOUS_SLOT, ItemStackUtil.getCleanItem(ChestMenuUtils.getPreviousButton(player, this.page, (this.slimefunItemList.size() - 1) / MAIN_CONTENT.length + 1)));
+        chestMenu.addItem(
+                PREVIOUS_SLOT,
+                ItemStackUtil.getCleanItem(ChestMenuUtils.getPreviousButton(
+                        player, this.page, (this.slimefunItemList.size() - 1) / MAIN_CONTENT.length + 1)));
         chestMenu.addMenuClickHandler(PREVIOUS_SLOT, (p, slot, item, action) -> {
             GuideUtil.removeLastEntry(playerProfile.getGuideHistory());
             SearchGroup searchGroup = this.getByPage(Math.max(this.page - 1, 1));
@@ -207,10 +226,14 @@ public class SearchGroup extends FlexItemGroup {
             return false;
         });
 
-        chestMenu.addItem(NEXT_SLOT, ItemStackUtil.getCleanItem(ChestMenuUtils.getNextButton(player, this.page, (this.slimefunItemList.size() - 1) / MAIN_CONTENT.length + 1)));
+        chestMenu.addItem(
+                NEXT_SLOT,
+                ItemStackUtil.getCleanItem(ChestMenuUtils.getNextButton(
+                        player, this.page, (this.slimefunItemList.size() - 1) / MAIN_CONTENT.length + 1)));
         chestMenu.addMenuClickHandler(NEXT_SLOT, (p, slot, item, action) -> {
             GuideUtil.removeLastEntry(playerProfile.getGuideHistory());
-            SearchGroup searchGroup = this.getByPage(Math.min(this.page + 1, (this.slimefunItemList.size() - 1) / MAIN_CONTENT.length + 1));
+            SearchGroup searchGroup = this.getByPage(
+                    Math.min(this.page + 1, (this.slimefunItemList.size() - 1) / MAIN_CONTENT.length + 1));
             searchGroup.open(player, playerProfile, slimefunGuideMode);
             return false;
         });
@@ -226,7 +249,13 @@ public class SearchGroup extends FlexItemGroup {
                 SlimefunItem slimefunItem = slimefunItemList.get(index);
                 ItemStack itemstack = ItemStackUtil.getCleanItem(new CustomItemStack(slimefunItem.getItem(), meta -> {
                     ItemGroup itemGroup = slimefunItem.getItemGroup();
-                    List<String> additionLore = List.of("", ChatColor.DARK_GRAY + "\u21E8 " + ChatColor.WHITE + (itemGroup.getAddon() == null ? "Slimefun" : itemGroup.getAddon().getName()) + " - " + itemGroup.getDisplayName(player));
+                    List<String> additionLore = List.of(
+                            "",
+                            ChatColor.DARK_GRAY + "\u21E8 " + ChatColor.WHITE
+                                    + (itemGroup.getAddon() == null
+                                            ? "Slimefun"
+                                            : itemGroup.getAddon().getName()) + " - "
+                                    + itemGroup.getDisplayName(player));
                     if (meta.hasLore() && meta.getLore() != null) {
                         List<String> lore = meta.getLore();
                         lore.addAll(additionLore);
@@ -242,7 +271,8 @@ public class SearchGroup extends FlexItemGroup {
                 }));
                 chestMenu.addItem(MAIN_CONTENT[i], ItemStackUtil.getCleanItem(itemstack), (pl, slot, itm, action) -> {
                     try {
-                        if (implementation.getMode() != SlimefunGuideMode.SURVIVAL_MODE && (pl.isOp() || pl.hasPermission("slimefun.cheat.items"))) {
+                        if (implementation.getMode() != SlimefunGuideMode.SURVIVAL_MODE
+                                && (pl.isOp() || pl.hasPermission("slimefun.cheat.items"))) {
                             pl.getInventory().addItem(slimefunItem.getItem().clone());
                         } else {
                             implementation.displayItem(playerProfile, slimefunItem, true);
@@ -265,8 +295,7 @@ public class SearchGroup extends FlexItemGroup {
      * @param page The page to get.
      * @return The search group by page.
      */
-    @NotNull
-    private SearchGroup getByPage(int page) {
+    @NotNull private SearchGroup getByPage(int page) {
         if (this.pageMap.containsKey(page)) {
             return this.pageMap.get(page);
         } else {
@@ -291,12 +320,11 @@ public class SearchGroup extends FlexItemGroup {
      * @param pinyin     Whether the search term is in Pinyin.
      * @return The matched items.
      */
-    private @NotNull List<SlimefunItem> getAllMatchedItems(@NotNull Player p, @NotNull String searchTerm, boolean pinyin) {
+    private @NotNull List<SlimefunItem> getAllMatchedItems(
+            @NotNull Player p, @NotNull String searchTerm, boolean pinyin) {
         if (searchTerm.length() > 2 && searchTerm.startsWith("#m")) {
             String substring = searchTerm.substring(2);
-            return ENABLED_ITEMS
-                    .keySet()
-                    .stream()
+            return ENABLED_ITEMS.keySet().stream()
                     .filter(item -> {
                         if (item.isHidden() || !isItemGroupAccessible(p, item)) {
                             return false;
@@ -321,9 +349,7 @@ public class SearchGroup extends FlexItemGroup {
                     .toList();
         } else if (searchTerm.length() > 2 && searchTerm.startsWith("#t")) {
             String substring = searchTerm.substring(2);
-            return ENABLED_ITEMS
-                    .keySet()
-                    .stream()
+            return ENABLED_ITEMS.keySet().stream()
                     .filter(item -> {
                         if (item.isHidden() || !isItemGroupAccessible(p, item)) {
                             return false;
@@ -339,9 +365,7 @@ public class SearchGroup extends FlexItemGroup {
                     .toList();
         } else if (searchTerm.length() > 2 && searchTerm.startsWith("#r")) {
             String substring = searchTerm.substring(2);
-            return ENABLED_ITEMS
-                    .keySet()
-                    .stream()
+            return ENABLED_ITEMS.keySet().stream()
                     .filter(item -> {
                         if (item.isHidden() || !isItemGroupAccessible(p, item)) {
                             return false;
@@ -362,9 +386,7 @@ public class SearchGroup extends FlexItemGroup {
                     })
                     .toList();
         } else {
-            return ENABLED_ITEMS
-                    .keySet()
-                    .stream()
+            return ENABLED_ITEMS.keySet().stream()
                     .filter(item -> {
                         if (item.isHidden() || !isItemGroupAccessible(p, item)) {
                             return false;
@@ -442,7 +464,8 @@ public class SearchGroup extends FlexItemGroup {
         if (itemStack == null) {
             return false;
         }
-        String itemName = ChatColor.stripColor(ItemStackHelper.getDisplayName(itemStack)).toLowerCase(Locale.ROOT);
+        String itemName =
+                ChatColor.stripColor(ItemStackHelper.getDisplayName(itemStack)).toLowerCase(Locale.ROOT);
         return isSearchFilterApplicable(itemName, searchTerm, pinyin);
     }
 
@@ -462,7 +485,9 @@ public class SearchGroup extends FlexItemGroup {
         if (pinyin) {
             final String pinyinName = PinyinHelper.toPinyin(itemName, PinyinStyleEnum.INPUT, "");
             final String pinyinFirstLetter = PinyinHelper.toPinyin(itemName, PinyinStyleEnum.FIRST_LETTER, "");
-            return itemName.contains(searchTerm) || pinyinName.contains(searchTerm) || pinyinFirstLetter.contains(searchTerm);
+            return itemName.contains(searchTerm)
+                    || pinyinName.contains(searchTerm)
+                    || pinyinFirstLetter.contains(searchTerm);
         } else {
             return itemName.contains(searchTerm);
         }

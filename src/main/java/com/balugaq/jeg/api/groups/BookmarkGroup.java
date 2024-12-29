@@ -21,6 +21,12 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.chat.ChatInput;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.ItemUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.logging.Level;
+import javax.annotation.ParametersAreNonnullByDefault;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -31,13 +37,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.logging.Level;
 
 /**
  * This class used to create groups to display all the marked items in the guide.
@@ -55,12 +54,12 @@ public class BookmarkGroup extends FlexItemGroup {
     private static final int SEARCH_SLOT = 7;
     private static final int PREVIOUS_SLOT = 46;
     private static final int NEXT_SLOT = 52;
-    private static final int[] BORDER = new int[]{0, 2, 3, 4, 5, 6, 8, 45, 47, 48, 49, 50, 51, 53};
-    private static final int[] MAIN_CONTENT = new int[]{
-            9, 10, 11, 12, 13, 14, 15, 16, 17,
-            18, 19, 20, 21, 22, 23, 24, 25, 26,
-            27, 28, 29, 30, 31, 32, 33, 34, 35,
-            36, 37, 38, 39, 40, 41, 42, 43, 44
+    private static final int[] BORDER = new int[] {0, 2, 3, 4, 5, 6, 8, 45, 47, 48, 49, 50, 51, 53};
+    private static final int[] MAIN_CONTENT = new int[] {
+        9, 10, 11, 12, 13, 14, 15, 16, 17,
+        18, 19, 20, 21, 22, 23, 24, 25, 26,
+        27, 28, 29, 30, 31, 32, 33, 34, 35,
+        36, 37, 38, 39, 40, 41, 42, 43, 44
     };
 
     private static final JavaPlugin JAVA_PLUGIN = JustEnoughGuide.getInstance();
@@ -78,8 +77,13 @@ public class BookmarkGroup extends FlexItemGroup {
      * @param slimefunItemList The list of marked items.
      */
     @ParametersAreNonnullByDefault
-    public BookmarkGroup(@NotNull SlimefunGuideImplementation implementation, @NotNull Player player, @NotNull List<SlimefunItem> slimefunItemList) {
-        super(new NamespacedKey(JAVA_PLUGIN, "jeg_bookmark_group_" + UUID.randomUUID()), new ItemStack(Material.BARRIER));
+    public BookmarkGroup(
+            @NotNull SlimefunGuideImplementation implementation,
+            @NotNull Player player,
+            @NotNull List<SlimefunItem> slimefunItemList) {
+        super(
+                new NamespacedKey(JAVA_PLUGIN, "jeg_bookmark_group_" + UUID.randomUUID()),
+                new ItemStack(Material.BARRIER));
         this.page = 1;
         this.player = player;
         this.implementation = implementation;
@@ -111,7 +115,10 @@ public class BookmarkGroup extends FlexItemGroup {
      * @return false.
      */
     @Override
-    public boolean isVisible(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
+    public boolean isVisible(
+            @NotNull Player player,
+            @NotNull PlayerProfile playerProfile,
+            @NotNull SlimefunGuideMode slimefunGuideMode) {
         return false;
     }
 
@@ -123,7 +130,10 @@ public class BookmarkGroup extends FlexItemGroup {
      * @param slimefunGuideMode The Slimefun guide mode.
      */
     @Override
-    public void open(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
+    public void open(
+            @NotNull Player player,
+            @NotNull PlayerProfile playerProfile,
+            @NotNull SlimefunGuideMode slimefunGuideMode) {
         playerProfile.getGuideHistory().add(this, this.page);
         this.generateMenu(player, playerProfile, slimefunGuideMode).open(player);
     }
@@ -135,7 +145,10 @@ public class BookmarkGroup extends FlexItemGroup {
      * @param playerProfile     The player's profile.
      * @param slimefunGuideMode The Slimefun guide mode.
      */
-    public void refresh(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
+    public void refresh(
+            @NotNull Player player,
+            @NotNull PlayerProfile playerProfile,
+            @NotNull SlimefunGuideMode slimefunGuideMode) {
         GuideUtil.removeLastEntry(playerProfile.getGuideHistory());
         this.open(player, playerProfile, slimefunGuideMode);
     }
@@ -148,8 +161,10 @@ public class BookmarkGroup extends FlexItemGroup {
      * @param slimefunGuideMode The Slimefun guide mode.
      * @return The generated menu.
      */
-    @NotNull
-    private ChestMenu generateMenu(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
+    @NotNull private ChestMenu generateMenu(
+            @NotNull Player player,
+            @NotNull PlayerProfile playerProfile,
+            @NotNull SlimefunGuideMode slimefunGuideMode) {
         ChestMenu chestMenu = new ChestMenu("收藏页 - JEG");
 
         chestMenu.setEmptySlotsClickable(false);
@@ -175,12 +190,16 @@ public class BookmarkGroup extends FlexItemGroup {
             ChatInput.waitForPlayer(
                     JAVA_PLUGIN,
                     pl,
-                    msg -> implementation.openSearch(playerProfile, msg, implementation.getMode() == SlimefunGuideMode.SURVIVAL_MODE));
+                    msg -> implementation.openSearch(
+                            playerProfile, msg, implementation.getMode() == SlimefunGuideMode.SURVIVAL_MODE));
 
             return false;
         });
 
-        chestMenu.addItem(PREVIOUS_SLOT, ItemStackUtil.getCleanItem(ChestMenuUtils.getPreviousButton(player, this.page, (this.slimefunItemList.size() - 1) / MAIN_CONTENT.length + 1)));
+        chestMenu.addItem(
+                PREVIOUS_SLOT,
+                ItemStackUtil.getCleanItem(ChestMenuUtils.getPreviousButton(
+                        player, this.page, (this.slimefunItemList.size() - 1) / MAIN_CONTENT.length + 1)));
         chestMenu.addMenuClickHandler(PREVIOUS_SLOT, (p, slot, item, action) -> {
             GuideUtil.removeLastEntry(playerProfile.getGuideHistory());
             BookmarkGroup bookMarkGroup = this.getByPage(Math.max(this.page - 1, 1));
@@ -188,10 +207,14 @@ public class BookmarkGroup extends FlexItemGroup {
             return false;
         });
 
-        chestMenu.addItem(NEXT_SLOT, ItemStackUtil.getCleanItem(ChestMenuUtils.getNextButton(player, this.page, (this.slimefunItemList.size() - 1) / MAIN_CONTENT.length + 1)));
+        chestMenu.addItem(
+                NEXT_SLOT,
+                ItemStackUtil.getCleanItem(ChestMenuUtils.getNextButton(
+                        player, this.page, (this.slimefunItemList.size() - 1) / MAIN_CONTENT.length + 1)));
         chestMenu.addMenuClickHandler(NEXT_SLOT, (p, slot, item, action) -> {
             GuideUtil.removeLastEntry(playerProfile.getGuideHistory());
-            BookmarkGroup bookMarkGroup = this.getByPage(Math.min(this.page + 1, (this.slimefunItemList.size() - 1) / MAIN_CONTENT.length + 1));
+            BookmarkGroup bookMarkGroup = this.getByPage(
+                    Math.min(this.page + 1, (this.slimefunItemList.size() - 1) / MAIN_CONTENT.length + 1));
             bookMarkGroup.open(player, playerProfile, slimefunGuideMode);
             return false;
         });
@@ -208,7 +231,9 @@ public class BookmarkGroup extends FlexItemGroup {
                 Research research = slimefunItem.getResearch();
                 ItemStack itemstack;
                 ChestMenu.MenuClickHandler handler;
-                if (implementation.getMode() == SlimefunGuideMode.SURVIVAL_MODE && research != null && !playerProfile.hasUnlocked(research)) {
+                if (implementation.getMode() == SlimefunGuideMode.SURVIVAL_MODE
+                        && research != null
+                        && !playerProfile.hasUnlocked(research)) {
                     String lore;
 
                     if (VaultIntegration.isEnabled()) {
@@ -228,7 +253,8 @@ public class BookmarkGroup extends FlexItemGroup {
                             "&7需要 &b",
                             lore));
                     handler = (pl, slot, item, action) -> {
-                        research.unlockFromGuide(implementation, pl, playerProfile, slimefunItem, slimefunItem.getItemGroup(), page);
+                        research.unlockFromGuide(
+                                implementation, pl, playerProfile, slimefunItem, slimefunItem.getItemGroup(), page);
                         return false;
                     };
                 } else {
@@ -236,7 +262,11 @@ public class BookmarkGroup extends FlexItemGroup {
                         ItemGroup itemGroup = slimefunItem.getItemGroup();
                         List<String> additionLore = List.of(
                                 "",
-                                ChatColor.DARK_GRAY + "\u21E8 " + ChatColor.WHITE + (itemGroup.getAddon() == null ? "Slimefun" : itemGroup.getAddon().getName()) + " - " + itemGroup.getDisplayName(player),
+                                ChatColor.DARK_GRAY + "\u21E8 " + ChatColor.WHITE
+                                        + (itemGroup.getAddon() == null
+                                                ? "Slimefun"
+                                                : itemGroup.getAddon().getName()) + " - "
+                                        + itemGroup.getDisplayName(player),
                                 ChatColor.YELLOW + "右键以取消收藏物品");
                         if (meta.hasLore() && meta.getLore() != null) {
                             List<String> lore = meta.getLore();
@@ -257,15 +287,19 @@ public class BookmarkGroup extends FlexItemGroup {
                                 GuideUtil.removeLastEntry(playerProfile.getGuideHistory());
                                 JustEnoughGuide.getBookmarkManager().removeBookmark(player, slimefunItem);
 
-                                List<SlimefunItem> items = JustEnoughGuide.getBookmarkManager().getBookmarkedItems(player);
+                                List<SlimefunItem> items =
+                                        JustEnoughGuide.getBookmarkManager().getBookmarkedItems(player);
                                 if (items == null || items.isEmpty()) {
                                     pl.closeInventory();
                                     return false;
                                 }
-                                new BookmarkGroup(this.implementation, this.player, items).open(player, playerProfile, slimefunGuideMode);
+                                new BookmarkGroup(this.implementation, this.player, items)
+                                        .open(player, playerProfile, slimefunGuideMode);
                             } else {
-                                if (implementation.getMode() != SlimefunGuideMode.SURVIVAL_MODE && (pl.isOp() || pl.hasPermission("slimefun.cheat.items"))) {
-                                    pl.getInventory().addItem(slimefunItem.getItem().clone());
+                                if (implementation.getMode() != SlimefunGuideMode.SURVIVAL_MODE
+                                        && (pl.isOp() || pl.hasPermission("slimefun.cheat.items"))) {
+                                    pl.getInventory()
+                                            .addItem(slimefunItem.getItem().clone());
                                 } else {
                                     implementation.displayItem(playerProfile, slimefunItem, true);
                                 }
@@ -313,8 +347,7 @@ public class BookmarkGroup extends FlexItemGroup {
      * @param page The page number.
      * @return The BookmarkGroup by page.
      */
-    @NotNull
-    private BookmarkGroup getByPage(int page) {
+    @NotNull private BookmarkGroup getByPage(int page) {
         if (this.pageMap.containsKey(page)) {
             return this.pageMap.get(page);
         } else {
@@ -343,7 +376,6 @@ public class BookmarkGroup extends FlexItemGroup {
         return Slimefun.getConfigManager().isShowHiddenItemGroupsInSearch()
                 || slimefunItem.getItemGroup().isAccessible(p);
     }
-
 
     /**
      * Prints an error message to the player.
