@@ -54,7 +54,6 @@ import org.bukkit.inventory.RecipeChoice.MaterialChoice;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -101,7 +100,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
     }
 
     @ParametersAreNonnullByDefault
-    private static @Nonnull ItemStack getDisplayItem(Player p, boolean isSlimefunRecipe, ItemStack item) {
+    private static @NotNull ItemStack getDisplayItem(Player p, boolean isSlimefunRecipe, ItemStack item) {
         if (isSlimefunRecipe) {
             SlimefunItem slimefunItem = SlimefunItem.getByItem(item);
 
@@ -132,12 +131,12 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
     }
 
     @Override
-    public @Nonnull SlimefunGuideMode getMode() {
+    public @NotNull SlimefunGuideMode getMode() {
         return SlimefunGuideMode.CHEAT_MODE;
     }
 
     @Override
-    public @Nonnull ItemStack getItem() {
+    public @NotNull ItemStack getItem() {
         return item;
     }
 
@@ -152,7 +151,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
      * @param profile The {@link PlayerProfile} of the {@link Player}
      * @return a {@link List} of visible {@link ItemGroup} instances
      */
-    protected @Nonnull List<ItemGroup> getVisibleItemGroups(@Nonnull Player p, @Nonnull PlayerProfile profile) {
+    protected @NotNull List<ItemGroup> getVisibleItemGroups(@NotNull Player p, @NotNull PlayerProfile profile) {
         List<ItemGroup> groups = new LinkedList<>();
         List<ItemGroup> specialGroups = new LinkedList<>();
 
@@ -959,8 +958,8 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
         }
     }
 
-    @Nonnull
-    public ChestMenu create(@Nonnull Player p) {
+    @NotNull
+    public ChestMenu create(@NotNull Player p) {
         ChestMenu menu = new ChestMenu("&c&lSlimefun 指南 (作弊模式)         &e&l爱来自 JustEnoughGuide");
 
         menu.setEmptySlotsClickable(false);

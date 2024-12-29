@@ -32,7 +32,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -71,7 +70,8 @@ public class BookmarkGroup extends FlexItemGroup {
     private final List<SlimefunItem> slimefunItemList;
     private Map<Integer, BookmarkGroup> pageMap = new LinkedHashMap<>();
 
-    public BookmarkGroup(SlimefunGuideImplementation implementation, Player player, List<SlimefunItem> slimefunItemList) {
+    @ParametersAreNonnullByDefault
+    public BookmarkGroup(@NotNull SlimefunGuideImplementation implementation, @NotNull Player player, @NotNull List<SlimefunItem> slimefunItemList) {
         super(new NamespacedKey(JAVA_PLUGIN, "jeg_bookmark_group_" + UUID.randomUUID()), new ItemStack(Material.BARRIER));
         this.page = 1;
         this.player = player;
@@ -90,7 +90,7 @@ public class BookmarkGroup extends FlexItemGroup {
     }
 
     @Override
-    public boolean isVisible(@Nonnull Player player, @Nonnull PlayerProfile playerProfile, @Nonnull SlimefunGuideMode slimefunGuideMode) {
+    public boolean isVisible(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
         return false;
     }
 
@@ -100,13 +100,13 @@ public class BookmarkGroup extends FlexItemGroup {
         this.generateMenu(player, playerProfile, slimefunGuideMode).open(player);
     }
 
-    public void refresh(@Nonnull Player player, @Nonnull PlayerProfile playerProfile, @Nonnull SlimefunGuideMode slimefunGuideMode) {
+    public void refresh(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
         GuideUtil.removeLastEntry(playerProfile.getGuideHistory());
         this.open(player, playerProfile, slimefunGuideMode);
     }
 
-    @Nonnull
-    private ChestMenu generateMenu(@Nonnull Player player, @Nonnull PlayerProfile playerProfile, @Nonnull SlimefunGuideMode slimefunGuideMode) {
+    @NotNull
+    private ChestMenu generateMenu(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
         ChestMenu chestMenu = new ChestMenu("收藏页 - JEG");
 
         chestMenu.setEmptySlotsClickable(false);
@@ -264,7 +264,7 @@ public class BookmarkGroup extends FlexItemGroup {
         return chestMenu;
     }
 
-    @Nonnull
+    @NotNull
     private BookmarkGroup getByPage(int page) {
         if (this.pageMap.containsKey(page)) {
             return this.pageMap.get(page);
@@ -283,20 +283,20 @@ public class BookmarkGroup extends FlexItemGroup {
     }
 
     @ParametersAreNonnullByDefault
-    private boolean isItemGroupAccessible(Player p, SlimefunItem slimefunItem) {
+    private boolean isItemGroupAccessible(@NotNull Player p, @NotNull SlimefunItem slimefunItem) {
         return Slimefun.getConfigManager().isShowHiddenItemGroupsInSearch()
                 || slimefunItem.getItemGroup().isAccessible(p);
     }
 
 
     @ParametersAreNonnullByDefault
-    private void printErrorMessage(Player p, Throwable x) {
+    private void printErrorMessage(@NotNull Player p, @NotNull Throwable x) {
         p.sendMessage("&4服务器发生了一个内部错误. 请联系管理员处理.");
         JAVA_PLUGIN.getLogger().log(Level.SEVERE, "在打开指南书里的 Slimefun 物品时发生了意外!", x);
     }
 
     @ParametersAreNonnullByDefault
-    private void printErrorMessage(Player p, SlimefunItem item, Throwable x) {
+    private void printErrorMessage(@NotNull Player p, @NotNull SlimefunItem item, @NotNull Throwable x) {
         p.sendMessage(ChatColor.DARK_RED
                 + "An internal server error has occurred. Please inform an admin, check the console for"
                 + " further info.");

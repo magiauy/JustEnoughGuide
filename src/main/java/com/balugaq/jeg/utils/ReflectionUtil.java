@@ -28,7 +28,7 @@ public final class ReflectionUtil {
         return true;
     }
 
-    public static <T> boolean setStaticValue(@NotNull Class<T> clazz, @NotNull String field, Object value) {
+    public static <T> boolean setStaticValue(@NotNull Class<T> clazz, @NotNull String field, @Nullable Object value) {
         try {
             Field declaredField = clazz.getDeclaredField(field);
             declaredField.setAccessible(true);
@@ -40,7 +40,7 @@ public final class ReflectionUtil {
         return true;
     }
 
-    public static @Nullable Method getMethod(@NotNull Class<?> clazz, String methodName) {
+    public static @Nullable Method getMethod(@NotNull Class<?> clazz, @NotNull String methodName) {
         while (clazz != Object.class) {
             for (Method method : clazz.getDeclaredMethods()) {
                 if (method.getName().equals(methodName)) {
@@ -52,7 +52,7 @@ public final class ReflectionUtil {
         return null;
     }
 
-    public static @Nullable Field getField(@NotNull Class<?> clazz, String fieldName) {
+    public static @Nullable Field getField(@NotNull Class<?> clazz, @NotNull String fieldName) {
         while (clazz != Object.class) {
             for (Field field : clazz.getDeclaredFields()) {
                 if (field.getName().equals(fieldName)) {
@@ -64,7 +64,7 @@ public final class ReflectionUtil {
         return null;
     }
 
-    public static <T, V> @Nullable T getProperty(Object o, @NotNull Class<V> clazz, String fieldName) throws IllegalAccessException {
+    public static <T, V> @Nullable T getProperty(@NotNull Object o, @NotNull Class<V> clazz, @NotNull String fieldName) throws IllegalAccessException {
         Field field = getField(clazz, fieldName);
         if (field != null) {
             boolean b = field.canAccess(o);

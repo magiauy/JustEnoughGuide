@@ -36,7 +36,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -71,7 +70,7 @@ public class ItemMarkGroup extends FlexItemGroup {
     private final int[] MAIN_CONTENT;
     private final JEGSlimefunGuideImplementation implementation;
     private final Player player;
-    private final ItemGroup itemGroup;
+    private final @NotNull ItemGroup itemGroup;
     private final int page;
     private final @NotNull List<SlimefunItem> slimefunItemList;
     private Map<Integer, ItemMarkGroup> pageMap = new LinkedHashMap<>();
@@ -116,7 +115,7 @@ public class ItemMarkGroup extends FlexItemGroup {
     }
 
     @Override
-    public boolean isVisible(@Nonnull Player player, @Nonnull PlayerProfile playerProfile, @Nonnull SlimefunGuideMode slimefunGuideMode) {
+    public boolean isVisible(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
         return false;
     }
 
@@ -126,13 +125,13 @@ public class ItemMarkGroup extends FlexItemGroup {
         this.generateMenu(player, playerProfile, slimefunGuideMode).open(player);
     }
 
-    public void refresh(@Nonnull Player player, @Nonnull PlayerProfile playerProfile, @Nonnull SlimefunGuideMode slimefunGuideMode) {
+    public void refresh(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
         GuideUtil.removeLastEntry(playerProfile.getGuideHistory());
         this.open(player, playerProfile, slimefunGuideMode);
     }
 
-    @Nonnull
-    private ChestMenu generateMenu(@Nonnull Player player, @Nonnull PlayerProfile playerProfile, @Nonnull SlimefunGuideMode slimefunGuideMode) {
+    @NotNull
+    private ChestMenu generateMenu(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
         ChestMenu chestMenu = new ChestMenu("添加收藏物 - JEG");
 
         chestMenu.setEmptySlotsClickable(false);
@@ -270,7 +269,7 @@ public class ItemMarkGroup extends FlexItemGroup {
         return chestMenu;
     }
 
-    @Nonnull
+    @NotNull
     private ItemMarkGroup getByPage(int page) {
         if (this.pageMap.containsKey(page)) {
             return this.pageMap.get(page);

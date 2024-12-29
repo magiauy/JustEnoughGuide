@@ -34,7 +34,7 @@ public class ConfigManager extends AbstractManager {
     private final boolean CHEAT_IMPROVEMENTS;
     private final boolean PINYIN_SEARCH;
     private final boolean BOOKMARK;
-    private final JavaPlugin plugin;
+    private final @NotNull JavaPlugin plugin;
 
     public ConfigManager(@NotNull JavaPlugin plugin) {
         this.plugin = plugin;

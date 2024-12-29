@@ -12,13 +12,16 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 @SuppressWarnings("deprecation")
 public interface JEGSlimefunGuideImplementation extends SlimefunGuideImplementation {
-    @Nonnull
-    ChestMenu create(@Nonnull Player p);
+    @ParametersAreNonnullByDefault
+    void createHeader(Player p, PlayerProfile profile, ChestMenu menu);
+
+    @NotNull
+    ChestMenu create(@NotNull Player p);
 
     default void openBookMarkGroup(@NotNull Player player, @NotNull PlayerProfile profile) {
         List<SlimefunItem> items = JustEnoughGuide.getBookmarkManager().getBookmarkedItems(player);

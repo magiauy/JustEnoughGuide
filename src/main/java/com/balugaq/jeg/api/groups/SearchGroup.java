@@ -35,7 +35,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -57,13 +56,6 @@ import java.util.logging.Level;
 @NotDisplayInCheatMode
 public class SearchGroup extends FlexItemGroup {
     private static final Map<SlimefunItem, Integer> ENABLED_ITEMS = new HashMap<>();
-    static {
-        int i = 0;
-        for (SlimefunItem slimefunItem : Slimefun.getRegistry().getEnabledSlimefunItems()) {
-            ENABLED_ITEMS.put(slimefunItem, i);
-            i += 1;
-        }
-    }
     private static final int BACK_SLOT = 1;
     private static final int SEARCH_SLOT = 7;
     private static final int PREVIOUS_SLOT = 46;
@@ -75,8 +67,16 @@ public class SearchGroup extends FlexItemGroup {
             27, 28, 29, 30, 31, 32, 33, 34, 35,
             36, 37, 38, 39, 40, 41, 42, 43, 44
     };
-
     private static final JavaPlugin JAVA_PLUGIN = JustEnoughGuide.getInstance();
+
+    static {
+        int i = 0;
+        for (SlimefunItem slimefunItem : Slimefun.getRegistry().getEnabledSlimefunItems()) {
+            ENABLED_ITEMS.put(slimefunItem, i);
+            i += 1;
+        }
+    }
+
     private final SlimefunGuideImplementation implementation;
     private final Player player;
     private final String searchTerm;
@@ -108,7 +108,7 @@ public class SearchGroup extends FlexItemGroup {
     }
 
     @Override
-    public boolean isVisible(@Nonnull Player player, @Nonnull PlayerProfile playerProfile, @Nonnull SlimefunGuideMode slimefunGuideMode) {
+    public boolean isVisible(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
         return false;
     }
 
@@ -118,13 +118,13 @@ public class SearchGroup extends FlexItemGroup {
         this.generateMenu(player, playerProfile, slimefunGuideMode).open(player);
     }
 
-    public void refresh(@Nonnull Player player, @Nonnull PlayerProfile playerProfile, @Nonnull SlimefunGuideMode slimefunGuideMode) {
+    public void refresh(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
         GuideUtil.removeLastEntry(playerProfile.getGuideHistory());
         this.open(player, playerProfile, slimefunGuideMode);
     }
 
-    @Nonnull
-    private ChestMenu generateMenu(@Nonnull Player player, @Nonnull PlayerProfile playerProfile, @Nonnull SlimefunGuideMode slimefunGuideMode) {
+    @NotNull
+    private ChestMenu generateMenu(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
         ChestMenu chestMenu = new ChestMenu("你正在搜索: %item%".replace("%item%", ChatUtils.crop(ChatColor.WHITE, searchTerm)));
 
         chestMenu.setEmptySlotsClickable(false);
@@ -215,7 +215,7 @@ public class SearchGroup extends FlexItemGroup {
         return chestMenu;
     }
 
-    @Nonnull
+    @NotNull
     private SearchGroup getByPage(int page) {
         if (this.pageMap.containsKey(page)) {
             return this.pageMap.get(page);
@@ -234,40 +234,114 @@ public class SearchGroup extends FlexItemGroup {
     }
 
     private @NotNull List<SlimefunItem> getAllMatchedItems(@NotNull Player p, @NotNull String searchTerm, boolean pinyin) {
-        return ENABLED_ITEMS
-                .keySet()
-                .stream()
-                .filter(item -> {
-                    if (item.isHidden() || !isItemGroupAccessible(p, item)) {
-                        return false;
-                    }
+        if (searchTerm.length() > 2 && searchTerm.startsWith("#m")) {
+            String substring = searchTerm.substring(2);
+            return ENABLED_ITEMS
+                    .keySet()
+                    .stream()
+                    .filter(item -> {
+                        if (item.isHidden() || !isItemGroupAccessible(p, item)) {
+                            return false;
+                        }
 
-                    if (item instanceof MultiBlockMachine) {
-                        return false;
-                    }
+                        if (!(item instanceof AContainer ac)) {
+                            return false;
+                        }
 
-                    if (item instanceof AContainer ac) {
                         try {
                             for (ItemStack itemStack : ac.getDisplayRecipes()) {
-                                if (isSearchFilterApplicable(itemStack, searchTerm, false)) {
+                                if (isSearchFilterApplicable(itemStack, substring, false)) {
                                     return true;
                                 }
                             }
                         } catch (Throwable ignored) {
                             return false;
                         }
-                    }
 
-                    if (isSearchFilterApplicable(item, searchTerm, pinyin)) {
-                        return true;
-                    }
+                        return false;
+                    })
+                    .toList();
+        }
+        else if (searchTerm.length() > 2 && searchTerm.startsWith("#t"))  {
+            String substring = searchTerm.substring(2);
+            return ENABLED_ITEMS
+                    .keySet()
+                    .stream()
+                    .filter(item -> {
+                        if (item.isHidden() || !isItemGroupAccessible(p, item)) {
+                            return false;
+                        }
 
-                    return false;
-                })
-                .sorted((a, b) -> {
-                    return ENABLED_ITEMS.get(a) > ENABLED_ITEMS.get(b) ? 1 : -1;
-                })
-                .toList();
+                        ItemStack recipeTypeIcon = item.getRecipeType().getItem(p);
+                        if (recipeTypeIcon == null) {
+                            return false;
+                        }
+
+                        return isSearchFilterApplicable(recipeTypeIcon, substring, false);
+                    })
+                    .toList();
+        }
+        else if (searchTerm.length() > 2 && searchTerm.startsWith("#r")) {
+            String substring = searchTerm.substring(2);
+            return ENABLED_ITEMS
+                    .keySet()
+                    .stream()
+                    .filter(item -> {
+                        if (item.isHidden() || !isItemGroupAccessible(p, item)) {
+                            return false;
+                        }
+
+                        ItemStack[] recipe = item.getRecipe();
+                        if (recipe == null) {
+                            return false;
+                        }
+
+                        for (ItemStack itemStack : recipe) {
+                            if (isSearchFilterApplicable(itemStack, substring, false)) {
+                                return true;
+                            }
+                        }
+
+                        return false;
+                    })
+                    .toList();
+        }
+        else {
+            return ENABLED_ITEMS
+                    .keySet()
+                    .stream()
+                    .filter(item -> {
+                        if (item.isHidden() || !isItemGroupAccessible(p, item)) {
+                            return false;
+                        }
+
+                        if (item instanceof MultiBlockMachine) {
+                            return false;
+                        }
+
+                        if (item instanceof AContainer ac) {
+                            try {
+                                for (ItemStack itemStack : ac.getDisplayRecipes()) {
+                                    if (isSearchFilterApplicable(itemStack, searchTerm, false)) {
+                                        return true;
+                                    }
+                                }
+                            } catch (Throwable ignored) {
+                                return false;
+                            }
+                        }
+
+                        if (isSearchFilterApplicable(item, searchTerm, pinyin)) {
+                            return true;
+                        }
+
+                        return false;
+                    })
+                    .sorted((a, b) -> {
+                        return ENABLED_ITEMS.get(a) > ENABLED_ITEMS.get(b) ? 1 : -1;
+                    })
+                    .toList();
+        }
     }
 
     @ParametersAreNonnullByDefault
@@ -278,12 +352,18 @@ public class SearchGroup extends FlexItemGroup {
 
     @ParametersAreNonnullByDefault
     private boolean isSearchFilterApplicable(SlimefunItem slimefunItem, String searchTerm, boolean pinyin) {
+        if (slimefunItem == null) {
+            return false;
+        }
         String itemName = ChatColor.stripColor(slimefunItem.getItemName()).toLowerCase(Locale.ROOT);
         return isSearchFilterApplicable(itemName, searchTerm, pinyin);
     }
 
     @ParametersAreNonnullByDefault
     private boolean isSearchFilterApplicable(ItemStack itemStack, String searchTerm, boolean pinyin) {
+        if (itemStack == null) {
+            return false;
+        }
         String itemName = ChatColor.stripColor(ItemStackHelper.getDisplayName(itemStack)).toLowerCase(Locale.ROOT);
         return isSearchFilterApplicable(itemName, searchTerm, pinyin);
     }

@@ -6,8 +6,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 
 /**
@@ -28,7 +28,7 @@ public class HelpCommand implements JEGCommand {
     }
 
     @Override
-    public @Nonnull List<String> onTabCompleteRaw(@Nonnull CommandSender sender, @Nonnull String[] args) {
+    public @NotNull List<String> onTabCompleteRaw(@NotNull CommandSender sender, @NotNull String[] args) {
         switch (args.length) {
             case 1 -> {
                 return List.of(
@@ -43,7 +43,7 @@ public class HelpCommand implements JEGCommand {
     }
 
     @Override
-    public boolean canCommand(@Nonnull CommandSender sender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args) {
+    public boolean canCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (sender.isOp()) {
             if (args.length == 1) {
                 if ("help".equalsIgnoreCase(args[0])) {
@@ -55,11 +55,11 @@ public class HelpCommand implements JEGCommand {
     }
 
     @Override
-    public void onCommand(@Nonnull CommandSender sender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args) {
+    public void onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         onHelp(sender);
     }
 
-    private void onHelp(@Nonnull CommandSender sender) {
+    private void onHelp(@NotNull CommandSender sender) {
         sender.sendMessage(ChatColor.GREEN + "JEG Commands:");
         sender.sendMessage(ChatColor.GREEN + "/jeg help - Show this help message");
         sender.sendMessage(ChatColor.GREEN + "/jeg reload - Reload JEG plugin");

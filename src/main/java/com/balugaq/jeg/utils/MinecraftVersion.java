@@ -74,7 +74,7 @@ public enum MinecraftVersion {
         return UNKNOWN;
     }
 
-    public static MinecraftVersion getCurrentVersion() {
+    public static @NotNull MinecraftVersion getCurrentVersion() {
         int major = PaperLib.getMinecraftVersion();
         int minor = PaperLib.getMinecraftPatchVersion();
         return of(major, minor);

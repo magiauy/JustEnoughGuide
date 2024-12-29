@@ -3,9 +3,9 @@ package com.balugaq.jeg.utils;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import lombok.experimental.UtilityClass;
 import org.bukkit.inventory.ItemFlag;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 
 /**
@@ -17,7 +17,7 @@ import java.lang.reflect.Field;
  */
 @UtilityClass
 public class JEGVersionedItemFlag {
-    public static final @org.jetbrains.annotations.Nullable ItemFlag HIDE_ADDITIONAL_TOOLTIP;
+    public static final @Nullable ItemFlag HIDE_ADDITIONAL_TOOLTIP;
 
     static {
         MinecraftVersion version = JustEnoughGuide.getMCVersion();
@@ -25,7 +25,7 @@ public class JEGVersionedItemFlag {
     }
 
     @Nullable
-    private static ItemFlag getKey(@Nonnull String key) {
+    private static ItemFlag getKey(@NotNull String key) {
         try {
             Field field = ItemFlag.class.getDeclaredField(key);
             return (ItemFlag) field.get(null);

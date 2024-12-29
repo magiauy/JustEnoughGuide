@@ -3,8 +3,8 @@ package com.balugaq.jeg.utils;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -18,7 +18,7 @@ public final class ItemStackUtil {
      * @param item The MyItemStack to be converted.
      * @return A pure ItemStack.
      */
-    @Nonnull
+    @NotNull
     public static ItemStack getCleanItem(@Nullable ItemStack item) {
         if (item == null) {
             return new ItemStack(Material.AIR);

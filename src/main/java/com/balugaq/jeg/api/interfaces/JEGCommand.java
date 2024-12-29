@@ -3,8 +3,8 @@ package com.balugaq.jeg.api.interfaces;
 import com.balugaq.jeg.core.commands.JEGCommands;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,14 +16,14 @@ import java.util.List;
  * @since 1.1
  */
 public interface JEGCommand {
-    @Nonnull
-    default List<String> onTabCompleteRaw(@Nonnull CommandSender sender, @Nonnull String[] args) {
+    @NotNull
+    default List<String> onTabCompleteRaw(@NotNull CommandSender sender, @NotNull String[] args) {
         return new ArrayList<>();
     }
 
-    default boolean canCommand(@Nonnull CommandSender sender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args) {
+    default boolean canCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         return false;
     }
 
-    void onCommand(@Nonnull CommandSender sender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args);
+    void onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args);
 }

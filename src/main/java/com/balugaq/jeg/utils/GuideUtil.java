@@ -12,7 +12,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -82,7 +81,7 @@ public final class GuideUtil {
         return Slimefun.getRegistry().getSlimefunGuide(SlimefunGuideMode.SURVIVAL_MODE);
     }
 
-    public static void removeLastEntry(@Nonnull GuideHistory guideHistory) {
+    public static void removeLastEntry(@NotNull GuideHistory guideHistory) {
         try {
             Method getLastEntry = guideHistory.getClass().getDeclaredMethod("getLastEntry", boolean.class);
             getLastEntry.setAccessible(true);

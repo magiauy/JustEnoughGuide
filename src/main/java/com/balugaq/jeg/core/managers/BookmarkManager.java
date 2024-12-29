@@ -20,7 +20,6 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,16 +41,16 @@ import java.util.function.Function;
 public class BookmarkManager extends AbstractManager {
     private static final int DATA_ITEM_SLOT = 0;
     private static final String BACKPACK_NAME = "JEGBookmarkBackpack";
-    private static final @org.jetbrains.annotations.Nullable ProfileDataController controller = Slimefun.getDatabaseManager().getProfileDataController();
+    private static final @Nullable ProfileDataController controller = Slimefun.getDatabaseManager().getProfileDataController();
     private final @NotNull NamespacedKey BOOKMARKS_KEY;
     private final @NotNull Plugin plugin;
 
-    public BookmarkManager(@Nonnull Plugin plugin) {
+    public BookmarkManager(@NotNull Plugin plugin) {
         this.plugin = plugin;
         this.BOOKMARKS_KEY = new NamespacedKey(plugin, "bookmarks");
     }
 
-    public void addBookmark(@Nonnull Player player, @Nonnull SlimefunItem slimefunItem) {
+    public void addBookmark(@NotNull Player player, @NotNull SlimefunItem slimefunItem) {
         PlayerBackpack backpack = getOrCreateBookmarkBackpack(player);
         if (backpack == null) {
             return;
@@ -60,7 +59,7 @@ public class BookmarkManager extends AbstractManager {
         addBookmark0(player, backpack, slimefunItem);
     }
 
-    private void addBookmark0(@Nonnull Player player, @Nonnull PlayerBackpack backpack, @Nonnull SlimefunItem slimefunItem) {
+    private void addBookmark0(@NotNull Player player, @NotNull PlayerBackpack backpack, @NotNull SlimefunItem slimefunItem) {
         ItemStack bookmarksItem = backpack.getInventory().getItem(DATA_ITEM_SLOT);
         if (bookmarksItem == null || bookmarksItem.getType() == Material.AIR) {
             bookmarksItem = markItemAsBookmarksItem(new ItemStack(Material.DIRT), player);
@@ -84,7 +83,7 @@ public class BookmarkManager extends AbstractManager {
     }
 
     @Nullable
-    public List<SlimefunItem> getBookmarkedItems(@Nonnull Player player) {
+    public List<SlimefunItem> getBookmarkedItems(@NotNull Player player) {
         PlayerBackpack backpack = getBookmarkBackpack(player);
         if (backpack == null) {
             return null;
@@ -249,16 +248,14 @@ public class BookmarkManager extends AbstractManager {
         return null;
     }
 
-    @Nonnull
-    public ItemStack markItemAsBookmarksItem(@Nonnull ItemStack itemStack, @Nonnull Player player) {
-        ItemStack newItemStack = ItemStackUtil.getCleanItem(new CustomItemStack(itemStack, itemMeta -> {
+    @NotNull
+    public ItemStack markItemAsBookmarksItem(@NotNull ItemStack itemStack, @NotNull Player player) {
+        return ItemStackUtil.getCleanItem(new CustomItemStack(itemStack, itemMeta -> {
             itemMeta.getPersistentDataContainer().set(BOOKMARKS_KEY, PersistentDataType.STRING, player.getUniqueId().toString());
         }));
-
-        return newItemStack;
     }
 
-    public boolean isBookmarksItem(@Nonnull ItemStack itemStack, @Nonnull Player player) {
+    public boolean isBookmarksItem(@NotNull ItemStack itemStack, @NotNull Player player) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta == null) {
             return false;
@@ -272,7 +269,7 @@ public class BookmarkManager extends AbstractManager {
         return false;
     }
 
-    public void unmarkBookmarksItem(@Nonnull ItemStack itemStack) {
+    public void unmarkBookmarksItem(@NotNull ItemStack itemStack) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta != null) {
             itemMeta.getPersistentDataContainer().remove(BOOKMARKS_KEY);
@@ -286,7 +283,7 @@ public class BookmarkManager extends AbstractManager {
         }
     }
 
-    private <T, R> @org.jetbrains.annotations.Nullable R operateController(@NotNull Function<ProfileDataController, R> function) {
+    private <T, R> @Nullable R operateController(@NotNull Function<ProfileDataController, R> function) {
         if (controller != null) {
             return function.apply(controller);
         }

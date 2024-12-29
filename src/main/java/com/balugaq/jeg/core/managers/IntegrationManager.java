@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  */
 @Getter
 public class IntegrationManager extends AbstractManager {
-    private final JavaPlugin plugin;
+    private final @NotNull JavaPlugin plugin;
     private final boolean enabledNetworksExpansion;
     private final boolean enabledOreWorkshop;
 
