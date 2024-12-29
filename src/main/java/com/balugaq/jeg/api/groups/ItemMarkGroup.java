@@ -9,8 +9,6 @@ import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
 import com.balugaq.jeg.utils.JEGVersionedItemFlag;
-import com.github.houbb.pinyin.constant.enums.PinyinStyleEnum;
-import com.github.houbb.pinyin.util.PinyinHelper;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.groups.FlexItemGroup;
@@ -39,7 +37,6 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -75,10 +72,25 @@ public class ItemMarkGroup extends FlexItemGroup {
     private final @NotNull List<SlimefunItem> slimefunItemList;
     private Map<Integer, ItemMarkGroup> pageMap = new LinkedHashMap<>();
 
+    /**
+     * Create a new instance of ItemMarkGroup.
+     *
+     * @param implementation The implementation of JEGSlimefunGuideImplementation.
+     * @param itemGroup      The item group to mark items.
+     * @param player         The player who open the guide.
+     */
     public ItemMarkGroup(JEGSlimefunGuideImplementation implementation, @NotNull ItemGroup itemGroup, Player player) {
         this(implementation, itemGroup, player, 1);
     }
 
+    /**
+     * Create a new instance of ItemMarkGroup.
+     *
+     * @param implementation The implementation of JEGSlimefunGuideImplementation.
+     * @param itemGroup      The item group to mark items.
+     * @param player         The player who open the guide.
+     * @param page           The page number to display.
+     */
     public ItemMarkGroup(JEGSlimefunGuideImplementation implementation, @NotNull ItemGroup itemGroup, Player player, int page) {
         super(new NamespacedKey(JAVA_PLUGIN, "jeg_item_mark_group_" + UUID.randomUUID()), new ItemStack(Material.BARRIER));
         this.page = page;
@@ -110,26 +122,62 @@ public class ItemMarkGroup extends FlexItemGroup {
         }
     }
 
+    /**
+     * Get the page number of this group.
+     *
+     * @param itemMarkGroup The ItemMarkGroup instance.
+     * @param page          The page number to get.
+     */
     protected ItemMarkGroup(@NotNull ItemMarkGroup itemMarkGroup, int page) {
         this(itemMarkGroup.implementation, itemMarkGroup.itemGroup, itemMarkGroup.player, page);
     }
 
+    /**
+     * Always return false.
+     *
+     * @param player            The player who open the guide.
+     * @param playerProfile     The player profile.
+     * @param slimefunGuideMode The slimefun guide mode.
+     * @return false.
+     */
     @Override
     public boolean isVisible(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
         return false;
     }
 
+    /**
+     * Opens the group for the player.
+     *
+     * @param player            The player who open the guide.
+     * @param playerProfile     The player profile.
+     * @param slimefunGuideMode The slimefun guide mode.
+     */
     @Override
     public void open(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
         playerProfile.getGuideHistory().add(this, this.page);
         this.generateMenu(player, playerProfile, slimefunGuideMode).open(player);
     }
 
+    /**
+     * Refresh the group for the player.
+     *
+     * @param player            The player who open the guide.
+     * @param playerProfile     The player profile.
+     * @param slimefunGuideMode The slimefun guide mode.
+     */
     public void refresh(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
         GuideUtil.removeLastEntry(playerProfile.getGuideHistory());
         this.open(player, playerProfile, slimefunGuideMode);
     }
 
+    /**
+     * Get the ItemMarkGroup instance by page number.
+     *
+     * @param player            The player who open the guide.
+     * @param playerProfile     The player profile.
+     * @param slimefunGuideMode The slimefun guide mode.
+     * @return The ItemMarkGroup instance by page number.
+     */
     @NotNull
     private ChestMenu generateMenu(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
         ChestMenu chestMenu = new ChestMenu("添加收藏物 - JEG");
@@ -269,6 +317,12 @@ public class ItemMarkGroup extends FlexItemGroup {
         return chestMenu;
     }
 
+    /**
+     * Get the ItemMarkGroup instance by page number.
+     *
+     * @param page The page number to get.
+     * @return The ItemMarkGroup instance by page number.
+     */
     @NotNull
     private ItemMarkGroup getByPage(int page) {
         if (this.pageMap.containsKey(page)) {
@@ -287,33 +341,38 @@ public class ItemMarkGroup extends FlexItemGroup {
         }
     }
 
+    /**
+     * Get the ItemMarkGroup instance by page number.
+     *
+     * @param p            The player who open the guide.
+     * @param slimefunItem The SlimefunItem to check.
+     * @return The ItemMarkGroup instance by page number.
+     */
     @ParametersAreNonnullByDefault
     private boolean isItemGroupAccessible(Player p, SlimefunItem slimefunItem) {
         return Slimefun.getConfigManager().isShowHiddenItemGroupsInSearch()
                 || slimefunItem.getItemGroup().isAccessible(p);
     }
 
-    @ParametersAreNonnullByDefault
-    private boolean isSearchFilterApplicable(SlimefunItem slimefunItem, String searchTerm, boolean pinyin) {
-        String itemName = ChatColor.stripColor(slimefunItem.getItemName()).toLowerCase(Locale.ROOT);
-        if (itemName.isEmpty()) {
-            return false;
-        }
-        if (pinyin) {
-            final String pinyinName = PinyinHelper.toPinyin(itemName, PinyinStyleEnum.INPUT, "");
-            final String pinyinFirstLetter = PinyinHelper.toPinyin(itemName, PinyinStyleEnum.FIRST_LETTER, "");
-            return itemName.contains(searchTerm) || pinyinName.contains(searchTerm) || pinyinFirstLetter.contains(searchTerm);
-        } else {
-            return itemName.contains(searchTerm);
-        }
-    }
-
+    /**
+     * Print error message to player.
+     *
+     * @param p The player who open the guide.
+     * @param x The exception to print.
+     */
     @ParametersAreNonnullByDefault
     private void printErrorMessage(Player p, Throwable x) {
         p.sendMessage("&4服务器发生了一个内部错误. 请联系管理员处理.");
         JAVA_PLUGIN.getLogger().log(Level.SEVERE, "在打开指南书里的 Slimefun 物品时发生了意外!", x);
     }
 
+    /**
+     * Print error message to player.
+     *
+     * @param p    The player who open the guide.
+     * @param item The SlimefunItem to print.
+     * @param x    The exception to print.
+     */
     @ParametersAreNonnullByDefault
     private void printErrorMessage(Player p, SlimefunItem item, Throwable x) {
         p.sendMessage(ChatColor.DARK_RED

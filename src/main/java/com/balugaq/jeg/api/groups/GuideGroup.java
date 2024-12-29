@@ -47,14 +47,35 @@ public abstract class GuideGroup extends FlexItemGroup {
     private final Map<Integer, ItemStack> contents = new HashMap<>();
     private final Map<Integer, ChestMenu.MenuClickHandler> clickHandlers = new HashMap<>();
 
+    /**
+     * Creates a new guide group with the given key and icon.
+     *
+     * @param key  The key of the group.
+     * @param icon The icon of the group.
+     */
     protected GuideGroup(@NotNull NamespacedKey key, @NotNull ItemStack icon) {
         super(key, icon);
     }
 
+    /**
+     * Creates a new guide group with the given key, icon, and tier.
+     *
+     * @param key  The key of the group.
+     * @param icon The icon of the group.
+     * @param tier The tier of the group.
+     */
     protected GuideGroup(@NotNull NamespacedKey key, @NotNull ItemStack icon, int tier) {
         super(key, icon, tier);
     }
 
+    /**
+     * Adds a guide to the group.
+     *
+     * @param slot      The slot where the guide should be placed.
+     * @param itemStack The item stack representing the guide.
+     * @param handler   The click handler for the guide.
+     * @return The group itself.
+     */
     @NotNull
     public GuideGroup addGuide(@Range(from = 9, to = 44) int slot, @NotNull ItemStack itemStack, @NotNull ChestMenu.MenuClickHandler handler) {
         Preconditions.checkArgument(slot >= 9 && slot <= 44, "Slot must be between 9 and 44");
@@ -70,21 +91,46 @@ public abstract class GuideGroup extends FlexItemGroup {
         return this;
     }
 
+    /**
+     * Adds a guide to the group.
+     *
+     * @param slot      The slot where the guide should be placed.
+     * @param itemStack The item stack representing the guide.
+     * @return The group itself.
+     */
     @NotNull
     public GuideGroup addGuide(@Range(from = 9, to = 44) int slot, @NotNull ItemStack itemStack) {
         return addGuide(slot, itemStack, ChestMenuUtils.getEmptyClickHandler());
     }
 
+    /**
+     * Adds a guide to the group.
+     *
+     * @param itemStack The item stack representing the guide.
+     * @param handler   The click handler for the guide.
+     * @return The group itself.
+     */
     @NotNull
     public GuideGroup addGuide(@NotNull ItemStack itemStack, @NotNull ChestMenu.MenuClickHandler handler) {
         return addGuide(findEmptySlot(), itemStack, handler);
     }
 
+    /**
+     * Adds a guide to the group.
+     *
+     * @param itemStack The item stack representing the guide.
+     * @return The group itself.
+     */
     @NotNull
     public GuideGroup addGuide(@NotNull ItemStack itemStack) {
         return addGuide(itemStack, ChestMenuUtils.getEmptyClickHandler());
     }
 
+    /**
+     * Finds an empty slot in the chest menu.
+     *
+     * @return An empty slot in the chest menu, or -1 if no slot is available.
+     */
     private int findEmptySlot() {
         for (int i = 0; i < 54; i++) {
             if (!slots.contains(i)) {
@@ -94,11 +140,26 @@ public abstract class GuideGroup extends FlexItemGroup {
         return -1;
     }
 
+    /**
+     * Returns whether the group is visible to the given player.
+     *
+     * @param player            The player to check.
+     * @param playerProfile     The player profile of the player.
+     * @param slimefunGuideMode The guide mode of the player.
+     * @return Whether the group is visible to the given player.
+     */
     @Override
     public boolean isVisible(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
         return true;
     }
 
+    /**
+     * Opens the customized group for the given player.
+     *
+     * @param player            The player to open the group for.
+     * @param playerProfile     The player profile of the player.
+     * @param slimefunGuideMode The guide mode of the player.
+     */
     @Override
     public void open(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
         SlimefunGuideImplementation guide = GuideUtil.getGuide(player, slimefunGuideMode);
@@ -134,11 +195,32 @@ public abstract class GuideGroup extends FlexItemGroup {
         }
     }
 
+    /**
+     * Returns the size of the chest menu.
+     *
+     * @return The size of the chest menu.
+     */
     public abstract int getSize();
+
+    /**
+     * Returns whether the chest menu should be generated in classic mode.
+     *
+     * @return Whether the chest menu should be generated in classic mode.
+     */
 
     public abstract boolean isClassic();
 
+    /**
+     * Returns the slots where the guides should be placed.
+     *
+     * @return The slots where the guides should be placed.
+     */
     public abstract int[] getContentSlots();
 
+    /**
+     * Returns the slot where the back button should be placed.
+     *
+     * @return The slot where the back button should be placed.
+     */
     public abstract int getBackSlot();
 }

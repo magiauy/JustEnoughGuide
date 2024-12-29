@@ -70,6 +70,13 @@ public class BookmarkGroup extends FlexItemGroup {
     private final List<SlimefunItem> slimefunItemList;
     private Map<Integer, BookmarkGroup> pageMap = new LinkedHashMap<>();
 
+    /**
+     * Constructor of BookmarkGroup.
+     *
+     * @param implementation   The Slimefun guide implementation.
+     * @param player           The player who opened the group.
+     * @param slimefunItemList The list of marked items.
+     */
     @ParametersAreNonnullByDefault
     public BookmarkGroup(@NotNull SlimefunGuideImplementation implementation, @NotNull Player player, @NotNull List<SlimefunItem> slimefunItemList) {
         super(new NamespacedKey(JAVA_PLUGIN, "jeg_bookmark_group_" + UUID.randomUUID()), new ItemStack(Material.BARRIER));
@@ -80,6 +87,12 @@ public class BookmarkGroup extends FlexItemGroup {
         this.pageMap.put(1, this);
     }
 
+    /**
+     * Constructor of BookmarkGroup.
+     *
+     * @param bookmarkGroup The BookmarkGroup to copy.
+     * @param page          The page number to display.
+     */
     protected BookmarkGroup(@NotNull BookmarkGroup bookmarkGroup, int page) {
         super(bookmarkGroup.key, new ItemStack(Material.BARRIER));
         this.page = page;
@@ -89,22 +102,52 @@ public class BookmarkGroup extends FlexItemGroup {
         this.pageMap.put(page, this);
     }
 
+    /**
+     * Always returns false.
+     *
+     * @param player            The player who opened the group.
+     * @param playerProfile     The player's profile.
+     * @param slimefunGuideMode The Slimefun guide mode.
+     * @return false.
+     */
     @Override
     public boolean isVisible(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
         return false;
     }
 
+    /**
+     * Opens the group for the player.
+     *
+     * @param player            The player who opened the group.
+     * @param playerProfile     The player's profile.
+     * @param slimefunGuideMode The Slimefun guide mode.
+     */
     @Override
     public void open(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
         playerProfile.getGuideHistory().add(this, this.page);
         this.generateMenu(player, playerProfile, slimefunGuideMode).open(player);
     }
 
+    /**
+     * Reopens the menu for the player.
+     *
+     * @param player            The player who opened the group.
+     * @param playerProfile     The player's profile.
+     * @param slimefunGuideMode The Slimefun guide mode.
+     */
     public void refresh(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
         GuideUtil.removeLastEntry(playerProfile.getGuideHistory());
         this.open(player, playerProfile, slimefunGuideMode);
     }
 
+    /**
+     * Generates the menu for the player.
+     *
+     * @param player            The player who opened the group.
+     * @param playerProfile     The player's profile.
+     * @param slimefunGuideMode The Slimefun guide mode.
+     * @return The generated menu.
+     */
     @NotNull
     private ChestMenu generateMenu(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
         ChestMenu chestMenu = new ChestMenu("收藏页 - JEG");
@@ -264,6 +307,12 @@ public class BookmarkGroup extends FlexItemGroup {
         return chestMenu;
     }
 
+    /**
+     * Gets the BookmarkGroup by page.
+     *
+     * @param page The page number.
+     * @return The BookmarkGroup by page.
+     */
     @NotNull
     private BookmarkGroup getByPage(int page) {
         if (this.pageMap.containsKey(page)) {
@@ -282,6 +331,13 @@ public class BookmarkGroup extends FlexItemGroup {
         }
     }
 
+    /**
+     * Checks if the item group is accessible for the player.
+     *
+     * @param p            The player.
+     * @param slimefunItem The Slimefun item.
+     * @return True if the item group is accessible for the player.
+     */
     @ParametersAreNonnullByDefault
     private boolean isItemGroupAccessible(@NotNull Player p, @NotNull SlimefunItem slimefunItem) {
         return Slimefun.getConfigManager().isShowHiddenItemGroupsInSearch()
@@ -289,12 +345,25 @@ public class BookmarkGroup extends FlexItemGroup {
     }
 
 
+    /**
+     * Prints an error message to the player.
+     *
+     * @param p The player.
+     * @param x The exception.
+     */
     @ParametersAreNonnullByDefault
     private void printErrorMessage(@NotNull Player p, @NotNull Throwable x) {
         p.sendMessage("&4服务器发生了一个内部错误. 请联系管理员处理.");
         JAVA_PLUGIN.getLogger().log(Level.SEVERE, "在打开指南书里的 Slimefun 物品时发生了意外!", x);
     }
 
+    /**
+     * Prints an error message to the player.
+     *
+     * @param p    The player.
+     * @param item The Slimefun item.
+     * @param x    The exception.
+     */
     @ParametersAreNonnullByDefault
     private void printErrorMessage(@NotNull Player p, @NotNull SlimefunItem item, @NotNull Throwable x) {
         p.sendMessage(ChatColor.DARK_RED

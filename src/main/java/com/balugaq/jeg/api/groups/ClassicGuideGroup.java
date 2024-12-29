@@ -27,29 +27,62 @@ public class ClassicGuideGroup extends GuideGroup {
     private static final int SIZE = 54;
     private static final boolean CLASSIC = true;
 
+    /**
+     * Constructor.
+     *
+     * @param key  The key of the group.
+     * @param icon The icon of the group.
+     */
     protected ClassicGuideGroup(@NotNull NamespacedKey key, @NotNull ItemStack icon) {
         super(key, icon);
     }
 
+    /**
+     * Constructor.
+     *
+     * @param key  The key of the group.
+     * @param icon The icon of the group.
+     * @param tier The tier of the group.
+     */
     protected ClassicGuideGroup(@NotNull NamespacedKey key, @NotNull ItemStack icon, int tier) {
         super(key, icon, tier);
     }
 
+    /**
+     * Returns the size of the group.
+     *
+     * @return The size of the group.
+     */
     @Override
     public int getSize() {
         return SIZE;
     }
 
+    /**
+     * Returns whether the group is classic or not.
+     *
+     * @return Whether the group is classic or not.
+     */
     @Override
     public boolean isClassic() {
         return CLASSIC;
     }
 
+    /**
+     * Returns the slots where the content of the group can be placed.
+     *
+     * @return The slots where the content of the group can be placed.
+     */
     @Override
     public int[] getContentSlots() {
         return CONTENT_SLOTS;
     }
 
+    /**
+     * Returns the slot where the back of the group can be placed.
+     *
+     * @return The slot where the back of the group can be placed.
+     */
     @Override
     public int getBackSlot() {
         return BACK_SLOT;

@@ -85,6 +85,14 @@ public class SearchGroup extends FlexItemGroup {
     private final List<SlimefunItem> slimefunItemList;
     private Map<Integer, SearchGroup> pageMap = new LinkedHashMap<>();
 
+    /**
+     * Constructor for the SearchGroup.
+     *
+     * @param implementation The Slimefun guide implementation.
+     * @param player         The player who opened the guide.
+     * @param searchTerm     The search term.
+     * @param pinyin         Whether the search term is in Pinyin.
+     */
     public SearchGroup(SlimefunGuideImplementation implementation, @NotNull Player player, @NotNull String searchTerm, boolean pinyin) {
         super(new NamespacedKey(JAVA_PLUGIN, "jeg_search_group_" + UUID.randomUUID()), new ItemStack(Material.BARRIER));
         this.page = 1;
@@ -96,6 +104,12 @@ public class SearchGroup extends FlexItemGroup {
         this.pageMap.put(1, this);
     }
 
+    /**
+     * Constructor for the SearchGroup.
+     *
+     * @param searchGroup The SearchGroup to copy.
+     * @param page        The page to display.
+     */
     protected SearchGroup(@NotNull SearchGroup searchGroup, int page) {
         super(searchGroup.key, new ItemStack(Material.BARRIER));
         this.page = page;
@@ -107,22 +121,52 @@ public class SearchGroup extends FlexItemGroup {
         this.pageMap.put(page, this);
     }
 
+    /**
+     * Always returns false.
+     *
+     * @param player            The player to print the error message to.
+     * @param playerProfile     The player profile.
+     * @param slimefunGuideMode The Slimefun guide mode.
+     * @return false.
+     */
     @Override
     public boolean isVisible(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
         return false;
     }
 
+    /**
+     * Opens the search group.
+     *
+     * @param player            The player who opened the guide.
+     * @param playerProfile     The player profile.
+     * @param slimefunGuideMode The Slimefun guide mode.
+     */
     @Override
     public void open(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
         playerProfile.getGuideHistory().add(this, this.page);
         this.generateMenu(player, playerProfile, slimefunGuideMode).open(player);
     }
 
+    /**
+     * Refreshes the search group.
+     *
+     * @param player            The player who opened the guide.
+     * @param playerProfile     The player profile.
+     * @param slimefunGuideMode The Slimefun guide mode.
+     */
     public void refresh(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
         GuideUtil.removeLastEntry(playerProfile.getGuideHistory());
         this.open(player, playerProfile, slimefunGuideMode);
     }
 
+    /**
+     * Generates the menu for the search group.
+     *
+     * @param player            The player who opened the guide.
+     * @param playerProfile     The player profile.
+     * @param slimefunGuideMode The Slimefun guide mode.
+     * @return The generated menu.
+     */
     @NotNull
     private ChestMenu generateMenu(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
         ChestMenu chestMenu = new ChestMenu("你正在搜索: %item%".replace("%item%", ChatUtils.crop(ChatColor.WHITE, searchTerm)));
@@ -215,6 +259,12 @@ public class SearchGroup extends FlexItemGroup {
         return chestMenu;
     }
 
+    /**
+     * Gets the search group by page.
+     *
+     * @param page The page to get.
+     * @return The search group by page.
+     */
     @NotNull
     private SearchGroup getByPage(int page) {
         if (this.pageMap.containsKey(page)) {
@@ -233,6 +283,14 @@ public class SearchGroup extends FlexItemGroup {
         }
     }
 
+    /**
+     * Gets all matched items.
+     *
+     * @param p          The player.
+     * @param searchTerm The search term.
+     * @param pinyin     Whether the search term is in Pinyin.
+     * @return The matched items.
+     */
     private @NotNull List<SlimefunItem> getAllMatchedItems(@NotNull Player p, @NotNull String searchTerm, boolean pinyin) {
         if (searchTerm.length() > 2 && searchTerm.startsWith("#m")) {
             String substring = searchTerm.substring(2);
@@ -341,12 +399,27 @@ public class SearchGroup extends FlexItemGroup {
         }
     }
 
+    /**
+     * Checks if the item group is accessible.
+     *
+     * @param p            The player.
+     * @param slimefunItem The Slimefun item.
+     * @return True if the item group is accessible.
+     */
     @ParametersAreNonnullByDefault
     private boolean isItemGroupAccessible(Player p, SlimefunItem slimefunItem) {
         return Slimefun.getConfigManager().isShowHiddenItemGroupsInSearch()
                 || slimefunItem.getItemGroup().isAccessible(p);
     }
 
+    /**
+     * Checks if the search filter is applicable.
+     *
+     * @param slimefunItem The Slimefun item.
+     * @param searchTerm   The search term.
+     * @param pinyin       Whether the search term is in Pinyin.
+     * @return
+     */
     @ParametersAreNonnullByDefault
     private boolean isSearchFilterApplicable(SlimefunItem slimefunItem, String searchTerm, boolean pinyin) {
         if (slimefunItem == null) {
@@ -356,6 +429,14 @@ public class SearchGroup extends FlexItemGroup {
         return isSearchFilterApplicable(itemName, searchTerm, pinyin);
     }
 
+    /**
+     * Checks if the search filter is applicable.
+     *
+     * @param itemStack  The item stack.
+     * @param searchTerm The search term.
+     * @param pinyin     Whether the search term is in Pinyin.
+     * @return True if the search filter is applicable.
+     */
     @ParametersAreNonnullByDefault
     private boolean isSearchFilterApplicable(ItemStack itemStack, String searchTerm, boolean pinyin) {
         if (itemStack == null) {
@@ -365,6 +446,14 @@ public class SearchGroup extends FlexItemGroup {
         return isSearchFilterApplicable(itemName, searchTerm, pinyin);
     }
 
+    /**
+     * Checks if the search filter is applicable.
+     *
+     * @param itemName   The item name.
+     * @param searchTerm The search term.
+     * @param pinyin     Whether the search term is in Pinyin.
+     * @return True if the search filter is applicable.
+     */
     @ParametersAreNonnullByDefault
     private boolean isSearchFilterApplicable(String itemName, String searchTerm, boolean pinyin) {
         if (itemName.isEmpty()) {
@@ -379,12 +468,25 @@ public class SearchGroup extends FlexItemGroup {
         }
     }
 
+    /**
+     * Prints an error message.
+     *
+     * @param p The player.
+     * @param x The exception.
+     */
     @ParametersAreNonnullByDefault
     private void printErrorMessage(Player p, Throwable x) {
         p.sendMessage("&4服务器发生了一个内部错误. 请联系管理员处理.");
         JAVA_PLUGIN.getLogger().log(Level.SEVERE, "在打开指南书里的 Slimefun 物品时发生了意外!", x);
     }
 
+    /**
+     * Prints an error message.
+     *
+     * @param p    The player.
+     * @param item The Slimefun item.
+     * @param x    The exception.
+     */
     @ParametersAreNonnullByDefault
     private void printErrorMessage(Player p, SlimefunItem item, Throwable x) {
         p.sendMessage(ChatColor.DARK_RED

@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * A implementation of the ClassicGuideGroup for JEG.
+ * An implementation of the ClassicGuideGroup for JEG.
  *
  * @author balugaq
  * @since 1.3
