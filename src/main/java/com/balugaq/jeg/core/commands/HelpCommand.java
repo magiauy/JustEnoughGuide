@@ -28,7 +28,7 @@ public class HelpCommand implements JEGCommand {
     }
 
     @Override
-    public @NotNull List<String> onTabCompleteRaw(@NotNull CommandSender sender, @NotNull String[] args) {
+    public @NotNull List<String> onTabCompleteRaw(@NotNull CommandSender sender, @NotNull String @NotNull [] args) {
         switch (args.length) {
             case 1 -> {
                 return List.of(
@@ -43,7 +43,7 @@ public class HelpCommand implements JEGCommand {
     }
 
     @Override
-    public boolean canCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean canCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
         if (sender.isOp()) {
             if (args.length == 1) {
                 if ("help".equalsIgnoreCase(args[0])) {

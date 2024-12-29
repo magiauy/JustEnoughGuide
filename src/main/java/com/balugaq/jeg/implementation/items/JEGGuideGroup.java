@@ -24,6 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * A implementation of the ClassicGuideGroup for JEG.
+ *
  * @author balugaq
  * @since 1.3
  */
@@ -44,7 +45,7 @@ public class JEGGuideGroup extends ClassicGuideGroup {
     };
 
     private static final int[] BORDER_SLOTS = {
-            9,  17,
+            9, 17,
             18, 26,
             27, 35,
             36, 44,

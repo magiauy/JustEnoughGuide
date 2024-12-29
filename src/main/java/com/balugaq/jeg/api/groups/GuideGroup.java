@@ -100,7 +100,7 @@ public abstract class GuideGroup extends FlexItemGroup {
     }
 
     @Override
-    public void open(@NotNull Player player, @NotNull PlayerProfile playerProfile, SlimefunGuideMode slimefunGuideMode) {
+    public void open(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
         SlimefunGuideImplementation guide = GuideUtil.getGuide(player, slimefunGuideMode);
         playerProfile.getGuideHistory().add(this, 1);
         if (guide instanceof JEGSlimefunGuideImplementation jeg) {
@@ -139,5 +139,6 @@ public abstract class GuideGroup extends FlexItemGroup {
     public abstract boolean isClassic();
 
     public abstract int[] getContentSlots();
+
     public abstract int getBackSlot();
 }

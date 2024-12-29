@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * A classic implementation of GuideGroup.
+ *
  * @author balugaq
  * @since 1.3
  */
@@ -25,6 +26,7 @@ public class ClassicGuideGroup extends GuideGroup {
     private static final int BACK_SLOT = 1;
     private static final int SIZE = 54;
     private static final boolean CLASSIC = true;
+
     protected ClassicGuideGroup(@NotNull NamespacedKey key, @NotNull ItemStack icon) {
         super(key, icon);
     }

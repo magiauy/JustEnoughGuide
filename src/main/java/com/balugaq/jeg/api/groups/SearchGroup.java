@@ -261,8 +261,7 @@ public class SearchGroup extends FlexItemGroup {
                         return false;
                     })
                     .toList();
-        }
-        else if (searchTerm.length() > 2 && searchTerm.startsWith("#t"))  {
+        } else if (searchTerm.length() > 2 && searchTerm.startsWith("#t")) {
             String substring = searchTerm.substring(2);
             return ENABLED_ITEMS
                     .keySet()
@@ -280,8 +279,7 @@ public class SearchGroup extends FlexItemGroup {
                         return isSearchFilterApplicable(recipeTypeIcon, substring, false);
                     })
                     .toList();
-        }
-        else if (searchTerm.length() > 2 && searchTerm.startsWith("#r")) {
+        } else if (searchTerm.length() > 2 && searchTerm.startsWith("#r")) {
             String substring = searchTerm.substring(2);
             return ENABLED_ITEMS
                     .keySet()
@@ -305,8 +303,7 @@ public class SearchGroup extends FlexItemGroup {
                         return false;
                     })
                     .toList();
-        }
-        else {
+        } else {
             return ENABLED_ITEMS
                     .keySet()
                     .stream()
