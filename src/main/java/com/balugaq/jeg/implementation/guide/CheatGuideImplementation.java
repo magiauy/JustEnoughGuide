@@ -9,6 +9,7 @@ import com.balugaq.jeg.api.interfaces.NotDisplayInCheatMode;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
+import com.balugaq.jeg.utils.LocalHelper;
 import com.github.houbb.pinyin.constant.enums.PinyinStyleEnum;
 import com.github.houbb.pinyin.util.PinyinHelper;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
@@ -111,9 +112,9 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             String lore = hasPermission(p, slimefunItem)
                     ? String.format(
                             "&f需要在 %s 中解锁",
-                            (itemGroup.getAddon() == null
-                                            ? "Slimefun"
-                                            : itemGroup.getAddon().getName()) + " - " + itemGroup.getDisplayName(p))
+                    (itemGroup.getAddon() == null
+                            ? "粘液科技 (Slimefun)"
+                            : LocalHelper.getLocalName(itemGroup.getAddon().getName()) + " (" + itemGroup.getAddon().getName()) + ") - " + itemGroup.getDisplayName(p))
                     : "&f无权限";
             return ItemStackUtil.getCleanItem(
                     slimefunItem.canUse(p, false)
@@ -166,6 +167,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                 }
                 if (group.getClass().isAnnotationPresent(DisplayInCheatMode.class)) {
                     groups.add(group);
+                    continue;
                 }
                 if (group instanceof FlexItemGroup flexItemGroup) {
                     NamespacedKey key = group.getKey();
@@ -238,11 +240,9 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             return;
         }
 
-        if (!isCheatMode()) {
-            GuideHistory history = profile.getGuideHistory();
-            history.clear();
-            history.setMainMenuPage(page);
-        }
+        GuideHistory history = profile.getGuideHistory();
+        history.clear();
+        history.setMainMenuPage(page);
 
         ChestMenu menu = create(p);
         List<ItemGroup> itemGroups = getVisibleItemGroups(p, profile);

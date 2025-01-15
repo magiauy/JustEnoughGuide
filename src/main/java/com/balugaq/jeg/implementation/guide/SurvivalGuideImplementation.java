@@ -9,6 +9,7 @@ import com.balugaq.jeg.api.interfaces.NotDisplayInSurvivalMode;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
+import com.balugaq.jeg.utils.LocalHelper;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
@@ -111,8 +112,8 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
                     ? String.format(
                             "&f需要在 %s 中解锁",
                             (itemGroup.getAddon() == null
-                                            ? "Slimefun"
-                                            : itemGroup.getAddon().getName()) + " - " + itemGroup.getDisplayName(p))
+                                            ? "粘液科技 (Slimefun)"
+                                            : LocalHelper.getLocalName(itemGroup.getAddon().getName()) + " (" + itemGroup.getAddon().getName()) + ") - " + itemGroup.getDisplayName(p))
                     : "&f无权限";
             return ItemStackUtil.getCleanItem(
                     slimefunItem.canUse(p, false)
@@ -192,11 +193,9 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
             return;
         }
 
-        if (isSurvivalMode()) {
-            GuideHistory history = profile.getGuideHistory();
-            history.clear();
-            history.setMainMenuPage(page);
-        }
+        GuideHistory history = profile.getGuideHistory();
+        history.clear();
+        history.setMainMenuPage(page);
 
         ChestMenu menu = create(p);
         List<ItemGroup> itemGroups = getVisibleItemGroups(p, profile);

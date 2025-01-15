@@ -9,6 +9,7 @@ import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
 import com.balugaq.jeg.utils.JEGVersionedItemFlag;
+import com.balugaq.jeg.utils.LocalHelper;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.groups.FlexItemGroup;
@@ -287,8 +288,8 @@ public class ItemMarkGroup extends FlexItemGroup {
                                 "",
                                 ChatColor.DARK_GRAY + "\u21E8 " + ChatColor.WHITE
                                         + (itemGroup.getAddon() == null
-                                                ? "Slimefun"
-                                                : itemGroup.getAddon().getName()) + " - "
+                                                ? "粘液科技 (Slimefun)"
+                                                : LocalHelper.getLocalName(itemGroup.getAddon().getName()) + " (" + itemGroup.getAddon().getName()) + ") - "
                                         + itemGroup.getDisplayName(player),
                                 ChatColor.YELLOW + "左键点击以收藏物品");
                         if (meta.hasLore() && meta.getLore() != null) {

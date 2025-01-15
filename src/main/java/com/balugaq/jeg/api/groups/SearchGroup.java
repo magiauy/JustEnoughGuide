@@ -6,6 +6,7 @@ import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
 import com.balugaq.jeg.utils.JEGVersionedItemFlag;
+import com.balugaq.jeg.utils.LocalHelper;
 import com.github.houbb.pinyin.constant.enums.PinyinStyleEnum;
 import com.github.houbb.pinyin.util.PinyinHelper;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
@@ -253,8 +254,8 @@ public class SearchGroup extends FlexItemGroup {
                             "",
                             ChatColor.DARK_GRAY + "\u21E8 " + ChatColor.WHITE
                                     + (itemGroup.getAddon() == null
-                                            ? "Slimefun"
-                                            : itemGroup.getAddon().getName()) + " - "
+                                            ? "粘液科技 (Slimefun)"
+                                            : LocalHelper.getLocalName(itemGroup.getAddon().getName()) + " (" + itemGroup.getAddon().getName()) + ") - "
                                     + itemGroup.getDisplayName(player));
                     if (meta.hasLore() && meta.getLore() != null) {
                         List<String> lore = meta.getLore();
