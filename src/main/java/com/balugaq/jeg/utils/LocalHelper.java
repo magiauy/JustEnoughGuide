@@ -1,5 +1,6 @@
 package com.balugaq.jeg.utils;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
@@ -123,7 +124,7 @@ public class LocalHelper {
         addonLocals.put("RykenSlimeCustomizer", "Ryken自定义附属");
         addonLocals.put("FinalTECH-Changed", "乱序技艺-改版");
         addonLocals.put("BloodAlchemy", "血炼金术");
-        addonLocals.put("Laboratory", "Consider-实验室");
+        addonLocals.put("Laboratory", "实验室");
         addonLocals.put("MobEngineering", "生物工程");
         addonLocals.put("TsingshanTechnology", "青山科技");
         addonLocals.put("PomaExpansion", "高级安卓机器人");
@@ -214,9 +215,11 @@ public class LocalHelper {
         addonLocals.put("Brewery", "酿酒");
         addonLocals.put("EquivalencyTech", "等价交换");
         addonLocals.put("GeyserHeads", "互通头颅材质");
+        addonLocals.put("VariousClutter", "杂乱物品");
     }
-    @Nullable
+    @Nonnull
     public static String getLocalName(String addonName) {
-        return addonLocals.get(addonName);
+        String localName = addonLocals.get(addonName);
+        return localName == null ? "未知附属" : localName;
     }
 }

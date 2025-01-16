@@ -11,6 +11,7 @@ import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
 import com.balugaq.jeg.utils.LocalHelper;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
+import io.github.thebusybiscuit.slimefun4.api.events.PlayerPreResearchEvent;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.groups.FlexItemGroup;
@@ -48,8 +49,10 @@ import java.util.logging.Level;
 import javax.annotation.ParametersAreNonnullByDefault;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu.MenuClickHandler;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -57,6 +60,7 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.RecipeChoice.MaterialChoice;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -72,7 +76,7 @@ import org.jetbrains.annotations.NotNull;
  */
 @SuppressWarnings({"deprecation", "unused"})
 public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implements JEGSlimefunGuideImplementation {
-
+    private static final NamespacedKey UNLOCK_ITEM_KEY = new NamespacedKey(JustEnoughGuide.getInstance(), "unlock_item");
     private static final int MAX_ITEM_GROUPS = 36;
 
     private final int[] recipeSlots = {3, 4, 5, 12, 13, 14, 21, 22, 23};
@@ -115,15 +119,38 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
                                             ? "粘液科技 (Slimefun)"
                                             : LocalHelper.getLocalName(itemGroup.getAddon().getName()) + " (" + itemGroup.getAddon().getName()) + ") - " + itemGroup.getDisplayName(p))
                     : "&f无权限";
-            return ItemStackUtil.getCleanItem(
-                    slimefunItem.canUse(p, false)
-                            ? item
-                            : new CustomItemStack(
-                                    Material.BARRIER,
-                                    ItemUtils.getItemName(item),
-                                    "&4&l" + Slimefun.getLocalization().getMessage(p, "guide.locked"),
-                                    "",
-                                    lore));
+            Research research = slimefunItem.getResearch();
+            if (research == null) {
+                return ItemStackUtil.getCleanItem(
+                        slimefunItem.canUse(p, false)
+                                ? item
+                                : new CustomItemStack(new CustomItemStack(
+                                Material.BARRIER,
+                                ItemUtils.getItemName(item),
+                                "&4&l" + Slimefun.getLocalization().getMessage(p, "guide.locked"),
+                                "",
+                                lore), meta -> {
+                            meta.getPersistentDataContainer().set(UNLOCK_ITEM_KEY, PersistentDataType.STRING, slimefunItem.getId());
+                        }));
+            } else {
+                String cost = VaultIntegration.isEnabled() ? String.format("%.2f", research.getCurrencyCost()) + " 游戏币" : research.getLevelCost() + " 级经验";
+                return ItemStackUtil.getCleanItem(
+                        slimefunItem.canUse(p, false)
+                                ? item
+                                : new CustomItemStack(new CustomItemStack(
+                                Material.BARRIER,
+                                ItemUtils.getItemName(item),
+                                "&4&l" + Slimefun.getLocalization().getMessage(p, "guide.locked"),
+                                "",
+                                lore,
+                                "",
+                                "&a单击解锁",
+                                "",
+                                "&7需要",
+                                "&b" + cost), meta -> {
+                            meta.getPersistentDataContainer().set(UNLOCK_ITEM_KEY, PersistentDataType.STRING, slimefunItem.getId());
+                        }));
+            }
         } else {
             return item;
         }
@@ -403,8 +430,8 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
                             "",
                             "&a> 单击解锁",
                             "",
-                            "&7需要 &b",
-                            lore)));
+                            "&7需要",
+                            "&b" + lore)));
             menu.addMenuClickHandler(index, (pl, slot, item, action) -> {
                 research.unlockFromGuide(this, p, profile, sfitem, itemGroup, page);
                 return false;
@@ -677,8 +704,45 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
                         }
                     }
                 }
-                if (itemstack != null && itemstack.getType() != Material.BARRIER) {
-                    displayItem(profile, itemstack, 0, true);
+                if (itemstack != null && itemstack.getType() != Material.AIR) {
+                    String id = itemstack.getItemMeta().getPersistentDataContainer().get(UNLOCK_ITEM_KEY, PersistentDataType.STRING);
+                    if (id != null) {
+                        SlimefunItem sfItem = SlimefunItem.getById(id);
+                        if (sfItem != null) {
+                            Research research = sfItem.getResearch();
+                            if (research != null) {
+                                // try research and re-open this page
+                                if (!Slimefun.getRegistry().getCurrentlyResearchingPlayers().contains(p.getUniqueId())) {
+                                    if (profile.hasUnlocked(research)) {
+                                        // re-open
+                                        p.closeInventory();
+                                        GuideUtil.removeLastEntry(profile.getGuideHistory());
+                                        displayItem(menu, profile, p, item, output, recipeType, recipe, task);
+                                        menu.open(p);
+                                    } else {
+                                        PlayerPreResearchEvent event = new PlayerPreResearchEvent(p, research, sfItem);
+                                        Bukkit.getPluginManager().callEvent(event);
+                                        if (!event.isCancelled()) {
+                                            if (research.canUnlock(p)) {
+                                                // unlock research
+                                                this.unlockItem(p, sfItem, (p2) -> {
+                                                    // re-open
+                                                    p2.closeInventory();
+                                                    GuideUtil.removeLastEntry(profile.getGuideHistory());
+                                                    displayItem(menu, profile, p2, item, output, recipeType, recipe, task);
+                                                    menu.open(p2);
+                                                });
+                                            } else {
+                                                Slimefun.getLocalization().sendMessage(p, "messages.not-enough-xp", true);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        displayItem(profile, itemstack, 0, true);
+                    }
                 }
             } catch (Exception | LinkageError x) {
                 printErrorMessage(pl, x);

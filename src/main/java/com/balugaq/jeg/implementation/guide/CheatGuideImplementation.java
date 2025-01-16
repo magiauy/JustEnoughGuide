@@ -173,7 +173,8 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                     NamespacedKey key = group.getKey();
                     String namespace = key.getNamespace();
                     if (namespace.equalsIgnoreCase("networks") || namespace.equalsIgnoreCase("networks-changed")) {
-                        if (group.getClass().getName().equalsIgnoreCase("com.balugaq.netex.api.groups.MainItemGroup")) {
+                        if (group.getClass().getName()
+                                .equalsIgnoreCase("com.balugaq.netex.api.groups.MainItemGroup")) {
                             continue;
                         }
                         if (group instanceof NestedItemGroup) {
@@ -182,11 +183,21 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                         }
                     }
                     if (namespace.equalsIgnoreCase("finaltech") || namespace.equalsIgnoreCase("finaltech-changed")) {
-                        if (group.getClass()
-                                .getName()
+                        if (group.getClass().getName()
                                 .equalsIgnoreCase("io.taraxacum.finaltech.core.group.MainItemGroup")) {
                             continue;
                         }
+                        if (group instanceof NestedItemGroup) {
+                            groups.add(group);
+                            continue;
+                        }
+                    }
+                    if (namespace.equalsIgnoreCase("mobengineering")) {
+                        if (group.getClass().getName()
+                                .equalsIgnoreCase("io.github.ytdd9527.mobengineering.implementation.slimefun.groups.MainItemGroup")) {
+                            continue;
+                        }
+
                         if (group instanceof NestedItemGroup) {
                             groups.add(group);
                             continue;
