@@ -1,12 +1,23 @@
 package com.balugaq.jeg.utils;
 
+import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
+import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class LocalHelper {
+    private static final String def = "未知附属";
+    private static final Map<String, Map<String, SlimefunItemStack>> rscItems = new HashMap<>();
     private static final Map<String, String> addonLocals = new HashMap<>();
+    private static final Map<String, Set<String>> rscLocals = new HashMap<>();
     static {
         addonLocals.put("Slimefun", "粘液科技");
         addonLocals.put("ColoredEnderChests", "彩色末影箱");
@@ -122,6 +133,7 @@ public class LocalHelper {
         addonLocals.put("SlimefunNukes", "粘液核弹");
         addonLocals.put("SlimeCustomizer", "自定义粘液附属");
         addonLocals.put("RykenSlimeCustomizer", "Ryken自定义附属");
+        addonLocals.put("RykenSlimefunCustomizer", "Ryken自定义附属");
         addonLocals.put("FinalTECH-Changed", "乱序技艺-改版");
         addonLocals.put("BloodAlchemy", "血炼金术");
         addonLocals.put("Laboratory", "实验室");
@@ -217,9 +229,110 @@ public class LocalHelper {
         addonLocals.put("GeyserHeads", "互通头颅材质");
         addonLocals.put("VariousClutter", "杂乱物品");
     }
+
     @Nonnull
-    public static String getLocalName(String addonName) {
+    public static String getOfficialAddonName(@Nonnull ItemGroup itemGroup, @Nonnull String itemId) {
+        return itemGroup.getAddon() == null ? def : getOfficialAddonName(itemGroup.getAddon(), itemId);
+    }
+
+    @Nonnull
+    public static String getOfficialAddonName(@Nullable SlimefunAddon addon, @Nonnull String itemId) {
+        return getOfficialAddonName(addon == null ? "Slimefun" : addon.getName(), itemId);
+    }
+
+    @Nonnull
+    public static String getOfficialAddonName(@Nonnull String addonName, @Nonnull String itemId) {
+        return getAddonName(addonName, itemId) + " (" + addonName + ")";
+    }
+
+    @Nonnull
+    public static String getAddonName(@Nonnull ItemGroup itemGroup, @Nonnull String itemId) {
+        return itemGroup.getAddon() == null ? def : getAddonName(itemGroup.getAddon().getName(), itemId);
+    }
+
+    @Nonnull
+    public static String getAddonName(@Nullable SlimefunAddon addon, @Nonnull String itemId) {
+        return getAddonName(addon == null ? "Slimefun" : addon.getName(), itemId);
+    }
+
+    @Nonnull
+    public static String getAddonName(@Nonnull String addonName, @Nonnull String itemId) {
+        if (addonName == null) {
+            return def;
+        }
+
+        if ("RykenSlimefunCustomizer".equalsIgnoreCase(addonName) || "RykenSlimeCustomizer".equalsIgnoreCase(addonName)) {
+            return getRSCLocalName(itemId);
+        }
         String localName = addonLocals.get(addonName);
-        return localName == null ? "未知附属" : localName;
+        return localName == null ? def : localName;
+    }
+
+    public static void addRSCLocal(String rscAddonName, String itemId) {
+        if (!rscLocals.containsKey(rscAddonName)) {
+            rscLocals.put(rscAddonName, new HashSet<>());
+        }
+
+        rscLocals.get(rscAddonName).add(itemId);
+    }
+
+    // get a rsc addon name by item id
+    public static String getRSCLocalName(String itemId) {
+        for (Map.Entry<String, Set<String>> entry : rscLocals.entrySet()) {
+            if (entry.getValue().contains(itemId)) {
+                return entry.getKey();
+            }
+        }
+
+        String def = addonLocals.get("RykenSlimefunCustomizer");
+        if (def == null) {
+            def = addonLocals.get("RykenSlimeCustomizer");
+        }
+
+        if (rscItems.isEmpty()) {
+            try {
+                Plugin rsc1 = Bukkit.getPluginManager().getPlugin("RykenSlimefunCustomizer");
+                Plugin rsc2 = null;
+                if (rsc1 == null) {
+                    rsc2 = Bukkit.getPluginManager().getPlugin("RykenSlimeCustomizer");
+                    if (rsc2 == null) {
+                        return def;
+                    }
+                }
+
+                Plugin rsc = rsc1 == null ? rsc2 : rsc1;
+                if (rsc == null) {
+                    return def;
+                }
+                Object addonManager = ReflectionUtil.getValue(rsc, "addonManager");
+                Object projectAddons = ReflectionUtil.getValue(addonManager, "projectAddons");
+                @SuppressWarnings("unchecked") Map<Object, Object> map = (Map<Object, Object>) projectAddons;
+                for (Map.Entry<Object, Object> entry : map.entrySet()) {
+                    Object addon = entry.getValue();
+                    Object addonName = ReflectionUtil.getValue(addon, "addonName");
+                    String name = (String) addonName;
+                    Object preloadItems = ReflectionUtil.getValue(addon, "preloadItems");
+                    @SuppressWarnings("unchecked") Map<Object, Object> items = (Map<Object, Object>) preloadItems;
+                    Map<String, SlimefunItemStack> read = new HashMap<>();
+                    for (Map.Entry<Object, Object> itemEntry : items.entrySet()) {
+                        String id = (String) itemEntry.getKey();
+                        SlimefunItemStack item = (SlimefunItemStack) itemEntry.getValue();
+                        read.put(id, item);
+                    }
+                    rscItems.put(name, read);
+                }
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
+        }
+
+        for (Map.Entry<String, Map<String, SlimefunItemStack>> entry : rscItems.entrySet()) {
+            Map<String, SlimefunItemStack> items = entry.getValue();
+            if (items.containsKey(itemId)) {
+                return entry.getKey();
+            }
+        }
+
+        return def;
     }
 }

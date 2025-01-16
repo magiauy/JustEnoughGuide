@@ -87,11 +87,11 @@ public final class GuideUtil {
         }
     }
 
-    public @NotNull ItemStack getBookMarkMenuButton() {
+    public static @NotNull ItemStack getBookMarkMenuButton() {
         return BOOK_MARK_MENU_BUTTON;
     }
 
-    public @NotNull ItemStack getItemMarkMenuButton() {
+    public static @NotNull ItemStack getItemMarkMenuButton() {
         return ITEM_MARK_MENU_BUTTON;
     }
 }

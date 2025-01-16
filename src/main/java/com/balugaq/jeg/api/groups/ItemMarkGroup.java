@@ -287,9 +287,7 @@ public class ItemMarkGroup extends FlexItemGroup {
                         List<String> additionLore = List.of(
                                 "",
                                 ChatColor.DARK_GRAY + "\u21E8 " + ChatColor.WHITE
-                                        + (itemGroup.getAddon() == null
-                                                ? "粘液科技 (Slimefun)"
-                                                : LocalHelper.getLocalName(itemGroup.getAddon().getName()) + " (" + itemGroup.getAddon().getName()) + ") - "
+                                        + (LocalHelper.getAddonName(itemGroup, slimefunItem.getId())) + " - "
                                         + itemGroup.getDisplayName(player),
                                 ChatColor.YELLOW + "左键点击以收藏物品");
                         if (meta.hasLore() && meta.getLore() != null) {

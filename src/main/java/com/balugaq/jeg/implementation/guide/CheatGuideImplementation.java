@@ -112,9 +112,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             String lore = hasPermission(p, slimefunItem)
                     ? String.format(
                             "&f需要在 %s 中解锁",
-                    (itemGroup.getAddon() == null
-                            ? "粘液科技 (Slimefun)"
-                            : LocalHelper.getLocalName(itemGroup.getAddon().getName()) + " (" + itemGroup.getAddon().getName()) + ") - " + itemGroup.getDisplayName(p))
+                    (LocalHelper.getAddonName(itemGroup, slimefunItem.getId())) + " - " + itemGroup.getDisplayName(p))
                     : "&f无权限";
             return ItemStackUtil.getCleanItem(
                     slimefunItem.canUse(p, false)

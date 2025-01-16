@@ -196,7 +196,7 @@ public class SearchGroup extends FlexItemGroup {
             if (action.isShiftClicked()) {
                 SlimefunGuide.openMainMenu(playerProfile, slimefunGuideMode, guideHistory.getMainMenuPage());
             } else {
-                guideHistory.goBack(Slimefun.getRegistry().getSlimefunGuide(SlimefunGuideMode.SURVIVAL_MODE));
+                guideHistory.goBack(Slimefun.getRegistry().getSlimefunGuide(slimefunGuideMode));
             }
             return false;
         });
@@ -253,9 +253,7 @@ public class SearchGroup extends FlexItemGroup {
                     List<String> additionLore = List.of(
                             "",
                             ChatColor.DARK_GRAY + "\u21E8 " + ChatColor.WHITE
-                                    + (itemGroup.getAddon() == null
-                                            ? "粘液科技 (Slimefun)"
-                                            : LocalHelper.getLocalName(itemGroup.getAddon().getName()) + " (" + itemGroup.getAddon().getName()) + ") - "
+                                    + (LocalHelper.getAddonName(itemGroup, slimefunItem.getId())) + " - "
                                     + itemGroup.getDisplayName(player));
                     if (meta.hasLore() && meta.getLore() != null) {
                         List<String> lore = meta.getLore();
