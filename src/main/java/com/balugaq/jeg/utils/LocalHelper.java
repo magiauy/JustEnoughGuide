@@ -69,6 +69,7 @@ public class LocalHelper {
         addonLocals.put("PotionExpansion", "药剂科技");
         addonLocals.put("FlowerPower", "源之花");
         addonLocals.put("Galactifun", "星际");
+        addonLocals.put("Galactifun2", "星际2");
         addonLocals.put("ElementManipulation", "化学工程");
         addonLocals.put("CrystamaeHistoria", "魔法水晶编年史");
         addonLocals.put("DankTech", "无底储存");
@@ -147,7 +148,7 @@ public class LocalHelper {
         addonLocals.put("ZeroTech", "澪数工艺");
         addonLocals.put("Ex-Limus", "新手工具");
         addonLocals.put("NotEnoughAddons", "多彩科技");
-        addonLocals.put("SFWorldedit", "粘液创世神");
+        addonLocals.put("SFWorldedit", "粘液创世神[SW]");
         addonLocals.put("RSCEditor", "RSC编辑器");
         addonLocals.put("JustEnoughGuide", "更好的粘液书");
         addonLocals.put("SummaryHelper", "粘液刻管理");
@@ -229,6 +230,12 @@ public class LocalHelper {
         addonLocals.put("GeyserHeads", "互通头颅材质");
         addonLocals.put("VariousClutter", "杂乱物品");
         addonLocals.put("Mineralgenerator", "Mineral 矿物生成器");
+        addonLocals.put("CivilizationEvolution", "AG科技");
+        addonLocals.put("RemiliasUtilities", "雷米科技");
+        addonLocals.put("BetterChests", "更好的箱子");
+        addonLocals.put("SlimeFood", "粘液美食");
+        addonLocals.put("SlimeVision", "粘液可视化");
+        addonLocals.put("WorldeditSlimefun", "粘液创世神[WS]");
     }
 
     @Nonnull
