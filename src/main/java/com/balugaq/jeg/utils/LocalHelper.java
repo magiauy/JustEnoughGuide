@@ -228,6 +228,7 @@ public class LocalHelper {
         addonLocals.put("EquivalencyTech", "等价交换");
         addonLocals.put("GeyserHeads", "互通头颅材质");
         addonLocals.put("VariousClutter", "杂乱物品");
+        addonLocals.put("Mineralgenerator", "Mineral 矿物生成器");
     }
 
     @Nonnull
