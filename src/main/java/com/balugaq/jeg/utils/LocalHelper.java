@@ -29,7 +29,7 @@ public class LocalHelper {
         addonLocals.put("ExtraGear", "更多装备");
         addonLocals.put("ExtraHeads", "更多头颅");
         addonLocals.put("HotbarPets", "背包宠物");
-        addonLocals.put("luckyblocks-sf", "幸运方块");
+        addonLocals.put("luckyblocks-sf", "幸运方块"); // Same as SlimefunLuckyBlocks
         addonLocals.put("RedstoneConnector", "红石连接器");
         addonLocals.put("PrivateStorage", "私人储存");
         addonLocals.put("SlimefunOreChunks", "更多矿石块");
@@ -51,16 +51,17 @@ public class LocalHelper {
         addonLocals.put("GlobalWarming", "全球变暖");
         addonLocals.put("GlobiaMachines", "全球机器");
         addonLocals.put("DynaTech", "动力科技");
-        addonLocals.put("GeneticChickengineering", "鸡因工程");
-        addonLocals.put("GeneticChickengineering-Reborn", "鸡因工程");
-        addonLocals.put("ClayTech", "粘土科技");
-        addonLocals.put("ClayTech-Fixed", "粘土科技");
-        addonLocals.put("SpaceTech", "太空科技");
+        addonLocals.put("GeneticChickengineering", "鸡因工程"); // Same as GeneticChickengineering-Reborn
+        addonLocals.put("GeneticChickengineering-Reborn", "鸡因工程"); // Same as GeneticChickengineering
+        addonLocals.put("ClayTech", "粘土科技"); // Same as ClayTech-Fixed
+        addonLocals.put("ClayTech-Fixed", "粘土科技"); // Same as ClayTech
+        addonLocals.put("SpaceTech", "太空科技"); // Same as SpaceTech-Fixed
+        addonLocals.put("SpaceTech-Fixed", "太空科技"); // Same as SpaceTech
         addonLocals.put("FNAmplifications", "FN科技");
         addonLocals.put("SimpleMaterialGenerators", "简单材料生成器");
         addonLocals.put("Netheopoiesis", "下界乌托邦");
-        addonLocals.put("Networks", "网络");
-        addonLocals.put("EMC2", "等价交换");
+        addonLocals.put("Networks", "网络"); // Same as Networks-Changed (sometimes it is NetworksExpansion)
+        addonLocals.put("EMC2", "等价交换(EMC2)"); // Avoid conflict with EquivalencyTech
         addonLocals.put("Nexcavate", "文明复兴");
         addonLocals.put("SimpleStorage", "简易储存");
         addonLocals.put("SimpleUtils", "简易工具");
@@ -74,15 +75,15 @@ public class LocalHelper {
         addonLocals.put("CrystamaeHistoria", "魔法水晶编年史");
         addonLocals.put("DankTech", "无底储存");
         addonLocals.put("DankTech2", "无底储存2");
-        addonLocals.put("Networks-Changed", "网络");
+        addonLocals.put("Networks-Changed", "网络"); // Same as Networks
         addonLocals.put("VillagerUtil", "村民工具");
         addonLocals.put("MissileWarfare", "导弹科技");
         addonLocals.put("SensibleToolbox", "STB/未来科技");
         addonLocals.put("Endrex", "末地拓展");
         addonLocals.put("Bump", "Bump魔法");
-        addonLocals.put("FinalTech", "乱序技艺");
-        addonLocals.put("FinalTECH", "乱序技艺");
-        addonLocals.put("SlimefunLuckyBlocks", "幸运方块");
+        addonLocals.put("FinalTech", "乱序技艺"); // Same as FinalTECH
+        addonLocals.put("FinalTECH", "乱序技艺"); // Same as FinalTech
+        addonLocals.put("SlimefunLuckyBlocks", "幸运方块"); // Same as luckyblocks-sf
         addonLocals.put("FutureTech", "未来科技");
         addonLocals.put("DemonicExpansion", "魑魅拓展");
         addonLocals.put("BedrockTechnology", "基岩科技");
@@ -90,13 +91,13 @@ public class LocalHelper {
         addonLocals.put("SupplementalServiceableness", "更多日用物品");
         addonLocals.put("GuizhanCraft", "鬼斩科技");
         addonLocals.put("Magmanimous", "熔岩之息");
-        addonLocals.put("UltimateGenerators-RC27", "终极发电机");
-        addonLocals.put("UltimateGenerators", "终极发电机");
+        addonLocals.put("UltimateGenerators-RC27", "终极发电机"); // Same as UltimateGenerators
+        addonLocals.put("UltimateGenerators", "终极发电机"); // Same as UltimateGenerators-RC27
         addonLocals.put("UltimateGenerators2", "终极发电机2");
         addonLocals.put("CrispyMachine", "酥脆科技");
         addonLocals.put("Chocoholics", "虫火谷工艺");
-        addonLocals.put("draconic", "龙之研究");
-        addonLocals.put("DracFun", "龙之研究");
+        addonLocals.put("draconic", "龙之研究"); // Same as DracFun
+        addonLocals.put("DracFun", "龙之研究"); // Same as draconic
         addonLocals.put("EzSFAddon", "EZ科技");
         addonLocals.put("EzTech", "EZ科技");
         addonLocals.put("RandomExpansion", "随机拓展");
@@ -111,7 +112,7 @@ public class LocalHelper {
         addonLocals.put("Cultivation", "农耕工艺");
         addonLocals.put("Gastronomicon", "美食家");
         addonLocals.put("SmallSpace", "小世界");
-        addonLocals.put("BetterReactor", "工业反应堆");
+        addonLocals.put("BetterReactor", "工业反应堆"); // Avoid conflict with Fusion
         addonLocals.put("VillagerTrade", "村民交易");
         addonLocals.put("SlimeFrame", "粘液战甲");
         addonLocals.put("AdvancedTech", "先进科技");
@@ -120,21 +121,21 @@ public class LocalHelper {
         addonLocals.put("ThermalFun", "灼岩科技");
         addonLocals.put("FastMachines", "快捷机器");
         addonLocals.put("MomoTech", "乱码科技");
-        addonLocals.put("LogicTech", "逻辑工艺");
-        addonLocals.put("LogiTech", "逻辑工艺");
-        addonLocals.put("LogicTECH", "逻辑工艺");
-        addonLocals.put("LogiTECH", "逻辑工艺");
+        addonLocals.put("LogicTech", "逻辑工艺"); // Same as LogicTECH, a SlimefunCustomizer configuration
+        addonLocals.put("LogiTech", "逻辑工艺"); // Same as LogiTECH, a Slimefun addon
+        addonLocals.put("LogicTECH", "逻辑工艺"); // Same as LogicTech
+        addonLocals.put("LogiTECH", "逻辑工艺"); // Same as LogiTech
         addonLocals.put("SlimeAE", "能源应用2");
         addonLocals.put("SlimeChem", "粘液化学");
         addonLocals.put("WilderNether", "迷狱生机");
         addonLocals.put("MapJammers", "地图干扰");
-        addonLocals.put("Cakecraft", "蛋糕工艺");
+        addonLocals.put("Cakecraft", "蛋糕工艺"); // Same as MyFirstAddon
         addonLocals.put("SFMobDrops", "自定义生物掉落");
         addonLocals.put("Drugfun", "自定义医药用品");
         addonLocals.put("SlimefunNukes", "粘液核弹");
         addonLocals.put("SlimeCustomizer", "自定义粘液附属");
-        addonLocals.put("RykenSlimeCustomizer", "Ryken自定义附属");
-        addonLocals.put("RykenSlimefunCustomizer", "Ryken自定义附属");
+        addonLocals.put("RykenSlimeCustomizer", "Ryken自定义附属"); // Same as RykenSlimefunCustomizer
+        addonLocals.put("RykenSlimefunCustomizer", "Ryken自定义附属"); // Same as RykenSlimeCustomizer
         addonLocals.put("FinalTECH-Changed", "乱序技艺-改版");
         addonLocals.put("BloodAlchemy", "血炼金术");
         addonLocals.put("Laboratory", "实验室");
@@ -148,7 +149,7 @@ public class LocalHelper {
         addonLocals.put("ZeroTech", "澪数工艺");
         addonLocals.put("Ex-Limus", "新手工具");
         addonLocals.put("NotEnoughAddons", "多彩科技");
-        addonLocals.put("SFWorldedit", "粘液创世神[SW]");
+        addonLocals.put("SFWorldedit", "粘液创世神[SW]"); // Avoid conflict with SlimefunWorldedit
         addonLocals.put("RSCEditor", "RSC编辑器");
         addonLocals.put("JustEnoughGuide", "更好的粘液书");
         addonLocals.put("SummaryHelper", "粘液刻管理");
@@ -162,8 +163,8 @@ public class LocalHelper {
         addonLocals.put("CrispyMachines", "酥脆机器");
         addonLocals.put("DimensionTraveler", "维度旅者");
         addonLocals.put("HardlessMachine", "弹跳工具");
-        addonLocals.put("XingChengCraft", "星辰工艺");
-        addonLocals.put("XingChenCraft", "星辰工艺");
+        addonLocals.put("XingChengCraft", "星辰工艺"); // Same as XingChenCraft
+        addonLocals.put("XingChenCraft", "星辰工艺"); // Same as XingChengCraft
         addonLocals.put("DefoLiationTech", "落叶科技");
         addonLocals.put("HaimanTech2", "海曼科技院");
         addonLocals.put("HaimanTech", "海曼科技");
@@ -183,12 +184,12 @@ public class LocalHelper {
         addonLocals.put("SlimeGlue", "粘液胶");
         addonLocals.put("KeepSoulbound", "高级灵魂绑定");
         addonLocals.put("SlimeFunItemBanned", "禁用物品");
-        addonLocals.put("Aza p", "狱刑");
+        addonLocals.put("Azap", "狱刑");
         addonLocals.put("CringleBosses", "混沌Boss");
         addonLocals.put("SlimefunNotchApple", "粘液Notch旗帜图案");
         addonLocals.put("Huolaiy", "火莱伊工艺");
         addonLocals.put("WonderfulTransmitter", "奇妙发射器");
-        addonLocals.put("OreGeneration", "矿物生成器");
+        addonLocals.put("OreGeneration", "矿物生成器"); // Avoid conflict with Mineralgenerator
         addonLocals.put("SlimeSec", "安全粘液");
         addonLocals.put("Paradoxium", "凤凰科技");
         addonLocals.put("LuckyPandas", "幸运熊猫");
@@ -221,21 +222,27 @@ public class LocalHelper {
         addonLocals.put("SlimefunCombat", "原子弹模型");
         addonLocals.put("ObsidianArmor", "黑曜石合金装甲");
         addonLocals.put("FinalGenerations", "世代同堂");
-        addonLocals.put("Fusion", "工业反应堆");
+        addonLocals.put("Fusion", "工业反应堆 Fusion"); // Avoid conflict with BetterReactor
         addonLocals.put("Slimedustry", "粘液工业");
         addonLocals.put("Spikes", "更多地刺");
         addonLocals.put("SlimeRP", "现代工厂");
-        addonLocals.put("Brewery", "酿酒");
-        addonLocals.put("EquivalencyTech", "等价交换");
+        addonLocals.put("Brewery", "酿酒"); // Avoid conflict with BreweryMenu
+        addonLocals.put("EquivalencyTech", "等价交换(ET)"); // Avoid conflict with EMC2
         addonLocals.put("GeyserHeads", "互通头颅材质");
         addonLocals.put("VariousClutter", "杂乱物品");
-        addonLocals.put("Mineralgenerator", "Mineral 矿物生成器");
+        addonLocals.put("Mineralgenerator", "Mineral 矿物生成器"); // Avoid conflict with OreGeneration
         addonLocals.put("CivilizationEvolution", "AG科技");
         addonLocals.put("RemiliasUtilities", "雷米科技");
         addonLocals.put("BetterChests", "更好的箱子");
         addonLocals.put("SlimeFood", "粘液美食");
         addonLocals.put("SlimeVision", "粘液可视化");
-        addonLocals.put("WorldeditSlimefun", "粘液创世神[WS]");
+        addonLocals.put("WorldeditSlimefun", "粘液创世神[WS]"); // Avoid conflict with SFWorldedit
+        addonLocals.put("MinimizeFactory", "压缩工厂");
+        addonLocals.put("InfinityCompress", "无尽压缩");
+        addonLocals.put("SlimeFrameExtension", "粘液战甲扩展");
+        addonLocals.put("BreweryMenu", "酿酒GUI"); // Avoid conflict with Brewery
+        addonLocals.put("MySlimefunAddon", "自制拓展");
+        addonLocals.put("MyFirstAddon", "蛋糕工艺"); // Same as Cakecraft
     }
 
     @Nonnull
