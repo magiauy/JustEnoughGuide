@@ -272,4 +272,8 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
 
         return true;
     }
+
+    public boolean isDebug() {
+        return getConfigManager().isDebug();
+    }
 }

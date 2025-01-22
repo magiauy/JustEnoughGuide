@@ -125,7 +125,7 @@ public class LocalHelper {
         addonLocals.put("LogiTech", "逻辑工艺"); // Same as LogiTECH, a Slimefun addon
         addonLocals.put("LogicTECH", "逻辑工艺"); // Same as LogicTech
         addonLocals.put("LogiTECH", "逻辑工艺"); // Same as LogiTech
-        addonLocals.put("SlimeAE", "能源应用2");
+        addonLocals.put("SlimeAEPlugin", "能源应用2");
         addonLocals.put("SlimeChem", "粘液化学");
         addonLocals.put("WilderNether", "迷狱生机");
         addonLocals.put("MapJammers", "地图干扰");
@@ -149,7 +149,7 @@ public class LocalHelper {
         addonLocals.put("ZeroTech", "澪数工艺");
         addonLocals.put("Ex-Limus", "新手工具");
         addonLocals.put("NotEnoughAddons", "多彩科技");
-        addonLocals.put("SFWorldedit", "粘液创世神[SW]"); // Avoid conflict with SlimefunWorldedit
+        addonLocals.put("SFWorldEdit", "粘液创世神[SW]"); // Avoid conflict with SlimefunWorldedit
         addonLocals.put("RSCEditor", "RSC编辑器");
         addonLocals.put("JustEnoughGuide", "更好的粘液书");
         addonLocals.put("SummaryHelper", "粘液刻管理");
@@ -267,7 +267,7 @@ public class LocalHelper {
 
     @Nonnull
     public static String getAddonName(@Nullable SlimefunAddon addon, @Nonnull String itemId) {
-        return getAddonName(addon == null ? "Slimefun" : addon.getName(), itemId);
+        return getAddonName(addon == null ? addonLocals.get("Slimefun") : addon.getName(), itemId);
     }
 
     @Nonnull

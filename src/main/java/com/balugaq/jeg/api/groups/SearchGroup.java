@@ -2,13 +2,16 @@ package com.balugaq.jeg.api.groups;
 
 import com.balugaq.jeg.api.interfaces.NotDisplayInCheatMode;
 import com.balugaq.jeg.api.interfaces.NotDisplayInSurvivalMode;
+import com.balugaq.jeg.api.objects.enums.FilterType;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
+import com.balugaq.jeg.utils.Debug;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
 import com.balugaq.jeg.utils.JEGVersionedItemFlag;
 import com.balugaq.jeg.utils.LocalHelper;
 import com.github.houbb.pinyin.constant.enums.PinyinStyleEnum;
 import com.github.houbb.pinyin.util.PinyinHelper;
+import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.groups.FlexItemGroup;
@@ -23,11 +26,17 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.chat.ChatInput;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import io.github.thebusybiscuit.slimefun4.utils.ChatUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -55,7 +64,9 @@ import org.jetbrains.annotations.NotNull;
 @NotDisplayInSurvivalMode
 @NotDisplayInCheatMode
 public class SearchGroup extends FlexItemGroup {
+    private static final boolean SHOW_HIDDEN_ITEM_GROUPS = Slimefun.getConfigManager().isShowHiddenItemGroupsInSearch();
     private static final Map<SlimefunItem, Integer> ENABLED_ITEMS = new HashMap<>();
+    private static final List<SlimefunItem> AVAILABLE_ITEMS = new ArrayList<>();
     private static final int BACK_SLOT = 1;
     private static final int SEARCH_SLOT = 7;
     private static final int PREVIOUS_SLOT = 46;
@@ -71,9 +82,26 @@ public class SearchGroup extends FlexItemGroup {
 
     static {
         int i = 0;
-        for (SlimefunItem slimefunItem : Slimefun.getRegistry().getEnabledSlimefunItems()) {
-            ENABLED_ITEMS.put(slimefunItem, i);
+        for (SlimefunItem item : Slimefun.getRegistry().getEnabledSlimefunItems()) {
+            ENABLED_ITEMS.put(item, i);
             i += 1;
+            if (item.isHidden() && !SHOW_HIDDEN_ITEM_GROUPS) {
+                continue;
+            }
+
+            ItemStack[] recipe = item.getRecipe();
+            if (recipe == null) {
+                continue;
+            }
+
+            if (item instanceof MultiBlockMachine) {
+                continue;
+            }
+
+            if (item.isDisabled()) {
+                continue;
+            }
+            AVAILABLE_ITEMS.add(item);
         }
     }
 
@@ -104,7 +132,7 @@ public class SearchGroup extends FlexItemGroup {
         this.pinyin = pinyin;
         this.player = player;
         this.implementation = implementation;
-        this.slimefunItemList = getAllMatchedItems(player, searchTerm, pinyin);
+        this.slimefunItemList = filterItems(player, searchTerm, pinyin);
         this.pageMap.put(1, this);
     }
 
@@ -319,118 +347,8 @@ public class SearchGroup extends FlexItemGroup {
      * @param pinyin     Whether the search term is in Pinyin.
      * @return The matched items.
      */
-    private @NotNull List<SlimefunItem> getAllMatchedItems(
-            @NotNull Player p, @NotNull String searchTerm, boolean pinyin) {
-        if (searchTerm.length() > 2 && searchTerm.startsWith("#m")) {
-            String substring = searchTerm.substring(2);
-            return ENABLED_ITEMS.keySet().stream()
-                    .filter(item -> {
-                        if (item.isHidden() || !isItemGroupAccessible(p, item)) {
-                            return false;
-                        }
-
-                        if (!(item instanceof AContainer ac)) {
-                            return false;
-                        }
-
-                        try {
-                            for (ItemStack itemStack : ac.getDisplayRecipes()) {
-                                if (isSearchFilterApplicable(itemStack, substring, false)) {
-                                    return true;
-                                }
-                            }
-                        } catch (Throwable ignored) {
-                            return false;
-                        }
-
-                        return false;
-                    })
-                    .toList();
-        } else if (searchTerm.length() > 2 && searchTerm.startsWith("#t")) {
-            String substring = searchTerm.substring(2);
-            return ENABLED_ITEMS.keySet().stream()
-                    .filter(item -> {
-                        if (item.isHidden() || !isItemGroupAccessible(p, item)) {
-                            return false;
-                        }
-
-                        ItemStack recipeTypeIcon = item.getRecipeType().getItem(p);
-                        if (recipeTypeIcon == null) {
-                            return false;
-                        }
-
-                        return isSearchFilterApplicable(recipeTypeIcon, substring, false);
-                    })
-                    .toList();
-        } else if (searchTerm.length() > 2 && searchTerm.startsWith("#r")) {
-            String substring = searchTerm.substring(2);
-            return ENABLED_ITEMS.keySet().stream()
-                    .filter(item -> {
-                        if (item.isHidden() || !isItemGroupAccessible(p, item)) {
-                            return false;
-                        }
-
-                        ItemStack[] recipe = item.getRecipe();
-                        if (recipe == null) {
-                            return false;
-                        }
-
-                        for (ItemStack itemStack : recipe) {
-                            if (isSearchFilterApplicable(itemStack, substring, false)) {
-                                return true;
-                            }
-                        }
-
-                        return false;
-                    })
-                    .toList();
-        } else {
-            return ENABLED_ITEMS.keySet().stream()
-                    .filter(item -> {
-                        if (item.isHidden() || !isItemGroupAccessible(p, item)) {
-                            return false;
-                        }
-
-                        if (item instanceof MultiBlockMachine) {
-                            return false;
-                        }
-
-                        if (item instanceof AContainer ac) {
-                            try {
-                                for (ItemStack itemStack : ac.getDisplayRecipes()) {
-                                    if (isSearchFilterApplicable(itemStack, searchTerm, false)) {
-                                        return true;
-                                    }
-                                }
-                            } catch (Throwable ignored) {
-                                return false;
-                            }
-                        }
-
-                        if (isSearchFilterApplicable(item, searchTerm, pinyin)) {
-                            return true;
-                        }
-
-                        return false;
-                    })
-                    .sorted((a, b) -> {
-                        return ENABLED_ITEMS.get(a) > ENABLED_ITEMS.get(b) ? 1 : -1;
-                    })
-                    .toList();
-        }
-    }
-
-    /**
-     * Checks if the item group is accessible.
-     *
-     * @param p            The player.
-     * @param slimefunItem The Slimefun item.
-     * @return True if the item group is accessible.
-     */
-    @ParametersAreNonnullByDefault
-    private boolean isItemGroupAccessible(Player p, SlimefunItem slimefunItem) {
-        return Slimefun.getConfigManager().isShowHiddenItemGroupsInSearch()
-                || slimefunItem.getItemGroup().isAccessible(p);
+    private @NotNull List<SlimefunItem> getAllMatchedItems(@NotNull Player p, @NotNull String searchTerm, boolean pinyin) {
+        return filterItems(p, searchTerm, pinyin);
     }
 
     /**
@@ -439,7 +357,7 @@ public class SearchGroup extends FlexItemGroup {
      * @param slimefunItem The Slimefun item.
      * @param searchTerm   The search term.
      * @param pinyin       Whether the search term is in Pinyin.
-     * @return
+     * @return True if the search filter is applicable.
      */
     @ParametersAreNonnullByDefault
     private boolean isSearchFilterApplicable(SlimefunItem slimefunItem, String searchTerm, boolean pinyin) {
@@ -481,15 +399,21 @@ public class SearchGroup extends FlexItemGroup {
         if (itemName.isEmpty()) {
             return false;
         }
+
+        // Quick escape for common cases
+        boolean result = itemName.contains(searchTerm);
+        if (result) {
+            return true;
+        }
+
         if (pinyin) {
             final String pinyinName = PinyinHelper.toPinyin(itemName, PinyinStyleEnum.INPUT, "");
             final String pinyinFirstLetter = PinyinHelper.toPinyin(itemName, PinyinStyleEnum.FIRST_LETTER, "");
-            return itemName.contains(searchTerm)
-                    || pinyinName.contains(searchTerm)
+            return pinyinName.contains(searchTerm)
                     || pinyinFirstLetter.contains(searchTerm);
-        } else {
-            return itemName.contains(searchTerm);
         }
+
+        return false;
     }
 
     /**
@@ -518,5 +442,151 @@ public class SearchGroup extends FlexItemGroup {
                 + " further info.");
         item.error(
                 "This item has caused an error message to be thrown while viewing it in the Slimefun" + " guide.", x);
+    }
+
+    public List<SlimefunItem> filterItems(Player player, String searchTerm, boolean pinyin) {
+        StringBuilder actualSearchTermBuilder = new StringBuilder();
+        String[] split = searchTerm.split(" ");
+        Map<FilterType, String> filters = new HashMap<>();
+        for (String s : split) {
+            boolean isFilter = false;
+            for (FilterType filterType : FilterType.values()) {
+                if (s.startsWith(filterType.getFlag()) && s.length() > filterType.getFlag().length()) {
+                    isFilter = true;
+                    String filterValue = s.substring(filterType.getFlag().length());
+                    filters.put(filterType, filterValue);
+                    break;
+                }
+            }
+
+            if (!isFilter) {
+                actualSearchTermBuilder.append(s).append(" ");
+            }
+        }
+
+        String actualSearchTerm = actualSearchTermBuilder.toString().trim();
+        for (FilterType filterType : FilterType.values()) {
+            String flag = filterType.getFlag();
+            // Escape the flag
+
+            // origin = \flag, replace = flag
+            // regex = \\\\flag -> compile -> \\flag -> regex -> \flag
+            actualSearchTerm = actualSearchTerm.replaceAll("\\\\" + flag, flag);
+        }
+        List<SlimefunItem> merge = new ArrayList<>();
+        // The unfiltered items
+        List<SlimefunItem> items = AVAILABLE_ITEMS
+                .stream()
+                .filter(item -> item.getItemGroup().isAccessible(player))
+                .toList();
+
+        if (!actualSearchTerm.isBlank()) {
+            List<SlimefunItem> nameMatched = filterItems(FilterType.BY_ITEM_NAME, actualSearchTerm, pinyin, items);
+            List<SlimefunItem> machineMatched = filterItems(FilterType.BY_DISPLAY_ITEM_NAME, actualSearchTerm, pinyin, items);
+            for (SlimefunItem item : nameMatched) {
+                if (!merge.contains(item)) {
+                    merge.add(item);
+                }
+            }
+            for (SlimefunItem item : machineMatched) {
+                if (!merge.contains(item)) {
+                    merge.add(item);
+                }
+            }
+        }
+
+        // Filter items
+        if (!filters.isEmpty()) {
+            for (Map.Entry<FilterType, String> entry : filters.entrySet()) {
+                items = filterItems(entry.getKey(), entry.getValue(), pinyin, items);
+            }
+
+            for (SlimefunItem item : items) {
+                if (!merge.contains(item)) {
+                    merge.add(item);
+                }
+            }
+        }
+
+        return new ArrayList<>(merge);
+    }
+
+    public List<SlimefunItem> filterItems(FilterType filterType, String filterValue, boolean pinyin, List<SlimefunItem> items) {
+        String lowerFilterValue = filterValue.toLowerCase();
+        switch (filterType) {
+            case BY_ADDON_NAME -> {
+                return items.stream().filter(item -> {
+                    SlimefunAddon addon = item.getAddon();
+                    String localAddonName = LocalHelper.getAddonName(addon, item.getId()).toLowerCase();
+                    String originModName = (addon == null ? "Slimefun" : addon.getName()).toLowerCase();
+                    if (localAddonName.contains(lowerFilterValue) || originModName.contains(lowerFilterValue)) {
+                        return true;
+                    }
+                    return false;
+                }).toList();
+            }
+            case BY_RECIPE_ITEM_NAME -> {
+                return items.stream().filter(item -> {
+                    ItemStack[] recipe = item.getRecipe();
+                    if (recipe == null) {
+                        return false;
+                    }
+
+                    for (ItemStack itemStack : recipe) {
+                        if (isSearchFilterApplicable(itemStack, filterValue, false)) {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }).toList();
+            }
+            case BY_RECIPE_TYPE_NAME -> {
+                return items.stream().filter(item -> {
+                    ItemStack recipeTypeIcon = item.getRecipeType().getItem(player);
+                    if (recipeTypeIcon == null) {
+                        return false;
+                    }
+
+                    return isSearchFilterApplicable(recipeTypeIcon, filterValue, false);
+                }).toList();
+            }
+            case BY_DISPLAY_ITEM_NAME -> {
+                return items.stream().filter(item -> {
+                    if (item instanceof AContainer ac) {
+                        try {
+                            for (ItemStack itemStack : ac.getDisplayRecipes()) {
+                                if (isSearchFilterApplicable(itemStack, filterValue, false)) {
+                                    return true;
+                                }
+                            }
+                        } catch (Throwable ignored) {
+                            return false;
+                        }
+                    }
+
+                    return false;
+                }).toList();
+            }
+            case BY_MATERIAL_NAME -> {
+                return items.stream().filter(item -> {
+                    if (item.getItem().getType().name().toLowerCase().contains(lowerFilterValue)) {
+                        return true;
+                    }
+                    return false;
+                }).toList();
+            }
+            case BY_ITEM_NAME -> {
+                return items.stream().filter(item -> {
+                    if (isSearchFilterApplicable(item, filterValue, pinyin)) {
+                        return true;
+                    }
+                    return false;
+                }).toList();
+            }
+            default -> {
+                return items;
+            }
+        }
     }
 }
