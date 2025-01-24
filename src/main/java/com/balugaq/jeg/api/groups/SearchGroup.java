@@ -2,6 +2,7 @@ package com.balugaq.jeg.api.groups;
 
 import com.balugaq.jeg.api.interfaces.NotDisplayInCheatMode;
 import com.balugaq.jeg.api.interfaces.NotDisplayInSurvivalMode;
+import com.balugaq.jeg.api.objects.Timer;
 import com.balugaq.jeg.api.objects.enums.FilterType;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.Debug;
@@ -9,40 +10,41 @@ import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
 import com.balugaq.jeg.utils.JEGVersionedItemFlag;
 import com.balugaq.jeg.utils.LocalHelper;
+import com.balugaq.jeg.utils.ReflectionUtil;
 import com.github.houbb.pinyin.constant.enums.PinyinStyleEnum;
 import com.github.houbb.pinyin.util.PinyinHelper;
-import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import io.github.thebusybiscuit.slimefun4.api.items.groups.FlexItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.core.guide.GuideHistory;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuide;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
-import io.github.thebusybiscuit.slimefun4.core.multiblocks.MultiBlockMachine;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.chat.ChatInput;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.collections.RandomizedSet;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import io.github.thebusybiscuit.slimefun4.utils.ChatUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 import javax.annotation.ParametersAreNonnullByDefault;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.AContainer;
 import net.guizhanss.guizhanlib.minecraft.helper.inventory.ItemStackHelper;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -64,9 +66,14 @@ import org.jetbrains.annotations.NotNull;
 @NotDisplayInSurvivalMode
 @NotDisplayInCheatMode
 public class SearchGroup extends FlexItemGroup {
+    public static boolean LOADED = false;
+    public static final Map<Character, Set<SlimefunItem>> CACHE = new HashMap<>(); // fast way for by item name
+    public static final Map<Character, Set<SlimefunItem>> CACHE2 = new HashMap<>(); // fast way for by display item name
     private static final boolean SHOW_HIDDEN_ITEM_GROUPS = Slimefun.getConfigManager().isShowHiddenItemGroupsInSearch();
-    private static final Map<SlimefunItem, Integer> ENABLED_ITEMS = new HashMap<>();
-    private static final List<SlimefunItem> AVAILABLE_ITEMS = new ArrayList<>();
+    private static final int DEFAULT_HASH_SIZE = 5000;
+    private static final Map<SlimefunItem, Integer> ENABLED_ITEMS = new HashMap<>(DEFAULT_HASH_SIZE);
+    private static final Set<SlimefunItem> AVAILABLE_ITEMS = new HashSet<>(DEFAULT_HASH_SIZE);
+    public static final Map<String, Set<String>> SPECIAL_CACHE = new HashMap<>();
     private static final int BACK_SLOT = 1;
     private static final int SEARCH_SLOT = 7;
     private static final int PREVIOUS_SLOT = 46;
@@ -79,32 +86,6 @@ public class SearchGroup extends FlexItemGroup {
         36, 37, 38, 39, 40, 41, 42, 43, 44
     };
     private static final JavaPlugin JAVA_PLUGIN = JustEnoughGuide.getInstance();
-
-    static {
-        int i = 0;
-        for (SlimefunItem item : Slimefun.getRegistry().getEnabledSlimefunItems()) {
-            ENABLED_ITEMS.put(item, i);
-            i += 1;
-            if (item.isHidden() && !SHOW_HIDDEN_ITEM_GROUPS) {
-                continue;
-            }
-
-            ItemStack[] recipe = item.getRecipe();
-            if (recipe == null) {
-                continue;
-            }
-
-            if (item instanceof MultiBlockMachine) {
-                continue;
-            }
-
-            if (item.isDisabled()) {
-                continue;
-            }
-            AVAILABLE_ITEMS.add(item);
-        }
-    }
-
     private final SlimefunGuideImplementation implementation;
     private final Player player;
     private final String searchTerm;
@@ -127,6 +108,9 @@ public class SearchGroup extends FlexItemGroup {
             @NotNull String searchTerm,
             boolean pinyin) {
         super(new NamespacedKey(JAVA_PLUGIN, "jeg_search_group_" + UUID.randomUUID()), new ItemStack(Material.BARRIER));
+        if (!LOADED) {
+            init();
+        }
         this.page = 1;
         this.searchTerm = searchTerm;
         this.pinyin = pinyin;
@@ -360,7 +344,7 @@ public class SearchGroup extends FlexItemGroup {
      * @return True if the search filter is applicable.
      */
     @ParametersAreNonnullByDefault
-    private boolean isSearchFilterApplicable(SlimefunItem slimefunItem, String searchTerm, boolean pinyin) {
+    public static boolean isSearchFilterApplicable(SlimefunItem slimefunItem, String searchTerm, boolean pinyin) {
         if (slimefunItem == null) {
             return false;
         }
@@ -377,7 +361,7 @@ public class SearchGroup extends FlexItemGroup {
      * @return True if the search filter is applicable.
      */
     @ParametersAreNonnullByDefault
-    private boolean isSearchFilterApplicable(ItemStack itemStack, String searchTerm, boolean pinyin) {
+    public static boolean isSearchFilterApplicable(ItemStack itemStack, String searchTerm, boolean pinyin) {
         if (itemStack == null) {
             return false;
         }
@@ -395,7 +379,7 @@ public class SearchGroup extends FlexItemGroup {
      * @return True if the search filter is applicable.
      */
     @ParametersAreNonnullByDefault
-    private boolean isSearchFilterApplicable(String itemName, String searchTerm, boolean pinyin) {
+    public static boolean isSearchFilterApplicable(String itemName, String searchTerm, boolean pinyin) {
         if (itemName.isEmpty()) {
             return false;
         }
@@ -445,6 +429,8 @@ public class SearchGroup extends FlexItemGroup {
     }
 
     public List<SlimefunItem> filterItems(Player player, String searchTerm, boolean pinyin) {
+        Timer t = new Timer("Total Search");
+        t.starts();
         StringBuilder actualSearchTermBuilder = new StringBuilder();
         String[] split = searchTerm.split(" ");
         Map<FilterType, String> filters = new HashMap<>();
@@ -473,120 +459,364 @@ public class SearchGroup extends FlexItemGroup {
             // regex = \\\\flag -> compile -> \\flag -> regex -> \flag
             actualSearchTerm = actualSearchTerm.replaceAll("\\\\" + flag, flag);
         }
-        List<SlimefunItem> merge = new ArrayList<>();
+        Set<SlimefunItem> merge = new HashSet<>(36 * 4);
         // The unfiltered items
-        List<SlimefunItem> items = AVAILABLE_ITEMS
+        var timer0 = new Timer("Filter Items 0");
+        timer0.starts();
+        Set<SlimefunItem> items = AVAILABLE_ITEMS
                 .stream()
-                .filter(item -> item.getItemGroup().isAccessible(player))
-                .toList();
+                .filter(item -> item.getItemGroup().isAccessible(player)).collect(Collectors.toSet());
+        timer0.logs();
 
         if (!actualSearchTerm.isBlank()) {
-            List<SlimefunItem> nameMatched = filterItems(FilterType.BY_ITEM_NAME, actualSearchTerm, pinyin, items);
-            List<SlimefunItem> machineMatched = filterItems(FilterType.BY_DISPLAY_ITEM_NAME, actualSearchTerm, pinyin, items);
-            for (SlimefunItem item : nameMatched) {
-                if (!merge.contains(item)) {
-                    merge.add(item);
+            var timer = new Timer("Name Matched Items 1");
+            timer.starts();
+            Set<SlimefunItem> nameMatched = new HashSet<>();
+            boolean containsAll = true;
+            if (containsAll) {
+                Set<SlimefunItem> allMatched = null;
+                for (char c : actualSearchTerm.toCharArray()) {
+                    if (allMatched == null) {
+                        allMatched = CACHE.get(c);
+                    } else {
+                        allMatched.retainAll(CACHE.get(c));
+                    }
+                }
+                if (allMatched != null) {
+                    nameMatched.addAll(allMatched);
                 }
             }
-            for (SlimefunItem item : machineMatched) {
-                if (!merge.contains(item)) {
-                    merge.add(item);
+            timer.logs();
+            var timer2 = new Timer("Machine Matched Items 2");
+            timer2.starts();
+            boolean containsMachine = true;
+            Set<SlimefunItem> machineMatched = new HashSet<>();
+            if (containsMachine) {
+                Set<SlimefunItem> allMatched = null;
+                for (char c : actualSearchTerm.toCharArray()) {
+                    if (allMatched == null) {
+                        allMatched = CACHE2.get(c);
+                    } else {
+                        allMatched.retainAll(CACHE2.get(c));
+                    }
+                }
+                if (allMatched != null) {
+                    machineMatched.addAll(allMatched);
                 }
             }
+            timer2.logs();
+            merge.addAll(nameMatched);
+            merge.addAll(machineMatched);
         }
 
+        var timer3 = new Timer("Filter Items 3");
+        timer3.starts();
         // Filter items
         if (!filters.isEmpty()) {
             for (Map.Entry<FilterType, String> entry : filters.entrySet()) {
                 items = filterItems(entry.getKey(), entry.getValue(), pinyin, items);
             }
 
-            for (SlimefunItem item : items) {
-                if (!merge.contains(item)) {
-                    merge.add(item);
-                }
-            }
+            merge.addAll(items);
         }
+        timer3.logs();
 
-        return new ArrayList<>(merge);
+        var timer4 = new Timer("Sort Items 4");
+        timer4.starts();
+        List<SlimefunItem> sorted = merge.stream().sorted((a, b) -> ENABLED_ITEMS.get(a) < ENABLED_ITEMS.get(b) ? -1 : 1).toList();
+        timer4.logs();
+        t.logs();
+        return sorted;
     }
 
     public List<SlimefunItem> filterItems(FilterType filterType, String filterValue, boolean pinyin, List<SlimefunItem> items) {
         String lowerFilterValue = filterValue.toLowerCase();
-        switch (filterType) {
-            case BY_ADDON_NAME -> {
-                return items.stream().filter(item -> {
-                    SlimefunAddon addon = item.getAddon();
-                    String localAddonName = LocalHelper.getAddonName(addon, item.getId()).toLowerCase();
-                    String originModName = (addon == null ? "Slimefun" : addon.getName()).toLowerCase();
-                    if (localAddonName.contains(lowerFilterValue) || originModName.contains(lowerFilterValue)) {
-                        return true;
-                    }
-                    return false;
-                }).toList();
-            }
-            case BY_RECIPE_ITEM_NAME -> {
-                return items.stream().filter(item -> {
-                    ItemStack[] recipe = item.getRecipe();
-                    if (recipe == null) {
-                        return false;
-                    }
+        return items.stream().filter(item -> filterType.getFilter().apply(player, item, lowerFilterValue, pinyin)).toList();
+    }
 
-                    for (ItemStack itemStack : recipe) {
-                        if (isSearchFilterApplicable(itemStack, filterValue, false)) {
-                            return true;
+    public Set<SlimefunItem> filterItems(FilterType filterType, String filterValue, boolean pinyin, Set<SlimefunItem> items) {
+        String lowerFilterValue = filterValue.toLowerCase();
+        return items.stream().filter(item -> filterType.getFilter().apply(player, item, lowerFilterValue, pinyin)).collect(Collectors.toSet());
+    }
+
+    public static List<SlimefunItem> filterItems(Player player, FilterType filterType, String filterValue, boolean pinyin, List<SlimefunItem> items) {
+        String lowerFilterValue = filterValue.toLowerCase();
+        return items.stream().filter(item -> filterType.getFilter().apply(player, item, lowerFilterValue, pinyin)).toList();
+    }
+
+    public static Set<SlimefunItem> filterItems(Player player, FilterType filterType, String filterValue, boolean pinyin, Set<SlimefunItem> items) {
+        String lowerFilterValue = filterValue.toLowerCase();
+        return items.stream().filter(item -> filterType.getFilter().apply(player, item, lowerFilterValue, pinyin)).collect(Collectors.toSet());
+    }
+
+    public static void init() {
+        Debug.log("Initializing Search Group...");
+        Timer.start();
+        if (!LOADED) {
+            LOADED = true;
+            int i = 0;
+            for (SlimefunItem item : Slimefun.getRegistry().getEnabledSlimefunItems()) {
+                ENABLED_ITEMS.put(item, i);
+                i += 1;
+                if (item.isHidden() && !SHOW_HIDDEN_ITEM_GROUPS) {
+                    continue;
+                }
+
+                ItemStack[] r = item.getRecipe();
+                if (r == null) {
+                    continue;
+                }
+
+                if (item.isDisabled()) {
+                    continue;
+                }
+                AVAILABLE_ITEMS.add(item);
+                try {
+                    String id = item.getId();
+                    if (!SPECIAL_CACHE.containsKey(id)) {
+                        Set<String> cache = new HashSet<>();
+
+                        // init cache
+                        Object Orecipes = ReflectionUtil.getValue(item, "recipes");
+                        if (Orecipes == null) {
+                            Object Omaterial = ReflectionUtil.getValue(item, "material");
+                            if (Omaterial == null) {
+                                Object ORECIPE_LIST = ReflectionUtil.getValue(item, "RECIPE_LIST");
+                                if (ORECIPE_LIST == null) {
+                                    Object Ooutputs = ReflectionUtil.getValue(item, "outputs");
+                                    if (Ooutputs == null) {
+                                        Object OOUTPUTS = ReflectionUtil.getValue(item, "OUTPUTS");
+                                        if (OOUTPUTS == null) {
+                                            continue;
+                                        }
+                                        // InfinityExpansion StrainerBase
+                                        if (OOUTPUTS instanceof ItemStack[] outputs) {
+                                            if (!isInstance(item, "StrainerBase")) {
+                                                continue;
+                                            }
+                                            for (ItemStack output : outputs) {
+                                                cache.add(ItemStackHelper.getDisplayName(output));
+                                            }
+                                        }
+                                    }
+                                    // InfinityExpansion Quarry
+                                    else if (Ooutputs instanceof Material[] outputs) {
+                                        if (!isInstance(item, "Quarry")) {
+                                            continue;
+                                        }
+                                        for (Material material : outputs) {
+                                            cache.add(ItemStackHelper.getDisplayName(new ItemStack(material)));
+                                        }
+                                    }
+                                }
+                                // InfinityExpansion SingularityConstructor
+                                else if (ORECIPE_LIST instanceof List<?> recipes) {
+                                    if (!isInstance(item, "SingularityConstructor")) {
+                                        continue;
+                                    }
+                                    for (Object recipe : recipes) {
+                                        ItemStack input = (ItemStack) ReflectionUtil.getValue(recipe, "input");
+                                        if (input != null) {
+                                            cache.add(ItemStackHelper.getDisplayName(input));
+                                        }
+                                        SlimefunItemStack output = (SlimefunItemStack) ReflectionUtil.getValue(recipe, "output");
+                                        if (output != null) {
+                                            SlimefunItem slimefunItem = output.getItem();
+                                            if (slimefunItem != null) {
+                                                cache.add(slimefunItem.getItemName());
+                                            }
+                                        }
+                                    }
+                                }
+                            } else {
+                                // InfinityExpansion MaterialGenerator
+                                if (!isInstance(item, "MaterialGenerator")) {
+                                    continue;
+                                }
+                                cache.add(ItemStackHelper.getDisplayName(new ItemStack((Material) Omaterial)));
+                            }
                         }
-                    }
-
-                    return false;
-                }).toList();
-            }
-            case BY_RECIPE_TYPE_NAME -> {
-                return items.stream().filter(item -> {
-                    ItemStack recipeTypeIcon = item.getRecipeType().getItem(player);
-                    if (recipeTypeIcon == null) {
-                        return false;
-                    }
-
-                    return isSearchFilterApplicable(recipeTypeIcon, filterValue, false);
-                }).toList();
-            }
-            case BY_DISPLAY_ITEM_NAME -> {
-                return items.stream().filter(item -> {
-                    if (item instanceof AContainer ac) {
-                        try {
-                            for (ItemStack itemStack : ac.getDisplayRecipes()) {
-                                if (isSearchFilterApplicable(itemStack, filterValue, false)) {
-                                    return true;
+                        // InfinityExpansion ResourceSynthesizer
+                        if (Orecipes instanceof SlimefunItemStack[] recipes) {
+                            if (!isInstance(item, "ResourceSynthesizer")){
+                                continue;
+                            }
+                            for (SlimefunItemStack slimefunItemStack : recipes) {
+                                SlimefunItem slimefunItem = slimefunItemStack.getItem();
+                                if (slimefunItem != null) {
+                                    cache.add(slimefunItem.getItemName());
                                 }
                             }
-                        } catch (Throwable ignored) {
-                            return false;
+                        }
+                        // InfinityExpansion GrowingMachine
+                        else if (Orecipes instanceof EnumMap<?, ?> recipes) {
+                            if (!isInstance(item, "GrowingMachine")){
+                                continue;
+                            }
+                            recipes.values().forEach(obj -> {
+                                ItemStack[] items = (ItemStack[]) obj;
+                                for (ItemStack itemStack : items) {
+                                    cache.add(ItemStackHelper.getDisplayName(itemStack));
+                                }
+                            });
+                        }
+                        // InfinityExpansion MachineBlock
+                        else if (Orecipes instanceof List<?> recipes) {
+                            if (!isInstance(item, "MachineBlock")) {
+                                continue;
+                            }
+                            for (Object recipe : recipes) {
+                                String[] strings = (String[]) ReflectionUtil.getValue(recipe, "strings");
+                                if (strings == null) {
+                                    continue;
+                                }
+                                for (String string : strings) {
+                                    SlimefunItem slimefunItem = SlimefunItem.getById(string);
+                                    if (slimefunItem != null) {
+                                        cache.add(slimefunItem.getItemName());
+                                    } else {
+                                        Material material = Material.getMaterial(string);
+                                        if (material != null) {
+                                            cache.add(ItemStackHelper.getDisplayName(new ItemStack(material)));
+                                        }
+                                    }
+                                }
+
+                                ItemStack output = (ItemStack) ReflectionUtil.getValue(recipe, "output");
+                                if (output != null) {
+                                    cache.add(ItemStackHelper.getDisplayName(output));
+                                }
+                            }
+                        }
+
+                        if (!cache.isEmpty()) {
+                            SPECIAL_CACHE.put(id, cache);
+                        }
+                    }
+                } catch (Throwable ignored) {
+                }
+            }
+
+            // InfinityExpansion StoneworksFactory
+            Set<Material> materials = new HashSet<>();
+            materials.add(Material.COBBLESTONE);
+            materials.add(Material.STONE);
+            materials.add(Material.SAND);
+            materials.add(Material.STONE_BRICKS);
+            materials.add(Material.SMOOTH_STONE);
+            materials.add(Material.GLASS);
+            materials.add(Material.CRACKED_STONE_BRICKS);
+            materials.add(Material.GRAVEL);
+            materials.add(Material.GRANITE);
+            materials.add(Material.DIORITE);
+            materials.add(Material.ANDESITE);
+            materials.add(Material.POLISHED_GRANITE);
+            materials.add(Material.POLISHED_DIORITE);
+            materials.add(Material.POLISHED_ANDESITE);
+            materials.add(Material.SANDSTONE);
+            Set<String> cache = new HashSet<>();
+            for (Material material : materials) {
+                cache.add(ItemStackHelper.getDisplayName(new ItemStack(material)));
+            }
+            SPECIAL_CACHE.put("STONEWORKS_FACTORY", cache);
+
+            // InfinityExpansion VoidHarvester
+            SlimefunItem item2 = SlimefunItem.getById("VOID_BIT");
+            if (item2 != null) {
+                Set<String> cache2 = new HashSet<>();
+                cache2.add(item2.getItemName());
+                SPECIAL_CACHE.put("VOID_HARVESTER", cache2);
+            }
+
+            // InfinityExpansion MobDataCard
+            label2:
+            {
+                try {
+                    Class<?> MobDataCardClass = Class.forName("io.github.mooy1.infinityexpansion.items.mobdata.MobDataCard");
+                    @SuppressWarnings("unchecked") Map<String, Object> cards = (Map<String, Object>) ReflectionUtil.getStaticValue(MobDataCardClass, "CARDS");
+                    if (cards == null) {
+                        break label2;
+                    }
+                    cards.values().forEach(card -> {
+                        @SuppressWarnings("unchecked") RandomizedSet<ItemStack> drops = (RandomizedSet<ItemStack>) ReflectionUtil.getValue(card, "drops");
+                        if (drops == null) {
+                            return;
+                        }
+                        Set<String> cache2 = new HashSet<>();
+                        for (ItemStack itemStack : drops.toMap().keySet()) {
+                            cache2.add(ItemStackHelper.getDisplayName(itemStack));
+                        }
+                        SPECIAL_CACHE.put(((SlimefunItem) card).getId(), cache2);
+                    });
+                } catch (Throwable ignored) {
+                }
+            }
+
+            Bukkit.getScheduler().runTaskAsynchronously(JustEnoughGuide.getInstance(), () -> {
+                Timer timer = new Timer("Init Cache");
+                timer.starts();
+                for (SlimefunItem slimefunItem : AVAILABLE_ITEMS) {
+                    String name = slimefunItem.getItemName();
+                    for (char c : name.toCharArray()) {
+                        CACHE.putIfAbsent(c, new HashSet<>());
+                        CACHE.get(c).add(slimefunItem);
+                    }
+
+                    if (JustEnoughGuide.getConfigManager().isPinyinSearch()) {
+                        final String pinyinName = PinyinHelper.toPinyin(name, PinyinStyleEnum.INPUT, "");
+                        final String pinyinFirstLetter = PinyinHelper.toPinyin(name, PinyinStyleEnum.FIRST_LETTER, "");
+                        for (char c : pinyinName.toCharArray()) {
+                            CACHE.putIfAbsent(c, new HashSet<>());
+                            CACHE.get(c).add(slimefunItem);
+                        }
+                        for (char c : pinyinFirstLetter.toCharArray()) {
+                            CACHE.putIfAbsent(c, new HashSet<>());
+                            CACHE.get(c).add(slimefunItem);
                         }
                     }
 
-                    return false;
-                }).toList();
-            }
-            case BY_MATERIAL_NAME -> {
-                return items.stream().filter(item -> {
-                    if (item.getItem().getType().name().toLowerCase().contains(lowerFilterValue)) {
-                        return true;
+                    if (slimefunItem instanceof AContainer ac) {
+                        List<ItemStack> displayRecipes = ac.getDisplayRecipes();
+                        for (ItemStack itemStack : displayRecipes) {
+                            String name2 = ItemStackHelper.getDisplayName(itemStack);
+                            for (char c : name2.toCharArray()) {
+                                CACHE2.putIfAbsent(c, new HashSet<>());
+                                CACHE2.get(c).add(slimefunItem);
+                            }
+                        }
                     }
-                    return false;
-                }).toList();
-            }
-            case BY_ITEM_NAME -> {
-                return items.stream().filter(item -> {
-                    if (isSearchFilterApplicable(item, filterValue, pinyin)) {
-                        return true;
+
+                    String id = slimefunItem.getId();
+                    if (SPECIAL_CACHE.containsKey(id)) {
+                        Set<String> cache2 = SPECIAL_CACHE.get(id);
+                        for (String s : cache2) {
+                            for (char c : s.toCharArray()) {
+                                CACHE2.putIfAbsent(c, new HashSet<>());
+                                CACHE2.get(c).add(slimefunItem);
+                            }
+                        }
                     }
-                    return false;
-                }).toList();
-            }
-            default -> {
-                return items;
-            }
+                }
+
+                timer.logs();
+                Debug.debug("Cache initialized.");
+            });
         }
+        Timer.log();
+        Debug.debug("Search Group initialized.");
+        Debug.debug("Enabled items: " + ENABLED_ITEMS.size());
+        Debug.debug("Available items: " + AVAILABLE_ITEMS.size());
+        Debug.debug("Machine blocks cache: " + SPECIAL_CACHE.size());
+    }
+
+    public static boolean isInstance(SlimefunItem item, String classSimpleName) {
+        Class<?> clazz = item.getClass();
+        while (clazz != SlimefunItem.class) {
+            if (clazz.getSimpleName().equals(classSimpleName)) {
+                return true;
+            }
+            clazz = clazz.getSuperclass();
+        }
+        return false;
     }
 }

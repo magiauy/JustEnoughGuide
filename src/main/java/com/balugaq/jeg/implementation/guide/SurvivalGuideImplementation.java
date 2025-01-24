@@ -112,6 +112,13 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
             }
 
             ItemGroup itemGroup = slimefunItem.getItemGroup();
+            if (slimefunItem.isDisabledIn(p.getWorld())) {
+                return ItemStackUtil.getCleanItem(new CustomItemStack(
+                        Material.BARRIER,
+                        ItemUtils.getItemName(item),
+                        "&4&l 该 Slimefun 物品已被禁用"
+                ));
+            }
             String lore = hasPermission(p, slimefunItem)
                     ? String.format(
                             "&f需要在 %s 中解锁",
@@ -546,7 +553,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
                 null,
                 null,
                 ItemStackUtil.getCleanItem(
-                        new CustomItemStack(Material.BARRIER, "&4We are somehow unable to show you this Recipe :/")),
+                        new CustomItemStack(Material.BARRIER, "&4我们不知道如何展示该配方 :/")),
                 null,
                 null,
                 null,
@@ -706,7 +713,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
                     String id = itemstack.getItemMeta().getPersistentDataContainer().get(UNLOCK_ITEM_KEY, PersistentDataType.STRING);
                     if (id != null) {
                         SlimefunItem sfItem = SlimefunItem.getById(id);
-                        if (sfItem != null) {
+                        if (sfItem != null && !sfItem.isDisabledIn(p.getWorld())) {
                             Research research = sfItem.getResearch();
                             if (research != null) {
                                 // try research and re-open this page

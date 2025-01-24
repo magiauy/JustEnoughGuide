@@ -16,7 +16,9 @@ import java.util.Set;
 public class LocalHelper {
     private static final String def = "未知附属";
     private static final Map<String, Map<String, SlimefunItemStack>> rscItems = new HashMap<>();
+    // default language is zh-CN
     private static final Map<String, String> addonLocals = new HashMap<>();
+    // depends on rsc addons' info.yml
     private static final Map<String, Set<String>> rscLocals = new HashMap<>();
     static {
         addonLocals.put("Slimefun", "粘液科技");
@@ -247,40 +249,70 @@ public class LocalHelper {
 
     @Nonnull
     public static String getOfficialAddonName(@Nonnull ItemGroup itemGroup, @Nonnull String itemId) {
-        return itemGroup.getAddon() == null ? def : getOfficialAddonName(itemGroup.getAddon(), itemId);
+        return getOfficialAddonName(itemGroup.getAddon(), itemId, def);
+    }
+
+    @Nonnull
+    public static String getOfficialAddonName(@Nonnull ItemGroup itemGroup, @Nonnull String itemId, String callback) {
+        return itemGroup.getAddon() == null ? def : getOfficialAddonName(itemGroup.getAddon(), itemId, callback);
     }
 
     @Nonnull
     public static String getOfficialAddonName(@Nullable SlimefunAddon addon, @Nonnull String itemId) {
-        return getOfficialAddonName(addon == null ? "Slimefun" : addon.getName(), itemId);
+        return getOfficialAddonName(addon, itemId, def);
+    }
+
+    @Nonnull
+    public static String getOfficialAddonName(@Nullable SlimefunAddon addon, @Nonnull String itemId, String callback) {
+        return getOfficialAddonName(addon == null ? "Slimefun" : addon.getName(), itemId, callback);
     }
 
     @Nonnull
     public static String getOfficialAddonName(@Nonnull String addonName, @Nonnull String itemId) {
-        return getAddonName(addonName, itemId) + " (" + addonName + ")";
+        return getOfficialAddonName(addonName, itemId, def);
+    }
+
+    @Nonnull
+    public static String getOfficialAddonName(@Nonnull String addonName, @Nonnull String itemId, String callback) {
+        return getAddonName(addonName, itemId, callback) + " (" + addonName + ")";
     }
 
     @Nonnull
     public static String getAddonName(@Nonnull ItemGroup itemGroup, @Nonnull String itemId) {
-        return itemGroup.getAddon() == null ? def : getAddonName(itemGroup.getAddon().getName(), itemId);
+        return getAddonName(itemGroup, itemId, def);
+    }
+
+    @Nonnull
+    public static String getAddonName(@Nonnull ItemGroup itemGroup, @Nonnull String itemId, @Nonnull String callback) {
+        return itemGroup.getAddon() == null ? def : getAddonName(itemGroup.getAddon().getName(), itemId, callback);
     }
 
     @Nonnull
     public static String getAddonName(@Nullable SlimefunAddon addon, @Nonnull String itemId) {
-        return getAddonName(addon == null ? addonLocals.get("Slimefun") : addon.getName(), itemId);
+        return getAddonName(addon, itemId, def);
+    }
+
+    @Nonnull
+    public static String getAddonName(@Nullable SlimefunAddon addon, @Nonnull String itemId, String callback) {
+        return getAddonName(addon == null ? addonLocals.get("Slimefun") : addon.getName(), itemId, callback);
     }
 
     @Nonnull
     public static String getAddonName(@Nonnull String addonName, @Nonnull String itemId) {
+        return getAddonName(addonName, itemId, def);
+    }
+
+    @Nonnull
+    public static String getAddonName(@Nonnull String addonName, @Nonnull String itemId, String callback) {
         if (addonName == null) {
-            return def;
+            return callback;
         }
 
         if ("RykenSlimefunCustomizer".equalsIgnoreCase(addonName) || "RykenSlimeCustomizer".equalsIgnoreCase(addonName)) {
             return getRSCLocalName(itemId);
         }
         String localName = addonLocals.get(addonName);
-        return localName == null ? def : localName;
+        return localName == null ? callback : localName;
     }
 
     public static void addRSCLocal(String rscAddonName, String itemId) {

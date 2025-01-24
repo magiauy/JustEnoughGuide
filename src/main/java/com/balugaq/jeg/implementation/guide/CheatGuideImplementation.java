@@ -1,6 +1,7 @@
 package com.balugaq.jeg.implementation.guide;
 
 import city.norain.slimefun4.VaultIntegration;
+import com.balugaq.jeg.api.groups.HiddenItemsGroup;
 import com.balugaq.jeg.api.groups.SearchGroup;
 import com.balugaq.jeg.api.interfaces.BookmarkRelocation;
 import com.balugaq.jeg.api.interfaces.DisplayInCheatMode;
@@ -361,7 +362,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
         }
 
         if (itemGroup instanceof FlexItemGroup flexItemGroup) {
-            flexItemGroup.open(p, profile, SlimefunGuideMode.CHEAT_MODE);
+            flexItemGroup.open(p, profile, getMode());
             return;
         }
 

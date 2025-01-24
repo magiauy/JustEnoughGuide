@@ -40,6 +40,17 @@ public class ReflectionUtil {
         return true;
     }
 
+    public static <T> T getStaticValue(@NotNull Class<T> clazz, @NotNull String field) {
+        try {
+            Field declaredField = clazz.getDeclaredField(field);
+            declaredField.setAccessible(true);
+            return (T) declaredField.get(null);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public static @Nullable Method getMethod(@NotNull Class<?> clazz, String methodName) {
         while (clazz != Object.class) {
             for (Method method : clazz.getDeclaredMethods()) {

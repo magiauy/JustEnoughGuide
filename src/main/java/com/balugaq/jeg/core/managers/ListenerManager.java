@@ -4,6 +4,8 @@ import com.balugaq.jeg.api.managers.AbstractManager;
 import com.balugaq.jeg.core.listeners.GuideListener;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.balugaq.jeg.core.listeners.SearchGroupInitListener;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
@@ -26,6 +28,7 @@ public class ListenerManager extends AbstractManager {
     public ListenerManager(JavaPlugin plugin) {
         this.plugin = plugin;
         listeners.add(new GuideListener());
+        listeners.add(new SearchGroupInitListener());
     }
 
     private void registerListeners() {

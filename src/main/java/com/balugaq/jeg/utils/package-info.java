@@ -11,5 +11,6 @@ package com.balugaq.jeg.utils;
  * @see com.balugaq.jeg.utils.JEGVersionedItemFlag
  * @see com.balugaq.jeg.utils.LocalHelper
  * @see com.balugaq.jeg.utils.SlimefunItemUtil
+ * @see com.balugaq.jeg.utils.SpecialMenuProvider
  * @since 1.0
  */
