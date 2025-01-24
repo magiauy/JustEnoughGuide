@@ -39,6 +39,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.annotation.ParametersAreNonnullByDefault;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
@@ -349,7 +351,7 @@ public class SearchGroup extends FlexItemGroup {
             return false;
         }
         String itemName = ChatColor.stripColor(slimefunItem.getItemName()).toLowerCase(Locale.ROOT);
-        return isSearchFilterApplicable(itemName, searchTerm, pinyin);
+        return isSearchFilterApplicable(itemName, searchTerm.toLowerCase(), pinyin);
     }
 
     /**
@@ -367,7 +369,7 @@ public class SearchGroup extends FlexItemGroup {
         }
         String itemName =
                 ChatColor.stripColor(ItemStackHelper.getDisplayName(itemStack)).toLowerCase(Locale.ROOT);
-        return isSearchFilterApplicable(itemName, searchTerm, pinyin);
+        return isSearchFilterApplicable(itemName, searchTerm.toLowerCase(), pinyin);
     }
 
     /**
@@ -453,11 +455,8 @@ public class SearchGroup extends FlexItemGroup {
         String actualSearchTerm = actualSearchTermBuilder.toString().trim();
         for (FilterType filterType : FilterType.values()) {
             String flag = filterType.getFlag();
-            // Escape the flag
-
-            // origin = \flag, replace = flag
-            // regex = \\\\flag -> compile -> \\flag -> regex -> \flag
-            actualSearchTerm = actualSearchTerm.replaceAll("\\\\" + flag, flag);
+            // Quote the flag to be used as a literal replacement
+            actualSearchTerm = actualSearchTerm.replaceAll(Pattern.quote(flag), Matcher.quoteReplacement(flag));
         }
         Set<SlimefunItem> merge = new HashSet<>(36 * 4);
         // The unfiltered items
@@ -476,10 +475,15 @@ public class SearchGroup extends FlexItemGroup {
             if (containsAll) {
                 Set<SlimefunItem> allMatched = null;
                 for (char c : actualSearchTerm.toCharArray()) {
+                    Debug.debug("Searching: " + c);
+                    Set<SlimefunItem> cache = CACHE.get(c);
+                    if (cache == null) {
+                        cache = new HashSet<>();
+                    }
                     if (allMatched == null) {
-                        allMatched = CACHE.get(c);
+                        allMatched = cache;
                     } else {
-                        allMatched.retainAll(CACHE.get(c));
+                        allMatched.retainAll(cache);
                     }
                 }
                 if (allMatched != null) {
@@ -494,10 +498,15 @@ public class SearchGroup extends FlexItemGroup {
             if (containsMachine) {
                 Set<SlimefunItem> allMatched = null;
                 for (char c : actualSearchTerm.toCharArray()) {
+                    Debug.debug("Searching: " + c);
+                    Set<SlimefunItem> cache = CACHE2.get(c);
+                    if (cache == null) {
+                        cache = new HashSet<>();
+                    }
                     if (allMatched == null) {
-                        allMatched = CACHE2.get(c);
+                        allMatched = cache;
                     } else {
-                        allMatched.retainAll(CACHE2.get(c));
+                        allMatched.retainAll(cache);
                     }
                 }
                 if (allMatched != null) {
@@ -550,10 +559,9 @@ public class SearchGroup extends FlexItemGroup {
     }
 
     public static void init() {
-        Debug.log("Initializing Search Group...");
-        Timer.start();
         if (!LOADED) {
-            LOADED = true;
+            Debug.log("Initializing Search Group...");
+            Timer.start();
             int i = 0;
             for (SlimefunItem item : Slimefun.getRegistry().getEnabledSlimefunItems()) {
                 ENABLED_ITEMS.put(item, i);
@@ -758,20 +766,23 @@ public class SearchGroup extends FlexItemGroup {
                 for (SlimefunItem slimefunItem : AVAILABLE_ITEMS) {
                     String name = slimefunItem.getItemName();
                     for (char c : name.toCharArray()) {
-                        CACHE.putIfAbsent(c, new HashSet<>());
-                        CACHE.get(c).add(slimefunItem);
+                        char d = Character.toLowerCase(c);
+                        CACHE.putIfAbsent(d, new HashSet<>());
+                        CACHE.get(d).add(slimefunItem);
                     }
 
                     if (JustEnoughGuide.getConfigManager().isPinyinSearch()) {
                         final String pinyinName = PinyinHelper.toPinyin(name, PinyinStyleEnum.INPUT, "");
                         final String pinyinFirstLetter = PinyinHelper.toPinyin(name, PinyinStyleEnum.FIRST_LETTER, "");
                         for (char c : pinyinName.toCharArray()) {
-                            CACHE.putIfAbsent(c, new HashSet<>());
-                            CACHE.get(c).add(slimefunItem);
+                            char d = Character.toLowerCase(c);
+                            CACHE.putIfAbsent(d, new HashSet<>());
+                            CACHE.get(d).add(slimefunItem);
                         }
                         for (char c : pinyinFirstLetter.toCharArray()) {
-                            CACHE.putIfAbsent(c, new HashSet<>());
-                            CACHE.get(c).add(slimefunItem);
+                            char d = Character.toLowerCase(c);
+                            CACHE.putIfAbsent(d, new HashSet<>());
+                            CACHE.get(d).add(slimefunItem);
                         }
                     }
 
@@ -780,8 +791,9 @@ public class SearchGroup extends FlexItemGroup {
                         for (ItemStack itemStack : displayRecipes) {
                             String name2 = ItemStackHelper.getDisplayName(itemStack);
                             for (char c : name2.toCharArray()) {
-                                CACHE2.putIfAbsent(c, new HashSet<>());
-                                CACHE2.get(c).add(slimefunItem);
+                                char d = Character.toLowerCase(c);
+                                CACHE2.putIfAbsent(d, new HashSet<>());
+                                CACHE2.get(d).add(slimefunItem);
                             }
                         }
                     }
@@ -791,8 +803,9 @@ public class SearchGroup extends FlexItemGroup {
                         Set<String> cache2 = SPECIAL_CACHE.get(id);
                         for (String s : cache2) {
                             for (char c : s.toCharArray()) {
-                                CACHE2.putIfAbsent(c, new HashSet<>());
-                                CACHE2.get(c).add(slimefunItem);
+                                char d = Character.toLowerCase(c);
+                                CACHE2.putIfAbsent(d, new HashSet<>());
+                                CACHE2.get(d).add(slimefunItem);
                             }
                         }
                     }
@@ -801,12 +814,14 @@ public class SearchGroup extends FlexItemGroup {
                 timer.logs();
                 Debug.debug("Cache initialized.");
             });
+            LOADED = true;
+
+            Timer.log();
+            Debug.debug("Search Group initialized.");
+            Debug.debug("Enabled items: " + ENABLED_ITEMS.size());
+            Debug.debug("Available items: " + AVAILABLE_ITEMS.size());
+            Debug.debug("Machine blocks cache: " + SPECIAL_CACHE.size());
         }
-        Timer.log();
-        Debug.debug("Search Group initialized.");
-        Debug.debug("Enabled items: " + ENABLED_ITEMS.size());
-        Debug.debug("Available items: " + AVAILABLE_ITEMS.size());
-        Debug.debug("Machine blocks cache: " + SPECIAL_CACHE.size());
     }
 
     public static boolean isInstance(SlimefunItem item, String classSimpleName) {

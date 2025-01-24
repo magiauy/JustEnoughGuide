@@ -97,11 +97,13 @@ public class LocalHelper {
         addonLocals.put("UltimateGenerators", "终极发电机"); // Same as UltimateGenerators-RC27
         addonLocals.put("UltimateGenerators2", "终极发电机2");
         addonLocals.put("CrispyMachine", "酥脆科技");
-        addonLocals.put("Chocoholics", "虫火谷工艺");
+        addonLocals.put("Chocoholics", "虫火谷工艺"); // Same as ChocoHills
+        addonLocals.put("ChocoHills", "虫火谷工艺"); // Same as Chocoholics
         addonLocals.put("draconic", "龙之研究"); // Same as DracFun
         addonLocals.put("DracFun", "龙之研究"); // Same as draconic
-        addonLocals.put("EzSFAddon", "EZ科技");
-        addonLocals.put("EzTech", "EZ科技");
+        addonLocals.put("EzSFAddon", "EZ科技"); // Same as EzTech, EzSlimeFunAddon
+        addonLocals.put("EzTech", "EZ科技"); // Same as EzSFAddon, EzSlimeFunAddon
+        addonLocals.put("EzSlimeFunAddon", "EZ科技"); // Same as EzSFAddon, EzTech
         addonLocals.put("RandomExpansion", "随机拓展");
         addonLocals.put("SlimyBees", "林业蜜蜂");
         addonLocals.put("ObsidianExpansion", "黑曜石科技");
@@ -142,11 +144,12 @@ public class LocalHelper {
         addonLocals.put("BloodAlchemy", "血炼金术");
         addonLocals.put("Laboratory", "实验室");
         addonLocals.put("MobEngineering", "生物工程");
-        addonLocals.put("TsingshanTechnology", "青山科技");
+        addonLocals.put("TsingshanTechnology", "青山科技"); // Same as TsingshanTechnology-Fixed
+        addonLocals.put("TsingshanTechnology-Fixed", "青山科技"); // Same as TsingshanTechnology
         addonLocals.put("PomaExpansion", "高级安卓机器人");
         addonLocals.put("BuildingStaff", "建筑魔杖");
         addonLocals.put("IDreamOfEasy", "易梦");
-        addonLocals.put("Magic-8-Ball", "魔法8号球");
+        addonLocals.put("Magic8Ball", "魔法8号球");
         addonLocals.put("InfinityExpansionAutomation", "无尽自动化");
         addonLocals.put("ZeroTech", "澪数工艺");
         addonLocals.put("Ex-Limus", "新手工具");
@@ -239,12 +242,18 @@ public class LocalHelper {
         addonLocals.put("SlimeFood", "粘液美食");
         addonLocals.put("SlimeVision", "粘液可视化");
         addonLocals.put("WorldeditSlimefun", "粘液创世神[WS]"); // Avoid conflict with SFWorldedit
-        addonLocals.put("MinimizeFactory", "压缩工厂");
+        addonLocals.put("MinimizeFactory", "最小化工厂");
         addonLocals.put("InfinityCompress", "无尽压缩");
         addonLocals.put("SlimeFrameExtension", "粘液战甲扩展");
         addonLocals.put("BreweryMenu", "酿酒GUI"); // Avoid conflict with Brewery
         addonLocals.put("MySlimefunAddon", "自制拓展");
         addonLocals.put("MyFirstAddon", "蛋糕工艺"); // Same as Cakecraft
+        addonLocals.put("StackMachine", "堆叠机器"); // Avoid conflict with SlimefunStackMachine
+        addonLocals.put("SlimefunStackMachine", "粘液堆叠机器"); // Avoid conflict with StackMachine
+        addonLocals.put("CraftableEnchantments", "附魔工艺");
+        addonLocals.put("sj_Expansion", "sjの粘液拓展");
+        addonLocals.put("SlimefunZT", "SiciliaCraft");
+        addonLocals.put("SlimefunAddon", "CAPTAINchad12自制拓展"); // Unbelievable...
     }
 
     @Nonnull
