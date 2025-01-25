@@ -33,6 +33,8 @@ public class ConfigManager extends AbstractManager {
     private final boolean CHEAT_IMPROVEMENTS;
     private final boolean PINYIN_SEARCH;
     private final boolean BOOKMARK;
+    private final String SURVIVAL_GUIDE_TITLE;
+    private final String CHEAT_GUIDE_TITLE;
     private final @NotNull JavaPlugin plugin;
 
     public ConfigManager(@NotNull JavaPlugin plugin) {
@@ -44,6 +46,8 @@ public class ConfigManager extends AbstractManager {
         this.CHEAT_IMPROVEMENTS = plugin.getConfig().getBoolean("guide.cheat-improvements");
         this.PINYIN_SEARCH = plugin.getConfig().getBoolean("improvements.pinyin-search");
         this.BOOKMARK = plugin.getConfig().getBoolean("improvements.bookmark");
+        this.SURVIVAL_GUIDE_TITLE = plugin.getConfig().getString("guide.survival-guide-title", "&2&lSlimefun 指南 (生存模式)         &e&l爱来自 JustEnoughGuide");
+        this.CHEAT_GUIDE_TITLE = plugin.getConfig().getString("guide.cheat-guide-title", "&c&lSlimefun 指南 (作弊模式)         &e&l爱来自 JustEnoughGuide");
     }
 
     private void setupDefaultConfig() {
@@ -105,5 +109,12 @@ public class ConfigManager extends AbstractManager {
 
     public boolean isBookmark() {
         return BOOKMARK;
+    }
+    public String getSurvivalGuideTitle() {
+        return SURVIVAL_GUIDE_TITLE;
+    }
+
+    public String getCheatGuideTitle() {
+        return CHEAT_GUIDE_TITLE;
     }
 }

@@ -1027,7 +1027,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
     }
 
     @NotNull public ChestMenu create(@NotNull Player p) {
-        ChestMenu menu = new ChestMenu("&c&lSlimefun 指南 (作弊模式)         &e&l爱来自 JustEnoughGuide");
+        ChestMenu menu = new ChestMenu(JustEnoughGuide.getConfigManager().getCheatGuideTitle());
 
         menu.setEmptySlotsClickable(false);
         menu.addMenuOpeningHandler(SoundEffect.GUIDE_BUTTON_CLICK_SOUND::playFor);
