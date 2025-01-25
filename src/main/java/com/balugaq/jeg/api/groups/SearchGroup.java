@@ -782,7 +782,12 @@ public class SearchGroup extends FlexItemGroup {
                         for (char c : pinyinFirstLetter.toCharArray()) {
                             char d = Character.toLowerCase(c);
                             CACHE.putIfAbsent(d, new HashSet<>());
-                            CACHE.get(d).add(slimefunItem);
+                            Set<SlimefunItem> set = CACHE.get(d);
+                            if (set == null) {
+                                set = new HashSet<>();
+                                CACHE.put(d, set);
+                            }
+                            set.add(slimefunItem);
                         }
                     }
 
@@ -793,7 +798,12 @@ public class SearchGroup extends FlexItemGroup {
                             for (char c : name2.toCharArray()) {
                                 char d = Character.toLowerCase(c);
                                 CACHE2.putIfAbsent(d, new HashSet<>());
-                                CACHE2.get(d).add(slimefunItem);
+                                Set<SlimefunItem> set = CACHE2.get(d);
+                                if (set == null) {
+                                    set = new HashSet<>();
+                                    CACHE2.put(d, set);
+                                }
+                                set.add(slimefunItem);
                             }
                         }
                     }

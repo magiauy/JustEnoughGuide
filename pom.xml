@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.balugaq.jeg</groupId>
     <artifactId>JustEnoughGuide</artifactId>
-    <version>53</version>
+    <version>54</version>
 
     <pluginRepositories>
         <pluginRepository>
@@ -178,6 +178,13 @@
             <artifactId>GuizhanLibPlugin</artifactId>
             <version>1.7.6</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>me.matl114</groupId>
+            <artifactId>LogiTech</artifactId>
+            <version>1.0.3</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/original-LogiTech v1.0.3.jar</systemPath>
         </dependency>
     </dependencies>
 </project>

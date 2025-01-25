@@ -5,6 +5,7 @@ import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
@@ -51,11 +52,57 @@ public class ReflectionUtil {
         }
     }
 
+    public static @Nullable Method getMethod(@NotNull Class<?> clazz, String methodName, boolean noargs) {
+        while (clazz != Object.class) {
+            for (Method method : clazz.getDeclaredMethods()) {
+                if (method.getName().equals(methodName) && (!noargs || method.getParameterTypes().length == 0)) {
+                    return method;
+                }
+            }
+            clazz = clazz.getSuperclass();
+        }
+        // noargs failed, try to find a method which has arguments
+        return getMethod(clazz, methodName);
+    }
+
     public static @Nullable Method getMethod(@NotNull Class<?> clazz, String methodName) {
         while (clazz != Object.class) {
             for (Method method : clazz.getDeclaredMethods()) {
                 if (method.getName().equals(methodName)) {
                     return method;
+                }
+            }
+            clazz = clazz.getSuperclass();
+        }
+        return null;
+    }
+
+    public static @Nullable Method getMethod(@NotNull Class<?> clazz, String methodName, int parameterCount) {
+        while (clazz != Object.class) {
+            for (Method method : clazz.getDeclaredMethods()) {
+                if (method.getName().equals(methodName) && method.getParameterTypes().length == parameterCount) {
+                    return method;
+                }
+            }
+            clazz = clazz.getSuperclass();
+        }
+        return null;
+    }
+
+    public static @Nullable Method getMethod(@NotNull Class<?> clazz, String methodName, Class<?>... parameterTypes) {
+        while (clazz != Object.class) {
+            for (Method method : clazz.getDeclaredMethods()) {
+                if (method.getName().equals(methodName) && method.getParameterTypes().length == parameterTypes.length) {
+                    boolean match = true;
+                    for (int i = 0; i < parameterTypes.length; i++) {
+                        if (method.getParameterTypes()[i] != parameterTypes[i]) {
+                            match = false;
+                            break;
+                        }
+                    }
+                    if (match) {
+                        return method;
+                    }
                 }
             }
             clazz = clazz.getSuperclass();
@@ -115,6 +162,15 @@ public class ReflectionUtil {
             } else {
                 return getDeclaredFieldsRecursively(clazz, fieldName);
             }
+        }
+    }
+
+    public static @Nullable Constructor<?> getConstructor(@NotNull Class<?> clazz, Class<?>... parameterTypes) {
+        try {
+            return clazz.getDeclaredConstructor(parameterTypes);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

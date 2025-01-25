@@ -17,6 +17,9 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("deprecation")
 public interface JEGSlimefunGuideImplementation extends SlimefunGuideImplementation {
     @ParametersAreNonnullByDefault
+    void displayItem(PlayerProfile profile, SlimefunItem item, boolean addToHistory, boolean maybeSpecial);
+
+    @ParametersAreNonnullByDefault
     void createHeader(Player p, PlayerProfile profile, ChestMenu menu);
 
     @NotNull ChestMenu create(@NotNull Player p);

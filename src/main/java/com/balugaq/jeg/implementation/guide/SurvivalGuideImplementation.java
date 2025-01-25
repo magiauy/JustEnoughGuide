@@ -10,6 +10,7 @@ import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
 import com.balugaq.jeg.utils.LocalHelper;
+import com.balugaq.jeg.utils.SpecialMenuProvider;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.api.events.PlayerPreResearchEvent;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
@@ -40,6 +41,8 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.recipes.MinecraftRecip
 import io.github.thebusybiscuit.slimefun4.utils.ChatUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import io.github.thebusybiscuit.slimefun4.utils.itemstack.SlimefunGuideItem;
+
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -631,10 +634,25 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
     @Override
     @ParametersAreNonnullByDefault
     public void displayItem(PlayerProfile profile, SlimefunItem item, boolean addToHistory) {
+        displayItem(profile, item, addToHistory, true);
+    }
+
+    @ParametersAreNonnullByDefault
+    public void displayItem(PlayerProfile profile, SlimefunItem item, boolean addToHistory, boolean maybeSpecial) {
         Player p = profile.getPlayer();
 
         if (p == null) {
             return;
+        }
+
+        if (maybeSpecial && SpecialMenuProvider.isSpecialItem(item)) {
+            try {
+                if (SpecialMenuProvider.open(profile.getPlayer(), profile, getMode(), item)) {
+                    return;
+                }
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
         }
 
         ChestMenu menu = create(p);

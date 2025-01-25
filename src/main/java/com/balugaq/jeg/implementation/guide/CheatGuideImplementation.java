@@ -11,6 +11,7 @@ import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
 import com.balugaq.jeg.utils.LocalHelper;
+import com.balugaq.jeg.utils.SpecialMenuProvider;
 import com.github.houbb.pinyin.constant.enums.PinyinStyleEnum;
 import com.github.houbb.pinyin.util.PinyinHelper;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
@@ -42,11 +43,15 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.recipes.MinecraftRecip
 import io.github.thebusybiscuit.slimefun4.utils.ChatUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import io.github.thebusybiscuit.slimefun4.utils.itemstack.SlimefunGuideItem;
+
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.Set;
 import java.util.logging.Level;
 import javax.annotation.ParametersAreNonnullByDefault;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
@@ -76,6 +81,7 @@ import org.jetbrains.annotations.NotNull;
  */
 @SuppressWarnings({"deprecation", "unused"})
 public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements JEGSlimefunGuideImplementation {
+    private static final Set<SlimefunItem> nexcavateItems = new HashSet<>();
     private static final int MAX_ITEM_GROUPS = 36;
     private final int[] recipeSlots = {3, 4, 5, 12, 13, 14, 21, 22, 23};
     private final @NotNull ItemStack item;
@@ -199,6 +205,12 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
 
                         if (group instanceof NestedItemGroup) {
                             groups.add(group);
+                            continue;
+                        }
+                    }
+                    if (namespace.equalsIgnoreCase("nexcavate")) {
+                        if (group.getClass().getName()
+                                .equalsIgnoreCase("me.char321.nexcavate.slimefun.NEItemGroup")) {
                             continue;
                         }
                     }
@@ -677,10 +689,25 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
     @Override
     @ParametersAreNonnullByDefault
     public void displayItem(PlayerProfile profile, SlimefunItem item, boolean addToHistory) {
+        displayItem(profile, item, addToHistory, true);
+    }
+
+    @ParametersAreNonnullByDefault
+    public void displayItem(PlayerProfile profile, SlimefunItem item, boolean addToHistory, boolean maybeSpecial) {
         Player p = profile.getPlayer();
 
         if (p == null) {
             return;
+        }
+
+        if (maybeSpecial && SpecialMenuProvider.isSpecialItem(item)) {
+            try {
+                if (SpecialMenuProvider.open(profile.getPlayer(), profile, getMode(), item)) {
+                    return;
+                }
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
         }
 
         ChestMenu menu = create(p);
