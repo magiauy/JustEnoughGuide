@@ -1,17 +1,19 @@
 package com.balugaq.jeg.core.managers;
 
 import com.balugaq.jeg.api.managers.AbstractManager;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import javax.annotation.ParametersAreNonnullByDefault;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 
 /**
  * This class is responsible for managing the configuration of the plugin.
@@ -33,8 +35,8 @@ public class ConfigManager extends AbstractManager {
     private final boolean CHEAT_IMPROVEMENTS;
     private final boolean PINYIN_SEARCH;
     private final boolean BOOKMARK;
-    private final String SURVIVAL_GUIDE_TITLE;
-    private final String CHEAT_GUIDE_TITLE;
+    private final @NotNull String SURVIVAL_GUIDE_TITLE;
+    private final @NotNull String CHEAT_GUIDE_TITLE;
     private final @NotNull JavaPlugin plugin;
 
     public ConfigManager(@NotNull JavaPlugin plugin) {
@@ -110,6 +112,7 @@ public class ConfigManager extends AbstractManager {
     public boolean isBookmark() {
         return BOOKMARK;
     }
+
     public String getSurvivalGuideTitle() {
         return SURVIVAL_GUIDE_TITLE;
     }

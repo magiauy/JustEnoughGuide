@@ -10,9 +10,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Set;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 @Getter
 public enum FilterType {
@@ -87,6 +84,7 @@ public enum FilterType {
 
     private final String flag;
     private final DiFunction<Player, SlimefunItem, String, Boolean, Boolean> filter;
+
     FilterType(String flag, DiFunction<Player, SlimefunItem, String, Boolean, Boolean> filter) {
         this.flag = flag;
         this.filter = filter;

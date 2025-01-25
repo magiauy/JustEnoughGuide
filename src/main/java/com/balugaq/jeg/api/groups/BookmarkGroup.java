@@ -22,12 +22,6 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.chat.ChatInput;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.ItemUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.logging.Level;
-import javax.annotation.ParametersAreNonnullByDefault;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -38,6 +32,13 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.logging.Level;
 
 /**
  * This class used to create groups to display all the marked items in the guide.
@@ -55,12 +56,12 @@ public class BookmarkGroup extends FlexItemGroup {
     private static final int SEARCH_SLOT = 7;
     private static final int PREVIOUS_SLOT = 46;
     private static final int NEXT_SLOT = 52;
-    private static final int[] BORDER = new int[] {0, 2, 3, 4, 5, 6, 8, 45, 47, 48, 49, 50, 51, 53};
-    private static final int[] MAIN_CONTENT = new int[] {
-        9, 10, 11, 12, 13, 14, 15, 16, 17,
-        18, 19, 20, 21, 22, 23, 24, 25, 26,
-        27, 28, 29, 30, 31, 32, 33, 34, 35,
-        36, 37, 38, 39, 40, 41, 42, 43, 44
+    private static final int[] BORDER = new int[]{0, 2, 3, 4, 5, 6, 8, 45, 47, 48, 49, 50, 51, 53};
+    private static final int[] MAIN_CONTENT = new int[]{
+            9, 10, 11, 12, 13, 14, 15, 16, 17,
+            18, 19, 20, 21, 22, 23, 24, 25, 26,
+            27, 28, 29, 30, 31, 32, 33, 34, 35,
+            36, 37, 38, 39, 40, 41, 42, 43, 44
     };
 
     private static final JavaPlugin JAVA_PLUGIN = JustEnoughGuide.getInstance();
@@ -162,7 +163,8 @@ public class BookmarkGroup extends FlexItemGroup {
      * @param slimefunGuideMode The Slimefun guide mode.
      * @return The generated menu.
      */
-    @NotNull private ChestMenu generateMenu(
+    @NotNull
+    private ChestMenu generateMenu(
             @NotNull Player player,
             @NotNull PlayerProfile playerProfile,
             @NotNull SlimefunGuideMode slimefunGuideMode) {
@@ -346,7 +348,8 @@ public class BookmarkGroup extends FlexItemGroup {
      * @param page The page number.
      * @return The BookmarkGroup by page.
      */
-    @NotNull private BookmarkGroup getByPage(int page) {
+    @NotNull
+    private BookmarkGroup getByPage(int page) {
         if (this.pageMap.containsKey(page)) {
             return this.pageMap.get(page);
         } else {

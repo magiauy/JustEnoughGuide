@@ -6,7 +6,6 @@ import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
 import com.balugaq.jeg.utils.JEGVersionedItemFlag;
-import com.balugaq.jeg.utils.LocalHelper;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.groups.FlexItemGroup;
@@ -55,8 +54,8 @@ public class NexcavateItemsGroup extends FlexItemGroup {
     private static final int SEARCH_SLOT = 7;
     private static final int PREVIOUS_SLOT = 46;
     private static final int NEXT_SLOT = 52;
-    private static final int[] BORDER = new int[] {0, 2, 3, 4, 5, 6, 8, 45, 47, 48, 49, 50, 51, 53};
-    private static final int[] MAIN_CONTENT = new int[] {
+    private static final int[] BORDER = new int[]{0, 2, 3, 4, 5, 6, 8, 45, 47, 48, 49, 50, 51, 53};
+    private static final int[] MAIN_CONTENT = new int[]{
             9, 10, 11, 12, 13, 14, 15, 16, 17,
             18, 19, 20, 21, 22, 23, 24, 25, 26,
             27, 28, 29, 30, 31, 32, 33, 34, 35,
@@ -86,7 +85,7 @@ public class NexcavateItemsGroup extends FlexItemGroup {
      * Constructor of nexvacateItemsGroup.
      *
      * @param nexcavateItemsGroup The nexvacateItemsGroup to copy.
-     * @param page          The page number to display.
+     * @param page                The page number to display.
      */
     protected NexcavateItemsGroup(@NotNull NexcavateItemsGroup nexcavateItemsGroup, int page) {
         super(nexcavateItemsGroup.key, new ItemStack(Material.BARRIER));
@@ -150,7 +149,8 @@ public class NexcavateItemsGroup extends FlexItemGroup {
      * @param slimefunGuideMode The Slimefun guide mode.
      * @return The generated menu.
      */
-    @NotNull private ChestMenu generateMenu(
+    @NotNull
+    private ChestMenu generateMenu(
             @NotNull Player player,
             @NotNull PlayerProfile playerProfile,
             @NotNull SlimefunGuideMode slimefunGuideMode) {
@@ -313,7 +313,8 @@ public class NexcavateItemsGroup extends FlexItemGroup {
      * @param page The page number.
      * @return The nexvacateItemsGroup by page.
      */
-    @NotNull private NexcavateItemsGroup getByPage(int page) {
+    @NotNull
+    private NexcavateItemsGroup getByPage(int page) {
         if (this.pageMap.containsKey(page)) {
             return this.pageMap.get(page);
         } else {

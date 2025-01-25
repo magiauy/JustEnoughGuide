@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
+import org.jetbrains.annotations.NotNull;
 
 public class SearchGroupInitListener implements Listener {
     @EventHandler
@@ -15,7 +16,7 @@ public class SearchGroupInitListener implements Listener {
     }
 
     @EventHandler
-    public void onReload(PluginDisableEvent event) {
+    public void onReload(@NotNull PluginDisableEvent event) {
         if (event.getPlugin() instanceof SlimefunAddon) {
             SearchGroup.LOADED = false;
             SearchGroup.CACHE.clear();
@@ -26,7 +27,7 @@ public class SearchGroupInitListener implements Listener {
     }
 
     @EventHandler
-    public void onReload(PluginEnableEvent event) {
+    public void onReload(@NotNull PluginEnableEvent event) {
         if (event.getPlugin() instanceof SlimefunAddon) {
             SearchGroup.LOADED = false;
             SearchGroup.init();

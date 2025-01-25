@@ -41,15 +41,6 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.recipes.MinecraftRecip
 import io.github.thebusybiscuit.slimefun4.utils.ChatUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import io.github.thebusybiscuit.slimefun4.utils.itemstack.SlimefunGuideItem;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.logging.Level;
-import javax.annotation.ParametersAreNonnullByDefault;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu.MenuClickHandler;
 import org.bukkit.Bukkit;
@@ -65,6 +56,15 @@ import org.bukkit.inventory.RecipeChoice.MaterialChoice;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.logging.Level;
 
 /**
  * This is JEG's implementation of the Survival Guide.
@@ -124,8 +124,8 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
             }
             String lore = hasPermission(p, slimefunItem)
                     ? String.format(
-                            "&f需要在 %s 中解锁",
-                            (LocalHelper.getAddonName(itemGroup, slimefunItem.getId())) + " - " + itemGroup.getDisplayName(p))
+                    "&f需要在 %s 中解锁",
+                    (LocalHelper.getAddonName(itemGroup, slimefunItem.getId())) + " - " + itemGroup.getDisplayName(p))
                     : "&f无权限";
             Research research = slimefunItem.getResearch();
             if (research == null) {
@@ -550,17 +550,17 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
             recipeType = new RecipeType(optional.get());
             result = recipe.getResult();
         } else {
-            recipeItems = new ItemStack[] {
-                null,
-                null,
-                null,
-                null,
-                ItemStackUtil.getCleanItem(
-                        new CustomItemStack(Material.BARRIER, "&4我们不知道如何展示该配方 :/")),
-                null,
-                null,
-                null,
-                null
+            recipeItems = new ItemStack[]{
+                    null,
+                    null,
+                    null,
+                    null,
+                    ItemStackUtil.getCleanItem(
+                            new CustomItemStack(Material.BARRIER, "&4我们不知道如何展示该配方 :/")),
+                    null,
+                    null,
+                    null,
+                    null
             };
         }
 
@@ -650,7 +650,8 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
                 if (SpecialMenuProvider.open(profile.getPlayer(), profile, getMode(), item)) {
                     return;
                 }
-            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
+                     InvocationTargetException e) {
                 e.printStackTrace();
             }
         }
@@ -1032,7 +1033,8 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         }
     }
 
-    @NotNull public ChestMenu create(@NotNull Player p) {
+    @NotNull
+    public ChestMenu create(@NotNull Player p) {
         ChestMenu menu = new ChestMenu(JustEnoughGuide.getConfigManager().getSurvivalGuideTitle());
 
         menu.setEmptySlotsClickable(false);

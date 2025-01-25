@@ -18,15 +18,16 @@ import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.implementation.guide.CheatSheetSlimefunGuide;
 import io.github.thebusybiscuit.slimefun4.implementation.guide.SurvivalSlimefunGuide;
 import io.github.thebusybiscuit.slimefun4.utils.NumberUtils;
-import java.lang.reflect.Field;
-import java.text.MessageFormat;
-import java.util.EnumMap;
-import java.util.Map;
 import lombok.Getter;
 import net.guizhanss.guizhanlibplugin.updater.GuizhanUpdater;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.lang.reflect.Field;
+import java.text.MessageFormat;
+import java.util.EnumMap;
+import java.util.Map;
 
 /**
  * This is the main class of the JustEnoughGuide plugin.
@@ -44,12 +45,12 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
     private final @NotNull String username;
     private final @NotNull String repo;
     private final @NotNull String branch;
-    private BookmarkManager bookmarkManager;
-    private CommandManager commandManager;
-    private ConfigManager configManager;
-    private IntegrationManager integrationManager;
-    private ListenerManager listenerManager;
-    private MinecraftVersion minecraftVersion;
+    private @Nullable BookmarkManager bookmarkManager;
+    private @Nullable CommandManager commandManager;
+    private @Nullable ConfigManager configManager;
+    private @Nullable IntegrationManager integrationManager;
+    private @Nullable ListenerManager listenerManager;
+    private @Nullable MinecraftVersion minecraftVersion;
     private int javaVersion;
 
     public JustEnoughGuide() {
@@ -228,12 +229,14 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
         getLogger().info("成功禁用此附属");
     }
 
-    @NotNull @Override
+    @NotNull
+    @Override
     public JavaPlugin getJavaPlugin() {
         return this;
     }
 
-    @Nullable @Override
+    @Nullable
+    @Override
     public String getBugTrackerURL() {
         return MessageFormat.format("https://github.com/{0}/{1}/issues/", this.username, this.repo);
     }

@@ -41,7 +41,7 @@ public class ReflectionUtil {
         return true;
     }
 
-    public static <T> T getStaticValue(@NotNull Class<T> clazz, @NotNull String field) {
+    public static <T> @Nullable T getStaticValue(@NotNull Class<T> clazz, @NotNull String field) {
         try {
             Field declaredField = clazz.getDeclaredField(field);
             declaredField.setAccessible(true);
@@ -89,7 +89,7 @@ public class ReflectionUtil {
         return null;
     }
 
-    public static @Nullable Method getMethod(@NotNull Class<?> clazz, String methodName, Class<?>... parameterTypes) {
+    public static @Nullable Method getMethod(@NotNull Class<?> clazz, String methodName, Class<?> @NotNull ... parameterTypes) {
         while (clazz != Object.class) {
             for (Method method : clazz.getDeclaredMethods()) {
                 if (method.getName().equals(methodName) && method.getParameterTypes().length == parameterTypes.length) {

@@ -1,11 +1,12 @@
 package com.balugaq.jeg.api.interfaces;
 
 import com.balugaq.jeg.core.commands.JEGCommands;
-import java.util.ArrayList;
-import java.util.List;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This interface is used to define a command that can be executed by JEG.
@@ -15,7 +16,8 @@ import org.jetbrains.annotations.NotNull;
  * @since 1.1
  */
 public interface JEGCommand {
-    @NotNull default List<String> onTabCompleteRaw(@NotNull CommandSender sender, @NotNull String[] args) {
+    @NotNull
+    default List<String> onTabCompleteRaw(@NotNull CommandSender sender, @NotNull String[] args) {
         return new ArrayList<>();
     }
 

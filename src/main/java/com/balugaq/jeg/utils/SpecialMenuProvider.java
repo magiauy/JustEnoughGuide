@@ -16,6 +16,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -35,23 +36,24 @@ public class SpecialMenuProvider {
     public static boolean ENABLED_InfinityExpansion;
     public static boolean ENABLED_ObsidianExpansion;
     // FinalTECH | FinalTECH-Changed
-    public static Method methodRecipeItemGroup_getBySlimefunItem = null;
+    public static @org.jetbrains.annotations.Nullable Method methodRecipeItemGroup_getBySlimefunItem = null;
     // Nexcavate
-    public static Method methodPlayerProgress_get = null;
-    public static Method methodNEGUI_openRecipe = null;
-    public static Method methodNEGUI_openResearchScreen = null;
-    public static Method methodNexcavateRegistry_getResearchMap = null;
-    public static Object objectNexcavate_registry = null;
+    public static @org.jetbrains.annotations.Nullable Method methodPlayerProgress_get = null;
+    public static @org.jetbrains.annotations.Nullable Method methodNEGUI_openRecipe = null;
+    public static @org.jetbrains.annotations.Nullable Method methodNEGUI_openResearchScreen = null;
+    public static @org.jetbrains.annotations.Nullable Method methodNexcavateRegistry_getResearchMap = null;
+    public static @org.jetbrains.annotations.Nullable Object objectNexcavate_registry = null;
     // LogiTech
-    public static Method methodMenuUtils_createItemRecipeDisplay = null;
-    public static Method methodMenuFactory_buildGuide = null;
-    public static Method methodCustomMenu_open = null;
+    public static @org.jetbrains.annotations.Nullable Method methodMenuUtils_createItemRecipeDisplay = null;
+    public static @org.jetbrains.annotations.Nullable Method methodMenuFactory_buildGuide = null;
+    public static @org.jetbrains.annotations.Nullable Method methodCustomMenu_open = null;
     // InfinityExpansion
-    public static Method methodInfinityGroup_openInfinityRecipe = null;
-    public static Method methodObsidianExpansion_openFORGERecipe = null;
+    public static @org.jetbrains.annotations.Nullable Method methodInfinityGroup_openInfinityRecipe = null;
+    public static @org.jetbrains.annotations.Nullable Method methodObsidianExpansion_openFORGERecipe = null;
     // ObsidianExpansion
-    public static Constructor<?> constructorInfinityExpansion_BackEntry = null;
-    public static Constructor<?> constructorObsidianExpansion_BackEntry = null;
+    public static @org.jetbrains.annotations.Nullable Constructor<?> constructorInfinityExpansion_BackEntry = null;
+    public static @org.jetbrains.annotations.Nullable Constructor<?> constructorObsidianExpansion_BackEntry = null;
+
     static {
         ENABLED_FinalTECH = Bukkit.getPluginManager().isPluginEnabled("FinalTECH") || Bukkit.getPluginManager().isPluginEnabled("FinalTECH-Changed");
         ENABLED_Nexcavate = Bukkit.getPluginManager().isPluginEnabled("Nexcavate");
@@ -188,6 +190,7 @@ public class SpecialMenuProvider {
         Debug.debug("methodObsidianExpansion_openFORGERecipe: " + (methodObsidianExpansion_openFORGERecipe != null));
         Debug.debug("constructorObsidianExpansion_BackEntry: " + (constructorObsidianExpansion_BackEntry != null));
     }
+
     @Nullable
     public static FlexItemGroup getFinalTECHRecipeItemGroup(@Nonnull Player player, @Nonnull PlayerProfile playerProfile, @Nonnull SlimefunGuideMode slimefunGuideMode, @Nonnull SlimefunItem slimefunItem) throws InvocationTargetException, IllegalAccessException {
         if (!ENABLED_FinalTECH) {
@@ -439,9 +442,13 @@ public class SpecialMenuProvider {
         }
     }
 
+    public void insertUselessHistory(@NotNull PlayerProfile playerProfile) {
+        playerProfile.getGuideHistory().add("undefined");
+    }
+
     public class CustomMenuHandlerImpl implements CustomMenuHandler {
         @Override
-        public ChestMenu.MenuClickHandler getInstance(CustomMenu menu) {
+        public ChestMenu.@NotNull MenuClickHandler getInstance(CustomMenu menu) {
             return (p, s, i, a) -> {
                 PlayerProfile.find(p).ifPresent(playerProfile -> {
                     playerProfile.getGuideHistory().goBack(Slimefun.getRegistry().getSlimefunGuide(SlimefunGuideMode.SURVIVAL_MODE));
@@ -449,9 +456,5 @@ public class SpecialMenuProvider {
                 return false;
             };
         }
-    }
-
-    public void insertUselessHistory(PlayerProfile playerProfile) {
-        playerProfile.getGuideHistory().add("undefined");
     }
 }

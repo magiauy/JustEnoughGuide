@@ -15,12 +15,13 @@ import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import java.util.concurrent.atomic.AtomicInteger;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * An implementation of the ClassicGuideGroup for JEG.
@@ -39,16 +40,16 @@ public class JEGGuideGroup extends ClassicGuideGroup {
             "&b查看以下指南书以快速上手 JEG 增加的功能。"
     );
     private static final int[] GUIDE_SLOTS = {
-        19, 20, 21, 22, 23, 24, 25,
-        28, 29, 30, 31, 32, 33, 34,
-        37, 38, 39, 40, 41, 42, 43
+            19, 20, 21, 22, 23, 24, 25,
+            28, 29, 30, 31, 32, 33, 34,
+            37, 38, 39, 40, 41, 42, 43
     };
 
     private static final int[] BORDER_SLOTS = {
-        9, 17,
-        18, 26,
-        27, 35,
-        36, 44,
+            9, 17,
+            18, 26,
+            27, 35,
+            36, 44,
     };
 
     protected JEGGuideGroup(@NotNull NamespacedKey key, @NotNull ItemStack icon) {
@@ -232,49 +233,49 @@ public class JEGGuideGroup extends ClassicGuideGroup {
 
         doIf(Slimefun.getConfigManager().isResearchingEnabled(), () -> {
             addGuide(
-                GUIDE_SLOTS[index.getAndIncrement()],
-                new CustomItemStack(
-                        Material.ENCHANTED_BOOK,
-                        "&b功能: 便携研究",
-                        "&b介绍: 你可以当你在查看物品的配方时，如果有未解锁的物品，可以点击以快速解锁。",
-                        "&b点击尝试功能。"
-                ), (p, s, i, a) -> {
-                    try {
-                        if (Slimefun.instance() == null) {
-                            p.sendMessage("§c无法获取 Slimefun 实例，无法使用此功能。");
-                            return false;
-                        }
+                    GUIDE_SLOTS[index.getAndIncrement()],
+                    new CustomItemStack(
+                            Material.ENCHANTED_BOOK,
+                            "&b功能: 便携研究",
+                            "&b介绍: 你可以当你在查看物品的配方时，如果有未解锁的物品，可以点击以快速解锁。",
+                            "&b点击尝试功能。"
+                    ), (p, s, i, a) -> {
+                        try {
+                            if (Slimefun.instance() == null) {
+                                p.sendMessage("§c无法获取 Slimefun 实例，无法使用此功能。");
+                                return false;
+                            }
 
-                        SlimefunGuideImplementation guide = GuideUtil.getGuide(p, SlimefunGuideMode.SURVIVAL_MODE);
-                        if (guide == null) {
-                            p.sendMessage("§c无法获取指南，请检查是否正确安装 Slimefun。");
-                            return false;
-                        }
+                            SlimefunGuideImplementation guide = GuideUtil.getGuide(p, SlimefunGuideMode.SURVIVAL_MODE);
+                            if (guide == null) {
+                                p.sendMessage("§c无法获取指南，请检查是否正确安装 Slimefun。");
+                                return false;
+                            }
 
-                        if (!(guide instanceof JEGSlimefunGuideImplementation jegGuide)) {
-                            p.sendMessage("§c功能未启用，无法使用此功能。");
-                            return false;
-                        }
+                            if (!(guide instanceof JEGSlimefunGuideImplementation jegGuide)) {
+                                p.sendMessage("§c功能未启用，无法使用此功能。");
+                                return false;
+                            }
 
-                        PlayerProfile profile = PlayerProfile.find(p).orElse(null);
-                        if (profile == null) {
-                            p.sendMessage("§c无法获取玩家资料，请检查是否正确安装 Slimefun。");
-                            return false;
-                        }
+                            PlayerProfile profile = PlayerProfile.find(p).orElse(null);
+                            if (profile == null) {
+                                p.sendMessage("§c无法获取玩家资料，请检查是否正确安装 Slimefun。");
+                                return false;
+                            }
 
-                        SlimefunItem exampleItem = SlimefunItems.ELECTRIC_DUST_WASHER_3.getItem();
-                        if (exampleItem == null) {
-                            p.sendMessage("§c无法获取示例物品，请检查是否正确安装 Slimefun。");
-                            return false;
-                        }
+                            SlimefunItem exampleItem = SlimefunItems.ELECTRIC_DUST_WASHER_3.getItem();
+                            if (exampleItem == null) {
+                                p.sendMessage("§c无法获取示例物品，请检查是否正确安装 Slimefun。");
+                                return false;
+                            }
 
-                        jegGuide.displayItem(profile, exampleItem, false);
-                    } catch (Throwable e) {
-                        p.sendMessage("§c无法执行操作，请检查 Slimefun 是否正确安装。");
-                        e.printStackTrace();
-                    }
-                    return false;
-                });
+                            jegGuide.displayItem(profile, exampleItem, false);
+                        } catch (Throwable e) {
+                            p.sendMessage("§c无法执行操作，请检查 Slimefun 是否正确安装。");
+                            e.printStackTrace();
+                        }
+                        return false;
+                    });
         });
 
         addGuide(

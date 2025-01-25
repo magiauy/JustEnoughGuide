@@ -5,6 +5,7 @@ import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -20,6 +21,7 @@ public class LocalHelper {
     private static final Map<String, String> addonLocals = new HashMap<>();
     // depends on rsc addons' info.yml
     private static final Map<String, Set<String>> rscLocals = new HashMap<>();
+
     static {
         addonLocals.put("Slimefun", "粘液科技");
         addonLocals.put("ColoredEnderChests", "彩色末影箱");
@@ -262,7 +264,7 @@ public class LocalHelper {
     }
 
     @Nonnull
-    public static String getOfficialAddonName(@Nonnull ItemGroup itemGroup, @Nonnull String itemId, String callback) {
+    public static String getOfficialAddonName(@Nonnull ItemGroup itemGroup, @Nonnull String itemId, @NotNull String callback) {
         return itemGroup.getAddon() == null ? def : getOfficialAddonName(itemGroup.getAddon(), itemId, callback);
     }
 
@@ -272,7 +274,7 @@ public class LocalHelper {
     }
 
     @Nonnull
-    public static String getOfficialAddonName(@Nullable SlimefunAddon addon, @Nonnull String itemId, String callback) {
+    public static String getOfficialAddonName(@Nullable SlimefunAddon addon, @Nonnull String itemId, @NotNull String callback) {
         return getOfficialAddonName(addon == null ? "Slimefun" : addon.getName(), itemId, callback);
     }
 
@@ -282,7 +284,7 @@ public class LocalHelper {
     }
 
     @Nonnull
-    public static String getOfficialAddonName(@Nonnull String addonName, @Nonnull String itemId, String callback) {
+    public static String getOfficialAddonName(@Nonnull String addonName, @Nonnull String itemId, @NotNull String callback) {
         return getAddonName(addonName, itemId, callback) + " (" + addonName + ")";
     }
 
@@ -302,7 +304,7 @@ public class LocalHelper {
     }
 
     @Nonnull
-    public static String getAddonName(@Nullable SlimefunAddon addon, @Nonnull String itemId, String callback) {
+    public static String getAddonName(@Nullable SlimefunAddon addon, @Nonnull String itemId, @NotNull String callback) {
         return getAddonName(addon == null ? addonLocals.get("Slimefun") : addon.getName(), itemId, callback);
     }
 
@@ -312,7 +314,7 @@ public class LocalHelper {
     }
 
     @Nonnull
-    public static String getAddonName(@Nonnull String addonName, @Nonnull String itemId, String callback) {
+    public static String getAddonName(@Nonnull String addonName, @Nonnull String itemId, @NotNull String callback) {
         if (addonName == null) {
             return callback;
         }
