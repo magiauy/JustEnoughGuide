@@ -30,11 +30,11 @@ import java.util.Map;
 @UtilityClass
 public class SpecialMenuProvider {
     public static final int COMMON_RECIPE_LENGTH = 9;
-    public static boolean ENABLED_FinalTECH;
-    public static boolean ENABLED_Nexcavate;
-    public static boolean ENABLED_LogiTech;
-    public static boolean ENABLED_InfinityExpansion;
-    public static boolean ENABLED_ObsidianExpansion;
+    public static final boolean ENABLED_FinalTECH;
+    public static final boolean ENABLED_Nexcavate;
+    public static final boolean ENABLED_LogiTech;
+    public static final boolean ENABLED_InfinityExpansion;
+    public static final boolean ENABLED_ObsidianExpansion;
     // FinalTECH | FinalTECH-Changed
     public static @org.jetbrains.annotations.Nullable Method methodRecipeItemGroup_getBySlimefunItem = null;
     // Nexcavate
@@ -222,7 +222,7 @@ public class SpecialMenuProvider {
         return false;
     }
 
-    public static void openNexcavateGuide(@Nonnull Player player, @Nonnull SlimefunItem slimefunItem) throws InstantiationException, IllegalAccessException, InvocationTargetException {
+    public static void openNexcavateGuide(@Nonnull Player player, @Nonnull SlimefunItem slimefunItem) throws IllegalAccessException, InvocationTargetException {
         if (!isNexcavateItem(slimefunItem)) {
             return;
         }
@@ -402,7 +402,7 @@ public class SpecialMenuProvider {
         return false;
     }
 
-    public static boolean open(@Nonnull Player player, @Nonnull PlayerProfile playerProfile, @Nonnull SlimefunGuideMode slimefunGuideMode, @Nonnull SlimefunItem slimefunItem) throws ClassNotFoundException, InvocationTargetException, IllegalAccessException, InstantiationException {
+    public static boolean open(@Nonnull Player player, @Nonnull PlayerProfile playerProfile, @Nonnull SlimefunGuideMode slimefunGuideMode, @Nonnull SlimefunItem slimefunItem) throws InvocationTargetException, IllegalAccessException, InstantiationException {
         if (player == null) {
             return false;
         }

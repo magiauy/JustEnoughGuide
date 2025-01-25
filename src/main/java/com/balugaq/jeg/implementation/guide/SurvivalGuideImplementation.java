@@ -650,8 +650,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
                 if (SpecialMenuProvider.open(profile.getPlayer(), profile, getMode(), item)) {
                     return;
                 }
-            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
-                     InvocationTargetException e) {
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
             }
         }
