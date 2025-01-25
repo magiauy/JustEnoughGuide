@@ -8,7 +8,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        ## Welcome to the NetworksExpansion Issue Tracker
+        ## Welcome to the JustEnoughGuide Issue Tracker
         
         <strong><i>You must fill out the fields marked with an asterisk (*)</i></strong>
 
@@ -18,7 +18,7 @@ body:
       label: Checklist
       description: Before reporting, you need to confirm
       options:
-        - label: You have searched the [list of known issues](https://github.com/ytdd9527/NetworksExpansion/issues) and have not found the same suggestion
+        - label: You have searched the [list of known issues](https://github.com/ytdd9527/JustEnoughGuide/issues) and have not found the same suggestion
           required: true
 
   - type: textarea

@@ -8,8 +8,8 @@ body:
   - type: markdown
     attributes:
       value: |
-        ## Welcome to the NetworksExpansion Issue Tracker
-        You are reporting a bug in NetworksExpansion.
+        ## Welcome to the JustEnoughGuide Issue Tracker
+        You are reporting a bug in JustEnoughGuide.
 
         <strong><i>You must fill out the fields marked with an asterisk (*)</i></strong>
 
@@ -22,7 +22,7 @@ body:
         - label: You are using the version downloaded from the build site
         - label: You have verified the checksum of the downloaded file to ensure it is fully downloaded
         - label: You have not made any changes to the content of the downloaded file
-        - label: You have searched the [list of known issues](https://github.com/SlimefunGuguProject/Networks/issues) and have not found the same issue
+        - label: You have searched the [list of known issues](https://github.com/balugaq/JustEnoughGuide/issues) and have not found the same issue
           required: true
 
   - type: textarea
