@@ -29,6 +29,7 @@ import java.util.Map;
 @SuppressWarnings("unchecked")
 @UtilityClass
 public class SpecialMenuProvider {
+    public static final String PLACEHOLDER_SEARCH_TERM = "undefined";
     public static final int COMMON_RECIPE_LENGTH = 9;
     public static final boolean ENABLED_FinalTECH;
     public static final boolean ENABLED_Nexcavate;
@@ -442,10 +443,23 @@ public class SpecialMenuProvider {
         }
     }
 
+    /**
+     * This method is used to insert useless history into the player profile.
+     * It is used to fix the bug of the special menu not working in some cases.
+     * @see com.balugaq.jeg.core.listeners.SpecialMenuFixListener
+     * @param playerProfile The player profile to insert useless history
+     * @author balugaq
+     * @since 1.3
+     */
     public void insertUselessHistory(@NotNull PlayerProfile playerProfile) {
-        playerProfile.getGuideHistory().add("undefined");
+        playerProfile.getGuideHistory().add(PLACEHOLDER_SEARCH_TERM);
     }
 
+    /**
+     * A better back implementation for the LogiTech special menu.
+     * @author balugaq
+     * @since 1.3
+     */
     public class CustomMenuHandlerImpl implements CustomMenuHandler {
         @Override
         public ChestMenu.@NotNull MenuClickHandler getInstance(CustomMenu menu) {

@@ -24,6 +24,11 @@ public class Debug {
         debug(sb.toString());
     }
 
+    public static void debug(@NotNull Throwable e) {
+        debug(e.getMessage());
+        e.printStackTrace();
+    }
+
     public static void debug(@NotNull Object object) {
         debug(object.toString());
     }

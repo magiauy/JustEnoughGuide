@@ -19,9 +19,6 @@ public class SearchGroupInitListener implements Listener {
     public void onReload(@NotNull PluginDisableEvent event) {
         if (event.getPlugin() instanceof SlimefunAddon) {
             SearchGroup.LOADED = false;
-            SearchGroup.CACHE.clear();
-            SearchGroup.CACHE2.clear();
-            SearchGroup.SPECIAL_CACHE.clear();
             SearchGroup.init();
         }
     }

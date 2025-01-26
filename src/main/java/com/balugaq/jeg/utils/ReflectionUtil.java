@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 
@@ -172,5 +173,33 @@ public class ReflectionUtil {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Nullable
+    public static Object invokeMethod(@NotNull Object object, @NotNull String methodName, Object... args) {
+        try {
+            Method method = getMethod(object.getClass(), methodName, args.length);
+            if (method != null) {
+                method.setAccessible(true);
+                return method.invoke(object, args);
+            }
+        } catch (InvocationTargetException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Nullable
+    public static Object invokeStaticMethod(@NotNull Class<?> clazz, @NotNull String methodName, Object... args) {
+        try {
+            Method method = getMethod(clazz, methodName, args.length);
+            if (method != null) {
+                method.setAccessible(true);
+                return method.invoke(null, args);
+            }
+        } catch (InvocationTargetException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

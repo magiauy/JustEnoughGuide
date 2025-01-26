@@ -49,7 +49,7 @@ public enum FilterType {
         }
 
         String id = item.getId();
-        Set<String> cache = SearchGroup.SPECIAL_CACHE.get(id);
+        Set<String> cache = SearchGroup.SPECIAL_CACHE.get(id).get();
         if (cache != null) {
             for (String s : cache) {
                 if (SearchGroup.isSearchFilterApplicable(s, lowerFilterValue, false)) {
