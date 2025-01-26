@@ -269,7 +269,7 @@ public class JEGGuideGroup extends ClassicGuideGroup {
                                 return false;
                             }
 
-                            jegGuide.displayItem(profile, exampleItem, false);
+                            jegGuide.displayItem(profile, exampleItem, true);
                         } catch (Throwable e) {
                             p.sendMessage("§c无法执行操作，请检查 Slimefun 是否正确安装。");
                             e.printStackTrace();
