@@ -201,7 +201,7 @@ public class SpecialMenuProvider {
             return null;
         }
         methodRecipeItemGroup_getBySlimefunItem.setAccessible(true);
-        return (FlexItemGroup) methodRecipeItemGroup_getBySlimefunItem.invoke(null, player, playerProfile, slimefunGuideMode, slimefunItem, null);
+        return (FlexItemGroup) methodRecipeItemGroup_getBySlimefunItem.invoke(null, player, playerProfile, slimefunGuideMode, slimefunItem, 1);
     }
 
     public static boolean isSpecialItem(@Nonnull SlimefunItem slimefunItem) {
