@@ -83,6 +83,9 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
     private static final Set<SlimefunItem> nexcavateItems = new HashSet<>();
     private static final int MAX_ITEM_GROUPS = 36;
     private final int[] recipeSlots = {3, 4, 5, 12, 13, 14, 21, 22, 23};
+    private static final int SPECIAL_MENU_SLOT = 26;
+    private static final ItemStack SPECIAL_MENU_ITEM = new CustomItemStack(Material.COMPASS, "&b超大配方", "", "&a点击打开超大配方(若有)");
+
     private final @NotNull ItemStack item;
 
     public CheatGuideImplementation() {
@@ -699,16 +702,6 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             return;
         }
 
-        if (maybeSpecial && SpecialMenuProvider.isSpecialItem(item)) {
-            try {
-                if (SpecialMenuProvider.open(profile.getPlayer(), profile, getMode(), item)) {
-                    return;
-                }
-            } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
-            }
-        }
-
         ChestMenu menu = create(p);
         Optional<String> wiki = item.getWikipage();
 
@@ -744,6 +737,18 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
 
         if (item instanceof RecipeDisplayItem recipeDisplayItem) {
             displayRecipes(p, profile, menu, recipeDisplayItem, 0);
+        }
+
+
+        if (maybeSpecial && SpecialMenuProvider.isSpecialItem(item)) {
+            menu.addItem(SPECIAL_MENU_SLOT, SPECIAL_MENU_ITEM, (pl, slot, itemstack, action) -> {
+                try {
+                    SpecialMenuProvider.open(profile.getPlayer(), profile, getMode(), item);
+                } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+                return false;
+            });
         }
 
         menu.open(p);
