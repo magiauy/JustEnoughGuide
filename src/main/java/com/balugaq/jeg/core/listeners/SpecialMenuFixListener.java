@@ -32,24 +32,27 @@ public class SpecialMenuFixListener implements Listener {
                     return;
                 }
 
-                Debug.debug("SpecialMenuFixListener: queue size: " + queue.size());
-                for (Object entry : queue) {
-                    Object object = ReflectionUtil.getValue(entry, "object");
-                    Debug.debug("--object: " + object);
-                }
+                do {
+                    Debug.debug("SpecialMenuFixListener: queue size: " + queue.size());
+                    for (Object entry : queue) {
+                        Object object = ReflectionUtil.getValue(entry, "object");
+                        Debug.debug("--object: " + object);
+                    }
 
-                Object entry = queue.getLast();
-                Object object = ReflectionUtil.getValue(entry, "object");
-                if (!(object instanceof String string)) {
-                    Debug.debug("SpecialMenuFixListener: object is not a string");
-                    return;
-                }
-                if (SpecialMenuProvider.PLACEHOLDER_SEARCH_TERM.equals(string)) {
-                    Debug.debug("SpecialMenuFixListener: removing placeholder search term");
-                    // remove the last entry from the queue, which is the placeholder search term
-                    queue.removeLast();
-                    return;
-                }
+                    Object entry = queue.getLast();
+                    Object object = ReflectionUtil.getValue(entry, "object");
+                    if (!(object instanceof String string)) {
+                        Debug.debug("SpecialMenuFixListener: object is not a string");
+                        return;
+                    }
+                    if (SpecialMenuProvider.PLACEHOLDER_SEARCH_TERM.equals(string)) {
+                        Debug.debug("SpecialMenuFixListener: removing placeholder search term");
+                        // remove the last entry from the queue, which is the placeholder search term
+                        queue.removeLast();
+                    } else {
+                        return;
+                    }
+                } while (!queue.isEmpty());
             } catch (Throwable e) {
                 Debug.debug(e);
             }

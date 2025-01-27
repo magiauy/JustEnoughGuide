@@ -374,7 +374,12 @@ public class SpecialMenuProvider {
                 }
                 Object backEntry = constructorInfinityExpansion_BackEntry.newInstance(null, playerProfile, Slimefun.getRegistry().getSlimefunGuide(slimefunGuideMode));
                 methodInfinityGroup_openInfinityRecipe.invoke(null, player, slimefunItem.getId(), backEntry);
-                // intentionally insert useless history twice to fix Back Button of InfinityGroup
+                /**
+                 * Intentionally insert useless history twice to fix Back Button of InfinityGroup
+                 * fixed in {@link com.balugaq.jeg.core.listeners.SpecialMenuFixListener}
+                 * @author balugaq
+                 * @since 1.3
+                 */
                 insertUselessHistory(playerProfile);
                 insertUselessHistory(playerProfile);
             } else {
