@@ -32,6 +32,12 @@ public class SpecialMenuFixListener implements Listener {
                     return;
                 }
 
+                Debug.debug("SpecialMenuFixListener: queue size: " + queue.size());
+                for (Object entry : queue) {
+                    Object object = ReflectionUtil.getValue(entry, "object");
+                    Debug.debug("--object: " + object);
+                }
+
                 Object entry = queue.getLast();
                 Object object = ReflectionUtil.getValue(entry, "object");
                 if (!(object instanceof String string)) {
