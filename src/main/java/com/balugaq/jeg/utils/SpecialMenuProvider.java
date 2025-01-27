@@ -4,6 +4,7 @@ import com.balugaq.jeg.api.interfaces.JEGSlimefunGuideImplementation;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.groups.FlexItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
+import io.github.thebusybiscuit.slimefun4.api.researches.Research;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
@@ -25,8 +26,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-// todo: check research, fallback
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "unused", "deprecation"})
 @UtilityClass
 public class SpecialMenuProvider {
     public static final String PLACEHOLDER_SEARCH_TERM = "undefined";
@@ -37,23 +37,24 @@ public class SpecialMenuProvider {
     public static final boolean ENABLED_InfinityExpansion;
     public static final boolean ENABLED_ObsidianExpansion;
     // FinalTECH | FinalTECH-Changed
-    public static @org.jetbrains.annotations.Nullable Method methodRecipeItemGroup_getBySlimefunItem = null;
+    public static @Nullable Method methodRecipeItemGroup_getBySlimefunItem = null;
     // Nexcavate
-    public static @org.jetbrains.annotations.Nullable Method methodPlayerProgress_get = null;
-    public static @org.jetbrains.annotations.Nullable Method methodNEGUI_openRecipe = null;
-    public static @org.jetbrains.annotations.Nullable Method methodNEGUI_openResearchScreen = null;
-    public static @org.jetbrains.annotations.Nullable Method methodNexcavateRegistry_getResearchMap = null;
-    public static @org.jetbrains.annotations.Nullable Object objectNexcavate_registry = null;
+    public static @Nullable Method methodPlayerProgress_get = null;
+    public static @Nullable Method methodNEGUI_openRecipe = null;
+    public static @Nullable Method methodNEGUI_openResearchScreen = null;
+    public static @Nullable Method methodNexcavateRegistry_getResearchMap = null;
+    public static @Nullable Object objectNexcavate_registry = null;
     // LogiTech
-    public static @org.jetbrains.annotations.Nullable Method methodMenuUtils_createItemRecipeDisplay = null;
-    public static @org.jetbrains.annotations.Nullable Method methodMenuFactory_buildGuide = null;
-    public static @org.jetbrains.annotations.Nullable Method methodCustomMenu_open = null;
+    public static @Nullable Method methodMenuUtils_createItemRecipeDisplay = null;
+    public static @Nullable Method methodMenuFactory_buildGuide = null;
+    public static @Nullable Method methodCustomMenu_open = null;
     // InfinityExpansion
-    public static @org.jetbrains.annotations.Nullable Method methodInfinityGroup_openInfinityRecipe = null;
-    public static @org.jetbrains.annotations.Nullable Method methodObsidianExpansion_openFORGERecipe = null;
+    public static @Nullable Method methodInfinityGroup_openInfinityRecipe = null;
+    public static @Nullable Object objectInfinityExpansion_INFINITY = null;
+    public static @Nullable Constructor<?> constructorInfinityExpansion_BackEntry = null;
     // ObsidianExpansion
-    public static @org.jetbrains.annotations.Nullable Constructor<?> constructorInfinityExpansion_BackEntry = null;
-    public static @org.jetbrains.annotations.Nullable Constructor<?> constructorObsidianExpansion_BackEntry = null;
+    public static @Nullable Method methodObsidianExpansion_openFORGERecipe = null; // check research
+    public static @Nullable Constructor<?> constructorObsidianExpansion_BackEntry = null;
 
     static {
         ENABLED_FinalTECH = Bukkit.getPluginManager().isPluginEnabled("FinalTECH") || Bukkit.getPluginManager().isPluginEnabled("FinalTECH-Changed");
@@ -105,7 +106,9 @@ public class SpecialMenuProvider {
         }
         try {
             Object instance = ReflectionUtil.getStaticValue(Class.forName("me.char321.nexcavate.Nexcavate"), "instance");
-            objectNexcavate_registry = ReflectionUtil.getValue(instance, "registry");
+            if (instance != null) {
+                objectNexcavate_registry = ReflectionUtil.getValue(instance, "registry");
+            }
         } catch (ClassNotFoundException ignored) {
         }
         // LogiTech
@@ -139,6 +142,13 @@ public class SpecialMenuProvider {
             if (constructor != null) {
                 constructor.setAccessible(true);
                 constructorInfinityExpansion_BackEntry = constructor;
+            }
+        } catch (ClassNotFoundException ignored) {
+        }
+        try {
+            Object object = ReflectionUtil.getStaticValue(Class.forName("io.github.mooy1.infinityexpansion.categories.Groups"), "INFINITY");
+            if (object != null) {
+                objectInfinityExpansion_INFINITY = object;
             }
         } catch (ClassNotFoundException ignored) {
         }
@@ -192,6 +202,10 @@ public class SpecialMenuProvider {
         Debug.debug("constructorObsidianExpansion_BackEntry: " + (constructorObsidianExpansion_BackEntry != null));
     }
 
+    public static boolean isSpecialItem(@Nonnull SlimefunItem slimefunItem) {
+        return isFinalTECHItem(slimefunItem) || isNexcavateItem(slimefunItem) || isLogiTechItem(slimefunItem) || isInfinityItem(slimefunItem) || isObsidianForgeItem(slimefunItem);
+    }
+
     @Nullable
     public static FlexItemGroup getFinalTECHRecipeItemGroup(@Nonnull Player player, @Nonnull PlayerProfile playerProfile, @Nonnull SlimefunGuideMode slimefunGuideMode, @Nonnull SlimefunItem slimefunItem) throws InvocationTargetException, IllegalAccessException {
         if (!ENABLED_FinalTECH) {
@@ -203,10 +217,6 @@ public class SpecialMenuProvider {
         }
         methodRecipeItemGroup_getBySlimefunItem.setAccessible(true);
         return (FlexItemGroup) methodRecipeItemGroup_getBySlimefunItem.invoke(null, player, playerProfile, slimefunGuideMode, slimefunItem, 1);
-    }
-
-    public static boolean isSpecialItem(@Nonnull SlimefunItem slimefunItem) {
-        return isFinalTECHItem(slimefunItem) || isNexcavateItem(slimefunItem) || isLogiTechItem(slimefunItem) || isInfinityItem(slimefunItem) || isObsidianForgeItem(slimefunItem);
     }
 
     public static boolean isFinalTECHItem(@Nonnull SlimefunItem slimefunItem) {
@@ -255,8 +265,14 @@ public class SpecialMenuProvider {
         }
 
         if (isPlayerResearchedNexcavate(player, research)) {
+            if (methodNEGUI_openRecipe == null) {
+                return;
+            }
             methodNEGUI_openRecipe.invoke(null, player, research);
         } else {
+            if (methodNEGUI_openResearchScreen == null) {
+                return;
+            }
             methodNEGUI_openResearchScreen.invoke(null, player);
         }
     }
@@ -352,13 +368,36 @@ public class SpecialMenuProvider {
         }
 
         if (isInfinityItem(slimefunItem)) {
-            if (constructorInfinityExpansion_BackEntry == null || methodInfinityGroup_openInfinityRecipe == null) {
-                return;
+            if (isPlayerResearchedInfinity(player, playerProfile, slimefunItem)) {
+                if (constructorInfinityExpansion_BackEntry == null || methodInfinityGroup_openInfinityRecipe == null) {
+                    return;
+                }
+                Object backEntry = constructorInfinityExpansion_BackEntry.newInstance(null, playerProfile, Slimefun.getRegistry().getSlimefunGuide(slimefunGuideMode));
+                methodInfinityGroup_openInfinityRecipe.invoke(null, player, slimefunItem.getId(), backEntry);
+                insertUselessHistory(playerProfile);
+            } else {
+                if (objectInfinityExpansion_INFINITY instanceof FlexItemGroup flexItemGroup) {
+                    flexItemGroup.open(player, playerProfile, slimefunGuideMode);
+                }
             }
-            Object backEntry = constructorInfinityExpansion_BackEntry.newInstance(null, playerProfile, Slimefun.getRegistry().getSlimefunGuide(slimefunGuideMode));
-            methodInfinityGroup_openInfinityRecipe.invoke(null, player, slimefunItem.getId(), backEntry);
-            insertUselessHistory(playerProfile);
         }
+    }
+
+    public static boolean isPlayerResearchedInfinity(@Nonnull Player player, @Nonnull PlayerProfile playerProfile, @Nonnull SlimefunItem slimefunItem) {
+        if (!ENABLED_InfinityExpansion) {
+            return false;
+        }
+
+        if (isInfinityItem(slimefunItem)) {
+            Research research = slimefunItem.getResearch();
+            if (research == null) {
+                return true;
+            }
+
+            return playerProfile.hasUnlocked(research);
+        }
+
+        return false;
     }
 
     public static boolean isInfinityItem(@Nonnull SlimefunItem slimefunItem) {
