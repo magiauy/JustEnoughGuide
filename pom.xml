@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.balugaq.jeg</groupId>
     <artifactId>JustEnoughGuide</artifactId>
-    <version>61</version>
+    <version>62</version>
 
     <pluginRepositories>
         <pluginRepository>
@@ -179,6 +179,8 @@
             <version>1.7.6</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- Special Menu Provider -->
         <dependency>
             <groupId>me.matl114</groupId>
             <artifactId>LogiTech</artifactId>

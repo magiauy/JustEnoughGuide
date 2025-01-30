@@ -261,16 +261,14 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
 
         if (minecraftVersion == MinecraftVersion.UNKNOWN) {
             getLogger().warning("无法识别到 Minecraft 版本！");
-            return false;
         }
 
         if (!minecraftVersion.isAtLeast(RECOMMENDED_MC_VERSION)) {
-            return false;
+            getLogger().warning("Minecraft 版本过低，请使用 Minecraft 1." + RECOMMENDED_MC_VERSION.getMajor() + "." + RECOMMENDED_MC_VERSION.getMinor() + " 或以上版本！");
         }
 
         if (javaVersion < RECOMMENDED_JAVA_VERSION) {
             getLogger().warning("Java 版本过低，请使用 Java " + RECOMMENDED_JAVA_VERSION + " 或以上版本！");
-            return false;
         }
 
         return true;

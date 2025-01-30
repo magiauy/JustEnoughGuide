@@ -4,11 +4,13 @@ import com.balugaq.jeg.api.groups.SearchGroup;
 import com.balugaq.jeg.utils.LocalHelper;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import io.github.thebusybiscuit.slimefun4.core.multiblocks.MultiBlockMachine;
 import lombok.Getter;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.AContainer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -36,9 +38,15 @@ public enum FilterType {
         return SearchGroup.isSearchFilterApplicable(recipeTypeIcon, lowerFilterValue, false);
     }),
     BY_DISPLAY_ITEM_NAME("%", (player, item, lowerFilterValue, pinyin) -> {
+        List<ItemStack> display = null;
         if (item instanceof AContainer ac) {
+            display = ac.getDisplayRecipes();
+        } else if (item instanceof MultiBlockMachine mb) {
+            display = mb.getDisplayRecipes();
+        }
+        if (display != null) {
             try {
-                for (ItemStack itemStack : ac.getDisplayRecipes()) {
+                for (ItemStack itemStack : display) {
                     if (SearchGroup.isSearchFilterApplicable(itemStack, lowerFilterValue, false)) {
                         return true;
                     }

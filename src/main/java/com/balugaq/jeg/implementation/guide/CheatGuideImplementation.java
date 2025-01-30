@@ -59,12 +59,10 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
-import java.util.Set;
 import java.util.logging.Level;
 
 /**
@@ -80,12 +78,12 @@ import java.util.logging.Level;
  */
 @SuppressWarnings({"deprecation", "unused"})
 public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements JEGSlimefunGuideImplementation {
-    private static final Set<SlimefunItem> nexcavateItems = new HashSet<>();
+    private static final int RTS_SLOT = 6;
+    private static final ItemStack RTS_ITEM = new CustomItemStack(Material.ANVIL, "&b实时搜索", "", "&c&l暂未完成");
     private static final int MAX_ITEM_GROUPS = 36;
-    private final int[] recipeSlots = {3, 4, 5, 12, 13, 14, 21, 22, 23};
     private static final int SPECIAL_MENU_SLOT = 26;
     private static final ItemStack SPECIAL_MENU_ITEM = new CustomItemStack(Material.COMPASS, "&b超大配方", "", "&a点击打开超大配方(若有)");
-
+    private final int[] recipeSlots = {3, 4, 5, 12, 13, 14, 21, 22, 23};
     private final @NotNull ItemStack item;
 
     public CheatGuideImplementation() {
@@ -828,6 +826,10 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
         menu.addItem(1, ItemStackUtil.getCleanItem(ChestMenuUtils.getMenuButton(p)));
         menu.addMenuClickHandler(1, (pl, slot, item, action) -> {
             SlimefunGuideSettings.openSettings(pl, pl.getInventory().getItemInMainHand());
+            return false;
+        });
+
+        menu.addItem(RTS_SLOT, ItemStackUtil.getCleanItem(RTS_ITEM), (pl, slot, itemstack, action) -> {
             return false;
         });
 

@@ -492,9 +492,10 @@ public class SpecialMenuProvider {
     /**
      * This method is used to insert useless history into the player profile.
      * It is used to fix the bug of the special menu not working in some cases.
-     * @see com.balugaq.jeg.core.listeners.SpecialMenuFixListener
+     *
      * @param playerProfile The player profile to insert useless history
      * @author balugaq
+     * @see com.balugaq.jeg.core.listeners.SpecialMenuFixListener
      * @since 1.3
      */
     public void insertUselessHistory(@NotNull PlayerProfile playerProfile) {
@@ -503,6 +504,7 @@ public class SpecialMenuProvider {
 
     /**
      * A better back implementation for the LogiTech special menu.
+     *
      * @author balugaq
      * @since 1.3
      */

@@ -13,8 +13,8 @@ import java.util.Deque;
 import java.util.Optional;
 
 /**
- * @see SpecialMenuProvider
  * @author balugaq
+ * @see SpecialMenuProvider
  * @since 1.3
  */
 public class SpecialMenuFixListener implements Listener {
