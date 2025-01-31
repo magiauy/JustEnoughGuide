@@ -433,8 +433,6 @@ public class SearchGroup extends FlexItemGroup {
                     }
                 }
 
-                Timer timer = new Timer("Init Cache");
-                timer.starts();
                 for (SlimefunItem slimefunItem : AVAILABLE_ITEMS) {
                     String name = slimefunItem.getItemName();
                     for (char c : name.toCharArray()) {
@@ -597,19 +595,18 @@ public class SearchGroup extends FlexItemGroup {
                         }
                     }
                 }
-                timer.logs();
                 Debug.debug("Cache initialized.");
             });
             LOADED = true;
 
             Timer.log();
-            Debug.log("Search Group initialized.");
-            Debug.log("Enabled items: " + ENABLED_ITEMS.size());
-            Debug.log("Available items: " + AVAILABLE_ITEMS.size());
-            Debug.log("Machine blocks cache: " + SPECIAL_CACHE.size());
-            Debug.log("Shared cache: " + SHARED_CHARS.size());
-            Debug.log("Cache 1 (Keywords): " + CACHE.size());
-            Debug.log("Cache 2 (Display Recipes): " + CACHE2.size());
+            Debug.debug("Search Group initialized.");
+            Debug.debug("Enabled items: " + ENABLED_ITEMS.size());
+            Debug.debug("Available items: " + AVAILABLE_ITEMS.size());
+            Debug.debug("Machine blocks cache: " + SPECIAL_CACHE.size());
+            Debug.debug("Shared cache: " + SHARED_CHARS.size());
+            Debug.debug("Cache 1 (Keywords): " + CACHE.size());
+            Debug.debug("Cache 2 (Display Recipes): " + CACHE2.size());
         }
     }
 
@@ -853,8 +850,6 @@ public class SearchGroup extends FlexItemGroup {
     }
 
     public @NotNull List<SlimefunItem> filterItems(@NotNull Player player, @NotNull String searchTerm, boolean pinyin) {
-        Timer t = new Timer("Total Search");
-        t.starts();
         StringBuilder actualSearchTermBuilder = new StringBuilder();
         String[] split = searchTerm.split(" ");
         Map<FilterType, String> filters = new HashMap<>();
@@ -882,16 +877,11 @@ public class SearchGroup extends FlexItemGroup {
         }
         Set<SlimefunItem> merge = new HashSet<>(36 * 4);
         // The unfiltered items
-        var timer0 = new Timer("Filter Items 0");
-        timer0.starts();
         Set<SlimefunItem> items = AVAILABLE_ITEMS
                 .stream()
                 .filter(item -> item.getItemGroup().isAccessible(player)).collect(Collectors.toSet());
-        timer0.logs();
 
         if (!actualSearchTerm.isBlank()) {
-            var timer = new Timer("Name Matched Items 1");
-            timer.starts();
             Set<SlimefunItem> nameMatched = new HashSet<>();
             Set<SlimefunItem> allMatched = null;
             for (char c : actualSearchTerm.toCharArray()) {
@@ -899,25 +889,26 @@ public class SearchGroup extends FlexItemGroup {
                 Set<SlimefunItem> cache;
                 Reference<Set<SlimefunItem>> ref = CACHE.get(c);
                 if (ref == null) {
+                    Debug.debug("1 Cache not found for " + c);
                     cache = new HashSet<>();
                 } else {
                     cache = ref.get();
                 }
                 if (cache == null) {
+                    Debug.debug("2 Cache not found for " + c);
                     cache = new HashSet<>();
                 }
                 if (allMatched == null) {
+                    Debug.debug("3 Set allMatched for " + actualSearchTerm);
                     allMatched = new HashSet<>(cache);
                 } else {
+                    Debug.debug("4 Retain allMatched for " + c);
                     allMatched.retainAll(new HashSet<>(cache));
                 }
             }
             if (allMatched != null) {
                 nameMatched.addAll(allMatched);
             }
-            timer.logs();
-            var timer2 = new Timer("Machine Matched Items 2");
-            timer2.starts();
             Set<SlimefunItem> machineMatched = new HashSet<>();
             Set<SlimefunItem> allMatched2 = null;
             for (char c : actualSearchTerm.toCharArray()) {
@@ -925,37 +916,35 @@ public class SearchGroup extends FlexItemGroup {
                 Set<SlimefunItem> cache;
                 Reference<Set<SlimefunItem>> ref = CACHE2.get(c);
                 if (ref == null) {
+                    Debug.debug("5 Cache not found for " + c);
                     cache = new HashSet<>();
                 } else {
                     cache = ref.get();
                 }
                 if (cache == null) {
+                    Debug.debug("6 Cache not found for " + c);
                     cache = new HashSet<>();
                 }
                 if (allMatched2 == null) {
+                    Debug.debug("7 Set allMatched2 for " + actualSearchTerm);
                     allMatched2 = new HashSet<>(cache);
                 } else {
+                    Debug.debug("8 Retain allMatched2 for " + c);
                     allMatched2.retainAll(new HashSet<>(cache));
                 }
             }
             if (allMatched2 != null) {
                 machineMatched.addAll(allMatched2);
             }
-            timer2.logs();
             merge.addAll(nameMatched);
             merge.addAll(machineMatched);
             if (nameMatched.isEmpty() && machineMatched.isEmpty()) {
                 // CACHE and CACHE2 are empty (maybe GCed), so need to initialize them again
-                Timer timer42 = new Timer("Reload Items 42");
-                timer42.starts();
                 LOADED = false;
                 init();
-                timer42.logs();
             }
         }
 
-        var timer3 = new Timer("Filter Items 3");
-        timer3.starts();
         // Filter items
         if (!filters.isEmpty()) {
             for (Map.Entry<FilterType, String> entry : filters.entrySet()) {
@@ -964,14 +953,8 @@ public class SearchGroup extends FlexItemGroup {
 
             merge.addAll(items);
         }
-        timer3.logs();
 
-        var timer4 = new Timer("Sort Items 4");
-        timer4.starts();
-        List<SlimefunItem> sorted = merge.stream().sorted((a, b) -> ENABLED_ITEMS.get(a) < ENABLED_ITEMS.get(b) ? -1 : 1).toList();
-        timer4.logs();
-        t.logs();
-        return sorted;
+        return merge.stream().sorted((a, b) -> ENABLED_ITEMS.get(a) < ENABLED_ITEMS.get(b) ? -1 : 1).toList();
     }
 
     public @NotNull List<SlimefunItem> filterItems(@NotNull FilterType filterType, @NotNull String filterValue, boolean pinyin, @NotNull List<SlimefunItem> items) {
