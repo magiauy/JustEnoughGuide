@@ -224,6 +224,7 @@ public class SearchGroup extends FlexItemGroup {
 
     public static void init() {
         if (!LOADED) {
+            LOADED = true;
             Debug.log("Initializing Search Group...");
             Timer.start();
             Bukkit.getScheduler().runTask(JustEnoughGuide.getInstance(), () -> {
@@ -596,17 +597,16 @@ public class SearchGroup extends FlexItemGroup {
                     }
                 }
                 Debug.debug("Cache initialized.");
-            });
-            LOADED = true;
 
-            Timer.log();
-            Debug.debug("Search Group initialized.");
-            Debug.debug("Enabled items: " + ENABLED_ITEMS.size());
-            Debug.debug("Available items: " + AVAILABLE_ITEMS.size());
-            Debug.debug("Machine blocks cache: " + SPECIAL_CACHE.size());
-            Debug.debug("Shared cache: " + SHARED_CHARS.size());
-            Debug.debug("Cache 1 (Keywords): " + CACHE.size());
-            Debug.debug("Cache 2 (Display Recipes): " + CACHE2.size());
+                Timer.log();
+                Debug.debug("Search Group initialized.");
+                Debug.debug("Enabled items: " + ENABLED_ITEMS.size());
+                Debug.debug("Available items: " + AVAILABLE_ITEMS.size());
+                Debug.debug("Machine blocks cache: " + SPECIAL_CACHE.size());
+                Debug.debug("Shared cache: " + SHARED_CHARS.size());
+                Debug.debug("Cache 1 (Keywords): " + CACHE.size());
+                Debug.debug("Cache 2 (Display Recipes): " + CACHE2.size());
+            });
         }
     }
 

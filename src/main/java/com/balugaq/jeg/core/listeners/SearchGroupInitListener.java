@@ -17,17 +17,19 @@ public class SearchGroupInitListener implements Listener {
 
     @EventHandler
     public void onReload(@NotNull PluginDisableEvent event) {
-        if (event.getPlugin() instanceof SlimefunAddon) {
-            SearchGroup.LOADED = false;
-            SearchGroup.init();
+        if (event.getPlugin() instanceof SlimefunAddon slimefunAddon) {
+            if (!slimefunAddon.getName().equals("JustEnoughGuide")) {
+                SearchGroup.init();
+            }
         }
     }
 
     @EventHandler
     public void onReload(@NotNull PluginEnableEvent event) {
-        if (event.getPlugin() instanceof SlimefunAddon) {
-            SearchGroup.LOADED = false;
-            SearchGroup.init();
+        if (event.getPlugin() instanceof SlimefunAddon slimefunAddon) {
+            if (!slimefunAddon.getName().equals("JustEnoughGuide")) {
+                SearchGroup.init();
+            }
         }
     }
 }
