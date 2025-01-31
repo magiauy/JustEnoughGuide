@@ -74,35 +74,35 @@ import java.util.stream.Collectors;
 @NotDisplayInCheatMode
 public class SearchGroup extends FlexItemGroup {
     @Deprecated
-    public static final int ACONTAINER_OFFSET = 50000;
+    public static final Integer ACONTAINER_OFFSET = 50000;
     public static final Map<Character, Reference<Set<SlimefunItem>>> CACHE = new HashMap<>(); // fast way for by item name
     public static final Map<Character, Reference<Set<SlimefunItem>>> CACHE2 = new HashMap<>(); // fast way for by display item name
     public static final Map<String, Reference<Set<String>>> SPECIAL_CACHE = new HashMap<>();
     public static final Set<String> SHARED_CHARS = new HashSet<>();
-    private static final boolean SHOW_HIDDEN_ITEM_GROUPS = Slimefun.getConfigManager().isShowHiddenItemGroupsInSearch();
-    private static final int DEFAULT_HASH_SIZE = 5000;
-    private static final Map<SlimefunItem, Integer> ENABLED_ITEMS = new HashMap<>(DEFAULT_HASH_SIZE);
-    private static final Set<SlimefunItem> AVAILABLE_ITEMS = new HashSet<>(DEFAULT_HASH_SIZE);
-    private static final int BACK_SLOT = 1;
-    private static final int SEARCH_SLOT = 7;
-    private static final int PREVIOUS_SLOT = 46;
-    private static final int NEXT_SLOT = 52;
-    private static final int[] BORDER = new int[]{0, 2, 3, 4, 5, 6, 8, 45, 47, 48, 49, 50, 51, 53};
-    private static final int[] MAIN_CONTENT = new int[]{
+    public static final Boolean SHOW_HIDDEN_ITEM_GROUPS = Slimefun.getConfigManager().isShowHiddenItemGroupsInSearch();
+    public static final Integer DEFAULT_HASH_SIZE = 5000;
+    public static final Map<SlimefunItem, Integer> ENABLED_ITEMS = new HashMap<>(DEFAULT_HASH_SIZE);
+    public static final Set<SlimefunItem> AVAILABLE_ITEMS = new HashSet<>(DEFAULT_HASH_SIZE);
+    public static final Integer BACK_SLOT = 1;
+    public static final Integer SEARCH_SLOT = 7;
+    public static final Integer PREVIOUS_SLOT = 46;
+    public static final Integer NEXT_SLOT = 52;
+    public static final Integer[] BORDER = new Integer[]{0, 2, 3, 4, 5, 6, 8, 45, 47, 48, 49, 50, 51, 53};
+    public static final Integer[] MAIN_CONTENT = new Integer[]{
             9, 10, 11, 12, 13, 14, 15, 16, 17,
             18, 19, 20, 21, 22, 23, 24, 25, 26,
             27, 28, 29, 30, 31, 32, 33, 34, 35,
             36, 37, 38, 39, 40, 41, 42, 43, 44
     };
-    private static final JavaPlugin JAVA_PLUGIN = JustEnoughGuide.getInstance();
-    public static boolean LOADED = false;
-    private final SlimefunGuideImplementation implementation;
-    private final Player player;
-    private final String searchTerm;
-    private final boolean pinyin;
-    private final int page;
-    private final List<SlimefunItem> slimefunItemList;
-    private Map<Integer, SearchGroup> pageMap = new LinkedHashMap<>();
+    public static final JavaPlugin JAVA_PLUGIN = JustEnoughGuide.getInstance();
+    public static Boolean LOADED = false;
+    public final SlimefunGuideImplementation implementation;
+    public final Player player;
+    public final String searchTerm;
+    public final Boolean pinyin;
+    public final Integer page;
+    public final List<SlimefunItem> slimefunItemList;
+    public Map<Integer, SearchGroup> pageMap = new LinkedHashMap<>();
 
     /**
      * Constructor for the SearchGroup.
@@ -792,7 +792,7 @@ public class SearchGroup extends FlexItemGroup {
      * @return The search group by page.
      */
     @NotNull
-    private SearchGroup getByPage(int page) {
+    public SearchGroup getByPage(int page) {
         if (this.pageMap.containsKey(page)) {
             return this.pageMap.get(page);
         } else {
@@ -817,7 +817,8 @@ public class SearchGroup extends FlexItemGroup {
      * @param pinyin     Whether the search term is in Pinyin.
      * @return The matched items.
      */
-    private @NotNull List<SlimefunItem> getAllMatchedItems(@NotNull Player p, @NotNull String searchTerm, boolean pinyin) {
+    @Deprecated
+    public @NotNull List<SlimefunItem> getAllMatchedItems(@NotNull Player p, @NotNull String searchTerm, boolean pinyin) {
         return filterItems(p, searchTerm, pinyin);
     }
 
@@ -916,13 +917,13 @@ public class SearchGroup extends FlexItemGroup {
                 Set<SlimefunItem> cache;
                 Reference<Set<SlimefunItem>> ref = CACHE2.get(c);
                 if (ref == null) {
-                    Debug.debug("5 Cache not found for " + c);
+                    Debug.debug("5 Cache2 not found for " + c);
                     cache = new HashSet<>();
                 } else {
                     cache = ref.get();
                 }
                 if (cache == null) {
-                    Debug.debug("6 Cache not found for " + c);
+                    Debug.debug("6 Cache2 not found for " + c);
                     cache = new HashSet<>();
                 }
                 if (allMatched2 == null) {
