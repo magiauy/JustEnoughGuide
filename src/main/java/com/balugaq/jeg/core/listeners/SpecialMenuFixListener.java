@@ -20,7 +20,6 @@ import java.util.Optional;
 public class SpecialMenuFixListener implements Listener {
     @EventHandler
     public void onSpecialMenuClose(InventoryCloseEvent event) {
-        Debug.debug("SpecialMenuFixListener: onSpecialMenuClose");
         Player player = (Player) event.getPlayer();
         Optional<PlayerProfile> optional = PlayerProfile.find(player);
         if (optional.isPresent()) {
@@ -28,25 +27,20 @@ public class SpecialMenuFixListener implements Listener {
             try {
                 @SuppressWarnings("unchecked") Deque<Object> queue = (Deque<Object>) ReflectionUtil.getValue(profile.getGuideHistory(), "queue");
                 if (queue == null || queue.isEmpty()) {
-                    Debug.debug("SpecialMenuFixListener: queue is empty");
                     return;
                 }
 
                 do {
-                    Debug.debug("SpecialMenuFixListener: queue size: " + queue.size());
                     for (Object entry : queue) {
                         Object object = ReflectionUtil.getValue(entry, "object");
-                        Debug.debug("--object: " + object);
                     }
 
                     Object entry = queue.getLast();
                     Object object = ReflectionUtil.getValue(entry, "object");
                     if (!(object instanceof String string)) {
-                        Debug.debug("SpecialMenuFixListener: object is not a string");
                         return;
                     }
                     if (SpecialMenuProvider.PLACEHOLDER_SEARCH_TERM.equals(string)) {
-                        Debug.debug("SpecialMenuFixListener: removing placeholder search term");
                         // remove the last entry from the queue, which is the placeholder search term
                         queue.removeLast();
                     } else {
