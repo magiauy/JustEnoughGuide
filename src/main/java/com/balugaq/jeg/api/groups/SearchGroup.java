@@ -603,11 +603,13 @@ public class SearchGroup extends FlexItemGroup {
             LOADED = true;
 
             Timer.log();
-            Debug.debug("Search Group initialized.");
-            Debug.debug("Enabled items: " + ENABLED_ITEMS.size());
-            Debug.debug("Available items: " + AVAILABLE_ITEMS.size());
-            Debug.debug("Machine blocks cache: " + SPECIAL_CACHE.size());
-            Debug.debug("Shared cache: " + SHARED_CHARS.size());
+            Debug.log("Search Group initialized.");
+            Debug.log("Enabled items: " + ENABLED_ITEMS.size());
+            Debug.log("Available items: " + AVAILABLE_ITEMS.size());
+            Debug.log("Machine blocks cache: " + SPECIAL_CACHE.size());
+            Debug.log("Shared cache: " + SHARED_CHARS.size());
+            Debug.log("Cache 1 (Keywords): " + CACHE.size());
+            Debug.log("Cache 2 (Display Recipes): " + CACHE2.size());
         }
     }
 
