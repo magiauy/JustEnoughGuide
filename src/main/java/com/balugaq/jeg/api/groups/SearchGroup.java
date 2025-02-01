@@ -943,6 +943,11 @@ public class SearchGroup extends FlexItemGroup {
                 // CACHE and CACHE2 are empty (maybe GCed), so need to initialize them again
                 LOADED = false;
                 init();
+                // Searching again by filters
+                if (filters.get(FilterType.BY_ITEM_NAME) == null && filters.get(FilterType.BY_DISPLAY_ITEM_NAME) == null) {
+                    filters.put(FilterType.BY_ITEM_NAME, actualSearchTerm);
+                    filters.put(FilterType.BY_DISPLAY_ITEM_NAME, actualSearchTerm);
+                }
             }
         }
 
