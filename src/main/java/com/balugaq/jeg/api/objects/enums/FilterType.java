@@ -10,6 +10,7 @@ import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.AContainer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.lang.ref.Reference;
 import java.util.List;
 import java.util.Set;
 
@@ -57,11 +58,14 @@ public enum FilterType {
         }
 
         String id = item.getId();
-        Set<String> cache = SearchGroup.SPECIAL_CACHE.get(id).get();
-        if (cache != null) {
-            for (String s : cache) {
-                if (SearchGroup.isSearchFilterApplicable(s, lowerFilterValue, false)) {
-                    return true;
+        Reference<Set<String>> ref = SearchGroup.SPECIAL_CACHE.get(id);
+        if (ref != null) {
+            Set<String> cache = ref.get();
+            if (cache != null) {
+                for (String s : cache) {
+                    if (SearchGroup.isSearchFilterApplicable(s, lowerFilterValue, false)) {
+                        return true;
+                    }
                 }
             }
         }
