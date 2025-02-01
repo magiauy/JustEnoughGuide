@@ -498,7 +498,7 @@ public class SpecialMenuProvider {
      * @see com.balugaq.jeg.core.listeners.SpecialMenuFixListener
      * @since 1.3
      */
-    public void insertUselessHistory(@NotNull PlayerProfile playerProfile) {
+    public static void insertUselessHistory(@NotNull PlayerProfile playerProfile) {
         playerProfile.getGuideHistory().add(PLACEHOLDER_SEARCH_TERM);
     }
 
