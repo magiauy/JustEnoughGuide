@@ -131,7 +131,7 @@ public class LocalHelper {
         addonLocals.put("LogiTech", "逻辑工艺"); // Same as LogiTECH, a Slimefun addon
         addonLocals.put("LogicTECH", "逻辑工艺"); // Same as LogicTech
         addonLocals.put("LogiTECH", "逻辑工艺"); // Same as LogiTech
-        addonLocals.put("SlimeAEPlugin", "能源应用2");
+        addonLocals.put("SlimeAEPlugin", "能源与应用2");
         addonLocals.put("SlimeChem", "粘液化学");
         addonLocals.put("WilderNether", "迷狱生机");
         addonLocals.put("MapJammers", "地图干扰");
