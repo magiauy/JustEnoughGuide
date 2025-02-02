@@ -573,7 +573,13 @@ public class SearchGroup extends FlexItemGroup {
                     }
                     if (!sharedItems.isEmpty()) {
                         for (char c : s.toCharArray()) {
-                            CACHE.put(c, new SoftReference<>(sharedItems));
+                            Reference<Set<SlimefunItem>> ref = CACHE.get(c);
+                            if (ref != null) {
+                                Set<SlimefunItem> set = ref.get();
+                                if (set != null) {
+                                    set.addAll(sharedItems);
+                                }
+                            }
                         }
                     }
 
@@ -592,7 +598,13 @@ public class SearchGroup extends FlexItemGroup {
                     }
                     if (!sharedItems2.isEmpty()) {
                         for (char c : s.toCharArray()) {
-                            CACHE2.put(c, new SoftReference<>(sharedItems2));
+                            Reference<Set<SlimefunItem>> ref = CACHE2.get(c);
+                            if (ref != null) {
+                                Set<SlimefunItem> set = ref.get();
+                                if (set != null) {
+                                    set.addAll(sharedItems2);
+                                }
+                            }
                         }
                     }
                 }
