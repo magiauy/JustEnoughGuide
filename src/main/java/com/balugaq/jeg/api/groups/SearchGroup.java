@@ -433,7 +433,7 @@ public class SearchGroup extends FlexItemGroup {
                         if (slimefunItem == null) {
                             continue;
                         }
-                        String name = slimefunItem.getItemName();
+                        String name = ChatColor.stripColor(slimefunItem.getItemName());
                         for (char c : name.toCharArray()) {
                             char d = Character.toLowerCase(c);
                             CACHE.putIfAbsent(d, new SoftReference<>(new HashSet<>()));
@@ -442,6 +442,7 @@ public class SearchGroup extends FlexItemGroup {
                                 Set<SlimefunItem> set = ref.get();
                                 if (set != null) {
                                     set.add(slimefunItem);
+                                    Debug.debug(name + " added to CACHE char \"" + d + "\" as name contains");
                                 }
                             }
                         }
@@ -457,6 +458,7 @@ public class SearchGroup extends FlexItemGroup {
                                     if (set == null) {
                                         set = new HashSet<>();
                                         CACHE.put(d, new SoftReference<>(set));
+                                        Debug.debug(name + " added to CACHE char \"" + d + "\" as pinyin first letter contains");
                                     }
                                     set.add(slimefunItem);
                                 }
@@ -472,7 +474,7 @@ public class SearchGroup extends FlexItemGroup {
                         if (displayRecipes != null) {
                             for (ItemStack itemStack : displayRecipes) {
                                 if (itemStack != null) {
-                                    String name2 = ItemStackHelper.getDisplayName(itemStack);
+                                    String name2 = ChatColor.stripColor(ItemStackHelper.getDisplayName(itemStack));
                                     for (char c : name2.toCharArray()) {
                                         char d = Character.toLowerCase(c);
                                         CACHE2.putIfAbsent(d, new SoftReference<>(new HashSet<>()));
@@ -482,6 +484,7 @@ public class SearchGroup extends FlexItemGroup {
                                             if (set == null) {
                                                 set = new HashSet<>();
                                                 CACHE2.put(d, new SoftReference<>(set));
+                                                Debug.debug(name + " added to CACHE2 char \"" + d + "\" as display recipe item name contains");
                                             }
                                             set.add(slimefunItem);
                                         }
@@ -505,6 +508,7 @@ public class SearchGroup extends FlexItemGroup {
                                                 Set<SlimefunItem> set = ref.get();
                                                 if (set != null) {
                                                     set.add(slimefunItem);
+                                                    Debug.debug(name + " added to CACHE2 char \"" + d + "\" as special cache contains");
                                                 }
                                             }
                                         }
@@ -564,6 +568,7 @@ public class SearchGroup extends FlexItemGroup {
                                 Set<SlimefunItem> set = ref.get();
                                 if (set != null) {
                                     set.addAll(sharedItems);
+                                    Debug.debug("Shared cache added to CACHE char \"" + c + "\" (" + sharedItems.size() + " items)");
                                 }
                             }
                         }
@@ -589,6 +594,7 @@ public class SearchGroup extends FlexItemGroup {
                                 Set<SlimefunItem> set = ref.get();
                                 if (set != null) {
                                     set.addAll(sharedItems2);
+                                    Debug.debug("Shared cache added to CACHE2 char \"" + c + "\" (" + sharedItems2.size() + " items)");
                                 }
                             }
                         }
