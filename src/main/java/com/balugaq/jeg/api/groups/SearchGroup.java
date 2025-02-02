@@ -886,24 +886,19 @@ public class SearchGroup extends FlexItemGroup {
             Set<SlimefunItem> nameMatched = new HashSet<>();
             Set<SlimefunItem> allMatched = null;
             for (char c : actualSearchTerm.toCharArray()) {
-                Debug.debug("Searching: " + c);
                 Set<SlimefunItem> cache;
                 Reference<Set<SlimefunItem>> ref = CACHE.get(c);
                 if (ref == null) {
-                    Debug.debug("1 Cache not found for " + c);
                     cache = new HashSet<>();
                 } else {
                     cache = ref.get();
                 }
                 if (cache == null) {
-                    Debug.debug("2 Cache not found for " + c);
                     cache = new HashSet<>();
                 }
                 if (allMatched == null) {
-                    Debug.debug("3 Set allMatched for " + actualSearchTerm);
                     allMatched = new HashSet<>(cache);
                 } else {
-                    Debug.debug("4 Retain allMatched for " + c);
                     allMatched.retainAll(new HashSet<>(cache));
                 }
             }
@@ -913,24 +908,19 @@ public class SearchGroup extends FlexItemGroup {
             Set<SlimefunItem> machineMatched = new HashSet<>();
             Set<SlimefunItem> allMatched2 = null;
             for (char c : actualSearchTerm.toCharArray()) {
-                Debug.debug("Searching: " + c);
                 Set<SlimefunItem> cache;
                 Reference<Set<SlimefunItem>> ref = CACHE2.get(c);
                 if (ref == null) {
-                    Debug.debug("5 Cache2 not found for " + c);
                     cache = new HashSet<>();
                 } else {
                     cache = ref.get();
                 }
                 if (cache == null) {
-                    Debug.debug("6 Cache2 not found for " + c);
                     cache = new HashSet<>();
                 }
                 if (allMatched2 == null) {
-                    Debug.debug("7 Set allMatched2 for " + actualSearchTerm);
                     allMatched2 = new HashSet<>(cache);
                 } else {
-                    Debug.debug("8 Retain allMatched2 for " + c);
                     allMatched2.retainAll(new HashSet<>(cache));
                 }
             }
