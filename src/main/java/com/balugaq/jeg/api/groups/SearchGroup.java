@@ -95,12 +95,12 @@ public class SearchGroup extends FlexItemGroup {
             36, 37, 38, 39, 40, 41, 42, 43, 44
     };
     public static final JavaPlugin JAVA_PLUGIN = JustEnoughGuide.getInstance();
-    public static Boolean LOADED = false;
+    public static @NotNull Boolean LOADED = false;
     public final SlimefunGuideImplementation implementation;
     public final Player player;
     public final String searchTerm;
     public final Boolean pinyin;
-    public final Integer page;
+    public final @NotNull Integer page;
     public final List<SlimefunItem> slimefunItemList;
     public Map<Integer, SearchGroup> pageMap = new LinkedHashMap<>();
 
