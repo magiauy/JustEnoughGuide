@@ -442,7 +442,6 @@ public class SearchGroup extends FlexItemGroup {
                                 Set<SlimefunItem> set = ref.get();
                                 if (set != null) {
                                     set.add(slimefunItem);
-                                    Debug.debug(name + " added to CACHE char \"" + d + "\" as name contains");
                                 }
                             }
                         }
@@ -458,7 +457,6 @@ public class SearchGroup extends FlexItemGroup {
                                     if (set == null) {
                                         set = new HashSet<>();
                                         CACHE.put(d, new SoftReference<>(set));
-                                        Debug.debug(name + " added to CACHE char \"" + d + "\" as pinyin first letter contains");
                                     }
                                     set.add(slimefunItem);
                                 }
@@ -484,7 +482,6 @@ public class SearchGroup extends FlexItemGroup {
                                             if (set == null) {
                                                 set = new HashSet<>();
                                                 CACHE2.put(d, new SoftReference<>(set));
-                                                Debug.debug(name + " added to CACHE2 char \"" + d + "\" as display recipe item name contains");
                                             }
                                             set.add(slimefunItem);
                                         }
@@ -508,7 +505,6 @@ public class SearchGroup extends FlexItemGroup {
                                                 Set<SlimefunItem> set = ref.get();
                                                 if (set != null) {
                                                     set.add(slimefunItem);
-                                                    Debug.debug(name + " added to CACHE2 char \"" + d + "\" as special cache contains");
                                                 }
                                             }
                                         }
