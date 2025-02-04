@@ -6,5 +6,6 @@ package com.balugaq.jeg.core.commands;
  * @author balugaq
  * @see com.balugaq.jeg.core.commands.HelpCommand
  * @see com.balugaq.jeg.core.commands.ReloadCommand
+ * @see com.balugaq.jeg.core.commands.CacheCommand
  * @since 1.1
  */

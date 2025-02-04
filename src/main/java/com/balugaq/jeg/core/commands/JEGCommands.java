@@ -42,6 +42,11 @@ public class JEGCommands implements TabExecutor {
             @NotNull Command command,
             @NotNull String label,
             @NotNull String @NotNull [] args) {
+        if (!sender.isOp()) {
+            sender.sendMessage(ChatColor.RED + "You don't have permission to use this command.");
+            return false;
+        }
+
         if (args.length == 0) {
             sender.sendMessage(ChatColor.RED + "Unknown command. Type /jeg help");
             return true;
@@ -78,7 +83,11 @@ public class JEGCommands implements TabExecutor {
             @NotNull Command command,
             @NotNull String label,
             @NotNull String @NotNull [] args) {
-        List<String> raw = onTabCompleteRaw(sender, args);
-        return StringUtil.copyPartialMatches(args[args.length - 1], raw, new ArrayList<>());
+        if (sender.isOp()) {
+            List<String> raw = onTabCompleteRaw(sender, args);
+            return StringUtil.copyPartialMatches(args[args.length - 1], raw, new ArrayList<>());
+        } else {
+            return List.of();
+        }
     }
 }

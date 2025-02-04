@@ -20,28 +20,34 @@ public class RTSEvents {
         private final Player player;
         private final AnvilGUI.StateSnapshot stateSnapshot;
         private final SlimefunGuideMode guideMode;
+
         public CloseRTSEvent(Player player, AnvilGUI.StateSnapshot stateSnapshot, SlimefunGuideMode guideMode) {
             super(!Bukkit.isPrimaryThread());
             this.player = player;
             this.stateSnapshot = stateSnapshot;
             this.guideMode = guideMode;
         }
+
+        public static HandlerList getHandlerList() {
+            return HANDLERS;
+        }
+
         @NotNull
         @Override
         public HandlerList getHandlers() {
             return HANDLERS;
         }
-        public static HandlerList getHandlerList() {
-            return HANDLERS;
-        }
     }
+
     @Getter
     public static class OpenRTSEvent extends Event {
         private static final HandlerList HANDLERS = new HandlerList();
         private final Player player;
         private final AnvilInventory openingInventory;
         private final SlimefunGuideMode guideMode;
-        private @Nullable final String presetSearchTerm;
+        private @Nullable
+        final String presetSearchTerm;
+
         public OpenRTSEvent(Player player, AnvilInventory openingInventory, SlimefunGuideMode guideMode) {
             this(player, openingInventory, guideMode, null);
         }
@@ -54,15 +60,17 @@ public class RTSEvents {
             this.presetSearchTerm = presetSearchTerm;
         }
 
+        public static HandlerList getHandlerList() {
+            return HANDLERS;
+        }
+
         @NotNull
         @Override
         public HandlerList getHandlers() {
             return HANDLERS;
         }
-        public static HandlerList getHandlerList() {
-            return HANDLERS;
-        }
     }
+
     @Getter
     public static class SearchTermChangeEvent extends Event {
         private static final HandlerList HANDLERS = new HandlerList();
@@ -72,6 +80,7 @@ public class RTSEvents {
         private final String oldSearchTerm;
         private final String newSearchTerm;
         private final SlimefunGuideMode guideMode;
+
         public SearchTermChangeEvent(Player player, InventoryView inventoryView, AnvilInventory openingInventory, String oldSearchTerm, String newSearchTerm, SlimefunGuideMode guideMode) {
             super(false);
             this.player = player;
@@ -82,15 +91,17 @@ public class RTSEvents {
             this.guideMode = guideMode;
         }
 
+        public static HandlerList getHandlerList() {
+            return HANDLERS;
+        }
+
         @NotNull
         @Override
         public HandlerList getHandlers() {
             return HANDLERS;
         }
-        public static HandlerList getHandlerList() {
-            return HANDLERS;
-        }
     }
+
     @Getter
     public static class ClickAnvilItemEvent extends Event implements Cancellable {
         private static final HandlerList HANDLERS = new HandlerList();
@@ -99,6 +110,7 @@ public class RTSEvents {
         private final SlimefunGuideMode guideMode;
         private final int slot;
         private boolean cancelled;
+
         public ClickAnvilItemEvent(Player player, AnvilGUI.StateSnapshot stateSnapshot, int slot, SlimefunGuideMode guideMode) {
             super(!Bukkit.isPrimaryThread());
             this.player = player;
@@ -107,12 +119,13 @@ public class RTSEvents {
             this.guideMode = guideMode;
         }
 
+        public static HandlerList getHandlerList() {
+            return HANDLERS;
+        }
+
         @NotNull
         @Override
         public HandlerList getHandlers() {
-            return HANDLERS;
-        }
-        public static HandlerList getHandlerList() {
             return HANDLERS;
         }
 
@@ -146,13 +159,13 @@ public class RTSEvents {
             this.guideMode = guideMode;
         }
 
-        @NotNull
-        @Override
-        public HandlerList getHandlers() {
+        public static HandlerList getHandlerList() {
             return HANDLERS;
         }
 
-        public static HandlerList getHandlerList() {
+        @NotNull
+        @Override
+        public HandlerList getHandlers() {
             return HANDLERS;
         }
 

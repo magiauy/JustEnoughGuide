@@ -17,7 +17,6 @@ import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
 import lombok.Getter;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import org.bukkit.Bukkit;
@@ -54,12 +53,48 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+@SuppressWarnings("deprecation")
 @Getter
 public class RTSListener implements Listener {
     public static final NamespacedKey FAKE_ITEM_KEY = new NamespacedKey(JustEnoughGuide.getInstance(), "fake_item");
     // Use openingPlayers must be by keyword "synchronized"
     public static final Map<Player, SlimefunGuideMode> openingPlayers = new HashMap<>();
     public static final Integer[] FILL_ORDER = {9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35};
+
+    public static boolean isRTSPlayer(Player player) {
+        return openingPlayers.containsKey(player);
+    }
+
+    public static boolean isFakeItem(ItemStack itemStack) {
+        if (itemStack != null && itemStack.getType() != Material.AIR) {
+            if (itemStack.getItemMeta().getPersistentDataContainer().get(FAKE_ITEM_KEY, PersistentDataType.STRING) != null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void quitRTS(Player player) {
+        if (isRTSPlayer(player)) {
+            synchronized (openingPlayers) {
+                openingPlayers.remove(player);
+            }
+            synchronized (RTSSearchGroup.RTS_PLAYERS) {
+                RTSSearchGroup.RTS_PLAYERS.remove(player);
+            }
+            synchronized (RTSSearchGroup.RTS_SEARCH_TERMS) {
+                RTSSearchGroup.RTS_SEARCH_TERMS.remove(player);
+            }
+            synchronized (RTSSearchGroup.RTS_SEARCH_GROUPS) {
+                RTSSearchGroup.RTS_SEARCH_GROUPS.remove(player);
+            }
+            synchronized (RTSSearchGroup.RTS_PAGES) {
+                RTSSearchGroup.RTS_PAGES.remove(player);
+            }
+            JustEnoughGuide.getInstance().getRtsBackpackManager().restoreInventoryFor(player);
+        }
+    }
+
     @EventHandler
     public void onOpenRTS(RTSEvents.OpenRTSEvent event) {
         Player player = event.getPlayer();
@@ -94,7 +129,7 @@ public class RTSListener implements Listener {
     public void onRTS(RTSEvents.SearchTermChangeEvent event) {
         Player player = event.getPlayer();
         SlimefunGuideImplementation implementation = Slimefun.getRegistry().getSlimefunGuide(event.getGuideMode());
-        SearchGroup searchGroup = new SearchGroup(implementation, player, event.getNewSearchTerm(), JustEnoughGuide.getConfigManager().isPinyinSearch(), false);
+        SearchGroup searchGroup = new SearchGroup(implementation, player, event.getNewSearchTerm(), JustEnoughGuide.getConfigManager().isPinyinSearch(), true);
         if (isRTSPlayer(player)) {
             synchronized (RTSSearchGroup.RTS_SEARCH_GROUPS) {
                 RTSSearchGroup.RTS_SEARCH_GROUPS.put(player, searchGroup);
@@ -401,40 +436,6 @@ public class RTSListener implements Listener {
         ItemStack itemStack = event.getItem();
         if (isFakeItem(itemStack)) {
             event.setCancelled(true);
-        }
-    }
-
-    public static boolean isRTSPlayer(Player player) {
-        return openingPlayers.containsKey(player);
-    }
-
-    public static boolean isFakeItem(ItemStack itemStack) {
-        if (itemStack != null && itemStack.getType() != Material.AIR) {
-            if (itemStack.getItemMeta().getPersistentDataContainer().get(FAKE_ITEM_KEY, PersistentDataType.STRING) != null) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static void quitRTS(Player player) {
-        if (isRTSPlayer(player)) {
-            synchronized (openingPlayers) {
-                openingPlayers.remove(player);
-            }
-            synchronized (RTSSearchGroup.RTS_PLAYERS) {
-                RTSSearchGroup.RTS_PLAYERS.remove(player);
-            }
-            synchronized (RTSSearchGroup.RTS_SEARCH_TERMS) {
-                RTSSearchGroup.RTS_SEARCH_TERMS.remove(player);
-            }
-            synchronized (RTSSearchGroup.RTS_SEARCH_GROUPS) {
-                RTSSearchGroup.RTS_SEARCH_GROUPS.remove(player);
-            }
-            synchronized (RTSSearchGroup.RTS_PAGES) {
-                RTSSearchGroup.RTS_PAGES.remove(player);
-            }
-            JustEnoughGuide.getInstance().getRtsBackpackManager().restoreInventoryFor(player);
         }
     }
 }

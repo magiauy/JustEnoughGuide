@@ -50,7 +50,14 @@ public class RTSSearchGroup extends FlexItemGroup {
     public static final Map<Player, AnvilInventory> RTS_PLAYERS = new HashMap<>();
     public static final Map<Player, String> RTS_SEARCH_TERMS = new HashMap<>();
     public static final Function<Player, ItemStack> BACK_ICON = (player) -> ChestMenuUtils.getBackButton(player, "", "&f左键: &7返回上一页", "&fShift + 左键: &7返回主菜单");
-    public static final ItemStack INPUT_TEXT_ICON = new CustomItemStack(Material.PAPER, "&f搜索: &7在上方输入搜索词", "");
+    public static final ItemStack INPUT_TEXT_ICON = new CustomItemStack(
+            Material.PAPER,
+            "&f搜索: &7在上方输入搜索词",
+            "&fNote:",
+            "&7 - &e左侧物品为返回键",
+            "&7 - &e中间物品为按键上一页",
+            "&7 - &e右侧物品为按键下一页"
+    );
     public static final ItemStack AIR_ICON = new ItemStack(Material.AIR);
     private static final JavaPlugin JAVA_PLUGIN = JustEnoughGuide.getInstance();
 
@@ -91,6 +98,7 @@ public class RTSSearchGroup extends FlexItemGroup {
     private final AnvilInventory anvilInventory;
     private final String presetSearchTerm;
     private final int page;
+
     public RTSSearchGroup(AnvilInventory anvilInventory, String presetSearchTerm) {
         this(anvilInventory, presetSearchTerm, 1);
     }

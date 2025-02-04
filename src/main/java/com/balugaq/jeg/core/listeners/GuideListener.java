@@ -1,6 +1,5 @@
 package com.balugaq.jeg.core.listeners;
 
-import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.GuideUtil;
 import io.github.thebusybiscuit.slimefun4.api.events.SlimefunGuideOpenEvent;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
@@ -27,6 +26,7 @@ import java.util.Optional;
 @Getter
 public class GuideListener implements Listener {
     public static final Map<Player, SlimefunGuideMode> guideModeMap = new HashMap<>();
+
     @EventHandler(priority = EventPriority.LOW)
     public void onGuideOpen(@NotNull SlimefunGuideOpenEvent e) {
         if (!e.isCancelled()) {

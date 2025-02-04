@@ -1,7 +1,6 @@
 package com.balugaq.jeg.core.managers;
 
 import com.balugaq.jeg.api.managers.AbstractManager;
-import com.balugaq.jeg.implementation.JustEnoughGuide;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -122,6 +121,7 @@ public class ConfigManager extends AbstractManager {
     public String getCheatGuideTitle() {
         return CHEAT_GUIDE_TITLE;
     }
+
     public boolean isRTSSearch() {
         return RTS_SEARCH;
     }

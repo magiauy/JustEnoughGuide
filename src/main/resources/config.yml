@@ -13,7 +13,7 @@ improvements:
   rts-search: true
 
 # Do not change this value unless you know what you are doing.
-config-version: 1.4
+config-version: 1.5
 
 # Do not change this value unless you know what you are doing.
 debug: false

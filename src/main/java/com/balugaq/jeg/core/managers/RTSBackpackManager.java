@@ -23,6 +23,9 @@ import java.util.UUID;
 public class RTSBackpackManager extends AbstractManager {
     private static final int IDENTIFIER_SLOT = 53;
     private static final String BACKPACK_NAME = "JEGRTSBackpack";
+    private static final NamespacedKey STATUS_KEY = new NamespacedKey(JustEnoughGuide.getInstance(), "status");
+    private static final String OPEN_STATUS = "open";
+    private static final String CLOSE_STATUS = "close";
     private final @NotNull Plugin plugin;
     private final @NotNull NamespacedKey SERVER_KEY;
     private final @NotNull NamespacedKey OWNER_KEY;
@@ -200,8 +203,4 @@ public class RTSBackpackManager extends AbstractManager {
 
         return false;
     }
-
-    private static final NamespacedKey STATUS_KEY = new NamespacedKey(JustEnoughGuide.getInstance(), "status");
-    private static final String OPEN_STATUS = "open";
-    private static final String CLOSE_STATUS = "close";
 }

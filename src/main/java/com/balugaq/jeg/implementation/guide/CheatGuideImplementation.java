@@ -535,7 +535,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
 
         String searchTerm = ChatColor.stripColor(input.toLowerCase(Locale.ROOT));
         SearchGroup group = new SearchGroup(
-                this, p, searchTerm, JustEnoughGuide.getConfigManager().isPinyinSearch());
+                this, p, searchTerm, JustEnoughGuide.getConfigManager().isPinyinSearch(), true);
         group.open(p, profile, getMode());
     }
 

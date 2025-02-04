@@ -4,7 +4,6 @@ import com.balugaq.jeg.api.interfaces.NotDisplayInCheatMode;
 import com.balugaq.jeg.api.interfaces.NotDisplayInSurvivalMode;
 import com.balugaq.jeg.api.objects.Timer;
 import com.balugaq.jeg.api.objects.enums.FilterType;
-import com.balugaq.jeg.api.objects.events.RTSEvents;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.Debug;
 import com.balugaq.jeg.utils.GuideUtil;
@@ -34,26 +33,21 @@ import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.AContainer;
 import net.guizhanss.guizhanlib.minecraft.helper.inventory.ItemStackHelper;
-import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.AnvilInventory;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -63,8 +57,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.BiConsumer;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -115,6 +107,7 @@ public class SearchGroup extends FlexItemGroup {
 
     /**
      * Constructor for the SearchGroup.
+     *
      * @param implementation The Slimefun guide implementation.
      * @param player         The player who opened the guide.
      * @param searchTerm     The search term.
@@ -127,6 +120,7 @@ public class SearchGroup extends FlexItemGroup {
             boolean pinyin) {
         this(implementation, player, searchTerm, pinyin, true);
     }
+
     /**
      * Constructor for the SearchGroup.
      *
@@ -150,9 +144,9 @@ public class SearchGroup extends FlexItemGroup {
         this.searchTerm = searchTerm;
         this.pinyin = pinyin;
         this.player = player;
+        this.re_search_when_cache_failed = re_search_when_cache_failed;
         this.implementation = implementation;
         this.slimefunItemList = filterItems(player, searchTerm, pinyin);
-        this.re_search_when_cache_failed = re_search_when_cache_failed;
         this.pageMap.put(1, this);
     }
 
@@ -168,9 +162,9 @@ public class SearchGroup extends FlexItemGroup {
         this.searchTerm = searchGroup.searchTerm;
         this.pinyin = searchGroup.pinyin;
         this.player = searchGroup.player;
+        this.re_search_when_cache_failed = searchGroup.re_search_when_cache_failed;
         this.implementation = searchGroup.implementation;
         this.slimefunItemList = searchGroup.slimefunItemList;
-        this.re_search_when_cache_failed = searchGroup.re_search_when_cache_failed;
         this.pageMap.put(page, this);
     }
 
@@ -905,9 +899,9 @@ public class SearchGroup extends FlexItemGroup {
         }
         Set<SlimefunItem> merge = new HashSet<>(36 * 4);
         // The unfiltered items
-        Set<SlimefunItem> items = AVAILABLE_ITEMS
+        Set<SlimefunItem> items = new HashSet<>(AVAILABLE_ITEMS
                 .stream()
-                .filter(item -> item.getItemGroup().isAccessible(player)).collect(Collectors.toSet());
+                .filter(item -> item.getItemGroup().isAccessible(player)).toList());
 
         if (!actualSearchTerm.isBlank()) {
             Set<SlimefunItem> nameMatched = new HashSet<>();
@@ -954,16 +948,22 @@ public class SearchGroup extends FlexItemGroup {
             if (allMatched2 != null) {
                 machineMatched.addAll(allMatched2);
             }
+            Debug.debug("Name matched: " + nameMatched.size());
+            Debug.debug("Machine matched: " + machineMatched.size());
             merge.addAll(nameMatched);
             merge.addAll(machineMatched);
             if (this.re_search_when_cache_failed) {
                 if (nameMatched.isEmpty()) {
-                    filters.putIfAbsent(FilterType.BY_ITEM_NAME, actualSearchTerm);
                     Debug.debug("Re-searching item name by filters (Normal search)");
+                    Set<SlimefunItem> clone = new HashSet<>(items);
+                    Set<SlimefunItem> result = filterItems(FilterType.BY_ITEM_NAME, actualSearchTerm, pinyin, clone);
+                    merge.addAll(result);
                 }
                 if (machineMatched.isEmpty()) {
-                    filters.putIfAbsent(FilterType.BY_DISPLAY_ITEM_NAME, actualSearchTerm);
                     Debug.debug("Re-searching display item name by filters (Normal search)");
+                    Set<SlimefunItem> clone = new HashSet<>(items);
+                    Set<SlimefunItem> result = filterItems(FilterType.BY_DISPLAY_ITEM_NAME, actualSearchTerm, pinyin, clone);
+                    merge.addAll(result);
                 }
             }
         }
