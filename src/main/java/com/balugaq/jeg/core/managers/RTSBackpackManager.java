@@ -12,6 +12,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
@@ -70,7 +71,7 @@ public class RTSBackpackManager extends AbstractManager {
         Inventory inventory = b.getInventory();
         setIdentifier(player, inventory, IDENTIFIER_SLOT, true);
         Slimefun.getDatabaseManager().getProfileDataController().saveBackpackInventory(b, IDENTIFIER_SLOT);
-        ItemStack[] contents = player.getInventory().getStorageContents();
+        ItemStack[] contents = getStorageContents(player.getInventory());
         for (int i = 0; i < contents.length; i++) {
             ItemStack itemStack = contents[i];
             if (itemStack == null || itemStack.getType() == Material.AIR) {
@@ -87,7 +88,7 @@ public class RTSBackpackManager extends AbstractManager {
         for (int i = 0; i < newContents.length; i++) {
             newContents[i] = new ItemStack(Material.AIR);
         }
-        player.getInventory().setContents(newContents);
+        player.getInventory().setStorageContents(newContents);
     }
 
     public void restoreInventoryFor(Player player) {
@@ -104,7 +105,7 @@ public class RTSBackpackManager extends AbstractManager {
         for (PlayerBackpack backpack : backpacks) {
             if (backpack.getName().equals(BACKPACK_NAME)) {
                 Inventory inventory = backpack.getInventory();
-                ItemStack[] contents = inventory.getStorageContents();
+                ItemStack[] contents = inventory.getContents();
 
                 ItemStack identifierItem = contents[IDENTIFIER_SLOT];
                 if (identifierItem == null || identifierItem.getType() == Material.AIR) {
@@ -120,8 +121,7 @@ public class RTSBackpackManager extends AbstractManager {
                 }
 
                 // found the backpack, now restore it
-                int length = player.getInventory().getStorageContents().length;
-                for (int i = 0; i < length; i++) {
+                for (int i = 0; i < 36; i++) {
                     ItemStack itemStack = contents[i];
                     if (itemStack == null || itemStack.getType() == Material.AIR) {
                         player.getInventory().setItem(i, new ItemStack(Material.AIR));
@@ -202,5 +202,14 @@ public class RTSBackpackManager extends AbstractManager {
         }
 
         return false;
+    }
+
+    public static ItemStack[] getStorageContents(PlayerInventory inventory) {
+        ItemStack[] contents = new ItemStack[36];
+        for (int i = 0; i < 36; i++) {
+            ItemStack itemStack = inventory.getItem(i);
+            contents[i] = itemStack;
+        }
+        return contents;
     }
 }
