@@ -9,5 +9,6 @@ package com.balugaq.jeg.core.managers;
  * @see com.balugaq.jeg.core.managers.ConfigManager
  * @see com.balugaq.jeg.core.managers.IntegrationManager
  * @see com.balugaq.jeg.core.managers.ListenerManager
+ * @see com.balugaq.jeg.core.managers.RTSBackpackManager
  * @since 1.1
  */

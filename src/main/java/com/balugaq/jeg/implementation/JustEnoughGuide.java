@@ -5,11 +5,13 @@ import com.balugaq.jeg.core.managers.CommandManager;
 import com.balugaq.jeg.core.managers.ConfigManager;
 import com.balugaq.jeg.core.managers.IntegrationManager;
 import com.balugaq.jeg.core.managers.ListenerManager;
+import com.balugaq.jeg.core.managers.RTSBackpackManager;
 import com.balugaq.jeg.implementation.guide.CheatGuideImplementation;
 import com.balugaq.jeg.implementation.guide.SurvivalGuideImplementation;
 import com.balugaq.jeg.implementation.items.GroupSetup;
 import com.balugaq.jeg.utils.MinecraftVersion;
 import com.balugaq.jeg.utils.ReflectionUtil;
+import com.balugaq.jeg.utils.UUIDUtils;
 import com.google.common.base.Preconditions;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation;
@@ -24,10 +26,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.MessageFormat;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * This is the main class of the JustEnoughGuide plugin.
@@ -39,18 +46,33 @@ import java.util.Map;
 @SuppressWarnings("unused")
 @Getter
 public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
-    private static final int RECOMMENDED_JAVA_VERSION = 17;
-    private static final MinecraftVersion RECOMMENDED_MC_VERSION = MinecraftVersion.MINECRAFT_1_16;
+    public static final int RECOMMENDED_JAVA_VERSION = 17;
+    public static final MinecraftVersion RECOMMENDED_MC_VERSION = MinecraftVersion.MINECRAFT_1_16;
+    @Getter
     private static @Nullable JustEnoughGuide instance;
+    @Getter
+    private static @Nullable UUID serverUUID;
+    @Getter
     private final @NotNull String username;
+    @Getter
     private final @NotNull String repo;
+    @Getter
     private final @NotNull String branch;
+    @Getter
     private @Nullable BookmarkManager bookmarkManager;
+    @Getter
     private @Nullable CommandManager commandManager;
+    @Getter
     private @Nullable ConfigManager configManager;
+    @Getter
     private @Nullable IntegrationManager integrationManager;
+    @Getter
     private @Nullable ListenerManager listenerManager;
+    @Getter
+    private @Nullable RTSBackpackManager rtsBackpackManager;
+    @Getter
     private @Nullable MinecraftVersion minecraftVersion;
+    @Getter
     private int javaVersion;
 
     public JustEnoughGuide() {
@@ -160,6 +182,27 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
             getLogger().info("教学物品组加载完毕！");
         }
 
+        this.rtsBackpackManager = new RTSBackpackManager(this);
+        this.rtsBackpackManager.onLoad();
+
+        File uuidFile = new File(getDataFolder(), "server-uuid");
+        if (uuidFile.exists()) {
+            try {
+                serverUUID = UUID.nameUUIDFromBytes(Files.readAllBytes(Path.of(uuidFile.getPath())));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            serverUUID = UUID.randomUUID();
+            try {
+                getDataFolder().mkdirs();
+                uuidFile.createNewFile();
+                Files.write(Path.of(uuidFile.getPath()), UUIDUtils.toByteArray(serverUUID));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         getLogger().info("成功启用此附属");
     }
 
@@ -208,6 +251,10 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
 
         if (this.listenerManager != null) {
             this.listenerManager.onUnload();
+        }
+
+        if (this.rtsBackpackManager != null) {
+            this.rtsBackpackManager.onUnload();
         }
 
         if (this.configManager != null) {

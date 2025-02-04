@@ -1,6 +1,7 @@
 package com.balugaq.jeg.core.managers;
 
 import com.balugaq.jeg.api.managers.AbstractManager;
+import com.balugaq.jeg.implementation.JustEnoughGuide;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -34,6 +35,7 @@ public class ConfigManager extends AbstractManager {
     private final boolean CHEAT_IMPROVEMENTS;
     private final boolean PINYIN_SEARCH;
     private final boolean BOOKMARK;
+    private final boolean RTS_SEARCH;
     private final @NotNull String SURVIVAL_GUIDE_TITLE;
     private final @NotNull String CHEAT_GUIDE_TITLE;
     private final @NotNull JavaPlugin plugin;
@@ -41,14 +43,15 @@ public class ConfigManager extends AbstractManager {
     public ConfigManager(@NotNull JavaPlugin plugin) {
         this.plugin = plugin;
         setupDefaultConfig();
-        this.AUTO_UPDATE = plugin.getConfig().getBoolean("auto-update");
-        this.DEBUG = plugin.getConfig().getBoolean("debug");
-        this.SURVIVAL_IMPROVEMENTS = plugin.getConfig().getBoolean("guide.survival-improvements");
-        this.CHEAT_IMPROVEMENTS = plugin.getConfig().getBoolean("guide.cheat-improvements");
-        this.PINYIN_SEARCH = plugin.getConfig().getBoolean("improvements.pinyin-search");
-        this.BOOKMARK = plugin.getConfig().getBoolean("improvements.bookmark");
+        this.AUTO_UPDATE = plugin.getConfig().getBoolean("auto-update", false);
+        this.DEBUG = plugin.getConfig().getBoolean("debug", false);
+        this.SURVIVAL_IMPROVEMENTS = plugin.getConfig().getBoolean("guide.survival-improvements", true);
+        this.CHEAT_IMPROVEMENTS = plugin.getConfig().getBoolean("guide.cheat-improvements", true);
+        this.PINYIN_SEARCH = plugin.getConfig().getBoolean("improvements.pinyin-search", true);
+        this.BOOKMARK = plugin.getConfig().getBoolean("improvements.bookmark", true);
         this.SURVIVAL_GUIDE_TITLE = plugin.getConfig().getString("guide.survival-guide-title", "&2&lSlimefun 指南 (生存模式)         &e&l爱来自 JustEnoughGuide");
         this.CHEAT_GUIDE_TITLE = plugin.getConfig().getString("guide.cheat-guide-title", "&c&lSlimefun 指南 (作弊模式)         &e&l爱来自 JustEnoughGuide");
+        this.RTS_SEARCH = plugin.getConfig().getBoolean("improvements.rts-search", true);
     }
 
     private void setupDefaultConfig() {
@@ -118,5 +121,8 @@ public class ConfigManager extends AbstractManager {
 
     public String getCheatGuideTitle() {
         return CHEAT_GUIDE_TITLE;
+    }
+    public boolean isRTSSearch() {
+        return RTS_SEARCH;
     }
 }

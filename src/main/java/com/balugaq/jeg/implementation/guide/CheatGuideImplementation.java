@@ -1,11 +1,15 @@
 package com.balugaq.jeg.implementation.guide;
 
 import city.norain.slimefun4.VaultIntegration;
+import com.balugaq.jeg.api.groups.RTSSearchGroup;
 import com.balugaq.jeg.api.groups.SearchGroup;
 import com.balugaq.jeg.api.interfaces.BookmarkRelocation;
 import com.balugaq.jeg.api.interfaces.DisplayInCheatMode;
 import com.balugaq.jeg.api.interfaces.JEGSlimefunGuideImplementation;
 import com.balugaq.jeg.api.interfaces.NotDisplayInCheatMode;
+import com.balugaq.jeg.api.objects.events.RTSEvents;
+import com.balugaq.jeg.core.listeners.GuideListener;
+import com.balugaq.jeg.core.listeners.RTSListener;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
@@ -44,6 +48,8 @@ import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import io.github.thebusybiscuit.slimefun4.utils.itemstack.SlimefunGuideItem;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu.MenuClickHandler;
+import net.wesjd.anvilgui.AnvilGUI;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -79,7 +85,7 @@ import java.util.logging.Level;
 @SuppressWarnings({"deprecation", "unused"})
 public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements JEGSlimefunGuideImplementation {
     private static final int RTS_SLOT = 6;
-    private static final ItemStack RTS_ITEM = new CustomItemStack(Material.ANVIL, "&b实时搜索", "", "&c&l暂未完成");
+    private static final ItemStack RTS_ITEM = new CustomItemStack(Material.ANVIL, "&b实时搜索", "");
     private static final int MAX_ITEM_GROUPS = 36;
     private static final int SPECIAL_MENU_SLOT = 26;
     private static final ItemStack SPECIAL_MENU_ITEM = new CustomItemStack(Material.COMPASS, "&b超大配方", "", "&a点击打开超大配方(若有)");
@@ -316,6 +322,8 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                         return false;
                     });
         }
+
+        GuideListener.guideModeMap.put(p, getMode());
 
         menu.open(p);
     }
@@ -829,9 +837,51 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             return false;
         });
 
-        menu.addItem(RTS_SLOT, ItemStackUtil.getCleanItem(RTS_ITEM), (pl, slot, itemstack, action) -> {
-            return false;
-        });
+        if (JustEnoughGuide.getConfigManager().isRTSSearch()) {
+            menu.addItem(RTS_SLOT, ItemStackUtil.getCleanItem(RTS_ITEM), (pl, slot, itemstack, action) -> {
+                RTSSearchGroup.newRTSInventoryFor(pl, getMode(), (s, stateSnapshot) -> {
+                    if (s == AnvilGUI.Slot.INPUT_LEFT) {
+                        // back button clicked
+                        GuideHistory history = profile.getGuideHistory();
+                        if (action.isShiftClicked()) {
+                            openMainMenu(profile, profile.getGuideHistory().getMainMenuPage());
+                        } else {
+                            history.goBack(this);
+                        }
+                        return;
+                    } else if (s == AnvilGUI.Slot.INPUT_RIGHT) {
+                        // previous page button clicked
+                        SearchGroup rts = RTSSearchGroup.RTS_SEARCH_GROUPS.get(pl);
+                        if (rts != null) {
+                            synchronized (RTSSearchGroup.RTS_PAGES) {
+                                int oldPage = RTSSearchGroup.RTS_PAGES.getOrDefault(pl, 1);
+                                int newPage = Math.max(1, oldPage - 1);
+                                RTSEvents.PageChangeEvent event = new RTSEvents.PageChangeEvent(pl, RTSSearchGroup.RTS_PLAYERS.get(pl), oldPage, newPage, getMode());
+                                Bukkit.getPluginManager().callEvent(event);
+                                if (!event.isCancelled()) {
+                                    RTSSearchGroup.RTS_PAGES.put(pl, newPage);
+                                }
+                            }
+                        }
+                    } else if (s == AnvilGUI.Slot.OUTPUT) {
+                        // next page button clicked
+                        SearchGroup rts = RTSSearchGroup.RTS_SEARCH_GROUPS.get(pl);
+                        if (rts != null) {
+                            synchronized (RTSSearchGroup.RTS_PAGES) {
+                                int oldPage = RTSSearchGroup.RTS_PAGES.getOrDefault(pl, 1);
+                                int newPage = Math.min((rts.slimefunItemList.size() - 1) / RTSListener.FILL_ORDER.length + 1, oldPage + 1);
+                                RTSEvents.PageChangeEvent event = new RTSEvents.PageChangeEvent(pl, RTSSearchGroup.RTS_PLAYERS.get(pl), oldPage, newPage, getMode());
+                                Bukkit.getPluginManager().callEvent(event);
+                                if (!event.isCancelled()) {
+                                    RTSSearchGroup.RTS_PAGES.put(pl, newPage);
+                                }
+                            }
+                        }
+                    }
+                }, new int[]{AnvilGUI.Slot.INPUT_LEFT, AnvilGUI.Slot.INPUT_RIGHT, AnvilGUI.Slot.OUTPUT}, null);
+                return false;
+            });
+        }
 
         // Search feature!
         menu.addItem(7, ItemStackUtil.getCleanItem(ChestMenuUtils.getSearchButton(p)));
