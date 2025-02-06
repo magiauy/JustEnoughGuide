@@ -244,7 +244,7 @@ public class SearchGroup extends FlexItemGroup {
     public static void init() {
         if (!LOADED) {
             LOADED = true;
-            Debug.log("Initializing Search Group...");
+            Debug.debug("Initializing Search Group...");
             Timer.start();
             Bukkit.getScheduler().runTaskAsynchronously(JAVA_PLUGIN, () -> {
                 // Initialize asynchronously

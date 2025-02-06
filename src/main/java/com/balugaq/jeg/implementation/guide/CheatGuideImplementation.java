@@ -853,12 +853,12 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                         // previous page button clicked
                         SearchGroup rts = RTSSearchGroup.RTS_SEARCH_GROUPS.get(pl);
                         if (rts != null) {
-                            synchronized (RTSSearchGroup.RTS_PAGES) {
-                                int oldPage = RTSSearchGroup.RTS_PAGES.getOrDefault(pl, 1);
-                                int newPage = Math.max(1, oldPage - 1);
-                                RTSEvents.PageChangeEvent event = new RTSEvents.PageChangeEvent(pl, RTSSearchGroup.RTS_PLAYERS.get(pl), oldPage, newPage, getMode());
-                                Bukkit.getPluginManager().callEvent(event);
-                                if (!event.isCancelled()) {
+                            int oldPage = RTSSearchGroup.RTS_PAGES.getOrDefault(pl, 1);
+                            int newPage = Math.max(1, oldPage - 1);
+                            RTSEvents.PageChangeEvent event = new RTSEvents.PageChangeEvent(pl, RTSSearchGroup.RTS_PLAYERS.get(pl), oldPage, newPage, getMode());
+                            Bukkit.getPluginManager().callEvent(event);
+                            if (!event.isCancelled()) {
+                                synchronized (RTSSearchGroup.RTS_PAGES) {
                                     RTSSearchGroup.RTS_PAGES.put(pl, newPage);
                                 }
                             }
@@ -867,12 +867,12 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                         // next page button clicked
                         SearchGroup rts = RTSSearchGroup.RTS_SEARCH_GROUPS.get(pl);
                         if (rts != null) {
-                            synchronized (RTSSearchGroup.RTS_PAGES) {
-                                int oldPage = RTSSearchGroup.RTS_PAGES.getOrDefault(pl, 1);
-                                int newPage = Math.min((rts.slimefunItemList.size() - 1) / RTSListener.FILL_ORDER.length + 1, oldPage + 1);
-                                RTSEvents.PageChangeEvent event = new RTSEvents.PageChangeEvent(pl, RTSSearchGroup.RTS_PLAYERS.get(pl), oldPage, newPage, getMode());
-                                Bukkit.getPluginManager().callEvent(event);
-                                if (!event.isCancelled()) {
+                            int oldPage = RTSSearchGroup.RTS_PAGES.getOrDefault(pl, 1);
+                            int newPage = Math.min((rts.slimefunItemList.size() - 1) / RTSListener.FILL_ORDER.length + 1, oldPage + 1);
+                            RTSEvents.PageChangeEvent event = new RTSEvents.PageChangeEvent(pl, RTSSearchGroup.RTS_PLAYERS.get(pl), oldPage, newPage, getMode());
+                            Bukkit.getPluginManager().callEvent(event);
+                            if (!event.isCancelled()) {
+                                synchronized (RTSSearchGroup.RTS_PAGES) {
                                     RTSSearchGroup.RTS_PAGES.put(pl, newPage);
                                 }
                             }

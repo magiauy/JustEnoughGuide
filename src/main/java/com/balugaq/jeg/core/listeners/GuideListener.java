@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This class listens to {@link SlimefunGuideOpenEvent}
@@ -25,7 +26,7 @@ import java.util.Optional;
  */
 @Getter
 public class GuideListener implements Listener {
-    public static final Map<Player, SlimefunGuideMode> guideModeMap = new HashMap<>();
+    public static final Map<Player, SlimefunGuideMode> guideModeMap = new ConcurrentHashMap<>();
 
     @EventHandler(priority = EventPriority.LOW)
     public void onGuideOpen(@NotNull SlimefunGuideOpenEvent e) {

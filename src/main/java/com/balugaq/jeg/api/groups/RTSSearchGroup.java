@@ -34,9 +34,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
+@SuppressWarnings("unused")
 @NotDisplayInSurvivalMode
 @NotDisplayInCheatMode
 @Getter
@@ -45,10 +47,10 @@ public class RTSSearchGroup extends FlexItemGroup {
         meta.getPersistentDataContainer().set(RTSListener.FAKE_ITEM_KEY, PersistentDataType.STRING, "____JEG_FAKE_ITEM____");
     });
     // Use RTS_SEARCH_GROUPS, RTS_PAGES, RTS_PLAYERS or RTS_SEARCH_TERMS must be by keyword "synchronized"
-    public static final Map<Player, SearchGroup> RTS_SEARCH_GROUPS = new HashMap<>();
-    public static final Map<Player, Integer> RTS_PAGES = new HashMap<>();
-    public static final Map<Player, AnvilInventory> RTS_PLAYERS = new HashMap<>();
-    public static final Map<Player, String> RTS_SEARCH_TERMS = new HashMap<>();
+    public static final Map<Player, SearchGroup> RTS_SEARCH_GROUPS = new ConcurrentHashMap<>();
+    public static final Map<Player, Integer> RTS_PAGES = new ConcurrentHashMap<>();
+    public static final Map<Player, AnvilInventory> RTS_PLAYERS = new ConcurrentHashMap<>();
+    public static final Map<Player, String> RTS_SEARCH_TERMS = new ConcurrentHashMap<>();
     public static final Function<Player, ItemStack> BACK_ICON = (player) -> ChestMenuUtils.getBackButton(player, "", "&f左键: &7返回上一页", "&fShift + 左键: &7返回主菜单");
     public static final ItemStack INPUT_TEXT_ICON = new CustomItemStack(
             Material.PAPER,
@@ -62,37 +64,46 @@ public class RTSSearchGroup extends FlexItemGroup {
     private static final JavaPlugin JAVA_PLUGIN = JustEnoughGuide.getInstance();
 
     static {
-        Bukkit.getScheduler().runTaskTimerAsynchronously(SearchGroup.JAVA_PLUGIN, () -> {
+        Bukkit.getScheduler().runTaskTimer(SearchGroup.JAVA_PLUGIN, () -> {
+            Map<Player, AnvilInventory> copy;
             synchronized (RTS_PLAYERS) {
-                for (Map.Entry<Player, AnvilInventory> entry : RTS_PLAYERS.entrySet()) {
-                    Player player = entry.getKey();
-                    AnvilInventory inventory = entry.getValue();
-                    if (inventory == null) {
-                        continue;
-                    }
-                    InventoryView view = player.getOpenInventory();
-                    Inventory openingInventory = view.getTopInventory();
-                    if (openingInventory instanceof AnvilInventory anvilInventory && openingInventory.equals(inventory)) {
-                        synchronized (RTS_SEARCH_TERMS) {
-                            String oldSearchTerm = RTS_SEARCH_TERMS.get(player);
-                            String newSearchTerm = anvilInventory.getRenameText();
-                            if (oldSearchTerm == null || newSearchTerm == null) {
-                                RTS_SEARCH_TERMS.put(player, newSearchTerm);
-                                return;
-                            }
+                copy = new HashMap<>(RTS_PLAYERS);
+            }
 
-                            if (!oldSearchTerm.equals(newSearchTerm)) {
-                                RTS_SEARCH_TERMS.put(player, newSearchTerm);
-                                Bukkit.getScheduler().runTask(SearchGroup.JAVA_PLUGIN, () -> {
-                                    RTSEvents.SearchTermChangeEvent event = new RTSEvents.SearchTermChangeEvent(player, view, anvilInventory, oldSearchTerm, newSearchTerm, GuideListener.guideModeMap.get(player));
-                                    Bukkit.getPluginManager().callEvent(event);
-                                });
-                            }
-                        }
+            Map<Player, String> searchTermCopy;
+            synchronized (RTS_SEARCH_TERMS) {
+                searchTermCopy = new HashMap<>(RTS_SEARCH_TERMS);
+            }
+
+            Map<Player, String> writes = new HashMap<>();
+            copy.forEach((player, inventory) -> {
+                if (inventory == null) {
+                    return;
+                }
+                InventoryView view = player.getOpenInventory();
+                Inventory openingInventory = view.getTopInventory();
+                if (openingInventory instanceof AnvilInventory anvilInventory && openingInventory.equals(inventory)) {
+                    String oldSearchTerm = searchTermCopy.get(player);
+                    String newSearchTerm = anvilInventory.getRenameText();
+                    if (oldSearchTerm == null || newSearchTerm == null) {
+                        writes.put(player, newSearchTerm);
+                        return;
+                    }
+
+                    if (!oldSearchTerm.equals(newSearchTerm)) {
+                        writes.put(player, newSearchTerm);
+                        RTSEvents.SearchTermChangeEvent event = new RTSEvents.SearchTermChangeEvent(player, view, anvilInventory, oldSearchTerm, newSearchTerm, GuideListener.guideModeMap.get(player));
+                        Bukkit.getPluginManager().callEvent(event);
                     }
                 }
-            }
-        }, 1, 1);
+            });
+
+            writes.forEach((player, searchTerm) -> {
+                synchronized (RTS_SEARCH_TERMS) {
+                    RTS_SEARCH_TERMS.put(player, searchTerm);
+                }
+            });
+        }, 1, 4);
     }
 
     private final AnvilInventory anvilInventory;
@@ -185,12 +196,12 @@ public class RTSSearchGroup extends FlexItemGroup {
                 // previous page button clicked
                 SearchGroup rts = RTS_SEARCH_GROUPS.get(player);
                 if (rts != null) {
-                    synchronized (RTS_PAGES) {
-                        int oldPage = RTS_PAGES.getOrDefault(player, 1);
-                        int newPage = Math.max(1, oldPage - 1);
-                        RTSEvents.PageChangeEvent event = new RTSEvents.PageChangeEvent(player, RTS_PLAYERS.get(player), oldPage, newPage, slimefunGuideMode);
-                        Bukkit.getPluginManager().callEvent(event);
-                        if (!event.isCancelled()) {
+                    int oldPage = RTS_PAGES.getOrDefault(player, 1);
+                    int newPage = Math.max(1, oldPage - 1);
+                    RTSEvents.PageChangeEvent event = new RTSEvents.PageChangeEvent(player, RTS_PLAYERS.get(player), oldPage, newPage, slimefunGuideMode);
+                    Bukkit.getPluginManager().callEvent(event);
+                    if (!event.isCancelled()) {
+                        synchronized (RTS_PAGES) {
                             RTS_PAGES.put(player, newPage);
                         }
                     }
@@ -199,12 +210,12 @@ public class RTSSearchGroup extends FlexItemGroup {
                 // next page button clicked
                 SearchGroup rts = RTS_SEARCH_GROUPS.get(player);
                 if (rts != null) {
-                    synchronized (RTS_PAGES) {
-                        int oldPage = RTS_PAGES.getOrDefault(player, 1);
-                        int newPage = Math.min((rts.slimefunItemList.size() - 1) / RTSListener.FILL_ORDER.length + 1, oldPage + 1);
-                        RTSEvents.PageChangeEvent event = new RTSEvents.PageChangeEvent(player, RTS_PLAYERS.get(player), oldPage, newPage, slimefunGuideMode);
-                        Bukkit.getPluginManager().callEvent(event);
-                        if (!event.isCancelled()) {
+                    int oldPage = RTS_PAGES.getOrDefault(player, 1);
+                    int newPage = Math.min((rts.slimefunItemList.size() - 1) / RTSListener.FILL_ORDER.length + 1, oldPage + 1);
+                    RTSEvents.PageChangeEvent event = new RTSEvents.PageChangeEvent(player, RTS_PLAYERS.get(player), oldPage, newPage, slimefunGuideMode);
+                    Bukkit.getPluginManager().callEvent(event);
+                    if (!event.isCancelled()) {
+                        synchronized (RTS_PAGES) {
                             RTS_PAGES.put(player, newPage);
                         }
                     }
@@ -213,8 +224,8 @@ public class RTSSearchGroup extends FlexItemGroup {
         }, new int[]{AnvilGUI.Slot.INPUT_LEFT, AnvilGUI.Slot.INPUT_RIGHT, AnvilGUI.Slot.OUTPUT}, presetSearchTerm);
         synchronized (RTS_PAGES) {
             RTS_PAGES.put(player, this.page);
-            RTSEvents.PageChangeEvent event = new RTSEvents.PageChangeEvent(player, RTS_PLAYERS.get(player), page, page, slimefunGuideMode);
-            Bukkit.getPluginManager().callEvent(event);
         }
+        RTSEvents.PageChangeEvent event = new RTSEvents.PageChangeEvent(player, RTS_PLAYERS.get(player), page, page, slimefunGuideMode);
+        Bukkit.getPluginManager().callEvent(event);
     }
 }
