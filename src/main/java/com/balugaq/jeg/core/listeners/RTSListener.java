@@ -14,11 +14,13 @@ import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
+import io.github.thebusybiscuit.slimefun4.core.multiblocks.MultiBlockMachine;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.Getter;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
+import net.guizhanss.guizhanlib.minecraft.helper.inventory.ItemStackHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -45,8 +47,10 @@ import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -57,8 +61,10 @@ import java.util.Set;
 @Getter
 public class RTSListener implements Listener {
     public static final NamespacedKey FAKE_ITEM_KEY = new NamespacedKey(JustEnoughGuide.getInstance(), "fake_item");
+    public static final NamespacedKey CHEAT_AMOUNT_KEY = new NamespacedKey(JustEnoughGuide.getInstance(), "cheat_amount");
     // Use openingPlayers must be by keyword "synchronized"
     public static final Map<Player, SlimefunGuideMode> openingPlayers = new HashMap<>();
+    public static final Map<Player, List<ItemStack>> cheatItems = new HashMap<>();
     public static final Integer[] FILL_ORDER = {9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35};
 
     public static boolean isRTSPlayer(Player player) {
@@ -92,6 +98,17 @@ public class RTSListener implements Listener {
                 RTSSearchGroup.RTS_PAGES.remove(player);
             }
             JustEnoughGuide.getInstance().getRtsBackpackManager().restoreInventoryFor(player);
+            if (cheatItems.containsKey(player)) {
+                if (player.isOp() || player.hasPermission("slimefun.cheat.items")) {
+                    List<ItemStack> items = cheatItems.get(player);
+                    for (ItemStack item : items) {
+                        player.getInventory().addItem(item);
+                    }
+                    cheatItems.remove(player);
+                } else {
+                    cheatItems.remove(player);
+                }
+            }
         }
     }
 
@@ -309,7 +326,8 @@ public class RTSListener implements Listener {
                     return;
                 }
 
-                SlimefunGuideImplementation implementation = Slimefun.getRegistry().getSlimefunGuide(openingPlayers.get(player));
+                SlimefunGuideMode mode = openingPlayers.get(player);
+                SlimefunGuideImplementation implementation = Slimefun.getRegistry().getSlimefunGuide(mode);
                 PlayerProfile profile = PlayerProfile.find(player).orElse(null);
                 if (profile != null) {
                     SlimefunItem slimefunItem = SlimefunItem.getById(itemStack.getItemMeta().getPersistentDataContainer().get(FAKE_ITEM_KEY, PersistentDataType.STRING));
@@ -317,10 +335,37 @@ public class RTSListener implements Listener {
                         event.setCancelled(true);
                         return;
                     }
-                    RTSSearchGroup back = new RTSSearchGroup(RTSSearchGroup.RTS_PLAYERS.get(player), RTSSearchGroup.RTS_SEARCH_TERMS.get(player), RTSSearchGroup.RTS_PAGES.get(player));
-                    profile.getGuideHistory().add(back, 1);
-                    implementation.displayItem(profile, slimefunItem, true);
-                    quitRTS(player);
+
+                    if (mode == SlimefunGuideMode.SURVIVAL_MODE) {
+                        RTSSearchGroup back = new RTSSearchGroup(RTSSearchGroup.RTS_PLAYERS.get(player), RTSSearchGroup.RTS_SEARCH_TERMS.get(player), RTSSearchGroup.RTS_PAGES.get(player));
+                        profile.getGuideHistory().add(back, 1);
+                        implementation.displayItem(profile, slimefunItem, true);
+                        quitRTS(player);
+                    }
+                    else if (mode == SlimefunGuideMode.CHEAT_MODE) {
+                        if (player.isOp() || player.hasPermission("slimefun.cheat.items")) {
+                            if (slimefunItem instanceof MultiBlockMachine) {
+                                Slimefun.getLocalization().sendMessage(player, "guide.cheat.no-multiblocks");
+                            } else {
+                                ItemStack clonedItem = slimefunItem.getItem().clone();
+
+                                int addAmount = clonedItem.getMaxStackSize();
+                                clonedItem.setAmount(addAmount);
+
+                                cheatItems.putIfAbsent(player, new ArrayList<>());
+                                cheatItems.get(player).add(clonedItem);
+
+                                ItemMeta meta = itemStack.getItemMeta();
+                                int originalAmount = meta.getPersistentDataContainer().getOrDefault(CHEAT_AMOUNT_KEY, PersistentDataType.INTEGER, 0);
+                                int totalAmount = originalAmount + addAmount;
+                                meta.getPersistentDataContainer().set(CHEAT_AMOUNT_KEY, PersistentDataType.INTEGER, totalAmount);
+                                meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', ItemStackHelper.getDisplayName(clonedItem) + " &c已拿取物品 x" + totalAmount));
+                                itemStack.setItemMeta(meta);
+                            }
+                        } else {
+                            Slimefun.getLocalization().sendMessage(player, "messages.no-permission", true);
+                        }
+                    }
                 }
             }
 
