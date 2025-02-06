@@ -256,6 +256,7 @@ public class LocalHelper {
         addonLocals.put("sj_Expansion", "sjの粘液拓展");
         addonLocals.put("SlimefunZT", "SiciliaCraft");
         addonLocals.put("SlimefunAddon", "CAPTAINchad12自制拓展"); // Unbelievable...
+        addonLocals.put("AngleTech", "倾斜科技");
     }
 
     @Nonnull
