@@ -52,6 +52,7 @@ public class SpecialMenuProvider {
     public static @Nullable Method methodInfinityGroup_openInfinityRecipe = null;
     public static @Nullable Object objectInfinityExpansion_INFINITY = null;
     public static @Nullable Constructor<?> constructorInfinityExpansion_BackEntry = null;
+    public static @Nullable Class<?> classInfinityExpansion_Singularity = null;
     // ObsidianExpansion
     public static @Nullable Method methodObsidianExpansion_openFORGERecipe = null; // check research
     public static @Nullable Constructor<?> constructorObsidianExpansion_BackEntry = null;
@@ -159,6 +160,14 @@ public class SpecialMenuProvider {
                 methodInfinityGroup_openInfinityRecipe = method;
             }
         } catch (ClassNotFoundException ignored) {
+        }
+        try {
+            Class<?> clazz = Class.forName("io.github.mooy1.infinityexpansion.items.materials.Singularity");
+            if (clazz != null) {
+                classInfinityExpansion_Singularity = clazz;
+            }
+        } catch (ClassNotFoundException ignored) {
+            classInfinityExpansion_Singularity = null;
         }
         // ObsidianExpansion
         try {
@@ -319,10 +328,6 @@ public class SpecialMenuProvider {
     }
 
     public static void openLogiTechMenu(@Nonnull Player player, @Nonnull PlayerProfile playerProfile, @Nonnull SlimefunItem slimefunItem) throws InvocationTargetException, IllegalAccessException {
-        if (!isLogiTechItem(slimefunItem)) {
-            return;
-        }
-
         if (methodMenuUtils_createItemRecipeDisplay == null) {
             return;
         }
@@ -449,6 +454,20 @@ public class SpecialMenuProvider {
         return false;
     }
 
+    public static boolean isInfinityExpansionSingularityItem(@Nonnull SlimefunItem slimefunItem) {
+        return classInfinityExpansion_Singularity != null && slimefunItem.getClass() == classInfinityExpansion_Singularity;
+    }
+
+    public static void openInfinityExpansionSingularityMenu(@Nonnull Player player, @Nonnull PlayerProfile playerProfile, @Nonnull SlimefunItem slimefunItem) throws InvocationTargetException, IllegalAccessException {
+        if (!ENABLED_InfinityExpansion || !ENABLED_LogiTech) {
+            return;
+        }
+
+        if (isInfinityExpansionSingularityItem(slimefunItem)) {
+            openLogiTechMenu(player, playerProfile, slimefunItem);
+        }
+    }
+
     public static boolean open(@Nonnull Player player, @Nonnull PlayerProfile playerProfile, @Nonnull SlimefunGuideMode slimefunGuideMode, @Nonnull SlimefunItem slimefunItem) throws InvocationTargetException, IllegalAccessException, InstantiationException {
         if (player == null) {
             return false;
@@ -467,6 +486,10 @@ public class SpecialMenuProvider {
         } else if (isLogiTechItem(slimefunItem)) {
             openLogiTechMenu(player, playerProfile, slimefunItem);
             Debug.debug("Opened LogiTech special menu");
+            return true;
+        } else if (isInfinityExpansionSingularityItem(slimefunItem)) {
+            openInfinityExpansionSingularityMenu(player, playerProfile, slimefunItem);
+            Debug.debug("Opened InfinityExpansion Singularity special menu");
             return true;
         } else if (isInfinityItem(slimefunItem)) {
             openInfinityMenu(player, playerProfile, slimefunItem, slimefunGuideMode);
