@@ -213,7 +213,6 @@ public abstract class GuideGroup extends FlexItemGroup {
         playerProfile.getGuideHistory().add(this, page);
         if (guide instanceof JEGSlimefunGuideImplementation jeg) {
             ChestMenu menu = new ChestMenu(getDisplayName(player));
-            menu.setSize(getSize());
             if (isClassic()) {
                 jeg.createHeader(player, playerProfile, menu);
             }

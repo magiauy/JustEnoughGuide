@@ -1,6 +1,5 @@
 package com.balugaq.jeg.implementation.guide;
 
-import city.norain.slimefun4.VaultIntegration;
 import com.balugaq.jeg.api.groups.RTSSearchGroup;
 import com.balugaq.jeg.api.groups.SearchGroup;
 import com.balugaq.jeg.api.interfaces.BookmarkRelocation;
@@ -14,9 +13,8 @@ import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
 import com.balugaq.jeg.utils.LocalHelper;
+import com.balugaq.jeg.utils.SlimefunOfficialSupporter;
 import com.balugaq.jeg.utils.SpecialMenuProvider;
-import com.github.houbb.pinyin.constant.enums.PinyinStyleEnum;
-import com.github.houbb.pinyin.util.PinyinHelper;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
@@ -460,13 +458,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                             message.toArray(new String[0]))));
             menu.addMenuClickHandler(index, ChestMenuUtils.getEmptyClickHandler());
         } else if (!isCheatMode() && research != null && !profile.hasUnlocked(research)) {
-            String lore;
-
-            if (VaultIntegration.isEnabled()) {
-                lore = String.format("%.2f", research.getCurrencyCost()) + " 游戏币";
-            } else {
-                lore = research.getLevelCost() + " 级经验";
-            }
+            String lore = research.getCost() + " 级经验";
 
             menu.addItem(
                     index,
@@ -541,7 +533,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
 
     @ParametersAreNonnullByDefault
     private boolean isItemGroupAccessible(Player p, SlimefunItem slimefunItem) {
-        return Slimefun.getConfigManager().isShowHiddenItemGroupsInSearch()
+        return SlimefunOfficialSupporter.isShowHiddenItemGroups()
                 || slimefunItem.getItemGroup().isAccessible(p);
     }
 
@@ -551,15 +543,8 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
         if (itemName.isEmpty()) {
             return false;
         }
-        if (pinyin) {
-            final String pinyinName = PinyinHelper.toPinyin(itemName, PinyinStyleEnum.INPUT, "");
-            final String pinyinFirstLetter = PinyinHelper.toPinyin(itemName, PinyinStyleEnum.FIRST_LETTER, "");
-            return itemName.contains(searchTerm)
-                    || pinyinName.contains(searchTerm)
-                    || pinyinFirstLetter.contains(searchTerm);
-        } else {
-            return itemName.contains(searchTerm);
-        }
+
+        return itemName.contains(searchTerm);
     }
 
     @Override
@@ -578,7 +563,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             return;
         }
 
-        if (!Slimefun.getConfigManager().isShowVanillaRecipes()) {
+        if (!SlimefunOfficialSupporter.isShowVanillaRecipes()) {
             return;
         }
 

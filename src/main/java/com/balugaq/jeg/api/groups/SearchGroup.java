@@ -11,8 +11,7 @@ import com.balugaq.jeg.utils.ItemStackUtil;
 import com.balugaq.jeg.utils.JEGVersionedItemFlag;
 import com.balugaq.jeg.utils.LocalHelper;
 import com.balugaq.jeg.utils.ReflectionUtil;
-import com.github.houbb.pinyin.constant.enums.PinyinStyleEnum;
-import com.github.houbb.pinyin.util.PinyinHelper;
+import com.balugaq.jeg.utils.SlimefunOfficialSupporter;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
@@ -28,11 +27,11 @@ import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.chat.ChatInput;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.collections.RandomizedSet;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.items.ItemUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChatUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.AContainer;
-import net.guizhanss.guizhanlib.minecraft.helper.inventory.ItemStackHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -64,7 +63,6 @@ import java.util.stream.Collectors;
 
 /**
  * This group is used to display the search results of the search feature.
- * Supports Pinyin search and page turning.
  *
  * @author balugaq
  * @since 1.0
@@ -79,7 +77,7 @@ public class SearchGroup extends FlexItemGroup {
     public static final Map<Character, Reference<Set<SlimefunItem>>> CACHE2 = new HashMap<>(); // fast way for by display item name
     public static final Map<String, Reference<Set<String>>> SPECIAL_CACHE = new HashMap<>();
     public static final Set<String> SHARED_CHARS = new HashSet<>();
-    public static final Boolean SHOW_HIDDEN_ITEM_GROUPS = Slimefun.getConfigManager().isShowHiddenItemGroupsInSearch();
+    public static final Boolean SHOW_HIDDEN_ITEM_GROUPS = SlimefunOfficialSupporter.isShowHiddenItemGroups();
     public static final Integer DEFAULT_HASH_SIZE = 5000;
     public static final Map<SlimefunItem, Integer> ENABLED_ITEMS = new HashMap<>(DEFAULT_HASH_SIZE);
     public static final Set<SlimefunItem> AVAILABLE_ITEMS = new HashSet<>(DEFAULT_HASH_SIZE);
@@ -199,7 +197,7 @@ public class SearchGroup extends FlexItemGroup {
             return false;
         }
         String itemName =
-                ChatColor.stripColor(ItemStackHelper.getDisplayName(itemStack)).toLowerCase(Locale.ROOT);
+                ChatColor.stripColor(ItemUtils.getItemName(itemStack)).toLowerCase(Locale.ROOT);
         return isSearchFilterApplicable(itemName, searchTerm.toLowerCase(), pinyin);
     }
 
@@ -223,10 +221,12 @@ public class SearchGroup extends FlexItemGroup {
             return true;
         }
 
+        /* Not using Pinyin in EN version
         if (pinyin) {
             final String pinyinFirstLetter = PinyinHelper.toPinyin(itemName, PinyinStyleEnum.FIRST_LETTER, "");
             return pinyinFirstLetter.contains(searchTerm);
         }
+         */
 
         return false;
     }
@@ -290,7 +290,7 @@ public class SearchGroup extends FlexItemGroup {
                                                         continue;
                                                     }
                                                     for (ItemStack output : outputs) {
-                                                        cache.add(ItemStackHelper.getDisplayName(output));
+                                                        cache.add(ItemUtils.getItemName(output));
                                                     }
                                                 }
                                             }
@@ -300,7 +300,7 @@ public class SearchGroup extends FlexItemGroup {
                                                     continue;
                                                 }
                                                 for (Material material : outputs) {
-                                                    cache.add(ItemStackHelper.getDisplayName(new ItemStack(material)));
+                                                    cache.add(ItemUtils.getItemName(new ItemStack(material)));
                                                 }
                                             }
                                         }
@@ -312,7 +312,7 @@ public class SearchGroup extends FlexItemGroup {
                                             for (Object recipe : recipes) {
                                                 ItemStack input = (ItemStack) ReflectionUtil.getValue(recipe, "input");
                                                 if (input != null) {
-                                                    cache.add(ItemStackHelper.getDisplayName(input));
+                                                    cache.add(ItemUtils.getItemName(input));
                                                 }
                                                 SlimefunItemStack output = (SlimefunItemStack) ReflectionUtil.getValue(recipe, "output");
                                                 if (output != null) {
@@ -328,7 +328,7 @@ public class SearchGroup extends FlexItemGroup {
                                         if (!isInstance(item, "MaterialGenerator")) {
                                             continue;
                                         }
-                                        cache.add(ItemStackHelper.getDisplayName(new ItemStack((Material) Omaterial)));
+                                        cache.add(ItemUtils.getItemName(new ItemStack((Material) Omaterial)));
                                     }
                                 }
                                 // InfinityExpansion ResourceSynthesizer
@@ -351,7 +351,7 @@ public class SearchGroup extends FlexItemGroup {
                                     recipes.values().forEach(obj -> {
                                         ItemStack[] items = (ItemStack[]) obj;
                                         for (ItemStack itemStack : items) {
-                                            cache.add(ItemStackHelper.getDisplayName(itemStack));
+                                            cache.add(ItemUtils.getItemName(itemStack));
                                         }
                                     });
                                 }
@@ -372,14 +372,14 @@ public class SearchGroup extends FlexItemGroup {
                                             } else {
                                                 Material material = Material.getMaterial(string);
                                                 if (material != null) {
-                                                    cache.add(ItemStackHelper.getDisplayName(new ItemStack(material)));
+                                                    cache.add(ItemUtils.getItemName(new ItemStack(material)));
                                                 }
                                             }
                                         }
 
                                         ItemStack output = (ItemStack) ReflectionUtil.getValue(recipe, "output");
                                         if (output != null) {
-                                            cache.add(ItemStackHelper.getDisplayName(output));
+                                            cache.add(ItemUtils.getItemName(output));
                                         }
                                     }
                                 }
@@ -413,7 +413,7 @@ public class SearchGroup extends FlexItemGroup {
                 materials.add(Material.SANDSTONE);
                 Set<String> cache = new HashSet<>();
                 for (Material material : materials) {
-                    cache.add(ItemStackHelper.getDisplayName(new ItemStack(material)));
+                    cache.add(ItemUtils.getItemName(new ItemStack(material)));
                 }
                 SPECIAL_CACHE.put("STONEWORKS_FACTORY", new SoftReference<>(cache));
 
@@ -441,7 +441,7 @@ public class SearchGroup extends FlexItemGroup {
                             }
                             Set<String> cache2 = new HashSet<>();
                             for (ItemStack itemStack : drops.toMap().keySet()) {
-                                cache2.add(ItemStackHelper.getDisplayName(itemStack));
+                                cache2.add(ItemUtils.getItemName(itemStack));
                             }
                             SPECIAL_CACHE.put(((SlimefunItem) card).getId(), new SoftReference<>(cache2));
                         });
@@ -467,6 +467,7 @@ public class SearchGroup extends FlexItemGroup {
                             }
                         }
 
+                        /* Not using Pinyin in EN version
                         if (JustEnoughGuide.getConfigManager().isPinyinSearch()) {
                             final String pinyinFirstLetter = PinyinHelper.toPinyin(name, PinyinStyleEnum.FIRST_LETTER, "");
                             for (char c : pinyinFirstLetter.toCharArray()) {
@@ -484,6 +485,8 @@ public class SearchGroup extends FlexItemGroup {
                             }
                         }
 
+                         */
+
                         List<ItemStack> displayRecipes = null;
                         if (slimefunItem instanceof AContainer ac) {
                             displayRecipes = ac.getDisplayRecipes();
@@ -493,7 +496,7 @@ public class SearchGroup extends FlexItemGroup {
                         if (displayRecipes != null) {
                             for (ItemStack itemStack : displayRecipes) {
                                 if (itemStack != null) {
-                                    String name2 = ChatColor.stripColor(ItemStackHelper.getDisplayName(itemStack));
+                                    String name2 = ChatColor.stripColor(ItemUtils.getItemName(itemStack));
                                     for (char c : name2.toCharArray()) {
                                         char d = Character.toLowerCase(c);
                                         CACHE2.putIfAbsent(d, new SoftReference<>(new HashSet<>()));

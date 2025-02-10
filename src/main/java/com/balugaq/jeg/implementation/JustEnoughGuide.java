@@ -11,6 +11,7 @@ import com.balugaq.jeg.implementation.guide.SurvivalGuideImplementation;
 import com.balugaq.jeg.implementation.items.GroupSetup;
 import com.balugaq.jeg.utils.MinecraftVersion;
 import com.balugaq.jeg.utils.ReflectionUtil;
+import com.balugaq.jeg.utils.SlimefunOfficialSupporter;
 import com.balugaq.jeg.utils.UUIDUtils;
 import com.google.common.base.Preconditions;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
@@ -21,7 +22,6 @@ import io.github.thebusybiscuit.slimefun4.implementation.guide.CheatSheetSlimefu
 import io.github.thebusybiscuit.slimefun4.implementation.guide.SurvivalSlimefunGuide;
 import io.github.thebusybiscuit.slimefun4.utils.NumberUtils;
 import lombok.Getter;
-import net.guizhanss.guizhanlibplugin.updater.GuizhanUpdater;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -137,8 +137,10 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
         this.listenerManager = new ListenerManager(this);
         this.listenerManager.onLoad();
 
+        /*
         getLogger().info("尝试自动更新...");
         tryUpdate();
+         */
 
         getLogger().info("正在注册指令");
         this.commandManager = new CommandManager(this);
@@ -160,7 +162,7 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
                 Map<SlimefunGuideMode, SlimefunGuideImplementation> newGuides = new EnumMap<>(SlimefunGuideMode.class);
                 newGuides.put(
                         SlimefunGuideMode.SURVIVAL_MODE,
-                        survivalOverride ? new SurvivalGuideImplementation() : new SurvivalSlimefunGuide());
+                        survivalOverride ? new SurvivalGuideImplementation() : new SurvivalSlimefunGuide(SlimefunOfficialSupporter.isShowVanillaRecipes(), SlimefunOfficialSupporter.isShowHiddenItemGroups()));
                 newGuides.put(
                         SlimefunGuideMode.CHEAT_MODE,
                         cheatOverride ? new CheatGuideImplementation() : new CheatSheetSlimefunGuide());
@@ -206,6 +208,7 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
         getLogger().info("成功启用此附属");
     }
 
+    /*
     public void tryUpdate() {
         try {
             if (configManager.isAutoUpdate() && getDescription().getVersion().startsWith("Build")) {
@@ -217,6 +220,8 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
         }
     }
 
+     */
+
     @Override
     public void onDisable() {
         Preconditions.checkArgument(instance != null, "JustEnoughGuide 未被启用！");
@@ -227,7 +232,7 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
             field.setAccessible(true);
 
             Map<SlimefunGuideMode, SlimefunGuideImplementation> newGuides = new EnumMap<>(SlimefunGuideMode.class);
-            newGuides.put(SlimefunGuideMode.SURVIVAL_MODE, new SurvivalSlimefunGuide());
+            newGuides.put(SlimefunGuideMode.SURVIVAL_MODE, new SurvivalSlimefunGuide(SlimefunOfficialSupporter.isShowVanillaRecipes(), SlimefunOfficialSupporter.isShowHiddenItemGroups()));
             newGuides.put(SlimefunGuideMode.CHEAT_MODE, new CheatSheetSlimefunGuide());
             try {
                 field.set(Slimefun.getRegistry(), newGuides);

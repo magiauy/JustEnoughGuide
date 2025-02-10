@@ -1,6 +1,5 @@
 package com.balugaq.jeg.implementation.guide;
 
-import city.norain.slimefun4.VaultIntegration;
 import com.balugaq.jeg.api.groups.RTSSearchGroup;
 import com.balugaq.jeg.api.groups.SearchGroup;
 import com.balugaq.jeg.api.interfaces.BookmarkRelocation;
@@ -14,6 +13,7 @@ import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
 import com.balugaq.jeg.utils.LocalHelper;
+import com.balugaq.jeg.utils.SlimefunOfficialSupporter;
 import com.balugaq.jeg.utils.SpecialMenuProvider;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.api.events.PlayerPreResearchEvent;
@@ -95,6 +95,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
     private final @NotNull ItemStack item;
 
     public SurvivalGuideImplementation() {
+        super(SlimefunOfficialSupporter.isShowVanillaRecipes(), SlimefunOfficialSupporter.isShowHiddenItemGroups());
         ItemMeta meta = SlimefunGuide.getItem(getMode()).getItemMeta();
         String name = "";
         if (meta != null) {
@@ -106,6 +107,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
     // fallback
     @Deprecated
     public SurvivalGuideImplementation(boolean v1, boolean v2) {
+        super(v1, v2);
         ItemMeta meta = SlimefunGuide.getItem(getMode()).getItemMeta();
         String name = "";
         if (meta != null) {
@@ -150,7 +152,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
                             meta.getPersistentDataContainer().set(UNLOCK_ITEM_KEY, PersistentDataType.STRING, slimefunItem.getId());
                         }));
             } else {
-                String cost = VaultIntegration.isEnabled() ? String.format("%.2f", research.getCurrencyCost()) + " 游戏币" : research.getLevelCost() + " 级经验";
+                String cost = research.getCost() + " 级经验";
                 return ItemStackUtil.getCleanItem(
                         slimefunItem.canUse(p, false)
                                 ? item
@@ -431,13 +433,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
                             message.toArray(new String[0]))));
             menu.addMenuClickHandler(index, ChestMenuUtils.getEmptyClickHandler());
         } else if (isSurvivalMode() && research != null && !profile.hasUnlocked(research)) {
-            String lore;
-
-            if (VaultIntegration.isEnabled()) {
-                lore = String.format("%.2f", research.getCurrencyCost()) + " 游戏币";
-            } else {
-                lore = research.getLevelCost() + " 级经验";
-            }
+            String lore = research.getCost() + " 级经验";
 
             menu.addItem(
                     index,
@@ -526,7 +522,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
             return;
         }
 
-        if (!Slimefun.getConfigManager().isShowVanillaRecipes()) {
+        if (!SlimefunOfficialSupporter.isShowVanillaRecipes()) {
             return;
         }
 

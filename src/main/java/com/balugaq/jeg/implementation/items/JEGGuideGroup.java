@@ -6,6 +6,7 @@ import com.balugaq.jeg.api.interfaces.NotDisplayInCheatMode;
 import com.balugaq.jeg.api.objects.enums.FilterType;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.GuideUtil;
+import com.balugaq.jeg.utils.SlimefunOfficialSupporter;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
@@ -231,7 +232,7 @@ public class JEGGuideGroup extends ClassicGuideGroup {
                     return false;
                 });
 
-        doIf(Slimefun.getConfigManager().isResearchingEnabled(), () -> {
+        doIf(SlimefunOfficialSupporter.isEnableResearching(), () -> {
             addGuide(
                     GUIDE_SLOTS[index.getAndIncrement()],
                     new CustomItemStack(

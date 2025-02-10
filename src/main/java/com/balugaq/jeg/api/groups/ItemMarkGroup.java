@@ -1,6 +1,5 @@
 package com.balugaq.jeg.api.groups;
 
-import city.norain.slimefun4.VaultIntegration;
 import com.balugaq.jeg.api.interfaces.BookmarkRelocation;
 import com.balugaq.jeg.api.interfaces.JEGSlimefunGuideImplementation;
 import com.balugaq.jeg.api.interfaces.NotDisplayInCheatMode;
@@ -10,6 +9,7 @@ import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
 import com.balugaq.jeg.utils.JEGVersionedItemFlag;
 import com.balugaq.jeg.utils.LocalHelper;
+import com.balugaq.jeg.utils.SlimefunOfficialSupporter;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.groups.FlexItemGroup;
@@ -261,13 +261,7 @@ public class ItemMarkGroup extends FlexItemGroup {
                 if (implementation.getMode() == SlimefunGuideMode.SURVIVAL_MODE
                         && research != null
                         && !playerProfile.hasUnlocked(research)) {
-                    String lore;
-
-                    if (VaultIntegration.isEnabled()) {
-                        lore = String.format("%.2f", research.getCurrencyCost()) + " 游戏币";
-                    } else {
-                        lore = research.getLevelCost() + " 级经验";
-                    }
+                    String lore = research.getCost() + " 级经验";
 
                     itemstack = ItemStackUtil.getCleanItem(new CustomItemStack(
                             ChestMenuUtils.getNoPermissionItem(),
@@ -375,7 +369,7 @@ public class ItemMarkGroup extends FlexItemGroup {
      */
     @ParametersAreNonnullByDefault
     private boolean isItemGroupAccessible(Player p, SlimefunItem slimefunItem) {
-        return Slimefun.getConfigManager().isShowHiddenItemGroupsInSearch()
+        return SlimefunOfficialSupporter.isShowHiddenItemGroups()
                 || slimefunItem.getItemGroup().isAccessible(p);
     }
 
