@@ -1,5 +1,6 @@
 package com.balugaq.jeg.api.groups;
 
+import city.norain.slimefun4.VaultIntegration;
 import com.balugaq.jeg.api.interfaces.BookmarkRelocation;
 import com.balugaq.jeg.api.interfaces.JEGSlimefunGuideImplementation;
 import com.balugaq.jeg.api.interfaces.NotDisplayInCheatMode;
@@ -9,7 +10,6 @@ import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
 import com.balugaq.jeg.utils.JEGVersionedItemFlag;
 import com.balugaq.jeg.utils.LocalHelper;
-import com.balugaq.jeg.utils.SlimefunOfficialSupporter;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.groups.FlexItemGroup;
@@ -54,7 +54,7 @@ import java.util.logging.Level;
 @NotDisplayInCheatMode
 public class ItemMarkGroup extends FlexItemGroup {
     private static final ItemStack ICON_BACKGROUND =
-            new CustomItemStack(Material.GREEN_STAINED_GLASS_PANE, "&a&lCollect Item", "", "&7Left-click to collect the item!");
+            new CustomItemStack(Material.GREEN_STAINED_GLASS_PANE, "&a&l添加收藏物", "", "&7左键物品添加到收藏中");
     private static final JavaPlugin JAVA_PLUGIN = JustEnoughGuide.getInstance();
     private final int BACK_SLOT;
     private final int SEARCH_SLOT;
@@ -192,7 +192,7 @@ public class ItemMarkGroup extends FlexItemGroup {
             @NotNull Player player,
             @NotNull PlayerProfile playerProfile,
             @NotNull SlimefunGuideMode slimefunGuideMode) {
-        ChestMenu chestMenu = new ChestMenu("Collecting - JEG");
+        ChestMenu chestMenu = new ChestMenu("添加收藏物 - JEG");
 
         chestMenu.setEmptySlotsClickable(false);
         chestMenu.addMenuOpeningHandler(pl -> pl.playSound(pl.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1, 1));
@@ -261,16 +261,24 @@ public class ItemMarkGroup extends FlexItemGroup {
                 if (implementation.getMode() == SlimefunGuideMode.SURVIVAL_MODE
                         && research != null
                         && !playerProfile.hasUnlocked(research)) {
+                    String lore;
+
+                    if (VaultIntegration.isEnabled()) {
+                        lore = String.format("%.2f", research.getCurrencyCost()) + " 游戏币";
+                    } else {
+                        lore = research.getLevelCost() + " 级经验";
+                    }
 
                     itemstack = ItemStackUtil.getCleanItem(new CustomItemStack(
-                                    ChestMenuUtils.getNoPermissionItem(),
-                                    "&f" + ItemUtils.getItemName(slimefunItem.getItem()),
-                                    "&7" + slimefunItem.getId(),
-                                    "&4&l" + Slimefun.getLocalization().getMessage(player, "guide.locked"),
-                                    "",
-                                    "&a> Click to unlock",
-                                    "",
-                                    "&7Cost: &b" + research.getCost() + " Level(s)"));
+                            ChestMenuUtils.getNoPermissionItem(),
+                            "&f" + ItemUtils.getItemName(slimefunItem.getItem()),
+                            "&7" + slimefunItem.getId(),
+                            "&4&l" + Slimefun.getLocalization().getMessage(player, "guide.locked"),
+                            "",
+                            "&a> 单击解锁",
+                            "",
+                            "&7需要 &b",
+                            lore));
                     handler = (pl, slot, item, action) -> {
                         research.unlockFromGuide(implementation, pl, playerProfile, slimefunItem, itemGroup, page);
                         return false;
@@ -283,7 +291,7 @@ public class ItemMarkGroup extends FlexItemGroup {
                                 ChatColor.DARK_GRAY + "\u21E8 " + ChatColor.WHITE
                                         + (LocalHelper.getAddonName(itemGroup, slimefunItem.getId())) + " - "
                                         + itemGroup.getDisplayName(player),
-                                ChatColor.YELLOW + "Left-click to collect");
+                                ChatColor.YELLOW + "左键点击以收藏物品");
                         if (meta.hasLore() && meta.getLore() != null) {
                             List<String> lore = meta.getLore();
                             lore.addAll(additionLore);
@@ -300,7 +308,7 @@ public class ItemMarkGroup extends FlexItemGroup {
                     handler = (pl, slot, itm, action) -> {
                         try {
                             JustEnoughGuide.getBookmarkManager().addBookmark(pl, slimefunItem);
-                            pl.sendMessage(ChatColor.GREEN + "Collected!");
+                            pl.sendMessage(ChatColor.GREEN + "已添加到收藏列表!");
                             pl.playSound(pl.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
                         } catch (Exception | LinkageError x) {
                             printErrorMessage(pl, slimefunItem, x);
@@ -367,7 +375,7 @@ public class ItemMarkGroup extends FlexItemGroup {
      */
     @ParametersAreNonnullByDefault
     private boolean isItemGroupAccessible(Player p, SlimefunItem slimefunItem) {
-        return SlimefunOfficialSupporter.isShowHiddenItemGroups()
+        return Slimefun.getConfigManager().isShowHiddenItemGroupsInSearch()
                 || slimefunItem.getItemGroup().isAccessible(p);
     }
 
@@ -379,8 +387,8 @@ public class ItemMarkGroup extends FlexItemGroup {
      */
     @ParametersAreNonnullByDefault
     private void printErrorMessage(Player p, Throwable x) {
-        p.sendMessage("&4An internal server error has occurred. Please inform an admin, check the console for further info.");
-        JAVA_PLUGIN.getLogger().log(Level.SEVERE, "An internal server error has occurred.", x);
+        p.sendMessage("&4服务器发生了一个内部错误. 请联系管理员处理.");
+        JAVA_PLUGIN.getLogger().log(Level.SEVERE, "在打开指南书里的 Slimefun 物品时发生了意外!", x);
     }
 
     /**

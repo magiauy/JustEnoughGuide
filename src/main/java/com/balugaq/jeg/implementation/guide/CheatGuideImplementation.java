@@ -1,5 +1,6 @@
 package com.balugaq.jeg.implementation.guide;
 
+import city.norain.slimefun4.VaultIntegration;
 import com.balugaq.jeg.api.groups.RTSSearchGroup;
 import com.balugaq.jeg.api.groups.SearchGroup;
 import com.balugaq.jeg.api.interfaces.BookmarkRelocation;
@@ -13,8 +14,9 @@ import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
 import com.balugaq.jeg.utils.LocalHelper;
-import com.balugaq.jeg.utils.SlimefunOfficialSupporter;
 import com.balugaq.jeg.utils.SpecialMenuProvider;
+import com.github.houbb.pinyin.constant.enums.PinyinStyleEnum;
+import com.github.houbb.pinyin.util.PinyinHelper;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
@@ -83,10 +85,10 @@ import java.util.logging.Level;
 @SuppressWarnings({"deprecation", "unused"})
 public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements JEGSlimefunGuideImplementation {
     private static final int RTS_SLOT = 6;
-    private static final ItemStack RTS_ITEM = new CustomItemStack(Material.ANVIL, "&bReal Time Search", "");
+    private static final ItemStack RTS_ITEM = new CustomItemStack(Material.ANVIL, "&b实时搜索", "");
     private static final int MAX_ITEM_GROUPS = 36;
     private static final int SPECIAL_MENU_SLOT = 26;
-    private static final ItemStack SPECIAL_MENU_ITEM = new CustomItemStack(Material.COMPASS, "&bBig Recipe", "", "&aClick to view");
+    private static final ItemStack SPECIAL_MENU_ITEM = new CustomItemStack(Material.COMPASS, "&b超大配方", "", "&a点击打开超大配方(若有)");
     private final int[] recipeSlots = {3, 4, 5, 12, 13, 14, 21, 22, 23};
     private final @NotNull ItemStack item;
 
@@ -122,9 +124,9 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             ItemGroup itemGroup = slimefunItem.getItemGroup();
             String lore = hasPermission(p, slimefunItem)
                     ? String.format(
-                    "&fNeeds to be unlocked in " +
+                    "&f需要在 %s 中解锁",
                     (LocalHelper.getAddonName(itemGroup, slimefunItem.getId())) + " - " + itemGroup.getDisplayName(p))
-                    : "&fNo permission";
+                    : "&f无权限";
             return ItemStackUtil.getCleanItem(
                     slimefunItem.canUse(p, false)
                             ? item
@@ -458,6 +460,14 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                             message.toArray(new String[0]))));
             menu.addMenuClickHandler(index, ChestMenuUtils.getEmptyClickHandler());
         } else if (!isCheatMode() && research != null && !profile.hasUnlocked(research)) {
+            String lore;
+
+            if (VaultIntegration.isEnabled()) {
+                lore = String.format("%.2f", research.getCurrencyCost()) + " 游戏币";
+            } else {
+                lore = research.getLevelCost() + " 级经验";
+            }
+
             menu.addItem(
                     index,
                     ItemStackUtil.getCleanItem(new CustomItemStack(
@@ -466,9 +476,10 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                             "&7" + sfitem.getId(),
                             "&4&l" + Slimefun.getLocalization().getMessage(p, "guide.locked"),
                             "",
-                            "&a> Click to unlock",
+                            "&a> 单击解锁",
                             "",
-                            "&7Cost: &b" + research.getCost() + " Level(s)")));
+                            "&7需要 &b",
+                            lore)));
             menu.addMenuClickHandler(index, (pl, slot, item, action) -> {
                 research.unlockFromGuide(this, p, profile, sfitem, itemGroup, page);
                 return false;
@@ -524,13 +535,13 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
 
         String searchTerm = ChatColor.stripColor(input.toLowerCase(Locale.ROOT));
         SearchGroup group = new SearchGroup(
-                this, p, searchTerm, false, true);
+                this, p, searchTerm, JustEnoughGuide.getConfigManager().isPinyinSearch(), true);
         group.open(p, profile, getMode());
     }
 
     @ParametersAreNonnullByDefault
     private boolean isItemGroupAccessible(Player p, SlimefunItem slimefunItem) {
-        return SlimefunOfficialSupporter.isShowHiddenItemGroups()
+        return Slimefun.getConfigManager().isShowHiddenItemGroupsInSearch()
                 || slimefunItem.getItemGroup().isAccessible(p);
     }
 
@@ -540,8 +551,15 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
         if (itemName.isEmpty()) {
             return false;
         }
-
-        return itemName.contains(searchTerm);
+        if (pinyin) {
+            final String pinyinName = PinyinHelper.toPinyin(itemName, PinyinStyleEnum.INPUT, "");
+            final String pinyinFirstLetter = PinyinHelper.toPinyin(itemName, PinyinStyleEnum.FIRST_LETTER, "");
+            return itemName.contains(searchTerm)
+                    || pinyinName.contains(searchTerm)
+                    || pinyinFirstLetter.contains(searchTerm);
+        } else {
+            return itemName.contains(searchTerm);
+        }
     }
 
     @Override
@@ -560,7 +578,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             return;
         }
 
-        if (!SlimefunOfficialSupporter.isShowVanillaRecipes()) {
+        if (!Slimefun.getConfigManager().isShowVanillaRecipes()) {
             return;
         }
 
@@ -976,7 +994,8 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
         if (!isCheatMode() && history.size() > 1) {
             menu.addItem(
                     slot,
-                    ItemStackUtil.getCleanItem(ChestMenuUtils.getBackButton(p, "", "&fLeft Click: &7Go back to previous Page", "&fShift + left Click: &7Go back to Main Menu")));
+                    ItemStackUtil.getCleanItem(
+                            ChestMenuUtils.getBackButton(p, "", "&f左键: &7返回上一页", "&fShift + 左键: &7返回主菜单")));
 
             menu.addMenuClickHandler(slot, (pl, s, is, action) -> {
                 if (action.isShiftClicked()) {
@@ -1101,15 +1120,8 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
 
     @ParametersAreNonnullByDefault
     private void printErrorMessage(Player p, Throwable x) {
-        p.sendMessage(ChatColor.DARK_RED + "An internal server error has occurred. Please inform an admin, check the console for"
-                + " further info.");
-        JustEnoughGuide.getInstance().getLogger().log(Level.SEVERE, "An error occurred while displaying an item in the guide.", x);
-        JustEnoughGuide.getInstance().getLogger().warning("We are trying to fix \"" + p.getName() + "\" 's guide...");
-        PlayerProfile profile = PlayerProfile.find(p).orElse(null);
-        if (profile == null) {
-            return;
-        }
-        GuideUtil.removeLastEntry(profile.getGuideHistory());
+        p.sendMessage(ChatColor.DARK_RED + "服务器发生了一个内部错误. 请联系管理员处理.");
+        JustEnoughGuide.getInstance().getLogger().log(Level.SEVERE, "在打开指南书里的 Slimefun 物品时发生了意外!", x);
     }
 
     @ParametersAreNonnullByDefault

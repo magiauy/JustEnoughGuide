@@ -213,6 +213,7 @@ public abstract class GuideGroup extends FlexItemGroup {
         playerProfile.getGuideHistory().add(this, page);
         if (guide instanceof JEGSlimefunGuideImplementation jeg) {
             ChestMenu menu = new ChestMenu(getDisplayName(player));
+            menu.setSize(getSize());
             if (isClassic()) {
                 jeg.createHeader(player, playerProfile, menu);
             }
@@ -263,7 +264,7 @@ public abstract class GuideGroup extends FlexItemGroup {
 
             menu.open(player);
         } else {
-            player.sendMessage("§cJEG has already been disabled!");
+            player.sendMessage("§cJEG 模块未启用。你不能打开 JEG 使用指南。");
         }
     }
 
