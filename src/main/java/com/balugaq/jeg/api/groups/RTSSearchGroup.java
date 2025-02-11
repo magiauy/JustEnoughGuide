@@ -99,8 +99,10 @@ public class RTSSearchGroup extends FlexItemGroup {
             });
 
             writes.forEach((player, searchTerm) -> {
-                synchronized (RTS_SEARCH_TERMS) {
-                    RTS_SEARCH_TERMS.put(player, searchTerm);
+                if (player != null && searchTerm != null) {
+                    synchronized (RTS_SEARCH_TERMS) {
+                        RTS_SEARCH_TERMS.put(player, searchTerm);
+                    }
                 }
             });
         }, 1, 4);
