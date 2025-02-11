@@ -263,7 +263,7 @@ public abstract class GuideGroup extends FlexItemGroup {
 
             menu.open(player);
         } else {
-            player.sendMessage("§cJEG 模块未启用。你不能打开 JEG 使用指南。");
+            player.sendMessage("§cJEG has already been disabled!");
         }
     }
 

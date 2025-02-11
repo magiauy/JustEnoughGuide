@@ -106,16 +106,16 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
     }
 
     public static @NotNull JustEnoughGuide getInstance() {
-        Preconditions.checkArgument(instance != null, "JustEnoughGuide 未被启用！");
+        Preconditions.checkArgument(instance != null, "JustEnoughGuide has not been enabled yet！");
         return JustEnoughGuide.instance;
     }
 
     @Override
     public void onEnable() {
-        Preconditions.checkArgument(instance == null, "JustEnoughGuide 已被启用！");
+        Preconditions.checkArgument(instance == null, "JustEnoughGuide has already been enabled!");
         instance = this;
 
-        getLogger().info("正在加载配置文件...");
+        getLogger().info("Loading configuration...");
         saveDefaultConfig();
         this.configManager = new ConfigManager(this);
         this.configManager.onLoad();
@@ -124,16 +124,16 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
         boolean isCompatible = environmentCheck();
 
         if (!isCompatible) {
-            getLogger().warning("环境不兼容！插件已被禁用！");
+            getLogger().warning("Environment check failed!");
             onDisable();
             return;
         }
 
-        getLogger().info("正在适配其他插件...");
+        getLogger().info("Integrating with other plugins...");
         this.integrationManager = new IntegrationManager(this);
         this.integrationManager.onLoad();
 
-        getLogger().info("正在注册监听器...");
+        getLogger().info("Registering listeners...");
         this.listenerManager = new ListenerManager(this);
         this.listenerManager.onLoad();
 
@@ -142,19 +142,19 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
         tryUpdate();
          */
 
-        getLogger().info("正在注册指令");
+        getLogger().info("Registering commands...");
         this.commandManager = new CommandManager(this);
         this.commandManager.onLoad();
 
         if (!commandManager.registerCommands()) {
-            getLogger().warning("注册指令失败！");
+            getLogger().warning("Registering commands failed！");
         }
 
         final boolean survivalOverride = getConfigManager().isSurvivalImprovement();
         final boolean cheatOverride = getConfigManager().isCheatImprovement();
         if (survivalOverride || cheatOverride) {
-            getLogger().info("已开启指南替换！");
-            getLogger().info("正在替换指南...");
+            getLogger().info("Enabled guide override!");
+            getLogger().info("Overriding guide...");
             Field field = ReflectionUtil.getField(Slimefun.getRegistry().getClass(), "guides");
             if (field != null) {
                 field.setAccessible(true);
@@ -172,16 +172,16 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
 
                 }
             }
-            getLogger().info(survivalOverride ? "已开启替换生存指南" : "未开启替换生存指南");
-            getLogger().info(cheatOverride ? "已开启替换作弊指南" : "未开启替换作弊指南");
+            getLogger().info(survivalOverride ? "Replaced survival guide!" : "Not replacing survival guide!");
+            getLogger().info(cheatOverride ? "Replaced cheat guide!" : "Not replacing cheat guide!");
 
-            getLogger().info("正在加载书签...");
+            getLogger().info("Loading collect groups...");
             this.bookmarkManager = new BookmarkManager(this);
             this.bookmarkManager.onLoad();
 
-            getLogger().info("正在加载教学物品组...");
+            getLogger().info("Loading guide group...");
             GroupSetup.setup();
-            getLogger().info("教学物品组加载完毕！");
+            getLogger().info("Loaded guide group!");
         }
 
         this.rtsBackpackManager = new RTSBackpackManager(this);
@@ -205,7 +205,7 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
             }
         }
 
-        getLogger().info("成功启用此附属");
+        getLogger().info("Enabled JustEnoughGuide");
     }
 
     /*
@@ -224,7 +224,7 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
 
     @Override
     public void onDisable() {
-        Preconditions.checkArgument(instance != null, "JustEnoughGuide 未被启用！");
+        Preconditions.checkArgument(instance != null, "JustEnoughGuide has not been enabled yet!");
         GroupSetup.shutdown();
 
         Field field = ReflectionUtil.getField(Slimefun.getRegistry().getClass(), "guides");
@@ -278,7 +278,7 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
 
         // Clear instance
         instance = null;
-        getLogger().info("成功禁用此附属");
+        getLogger().info("Disabled JustEnoughGuide");
     }
 
     @NotNull
@@ -307,20 +307,20 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
         this.minecraftVersion = MinecraftVersion.getCurrentVersion();
         this.javaVersion = NumberUtils.getJavaVersion();
         if (minecraftVersion == null) {
-            getLogger().warning("无法获取到 Minecraft 版本！");
+            getLogger().warning("Cannot recognize Minecraft version!");
             return false;
         }
 
         if (minecraftVersion == MinecraftVersion.UNKNOWN) {
-            getLogger().warning("无法识别到 Minecraft 版本！");
+            getLogger().warning("Cannot recognize Minecraft version!");
         }
 
         if (!minecraftVersion.isAtLeast(RECOMMENDED_MC_VERSION)) {
-            getLogger().warning("Minecraft 版本过低，请使用 Minecraft 1." + RECOMMENDED_MC_VERSION.getMajor() + "." + RECOMMENDED_MC_VERSION.getMinor() + " 或以上版本！");
+            getLogger().warning("Minecraft too old! Please use Minecraft 1." + RECOMMENDED_MC_VERSION.getMajor() + "." + RECOMMENDED_MC_VERSION.getMinor() + " or above!");
         }
 
         if (javaVersion < RECOMMENDED_JAVA_VERSION) {
-            getLogger().warning("Java 版本过低，请使用 Java " + RECOMMENDED_JAVA_VERSION + " 或以上版本！");
+            getLogger().warning("Java too old! Please use Java " + RECOMMENDED_JAVA_VERSION + " or above!");
         }
 
         return true;

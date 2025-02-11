@@ -146,7 +146,7 @@ public class RTSListener implements Listener {
     public void onRTS(RTSEvents.SearchTermChangeEvent event) {
         Player player = event.getPlayer();
         SlimefunGuideImplementation implementation = Slimefun.getRegistry().getSlimefunGuide(event.getGuideMode());
-        SearchGroup searchGroup = new SearchGroup(implementation, player, event.getNewSearchTerm(), JustEnoughGuide.getConfigManager().isPinyinSearch(), true);
+        SearchGroup searchGroup = new SearchGroup(implementation, player, event.getNewSearchTerm(), false, true);
         if (isRTSPlayer(player)) {
             synchronized (RTSSearchGroup.RTS_SEARCH_GROUPS) {
                 RTSSearchGroup.RTS_SEARCH_GROUPS.put(player, searchGroup);
@@ -359,7 +359,7 @@ public class RTSListener implements Listener {
                                 int originalAmount = meta.getPersistentDataContainer().getOrDefault(CHEAT_AMOUNT_KEY, PersistentDataType.INTEGER, 0);
                                 int totalAmount = originalAmount + addAmount;
                                 meta.getPersistentDataContainer().set(CHEAT_AMOUNT_KEY, PersistentDataType.INTEGER, totalAmount);
-                                meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', ItemUtils.getItemName(clonedItem) + " &c已拿取物品 x" + totalAmount));
+                                meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', ItemUtils.getItemName(clonedItem) + " &cTaken x" + totalAmount));
                                 itemStack.setItemMeta(meta);
                             }
                         } else {
