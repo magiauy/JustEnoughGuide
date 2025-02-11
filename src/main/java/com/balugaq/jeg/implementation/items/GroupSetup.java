@@ -4,6 +4,7 @@ import com.balugaq.jeg.api.groups.HiddenItemsGroup;
 import com.balugaq.jeg.api.groups.NexcavateItemsGroup;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.SlimefunItemUtil;
+import com.balugaq.jeg.utils.SpecialMenuProvider;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -28,15 +29,19 @@ public class GroupSetup {
                 new NamespacedKey(JustEnoughGuide.getInstance(), "hidden_items_group"),
                 new CustomItemStack(Material.BARRIER, "&c隐藏物品"));
         hiddenItemsGroup.register(JustEnoughGuide.getInstance());
-        nexcavateItemsGroup = new NexcavateItemsGroup(
-                new NamespacedKey(JustEnoughGuide.getInstance(), "nexvacate_items_group"),
-                new CustomItemStack(Material.BLACKSTONE, "&6Nexvacate 物品"));
-        nexcavateItemsGroup.register(JustEnoughGuide.getInstance());
+        if (SpecialMenuProvider.ENABLED_Nexcavate) {
+            nexcavateItemsGroup = new NexcavateItemsGroup(
+                    new NamespacedKey(JustEnoughGuide.getInstance(), "nexvacate_items_group"),
+                    new CustomItemStack(Material.BLACKSTONE, "&6Nexvacate 物品"));
+            nexcavateItemsGroup.register(JustEnoughGuide.getInstance());
+        }
     }
 
     public static void shutdown() {
         SlimefunItemUtil.unregisterItemGroup(guideGroup);
         SlimefunItemUtil.unregisterItemGroup(hiddenItemsGroup);
-        SlimefunItemUtil.unregisterItemGroup(nexcavateItemsGroup);
+        if (SpecialMenuProvider.ENABLED_Nexcavate) {
+            SlimefunItemUtil.unregisterItemGroup(nexcavateItemsGroup);
+        }
     }
 }

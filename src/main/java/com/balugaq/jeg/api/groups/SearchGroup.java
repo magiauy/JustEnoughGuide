@@ -521,7 +521,7 @@ public class SearchGroup extends FlexItemGroup {
                                         for (char c : s.toCharArray()) {
                                             char d = Character.toLowerCase(c);
                                             CACHE2.putIfAbsent(d, new SoftReference<>(new HashSet<>()));
-                                            Reference<Set<SlimefunItem>> ref = CACHE.get(d);
+                                            Reference<Set<SlimefunItem>> ref = CACHE2.get(d);
                                             if (ref != null) {
                                                 Set<SlimefunItem> set = ref.get();
                                                 if (set != null) {
