@@ -83,7 +83,7 @@ import java.util.logging.Level;
 @SuppressWarnings({"deprecation", "unused"})
 public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements JEGSlimefunGuideImplementation {
     private static final int RTS_SLOT = 6;
-    private static final ItemStack RTS_ITEM = new CustomItemStack(Material.ANVIL, "&Real Time Search", "");
+    private static final ItemStack RTS_ITEM = new CustomItemStack(Material.ANVIL, "&bReal Time Search", "");
     private static final int MAX_ITEM_GROUPS = 36;
     private static final int SPECIAL_MENU_SLOT = 26;
     private static final ItemStack SPECIAL_MENU_ITEM = new CustomItemStack(Material.COMPASS, "&bBig Recipe", "", "&aClick to view");

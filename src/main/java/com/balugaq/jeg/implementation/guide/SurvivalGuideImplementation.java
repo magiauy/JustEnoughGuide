@@ -85,7 +85,7 @@ import java.util.logging.Level;
 @SuppressWarnings({"deprecation", "unused"})
 public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implements JEGSlimefunGuideImplementation {
     private static final int RTS_SLOT = 6;
-    private static final ItemStack RTS_ITEM = new CustomItemStack(Material.ANVIL, "&Real Time Search", "");
+    private static final ItemStack RTS_ITEM = new CustomItemStack(Material.ANVIL, "&bReal Time Search", "");
     private static final NamespacedKey UNLOCK_ITEM_KEY = new NamespacedKey(JustEnoughGuide.getInstance(), "unlock_item");
     private static final int MAX_ITEM_GROUPS = 36;
     private static final int SPECIAL_MENU_SLOT = 26;

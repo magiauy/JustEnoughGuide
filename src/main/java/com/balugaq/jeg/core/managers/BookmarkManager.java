@@ -1,6 +1,7 @@
 package com.balugaq.jeg.core.managers;
 
 import com.balugaq.jeg.api.managers.AbstractManager;
+import com.balugaq.jeg.utils.Debug;
 import com.balugaq.jeg.utils.ItemStackUtil;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerBackpack;
@@ -218,20 +219,24 @@ public class BookmarkManager extends AbstractManager {
 
             ItemStack bookmarksItem = contents[DATA_ITEM_SLOT];
             if (bookmarksItem == null || bookmarksItem.getType() == Material.AIR) {
-                return null;
+                continue;
             }
 
             if (!isBookmarksItem(bookmarksItem, player)) {
-                return null;
+                continue;
             }
 
+            boolean pass = true;
             for (int i = 0; i < contents.length; i++) {
                 if (i != DATA_ITEM_SLOT && contents[i] != null && contents[i].getType() != Material.AIR) {
-                    return null;
+                    pass = false;
+                    break;
                 }
             }
 
-            return backpack;
+            if (pass) {
+                return backpack;
+            }
         }
 
         return null;

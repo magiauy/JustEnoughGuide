@@ -24,6 +24,7 @@ import java.util.UUID;
 @Getter
 public class RTSBackpackManager extends AbstractManager {
     private static final int IDENTIFIER_SLOT = 53;
+    @Deprecated
     private static final String BACKPACK_NAME = "JEGRTSBackpack";
     private static final NamespacedKey STATUS_KEY = new NamespacedKey(JustEnoughGuide.getInstance(), "status");
     private static final String OPEN_STATUS = "open";
