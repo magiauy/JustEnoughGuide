@@ -134,7 +134,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
             String lore = hasPermission(p, slimefunItem)
                     ? String.format(
                     "&f需要在 %s 中解锁",
-                    (LocalHelper.getAddonName(itemGroup, slimefunItem.getId())) + " - " + itemGroup.getDisplayName(p))
+                    (LocalHelper.getAddonName(itemGroup, slimefunItem.getId())) + ChatColor.WHITE + " - " + LocalHelper.getDisplayName(itemGroup, p))
                     : "&f无权限";
             Research research = slimefunItem.getResearch();
             if (research == null) {

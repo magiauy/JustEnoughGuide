@@ -266,8 +266,8 @@ public class BookmarkGroup extends FlexItemGroup {
                         List<String> additionLore = List.of(
                                 "",
                                 ChatColor.DARK_GRAY + "\u21E8 " + ChatColor.WHITE
-                                        + (LocalHelper.getAddonName(itemGroup, slimefunItem.getId())) + " - "
-                                        + itemGroup.getDisplayName(player),
+                                        + (LocalHelper.getAddonName(itemGroup, slimefunItem.getId())) + ChatColor.WHITE + " - "
+                                        + LocalHelper.getDisplayName(itemGroup, player),
                                 ChatColor.YELLOW + "右键以取消收藏物品");
                         if (meta.hasLore() && meta.getLore() != null) {
                             List<String> lore = meta.getLore();

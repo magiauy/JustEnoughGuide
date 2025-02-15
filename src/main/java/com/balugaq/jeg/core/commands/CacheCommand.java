@@ -84,11 +84,11 @@ public class CacheCommand implements JEGCommand {
 
     @Override
     public void onCommand(
-            @NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+            @NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
         onCheck(sender, args);
     }
 
-    private void onCheck(@NotNull CommandSender sender, @NotNull String[] args) {
+    private void onCheck(@NotNull CommandSender sender, @NotNull String @NotNull [] args) {
         if (args.length < 3) {
             sender.sendMessage(ChatColor.RED + "Usage: /jeg cache <section> <key>");
             return;
