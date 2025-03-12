@@ -5,6 +5,7 @@ import com.balugaq.jeg.api.groups.NexcavateItemsGroup;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.SlimefunItemUtil;
 import com.balugaq.jeg.utils.SpecialMenuProvider;
+import com.balugaq.jeg.utils.compatibility.Converter;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -23,16 +24,16 @@ public class GroupSetup {
     public static void setup() {
         guideGroup = new JEGGuideGroup(
                 new NamespacedKey(JustEnoughGuide.getInstance(), "jeg_guide_group"),
-                new CustomItemStack(Material.KNOWLEDGE_BOOK, "&bJEG 使用指南"));
+                Converter.getItem(Material.KNOWLEDGE_BOOK, "&bJEG 使用指南"));
         guideGroup.register(JustEnoughGuide.getInstance());
         hiddenItemsGroup = new HiddenItemsGroup(
                 new NamespacedKey(JustEnoughGuide.getInstance(), "hidden_items_group"),
-                new CustomItemStack(Material.BARRIER, "&c隐藏物品"));
+                Converter.getItem(Material.BARRIER, "&c隐藏物品"));
         hiddenItemsGroup.register(JustEnoughGuide.getInstance());
         if (SpecialMenuProvider.ENABLED_Nexcavate) {
             nexcavateItemsGroup = new NexcavateItemsGroup(
                     new NamespacedKey(JustEnoughGuide.getInstance(), "nexvacate_items_group"),
-                    new CustomItemStack(Material.BLACKSTONE, "&6Nexvacate 物品"));
+                    Converter.getItem(Material.BLACKSTONE, "&6Nexvacate 物品"));
             nexcavateItemsGroup.register(JustEnoughGuide.getInstance());
         }
     }

@@ -2,6 +2,7 @@ package com.balugaq.jeg.core.managers;
 
 import com.balugaq.jeg.api.managers.AbstractManager;
 import com.balugaq.jeg.utils.ItemStackUtil;
+import com.balugaq.jeg.utils.compatibility.Converter;
 import com.xzavier0722.mc.plugin.slimefun4.storage.controller.ProfileDataController;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerBackpack;
@@ -67,7 +68,7 @@ public class BookmarkManager extends AbstractManager {
             bookmarksItem = markItemAsBookmarksItem(new ItemStack(Material.DIRT), player);
         }
 
-        ItemStack itemStack = ItemStackUtil.getCleanItem(new CustomItemStack(bookmarksItem, itemMeta -> {
+        ItemStack itemStack = ItemStackUtil.getCleanItem(Converter.getItem(bookmarksItem, itemMeta -> {
             List<String> lore = itemMeta.getLore();
             if (lore == null) {
                 lore = new ArrayList<>();
@@ -134,7 +135,7 @@ public class BookmarkManager extends AbstractManager {
             return;
         }
 
-        ItemStack itemStack = ItemStackUtil.getCleanItem(new CustomItemStack(bookmarksItem, itemMeta -> {
+        ItemStack itemStack = ItemStackUtil.getCleanItem(Converter.getItem(bookmarksItem, itemMeta -> {
             List<String> lore = itemMeta.getLore();
             if (lore == null) {
                 return;
@@ -164,7 +165,7 @@ public class BookmarkManager extends AbstractManager {
             return;
         }
 
-        ItemStack itemStack = ItemStackUtil.getCleanItem(new CustomItemStack(bookmarksItem, itemMeta -> {
+        ItemStack itemStack = ItemStackUtil.getCleanItem(Converter.getItem(bookmarksItem, itemMeta -> {
             itemMeta.setLore(new ArrayList<>());
         }));
 
@@ -252,7 +253,7 @@ public class BookmarkManager extends AbstractManager {
 
     @NotNull
     public ItemStack markItemAsBookmarksItem(@NotNull ItemStack itemStack, @NotNull Player player) {
-        return ItemStackUtil.getCleanItem(new CustomItemStack(itemStack, itemMeta -> {
+        return ItemStackUtil.getCleanItem(Converter.getItem(itemStack, itemMeta -> {
             itemMeta.getPersistentDataContainer()
                     .set(
                             BOOKMARKS_KEY,

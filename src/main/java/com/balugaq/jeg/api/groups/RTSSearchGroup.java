@@ -7,6 +7,7 @@ import com.balugaq.jeg.core.listeners.GuideListener;
 import com.balugaq.jeg.core.listeners.RTSListener;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.GuideUtil;
+import com.balugaq.jeg.utils.compatibility.Converter;
 import io.github.thebusybiscuit.slimefun4.api.items.groups.FlexItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.core.guide.GuideHistory;
@@ -44,7 +45,7 @@ import java.util.function.Function;
 @NotDisplayInCheatMode
 @Getter
 public class RTSSearchGroup extends FlexItemGroup {
-    public static final ItemStack PLACEHOLDER = new CustomItemStack(new CustomItemStack(Material.LIGHT_GRAY_STAINED_GLASS_PANE, "&a", "&a", "&a"), meta -> {
+    public static final ItemStack PLACEHOLDER = Converter.getItem(Converter.getItem(Material.LIGHT_GRAY_STAINED_GLASS_PANE, "&a", "&a", "&a"), meta -> {
         meta.getPersistentDataContainer().set(RTSListener.FAKE_ITEM_KEY, PersistentDataType.STRING, "____JEG_FAKE_ITEM____");
     });
     // Use RTS_SEARCH_GROUPS, RTS_PAGES, RTS_PLAYERS or RTS_SEARCH_TERMS must be by keyword "synchronized"
@@ -53,7 +54,7 @@ public class RTSSearchGroup extends FlexItemGroup {
     public static final Map<Player, AnvilInventory> RTS_PLAYERS = new ConcurrentHashMap<>();
     public static final Map<Player, String> RTS_SEARCH_TERMS = new ConcurrentHashMap<>();
     public static final Function<Player, ItemStack> BACK_ICON = (player) -> ChestMenuUtils.getBackButton(player, "", "&f左键: &7返回上一页", "&fShift + 左键: &7返回主菜单");
-    public static final ItemStack INPUT_TEXT_ICON = new CustomItemStack(
+    public static final ItemStack INPUT_TEXT_ICON = Converter.getItem(
             Material.PAPER,
             "&f搜索: &7在上方输入搜索词",
             "&fNote:",

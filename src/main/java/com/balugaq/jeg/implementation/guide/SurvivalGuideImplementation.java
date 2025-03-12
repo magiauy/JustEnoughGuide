@@ -15,6 +15,7 @@ import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
 import com.balugaq.jeg.utils.LocalHelper;
 import com.balugaq.jeg.utils.SpecialMenuProvider;
+import com.balugaq.jeg.utils.compatibility.Converter;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.api.events.PlayerPreResearchEvent;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
@@ -85,11 +86,11 @@ import java.util.logging.Level;
 @SuppressWarnings({"deprecation", "unused"})
 public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implements JEGSlimefunGuideImplementation {
     private static final int RTS_SLOT = 6;
-    private static final ItemStack RTS_ITEM = new CustomItemStack(Material.ANVIL, "&b实时搜索", "");
+    private static final ItemStack RTS_ITEM = Converter.getItem(Material.ANVIL, "&b实时搜索", "");
     private static final NamespacedKey UNLOCK_ITEM_KEY = new NamespacedKey(JustEnoughGuide.getInstance(), "unlock_item");
     private static final int MAX_ITEM_GROUPS = 36;
     private static final int SPECIAL_MENU_SLOT = 26;
-    private static final ItemStack SPECIAL_MENU_ITEM = new CustomItemStack(Material.COMPASS, "&b超大配方", "", "&a点击打开超大配方(若有)");
+    private static final ItemStack SPECIAL_MENU_ITEM = Converter.getItem(Material.COMPASS, "&b超大配方", "", "&a点击打开超大配方(若有)");
 
     private final int[] recipeSlots = {3, 4, 5, 12, 13, 14, 21, 22, 23};
     private final @NotNull ItemStack item;
@@ -125,7 +126,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
 
             ItemGroup itemGroup = slimefunItem.getItemGroup();
             if (slimefunItem.isDisabledIn(p.getWorld())) {
-                return ItemStackUtil.getCleanItem(new CustomItemStack(
+                return ItemStackUtil.getCleanItem(Converter.getItem(
                         Material.BARRIER,
                         ItemUtils.getItemName(item),
                         "&4&l 该 Slimefun 物品已被禁用"
@@ -141,7 +142,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
                 return ItemStackUtil.getCleanItem(
                         slimefunItem.canUse(p, false)
                                 ? item
-                                : new CustomItemStack(new CustomItemStack(
+                                : Converter.getItem(Converter.getItem(
                                 Material.BARRIER,
                                 ItemUtils.getItemName(item),
                                 "&4&l" + Slimefun.getLocalization().getMessage(p, "guide.locked"),
@@ -154,7 +155,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
                 return ItemStackUtil.getCleanItem(
                         slimefunItem.canUse(p, false)
                                 ? item
-                                : new CustomItemStack(new CustomItemStack(
+                                : Converter.getItem(Converter.getItem(
                                 Material.BARRIER,
                                 ItemUtils.getItemName(item),
                                 "&4&l" + Slimefun.getLocalization().getMessage(p, "guide.locked"),
@@ -332,7 +333,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
 
             menu.addItem(
                     index,
-                    ItemStackUtil.getCleanItem(new CustomItemStack(
+                    ItemStackUtil.getCleanItem(Converter.getItem(
                             Material.BARRIER,
                             "&4"
                                     + Slimefun.getLocalization().getMessage(p, "guide.locked")
@@ -425,7 +426,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
             List<String> message = Slimefun.getPermissionsService().getLore(sfitem);
             menu.addItem(
                     index,
-                    ItemStackUtil.getCleanItem(new CustomItemStack(
+                    ItemStackUtil.getCleanItem(Converter.getItem(
                             ChestMenuUtils.getNoPermissionItem(),
                             sfitem.getItemName(),
                             message.toArray(new String[0]))));
@@ -441,7 +442,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
 
             menu.addItem(
                     index,
-                    ItemStackUtil.getCleanItem(new CustomItemStack(
+                    ItemStackUtil.getCleanItem(Converter.getItem(
                             ChestMenuUtils.getNoPermissionItem(),
                             "&f" + ItemUtils.getItemName(sfitem.getItem()),
                             "&7" + sfitem.getId(),
@@ -567,7 +568,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
                     null,
                     null,
                     ItemStackUtil.getCleanItem(
-                            new CustomItemStack(Material.BARRIER, "&4我们不知道如何展示该配方 :/")),
+                            Converter.getItem(Material.BARRIER, "&4我们不知道如何展示该配方 :/")),
                     null,
                     null,
                     null,
@@ -662,7 +663,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         if (wiki.isPresent()) {
             menu.addItem(
                     8,
-                    ItemStackUtil.getCleanItem(new CustomItemStack(
+                    ItemStackUtil.getCleanItem(Converter.getItem(
                             Material.KNOWLEDGE_BOOK,
                             ChatColor.WHITE + Slimefun.getLocalization().getMessage(p, "guide.tooltips.wiki"),
                             "",
@@ -1010,7 +1011,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
                 for (int i = 27; i < 36; i++) {
                     menu.replaceExistingItem(
                             i,
-                            ItemStackUtil.getCleanItem(new CustomItemStack(
+                            ItemStackUtil.getCleanItem(Converter.getItem(
                                     ChestMenuUtils.getBackground(), sfItem.getRecipeSectionLabel(p))));
                     menu.addMenuClickHandler(i, ChestMenuUtils.getEmptyClickHandler());
                 }
