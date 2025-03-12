@@ -83,7 +83,7 @@ public class Converter {
                     handle.type().generic(), handle, handle.type()
             ).getTarget().invokeExact();
         } catch (Throwable t) {
-            throw new RuntimeException(t);
+            return null;
         }
     }
 
