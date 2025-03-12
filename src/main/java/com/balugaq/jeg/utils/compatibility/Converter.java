@@ -25,11 +25,11 @@ public class Converter {
     public static @NotNull ItemStack getItem(SlimefunItemStack slimefunItemStack) {
         return asBukkit(slimefunItemStack);
     }
-    
+
     public static @NotNull ItemStack getItem(ItemStack itemStack) {
         return new CustomItemStack(itemStack).asBukkit();
     }
-    
+
     public static @NotNull ItemStack getItem(Material material) {
         return new CustomItemStack(material).asBukkit();
     }
@@ -41,6 +41,7 @@ public class Converter {
     public static @NotNull ItemStack getItem(@NotNull Material material, @NotNull Consumer<ItemMeta> meta) {
         return new CustomItemStack(material, meta).asBukkit();
     }
+
     public static @NotNull ItemStack getItem(@NotNull ItemStack itemStack, @Nullable String name, @NotNull String @NotNull ... lore) {
         return new CustomItemStack(itemStack, name, lore).asBukkit();
     }

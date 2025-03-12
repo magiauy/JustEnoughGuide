@@ -102,6 +102,10 @@ public class CustomItemStack implements Cloneable {
         this.delegate.setType(material);
     }
 
+    public static @NotNull String color(@NotNull String raw) {
+        return ChatColor.translateAlternateColorCodes('&', Preconditions.checkNotNull(raw, "raw cannot be null"));
+    }
+
     // 委托方法封装
     public ItemStack getDelegate() {
         return delegate.clone();
@@ -135,10 +139,6 @@ public class CustomItemStack implements Cloneable {
         return delegate.setItemMeta(meta);
     }
 
-    public static @NotNull String color(@NotNull String raw) {
-        return ChatColor.translateAlternateColorCodes('&', Preconditions.checkNotNull(raw, "raw cannot be null"));
-    }
-
     public @NotNull CustomItemStack addFlags(@NotNull ItemFlag @NotNull ... flags) {
         Preconditions.checkNotNull(flags, "flags cannot be null");
         Preconditions.checkArgument(flags.length > 0, "flags cannot be empty");
@@ -170,7 +170,7 @@ public class CustomItemStack implements Cloneable {
     public @NotNull CustomItemStack setCustomModelData(@Range(from = 0, to = Integer.MAX_VALUE) int data) {
         return editItemMeta(meta -> meta.setCustomModelData(data == 0 ? null : data));
     }
-    
+
     public @NotNull CustomItemStack clone() {
         return new CustomItemStack(getDelegate());
     }
