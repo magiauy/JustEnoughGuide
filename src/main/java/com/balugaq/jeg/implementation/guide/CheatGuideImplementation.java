@@ -14,6 +14,7 @@ import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
 import com.balugaq.jeg.utils.LocalHelper;
+import com.balugaq.jeg.utils.Models;
 import com.balugaq.jeg.utils.SpecialMenuProvider;
 import com.balugaq.jeg.utils.compatibility.Converter;
 import com.github.houbb.pinyin.constant.enums.PinyinStyleEnum;
@@ -86,10 +87,10 @@ import java.util.logging.Level;
 @SuppressWarnings({"deprecation", "unused"})
 public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements JEGSlimefunGuideImplementation {
     private static final int RTS_SLOT = 6;
-    private static final ItemStack RTS_ITEM = Converter.getItem(Material.ANVIL, "&b实时搜索", "");
+    private static final ItemStack RTS_ITEM = Models.RTS_ITEM;
     private static final int MAX_ITEM_GROUPS = 36;
     private static final int SPECIAL_MENU_SLOT = 26;
-    private static final ItemStack SPECIAL_MENU_ITEM = Converter.getItem(Material.COMPASS, "&b超大配方", "", "&a点击打开超大配方(若有)");
+    private static final ItemStack SPECIAL_MENU_ITEM = Models.SPECIAL_MENU_ITEM;
     private final int[] recipeSlots = {3, 4, 5, 12, 13, 14, 21, 22, 23};
     private final @NotNull ItemStack item;
 
