@@ -29,7 +29,6 @@ import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.chat.ChatInput;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.collections.RandomizedSet;
-import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import io.github.thebusybiscuit.slimefun4.utils.ChatUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.matl114.logitech.SlimefunItem.CustomSlimefunItem;
@@ -174,10 +173,10 @@ public class SearchGroup extends FlexItemGroup {
     /**
      * Checks if the search filter is applicable.
      *
-     * @param slimefunItem The Slimefun item.
+     * @param slimefunItem The Slimefun item to check.
      * @param searchTerm   The search term.
      * @param pinyin       Whether the search term is in Pinyin.
-     * @return True if the search filter is applicable.
+     * @return True if the search filter is applicable, false otherwise.
      */
     @ParametersAreNonnullByDefault
     public static boolean isSearchFilterApplicable(SlimefunItem slimefunItem, String searchTerm, boolean pinyin) {
@@ -191,10 +190,10 @@ public class SearchGroup extends FlexItemGroup {
     /**
      * Checks if the search filter is applicable.
      *
-     * @param itemStack  The item stack.
+     * @param itemStack  The item stack to check.
      * @param searchTerm The search term.
      * @param pinyin     Whether the search term is in Pinyin.
-     * @return True if the search filter is applicable.
+     * @return True if the search filter is applicable, false otherwise.
      */
     @ParametersAreNonnullByDefault
     public static boolean isSearchFilterApplicable(ItemStack itemStack, String searchTerm, boolean pinyin) {
@@ -209,10 +208,10 @@ public class SearchGroup extends FlexItemGroup {
     /**
      * Checks if the search filter is applicable.
      *
-     * @param itemName   The item name.
+     * @param itemName   The item name to check.
      * @param searchTerm The search term.
      * @param pinyin     Whether the search term is in Pinyin.
-     * @return True if the search filter is applicable.
+     * @return True if the search filter is applicable, false otherwise.
      */
     @ParametersAreNonnullByDefault
     public static boolean isSearchFilterApplicable(String itemName, String searchTerm, boolean pinyin) {
@@ -234,16 +233,39 @@ public class SearchGroup extends FlexItemGroup {
         return false;
     }
 
+    /**
+     * Filters items based on the given filter type, filter value, and pinyin flag.
+     *
+     * @param player      The player.
+     * @param filterType  The filter type.
+     * @param filterValue The filter value.
+     * @param pinyin      Whether the search term is in Pinyin.
+     * @param items       The list of items to filter.
+     * @return The filtered list of items.
+     */
     public static @NotNull List<SlimefunItem> filterItems(Player player, @NotNull FilterType filterType, @NotNull String filterValue, boolean pinyin, @NotNull List<SlimefunItem> items) {
         String lowerFilterValue = filterValue.toLowerCase();
         return items.stream().filter(item -> filterType.getFilter().apply(player, item, lowerFilterValue, pinyin)).toList();
     }
 
+    /**
+     * Filters items based on the given filter type, filter value, and pinyin flag.
+     *
+     * @param player      The player.
+     * @param filterType  The filter type.
+     * @param filterValue The filter value.
+     * @param pinyin      Whether the search term is in Pinyin.
+     * @param items       The set of items to filter.
+     * @return The filtered set of items.
+     */
     public static @NotNull Set<SlimefunItem> filterItems(Player player, @NotNull FilterType filterType, @NotNull String filterValue, boolean pinyin, @NotNull Set<SlimefunItem> items) {
         String lowerFilterValue = filterValue.toLowerCase();
         return items.stream().filter(item -> filterType.getFilter().apply(player, item, lowerFilterValue, pinyin)).collect(Collectors.toSet());
     }
 
+    /**
+     * Initializes the search group by populating caches and preparing data.
+     */
     public static void init() {
         if (!LOADED) {
             LOADED = true;
@@ -644,6 +666,13 @@ public class SearchGroup extends FlexItemGroup {
         }
     }
 
+    /**
+     * Checks if the given Slimefun item is an instance of the specified class.
+     *
+     * @param item            The Slimefun item.
+     * @param classSimpleName The simple name of the class to check against.
+     * @return True if the item is an instance of the specified class, false otherwise.
+     */
     public static boolean isInstance(@NotNull SlimefunItem item, String classSimpleName) {
         Class<?> clazz = item.getClass();
         while (clazz != SlimefunItem.class) {
@@ -844,7 +873,7 @@ public class SearchGroup extends FlexItemGroup {
     }
 
     /**
-     * Gets all matched items.
+     * Gets all matched items based on the search term and pinyin flag.
      *
      * @param p          The player.
      * @param searchTerm The search term.
@@ -884,6 +913,14 @@ public class SearchGroup extends FlexItemGroup {
                 "This item has caused an error message to be thrown while viewing it in the Slimefun" + " guide.", x);
     }
 
+    /**
+     * Filters items based on the search term and pinyin flag.
+     *
+     * @param player     The player.
+     * @param searchTerm The search term.
+     * @param pinyin     Whether the search term is in Pinyin.
+     * @return The matched items.
+     */
     public @NotNull List<SlimefunItem> filterItems(@NotNull Player player, @NotNull String searchTerm, boolean pinyin) {
         StringBuilder actualSearchTermBuilder = new StringBuilder();
         String[] split = searchTerm.split(" ");
@@ -891,9 +928,9 @@ public class SearchGroup extends FlexItemGroup {
         for (String s : split) {
             boolean isFilter = false;
             for (FilterType filterType : FilterType.values()) {
-                if (s.startsWith(filterType.getFlag()) && s.length() > filterType.getFlag().length()) {
+                if (s.startsWith(filterType.getSymbol()) && s.length() > filterType.getSymbol().length()) {
                     isFilter = true;
-                    String filterValue = s.substring(filterType.getFlag().length());
+                    String filterValue = s.substring(filterType.getSymbol().length());
                     filters.put(filterType, filterValue);
                     break;
                 }
@@ -906,7 +943,7 @@ public class SearchGroup extends FlexItemGroup {
 
         String actualSearchTerm = actualSearchTermBuilder.toString().trim();
         for (FilterType filterType : FilterType.values()) {
-            String flag = filterType.getFlag();
+            String flag = filterType.getSymbol();
             // Quote the flag to be used as a literal replacement
             actualSearchTerm = actualSearchTerm.replaceAll(Pattern.quote(flag), Matcher.quoteReplacement(flag));
         }
@@ -993,11 +1030,29 @@ public class SearchGroup extends FlexItemGroup {
         return merge.stream().sorted((a, b) -> ENABLED_ITEMS.get(a) < ENABLED_ITEMS.get(b) ? -1 : 1).toList();
     }
 
+    /**
+     * Filters items based on the given filter type, filter value, and pinyin flag.
+     *
+     * @param filterType  The filter type.
+     * @param filterValue The filter value.
+     * @param pinyin      Whether the search term is in Pinyin.
+     * @param items       The list of items to filter.
+     * @return The filtered list of items.
+     */
     public @NotNull List<SlimefunItem> filterItems(@NotNull FilterType filterType, @NotNull String filterValue, boolean pinyin, @NotNull List<SlimefunItem> items) {
         String lowerFilterValue = filterValue.toLowerCase();
         return items.stream().filter(item -> filterType.getFilter().apply(player, item, lowerFilterValue, pinyin)).toList();
     }
 
+    /**
+     * Filters items based on the given filter type, filter value, and pinyin flag.
+     *
+     * @param filterType  The filter type.
+     * @param filterValue The filter value.
+     * @param pinyin      Whether the search term is in Pinyin.
+     * @param items       The set of items to filter.
+     * @return The filtered set of items.
+     */
     public @NotNull Set<SlimefunItem> filterItems(@NotNull FilterType filterType, @NotNull String filterValue, boolean pinyin, @NotNull Set<SlimefunItem> items) {
         String lowerFilterValue = filterValue.toLowerCase();
         return items.stream().filter(item -> filterType.getFilter().apply(player, item, lowerFilterValue, pinyin)).collect(Collectors.toSet());

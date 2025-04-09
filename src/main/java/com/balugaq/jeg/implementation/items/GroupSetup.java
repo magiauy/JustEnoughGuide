@@ -6,7 +6,6 @@ import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.SlimefunItemUtil;
 import com.balugaq.jeg.utils.SpecialMenuProvider;
 import com.balugaq.jeg.utils.compatibility.Converter;
-import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 
@@ -21,6 +20,9 @@ public class GroupSetup {
     public static HiddenItemsGroup hiddenItemsGroup;
     public static NexcavateItemsGroup nexcavateItemsGroup;
 
+    /**
+     * Registers all the JEG groups.
+     */
     public static void setup() {
         guideGroup = new JEGGuideGroup(
                 new NamespacedKey(JustEnoughGuide.getInstance(), "jeg_guide_group"),
@@ -38,6 +40,9 @@ public class GroupSetup {
         }
     }
 
+    /**
+     * Unregisters all the JEG groups.
+     */
     public static void shutdown() {
         SlimefunItemUtil.unregisterItemGroup(guideGroup);
         SlimefunItemUtil.unregisterItemGroup(hiddenItemsGroup);

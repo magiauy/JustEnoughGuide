@@ -42,7 +42,6 @@ import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.implementation.guide.CheatSheetSlimefunGuide;
 import io.github.thebusybiscuit.slimefun4.implementation.tasks.AsyncRecipeChoiceTask;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.chat.ChatInput;
-import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.ItemUtils;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.recipes.MinecraftRecipe;
 import io.github.thebusybiscuit.slimefun4.utils.ChatUtils;
@@ -262,6 +261,12 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
         return groups;
     }
 
+    /**
+     * Opens the main menu of the guide for a player.
+     *
+     * @param profile The player profile associated with the player.
+     * @param page    The page number to open.
+     */
     @Override
     public void openMainMenu(@NotNull PlayerProfile profile, int page) {
         Player p = profile.getPlayer();

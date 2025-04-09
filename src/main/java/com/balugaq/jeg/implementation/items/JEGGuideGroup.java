@@ -14,7 +14,6 @@ import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
-import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.Getter;
 import org.bukkit.Material;
@@ -297,7 +296,7 @@ public class JEGGuideGroup extends ClassicGuideGroup {
                     return false;
                 });
 
-        String flag_recipe_item_name = FilterType.BY_RECIPE_ITEM_NAME.getFlag();
+        String flag_recipe_item_name = FilterType.BY_RECIPE_ITEM_NAME.getSymbol();
         addGuide(
                 GUIDE_SLOTS[index.getAndIncrement()],
                 Converter.getItem(
@@ -318,7 +317,7 @@ public class JEGGuideGroup extends ClassicGuideGroup {
                     return false;
                 });
 
-        String flag_recipe_type_name = FilterType.BY_RECIPE_TYPE_NAME.getFlag();
+        String flag_recipe_type_name = FilterType.BY_RECIPE_TYPE_NAME.getSymbol();
         addGuide(
                 GUIDE_SLOTS[index.getAndIncrement()],
                 Converter.getItem(
@@ -339,7 +338,7 @@ public class JEGGuideGroup extends ClassicGuideGroup {
                     return false;
                 });
 
-        String flag_display_item_name = FilterType.BY_DISPLAY_ITEM_NAME.getFlag();
+        String flag_display_item_name = FilterType.BY_DISPLAY_ITEM_NAME.getSymbol();
         addGuide(
                 GUIDE_SLOTS[index.getAndIncrement()],
                 Converter.getItem(
@@ -360,7 +359,7 @@ public class JEGGuideGroup extends ClassicGuideGroup {
                     return false;
                 });
 
-        String flag_addon_name = FilterType.BY_ADDON_NAME.getFlag();
+        String flag_addon_name = FilterType.BY_ADDON_NAME.getSymbol();
         addGuide(
                 GUIDE_SLOTS[index.getAndIncrement()],
                 Converter.getItem(
@@ -381,7 +380,7 @@ public class JEGGuideGroup extends ClassicGuideGroup {
                     return false;
                 });
 
-        String flag_item_name = FilterType.BY_ITEM_NAME.getFlag();
+        String flag_item_name = FilterType.BY_ITEM_NAME.getSymbol();
         addGuide(
                 GUIDE_SLOTS[index.getAndIncrement()],
                 Converter.getItem(
@@ -402,7 +401,7 @@ public class JEGGuideGroup extends ClassicGuideGroup {
                     return false;
                 });
 
-        String flag_material_name = FilterType.BY_MATERIAL_NAME.getFlag();
+        String flag_material_name = FilterType.BY_MATERIAL_NAME.getSymbol();
         addGuide(
                 GUIDE_SLOTS[index.getAndIncrement()],
                 Converter.getItem(

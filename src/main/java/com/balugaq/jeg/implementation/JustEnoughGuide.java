@@ -110,6 +110,9 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
         return JustEnoughGuide.instance;
     }
 
+    /**
+     * Initializes the plugin and sets up all necessary components.
+     */
     @Override
     public void onEnable() {
         Preconditions.checkArgument(instance == null, "JustEnoughGuide 已被启用！");
@@ -118,7 +121,7 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
         getLogger().info("正在加载配置文件...");
         saveDefaultConfig();
         this.configManager = new ConfigManager(this);
-        this.configManager.onLoad();
+        this.configManager.load();
 
         // Checking environment compatibility
         boolean isCompatible = environmentCheck();
@@ -131,18 +134,18 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
 
         getLogger().info("正在适配其他插件...");
         this.integrationManager = new IntegrationManager(this);
-        this.integrationManager.onLoad();
+        this.integrationManager.load();
 
         getLogger().info("正在注册监听器...");
         this.listenerManager = new ListenerManager(this);
-        this.listenerManager.onLoad();
+        this.listenerManager.load();
 
         getLogger().info("尝试自动更新...");
         tryUpdate();
 
         getLogger().info("正在注册指令");
         this.commandManager = new CommandManager(this);
-        this.commandManager.onLoad();
+        this.commandManager.load();
 
         if (!commandManager.registerCommands()) {
             getLogger().warning("注册指令失败！");
@@ -175,7 +178,7 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
 
             getLogger().info("正在加载书签...");
             this.bookmarkManager = new BookmarkManager(this);
-            this.bookmarkManager.onLoad();
+            this.bookmarkManager.load();
 
             getLogger().info("正在加载教学物品组...");
             GroupSetup.setup();
@@ -183,7 +186,7 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
         }
 
         this.rtsBackpackManager = new RTSBackpackManager(this);
-        this.rtsBackpackManager.onLoad();
+        this.rtsBackpackManager.load();
 
         File uuidFile = new File(getDataFolder(), "server-uuid");
         if (uuidFile.exists()) {
@@ -206,6 +209,9 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
         getLogger().info("成功启用此附属");
     }
 
+    /**
+     * Attempts to update the plugin if auto-update is enabled.
+     */
     public void tryUpdate() {
         try {
             if (configManager.isAutoUpdate() && getDescription().getVersion().startsWith("Build")) {
@@ -217,6 +223,9 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
         }
     }
 
+    /**
+     * Cleans up resources and shuts down the plugin.
+     */
     @Override
     public void onDisable() {
         Preconditions.checkArgument(instance != null, "JustEnoughGuide 未被启用！");
@@ -238,27 +247,27 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
 
         // Managers
         if (this.bookmarkManager != null) {
-            this.bookmarkManager.onUnload();
+            this.bookmarkManager.unload();
         }
 
         if (this.integrationManager != null) {
-            this.integrationManager.onUnload();
+            this.integrationManager.unload();
         }
 
         if (this.commandManager != null) {
-            this.commandManager.onUnload();
+            this.commandManager.unload();
         }
 
         if (this.listenerManager != null) {
-            this.listenerManager.onUnload();
+            this.listenerManager.unload();
         }
 
         if (this.rtsBackpackManager != null) {
-            this.rtsBackpackManager.onUnload();
+            this.rtsBackpackManager.unload();
         }
 
         if (this.configManager != null) {
-            this.configManager.onUnload();
+            this.configManager.unload();
         }
 
         this.bookmarkManager = null;
@@ -276,28 +285,52 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
         getLogger().info("成功禁用此附属");
     }
 
-    @NotNull
+    /**
+     * Returns the JavaPlugin instance.
+     *
+     * @return the JavaPlugin instance
+     */
     @Override
     public JavaPlugin getJavaPlugin() {
         return this;
     }
 
+    /**
+     * Returns the bug tracker URL for the plugin.
+     *
+     * @return the bug tracker URL
+     */
     @Nullable
     @Override
     public String getBugTrackerURL() {
         return MessageFormat.format("https://github.com/{0}/{1}/issues/", this.username, this.repo);
     }
 
+    /**
+     * Logs a debug message if debugging is enabled.
+     *
+     * @param message the debug message to log
+     */
     public void debug(String message) {
         if (getConfigManager().isDebug()) {
             getLogger().warning("[DEBUG] " + message);
         }
     }
 
+    /**
+     * Returns the version of the plugin.
+     *
+     * @return the version of the plugin
+     */
     public @NotNull String getVersion() {
         return getDescription().getVersion();
     }
 
+    /**
+     * Checks the environment compatibility for the plugin.
+     *
+     * @return true if the environment is compatible, false otherwise
+     */
     private boolean environmentCheck() {
         this.minecraftVersion = MinecraftVersion.getCurrentVersion();
         this.javaVersion = NumberUtils.getJavaVersion();
@@ -321,6 +354,11 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
         return true;
     }
 
+    /**
+     * Checks if debugging is enabled.
+     *
+     * @return true if debugging is enabled, false otherwise
+     */
     public boolean isDebug() {
         return getConfigManager().isDebug();
     }
