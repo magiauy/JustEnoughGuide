@@ -96,28 +96,13 @@ public enum FilterType {
         SlimefunAddon addon = item.getAddon();
         String localAddonName = LocalHelper.getAddonName(addon, item.getId()).toLowerCase();
         String originModName = (addon == null ? "Slimefun" : addon.getName()).toLowerCase();
-        if (localAddonName.contains(lowerFilterValue) || originModName.contains(lowerFilterValue)) {
-            return true;
-        }
-        return false;
+        return localAddonName.contains(lowerFilterValue) || originModName.contains(lowerFilterValue);
     }),
-    BY_ITEM_NAME("!", (player, item, lowerFilterValue, pinyin) -> {
-        if (SearchGroup.isSearchFilterApplicable(item, lowerFilterValue, pinyin)) {
-            return true;
-        }
-        return false;
-    }),
-    BY_MATERIAL_NAME("~", (player, item, lowerFilterValue, pinyin) -> {
-        if (item.getItem().getType().name().toLowerCase().contains(lowerFilterValue)) {
-            return true;
-        }
-        return false;
-    });
+    BY_ITEM_NAME("!", (player, item, lowerFilterValue, pinyin) -> SearchGroup.isSearchFilterApplicable(item, lowerFilterValue, pinyin)),
+    BY_MATERIAL_NAME("~", (player, item, lowerFilterValue, pinyin) -> item.getItem().getType().name().toLowerCase().contains(lowerFilterValue));
 
-    private @Nonnull
-    final String symbol;
-    private @Nonnull
-    final DiFunction<Player, SlimefunItem, String, Boolean, Boolean> filter;
+    private @Nonnull final String symbol;
+    private @Nonnull final DiFunction<Player, SlimefunItem, String, Boolean, Boolean> filter;
 
     /**
      * Constructs a new FilterType instance with the specified flag and filter function.

@@ -10,6 +10,7 @@ import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import lombok.experimental.UtilityClass;
+import me.matl114.logitech.SlimefunItem.CustomSlimefunItem;
 import me.matl114.logitech.Utils.UtilClass.MenuClass.CustomMenu;
 import me.matl114.logitech.Utils.UtilClass.MenuClass.CustomMenuHandler;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
@@ -142,7 +143,14 @@ public class SpecialMenuProvider {
 
         SlimefunItem item = SlimefunItem.getById("LOGITECH_BUG");
         if (item != null) {
-            classLogiTech_CustomSlimefunItem = (Class<? extends RecipeDisplayItem>) ReflectionUtil.getClass(item.getClass(), "CustomSlimefunItem");
+            try {
+                classLogiTech_CustomSlimefunItem = (Class<? extends RecipeDisplayItem>) Class.forName("me.matl114.logitech.SlimefunItem.CustomSlimefunItem");
+            } catch (ClassNotFoundException | ClassCastException ignored) {
+                try {
+                    classLogiTech_CustomSlimefunItem = (Class<? extends RecipeDisplayItem>) Class.forName("me.matl114.logitech.core.CustomSlimefunItem");
+                } catch (ClassNotFoundException | ClassCastException ignored2) {
+                }
+            }
         }
 
         // InfinityExpansion
