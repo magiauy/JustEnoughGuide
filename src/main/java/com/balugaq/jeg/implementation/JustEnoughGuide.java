@@ -9,6 +9,7 @@ import com.balugaq.jeg.core.managers.RTSBackpackManager;
 import com.balugaq.jeg.implementation.guide.CheatGuideImplementation;
 import com.balugaq.jeg.implementation.guide.SurvivalGuideImplementation;
 import com.balugaq.jeg.implementation.items.GroupSetup;
+import com.balugaq.jeg.implementation.option.BeginnersGuideOption;
 import com.balugaq.jeg.utils.MinecraftVersion;
 import com.balugaq.jeg.utils.ReflectionUtil;
 import com.balugaq.jeg.utils.UUIDUtils;
@@ -16,6 +17,7 @@ import com.google.common.base.Preconditions;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
+import io.github.thebusybiscuit.slimefun4.core.guide.options.SlimefunGuideSettings;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.implementation.guide.CheatSheetSlimefunGuide;
 import io.github.thebusybiscuit.slimefun4.implementation.guide.SurvivalSlimefunGuide;
@@ -49,9 +51,9 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
     public static final int RECOMMENDED_JAVA_VERSION = 17;
     public static final MinecraftVersion RECOMMENDED_MC_VERSION = MinecraftVersion.MINECRAFT_1_16;
     @Getter
-    private static @Nullable JustEnoughGuide instance;
+    private static JustEnoughGuide instance;
     @Getter
-    private static @Nullable UUID serverUUID;
+    private static UUID serverUUID;
     @Getter
     private final @NotNull String username;
     @Getter
@@ -59,19 +61,19 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
     @Getter
     private final @NotNull String branch;
     @Getter
-    private @Nullable BookmarkManager bookmarkManager;
+    private BookmarkManager bookmarkManager;
     @Getter
-    private @Nullable CommandManager commandManager;
+    private CommandManager commandManager;
     @Getter
-    private @Nullable ConfigManager configManager;
+    private ConfigManager configManager;
     @Getter
-    private @Nullable IntegrationManager integrationManager;
+    private IntegrationManager integrationManager;
     @Getter
-    private @Nullable ListenerManager listenerManager;
+    private ListenerManager listenerManager;
     @Getter
-    private @Nullable RTSBackpackManager rtsBackpackManager;
+    private RTSBackpackManager rtsBackpackManager;
     @Getter
-    private @Nullable MinecraftVersion minecraftVersion;
+    private MinecraftVersion minecraftVersion;
     @Getter
     private int javaVersion;
 
@@ -81,27 +83,27 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
         this.branch = "master";
     }
 
-    public static @Nullable BookmarkManager getBookmarkManager() {
+    public static BookmarkManager getBookmarkManager() {
         return getInstance().bookmarkManager;
     }
 
-    public static @Nullable CommandManager getCommandManager() {
+    public static CommandManager getCommandManager() {
         return getInstance().commandManager;
     }
 
-    public static @Nullable ConfigManager getConfigManager() {
+    public static ConfigManager getConfigManager() {
         return getInstance().configManager;
     }
 
-    public static @Nullable IntegrationManager getIntegrationManager() {
+    public static IntegrationManager getIntegrationManager() {
         return getInstance().integrationManager;
     }
 
-    public static @Nullable ListenerManager getListenerManager() {
+    public static ListenerManager getListenerManager() {
         return getInstance().listenerManager;
     }
 
-    public static @Nullable MinecraftVersion getMCVersion() {
+    public static  MinecraftVersion getMCVersion() {
         return getInstance().minecraftVersion;
     }
 
@@ -183,6 +185,12 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
             getLogger().info("正在加载教学物品组...");
             GroupSetup.setup();
             getLogger().info("教学物品组加载完毕！");
+
+            if (getConfigManager().isBeginnerOption()) {
+                getLogger().info("正在加载新手指南选项...");
+                SlimefunGuideSettings.addOption(new BeginnersGuideOption());
+                getLogger().info("新手指南选项加载完毕！");
+            }
         }
 
         this.rtsBackpackManager = new RTSBackpackManager(this);

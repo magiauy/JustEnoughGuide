@@ -35,6 +35,7 @@ public class ConfigManager extends AbstractManager {
     private final boolean PINYIN_SEARCH;
     private final boolean BOOKMARK;
     private final boolean RTS_SEARCH;
+    private final boolean BEGINNER_OPTION;
     private final @NotNull String SURVIVAL_GUIDE_TITLE;
     private final @NotNull String CHEAT_GUIDE_TITLE;
     private final @NotNull JavaPlugin plugin;
@@ -51,6 +52,7 @@ public class ConfigManager extends AbstractManager {
         this.SURVIVAL_GUIDE_TITLE = plugin.getConfig().getString("guide.survival-guide-title", "&2&lSlimefun 指南 (生存模式)         &e&l爱来自 JustEnoughGuide");
         this.CHEAT_GUIDE_TITLE = plugin.getConfig().getString("guide.cheat-guide-title", "&c&lSlimefun 指南 (作弊模式)         &e&l爱来自 JustEnoughGuide");
         this.RTS_SEARCH = plugin.getConfig().getBoolean("improvements.rts-search", true);
+        this.BEGINNER_OPTION = plugin.getConfig().getBoolean("improvements.beginner-option", true);
     }
 
     private void setupDefaultConfig() {
@@ -112,6 +114,9 @@ public class ConfigManager extends AbstractManager {
 
     public boolean isBookmark() {
         return BOOKMARK;
+    }
+    public boolean isBeginnerOption() {
+        return BEGINNER_OPTION;
     }
 
     public @NotNull String getSurvivalGuideTitle() {

@@ -11,6 +11,7 @@ improvements:
   pinyin-search: true
   bookmark: true
   rts-search: true
+  beginner-option: true
 
 # Do not change this value unless you know what you are doing.
 config-version: 1.5

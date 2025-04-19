@@ -11,11 +11,13 @@ import com.balugaq.jeg.api.objects.events.RTSEvents;
 import com.balugaq.jeg.core.listeners.GuideListener;
 import com.balugaq.jeg.core.listeners.RTSListener;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
+import com.balugaq.jeg.utils.clickhandler.GroupLinker;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
 import com.balugaq.jeg.utils.LocalHelper;
 import com.balugaq.jeg.utils.Models;
 import com.balugaq.jeg.utils.SpecialMenuProvider;
+import com.balugaq.jeg.utils.clickhandler.BeginnerUtils;
 import com.balugaq.jeg.utils.compatibility.Converter;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.api.events.PlayerPreResearchEvent;
@@ -488,6 +490,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
 
                 return false;
             });
+            BeginnerUtils.applyBeginnersGuide(this, menu, index);
         }
     }
 
@@ -725,21 +728,6 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
 
         MenuClickHandler clickHandler = (pl, slot, itemstack, action) -> {
             try {
-                if (!action.isRightClicked() && action.isShiftClicked()) {
-                    // Open the item's item group if exists
-                    final SlimefunItem sfItem = SlimefunItem.getByItem(itemstack);
-                    if (sfItem != null) {
-                        final ItemGroup itemGroup = sfItem.getItemGroup();
-                        if (itemGroup != null) {
-                            int page = 1;
-                            if (isTaggedGroupType(itemGroup)) {
-                                page = (itemGroup.getItems().indexOf(sfItem) / 36) + 1;
-                            }
-                            openItemGroup(profile, itemGroup, page);
-                            return false;
-                        }
-                    }
-                }
                 if (itemstack != null && itemstack.getType() != Material.AIR) {
                     String id = itemstack.getItemMeta().getPersistentDataContainer().get(UNLOCK_ITEM_KEY, PersistentDataType.STRING);
                     if (id != null) {
@@ -791,6 +779,8 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         for (int i = 0; i < 9; i++) {
             ItemStack recipeItem = getDisplayItem(p, isSlimefunRecipe, recipe[i]);
             menu.addItem(recipeSlots[i], ItemStackUtil.getCleanItem(recipeItem), clickHandler);
+            BeginnerUtils.applyBeginnersGuide(this, menu, recipeSlots[i]);
+            GroupLinker.applyGroupLinker(this, menu, recipeSlots[i]);
 
             if (recipeItem != null && item instanceof MultiBlockMachine) {
                 for (Tag<Material> tag : MultiBlock.getSupportedTags()) {
@@ -803,7 +793,11 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         }
 
         menu.addItem(10, ItemStackUtil.getCleanItem(recipeType.getItem(p)), ChestMenuUtils.getEmptyClickHandler());
+        BeginnerUtils.applyBeginnersGuide(this, menu, 10);
+        GroupLinker.applyGroupLinker(this, menu, 10);
         menu.addItem(16, ItemStackUtil.getCleanItem(output), ChestMenuUtils.getEmptyClickHandler());
+        BeginnerUtils.applyBeginnersGuide(this, menu, 16);
+        GroupLinker.applyGroupLinker(this, menu, 16);
     }
 
     @ParametersAreNonnullByDefault
@@ -956,7 +950,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         }
     }
 
-    private boolean isTaggedGroupType(@NotNull ItemGroup itemGroup) {
+    public static boolean isTaggedGroupType(@NotNull ItemGroup itemGroup) {
         Class<?> clazz = itemGroup.getClass();
         return clazz == ItemGroup.class
                 || clazz == SubItemGroup.class
@@ -1084,6 +1078,8 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
                     displayItem(profile, itemstack, 0, true);
                     return false;
                 });
+                BeginnerUtils.applyBeginnersGuide(this, menu, slot);
+                GroupLinker.applyGroupLinker(this, menu, slot);
             }
         } else {
             menu.replaceExistingItem(slot, ItemStackUtil.getCleanItem(null));
