@@ -181,6 +181,20 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         return Slimefun.getPermissionsService().hasPermission(p, item);
     }
 
+    public static boolean isTaggedGroupType(@NotNull ItemGroup itemGroup) {
+        Class<?> clazz = itemGroup.getClass();
+        return clazz == ItemGroup.class
+                || clazz == SubItemGroup.class
+                || clazz == NestedItemGroup.class
+                || clazz == LockedItemGroup.class
+                || clazz == SeasonalItemGroup.class
+                || clazz == SearchGroup.class
+                || itemGroup instanceof BookmarkRelocation
+                || clazz.getName().equalsIgnoreCase("me.voper.slimeframe.implementation.groups.ChildGroup")
+                || clazz.getName().endsWith("DummyItemGroup")
+                || clazz.getName().endsWith("SubGroup");
+    }
+
     @Override
     public @NotNull SlimefunGuideMode getMode() {
         return SlimefunGuideMode.SURVIVAL_MODE;
@@ -818,46 +832,50 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
 
         if (JustEnoughGuide.getConfigManager().isRTSSearch()) {
             menu.addItem(RTS_SLOT, ItemStackUtil.getCleanItem(RTS_ITEM), (pl, slot, itemstack, action) -> {
-                RTSSearchGroup.newRTSInventoryFor(pl, getMode(), (s, stateSnapshot) -> {
-                    if (s == AnvilGUI.Slot.INPUT_LEFT) {
-                        // back button clicked
-                        GuideHistory history = profile.getGuideHistory();
-                        if (action.isShiftClicked()) {
-                            openMainMenu(profile, profile.getGuideHistory().getMainMenuPage());
-                        } else {
-                            history.goBack(this);
-                        }
-                        return;
-                    } else if (s == AnvilGUI.Slot.INPUT_RIGHT) {
-                        // previous page button clicked
-                        SearchGroup rts = RTSSearchGroup.RTS_SEARCH_GROUPS.get(pl);
-                        if (rts != null) {
-                            int oldPage = RTSSearchGroup.RTS_PAGES.getOrDefault(pl, 1);
-                            int newPage = Math.max(1, oldPage - 1);
-                            RTSEvents.PageChangeEvent event = new RTSEvents.PageChangeEvent(pl, RTSSearchGroup.RTS_PLAYERS.get(pl), oldPage, newPage, getMode());
-                            Bukkit.getPluginManager().callEvent(event);
-                            if (!event.isCancelled()) {
-                                synchronized (RTSSearchGroup.RTS_PAGES) {
-                                    RTSSearchGroup.RTS_PAGES.put(pl, newPage);
+                try {
+                    RTSSearchGroup.newRTSInventoryFor(pl, getMode(), (s, stateSnapshot) -> {
+                        if (s == AnvilGUI.Slot.INPUT_LEFT) {
+                            // back button clicked
+                            GuideHistory history = profile.getGuideHistory();
+                            if (action.isShiftClicked()) {
+                                openMainMenu(profile, profile.getGuideHistory().getMainMenuPage());
+                            } else {
+                                history.goBack(this);
+                            }
+                            return;
+                        } else if (s == AnvilGUI.Slot.INPUT_RIGHT) {
+                            // previous page button clicked
+                            SearchGroup rts = RTSSearchGroup.RTS_SEARCH_GROUPS.get(pl);
+                            if (rts != null) {
+                                int oldPage = RTSSearchGroup.RTS_PAGES.getOrDefault(pl, 1);
+                                int newPage = Math.max(1, oldPage - 1);
+                                RTSEvents.PageChangeEvent event = new RTSEvents.PageChangeEvent(pl, RTSSearchGroup.RTS_PLAYERS.get(pl), oldPage, newPage, getMode());
+                                Bukkit.getPluginManager().callEvent(event);
+                                if (!event.isCancelled()) {
+                                    synchronized (RTSSearchGroup.RTS_PAGES) {
+                                        RTSSearchGroup.RTS_PAGES.put(pl, newPage);
+                                    }
+                                }
+                            }
+                        } else if (s == AnvilGUI.Slot.OUTPUT) {
+                            // next page button clicked
+                            SearchGroup rts = RTSSearchGroup.RTS_SEARCH_GROUPS.get(pl);
+                            if (rts != null) {
+                                int oldPage = RTSSearchGroup.RTS_PAGES.getOrDefault(pl, 1);
+                                int newPage = Math.min((rts.slimefunItemList.size() - 1) / RTSListener.FILL_ORDER.length + 1, oldPage + 1);
+                                RTSEvents.PageChangeEvent event = new RTSEvents.PageChangeEvent(pl, RTSSearchGroup.RTS_PLAYERS.get(pl), oldPage, newPage, getMode());
+                                Bukkit.getPluginManager().callEvent(event);
+                                if (!event.isCancelled()) {
+                                    synchronized (RTSSearchGroup.RTS_PAGES) {
+                                        RTSSearchGroup.RTS_PAGES.put(pl, newPage);
+                                    }
                                 }
                             }
                         }
-                    } else if (s == AnvilGUI.Slot.OUTPUT) {
-                        // next page button clicked
-                        SearchGroup rts = RTSSearchGroup.RTS_SEARCH_GROUPS.get(pl);
-                        if (rts != null) {
-                            int oldPage = RTSSearchGroup.RTS_PAGES.getOrDefault(pl, 1);
-                            int newPage = Math.min((rts.slimefunItemList.size() - 1) / RTSListener.FILL_ORDER.length + 1, oldPage + 1);
-                            RTSEvents.PageChangeEvent event = new RTSEvents.PageChangeEvent(pl, RTSSearchGroup.RTS_PLAYERS.get(pl), oldPage, newPage, getMode());
-                            Bukkit.getPluginManager().callEvent(event);
-                            if (!event.isCancelled()) {
-                                synchronized (RTSSearchGroup.RTS_PAGES) {
-                                    RTSSearchGroup.RTS_PAGES.put(pl, newPage);
-                                }
-                            }
-                        }
-                    }
-                }, new int[]{AnvilGUI.Slot.INPUT_LEFT, AnvilGUI.Slot.INPUT_RIGHT, AnvilGUI.Slot.OUTPUT}, null);
+                    }, new int[]{AnvilGUI.Slot.INPUT_LEFT, AnvilGUI.Slot.INPUT_RIGHT, AnvilGUI.Slot.OUTPUT}, null);
+                } catch (Throwable ignored) {
+                    p.sendMessage(ChatColor.RED + "不兼容的版本! 无法使用实时搜索");
+                }
                 return false;
             });
         }
@@ -948,20 +966,6 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
                         });
             }
         }
-    }
-
-    public static boolean isTaggedGroupType(@NotNull ItemGroup itemGroup) {
-        Class<?> clazz = itemGroup.getClass();
-        return clazz == ItemGroup.class
-                || clazz == SubItemGroup.class
-                || clazz == NestedItemGroup.class
-                || clazz == LockedItemGroup.class
-                || clazz == SeasonalItemGroup.class
-                || clazz == SearchGroup.class
-                || itemGroup instanceof BookmarkRelocation
-                || clazz.getName().equalsIgnoreCase("me.voper.slimeframe.implementation.groups.ChildGroup")
-                || clazz.getName().endsWith("DummyItemGroup")
-                || clazz.getName().endsWith("SubGroup");
     }
 
     private void addBackButton(@NotNull ChestMenu menu, int slot, @NotNull Player p, @NotNull PlayerProfile profile) {

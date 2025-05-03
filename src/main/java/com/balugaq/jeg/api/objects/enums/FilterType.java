@@ -101,8 +101,10 @@ public enum FilterType {
     BY_ITEM_NAME("!", (player, item, lowerFilterValue, pinyin) -> SearchGroup.isSearchFilterApplicable(item, lowerFilterValue, pinyin)),
     BY_MATERIAL_NAME("~", (player, item, lowerFilterValue, pinyin) -> item.getItem().getType().name().toLowerCase().contains(lowerFilterValue));
 
-    private @Nonnull final String symbol;
-    private @Nonnull final DiFunction<Player, SlimefunItem, String, Boolean, Boolean> filter;
+    private @Nonnull
+    final String symbol;
+    private @Nonnull
+    final DiFunction<Player, SlimefunItem, String, Boolean, Boolean> filter;
 
     /**
      * Constructs a new FilterType instance with the specified flag and filter function.

@@ -699,6 +699,19 @@ public class SearchGroup extends FlexItemGroup {
         return false;
     }
 
+    public static boolean inBlacklist(SlimefunItem slimefunItem) {
+        return inBlacklist(slimefunItem.getItemName());
+    }
+
+    public static boolean inBlacklist(String itemName) {
+        for (String s : BLACKLIST) {
+            if (ChatColor.stripColor(itemName).contains(s)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Always returns false.
      *
@@ -1073,18 +1086,5 @@ public class SearchGroup extends FlexItemGroup {
     public @NotNull Set<SlimefunItem> filterItems(@NotNull FilterType filterType, @NotNull String filterValue, boolean pinyin, @NotNull Set<SlimefunItem> items) {
         String lowerFilterValue = filterValue.toLowerCase();
         return items.stream().filter(item -> filterType.getFilter().apply(player, item, lowerFilterValue, pinyin)).collect(Collectors.toSet());
-    }
-
-    public static boolean inBlacklist(SlimefunItem slimefunItem) {
-        return inBlacklist(slimefunItem.getItemName());
-    }
-
-    public static boolean inBlacklist(String itemName) {
-        for (String s : BLACKLIST) {
-            if (ChatColor.stripColor(itemName).contains(s)) {
-                return true;
-            }
-        }
-        return false;
     }
 }

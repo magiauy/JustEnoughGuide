@@ -115,6 +115,7 @@ public class ConfigManager extends AbstractManager {
     public boolean isBookmark() {
         return BOOKMARK;
     }
+
     public boolean isBeginnerOption() {
         return BEGINNER_OPTION;
     }

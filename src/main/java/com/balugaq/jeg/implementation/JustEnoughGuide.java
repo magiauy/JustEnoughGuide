@@ -103,7 +103,7 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
         return getInstance().listenerManager;
     }
 
-    public static  MinecraftVersion getMCVersion() {
+    public static MinecraftVersion getMCVersion() {
         return getInstance().minecraftVersion;
     }
 
