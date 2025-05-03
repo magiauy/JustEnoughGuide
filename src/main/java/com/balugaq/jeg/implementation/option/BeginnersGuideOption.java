@@ -4,9 +4,6 @@ import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.compatibility.Converter;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.core.guide.options.SlimefunGuideOption;
-
-import java.util.Optional;
-
 import io.github.thebusybiscuit.slimefun4.core.guide.options.SlimefunGuideSettings;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.data.persistent.PersistentDataAPI;
 import org.bukkit.Material;
@@ -14,6 +11,8 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
 
 public class BeginnersGuideOption implements SlimefunGuideOption<Boolean> {
 

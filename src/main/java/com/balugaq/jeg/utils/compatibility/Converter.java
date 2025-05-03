@@ -167,6 +167,10 @@ public class Converter {
         return new CustomItemStack(itemStack, material).asBukkit();
     }
 
+    public static @NotNull ItemStack getItem(@NotNull Material material, @NotNull String name, Consumer<ItemMeta> consumer) {
+        return new CustomItemStack(new CustomItemStack(material, name).asBukkit(), consumer).asBukkit();
+    }
+
     /**
      * Creates an ItemGetter using MethodHandle.
      *

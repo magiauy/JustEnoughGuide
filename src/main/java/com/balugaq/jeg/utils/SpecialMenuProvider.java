@@ -10,7 +10,6 @@ import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import lombok.experimental.UtilityClass;
-import me.matl114.logitech.SlimefunItem.CustomSlimefunItem;
 import me.matl114.logitech.Utils.UtilClass.MenuClass.CustomMenu;
 import me.matl114.logitech.Utils.UtilClass.MenuClass.CustomMenuHandler;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
@@ -123,6 +122,14 @@ public class SpecialMenuProvider {
                 methodMenuUtils_createItemRecipeDisplay = method;
             }
         } catch (ClassNotFoundException ignored) {
+            try {
+                Method method = ReflectionUtil.getMethod(Class.forName("me.matl114.logitech.utils.MenuUtils"), "createItemRecipeDisplay", 3);
+                if (method != null) {
+                    method.setAccessible(true);
+                    methodMenuUtils_createItemRecipeDisplay = method;
+                }
+            } catch (ClassNotFoundException ignored2) {
+            }
         }
         try {
             Method method = ReflectionUtil.getMethod(Class.forName("me.matl114.logitech.Utils.UtilClass.MenuClass.MenuFactory"), "buildGuide");
@@ -131,6 +138,30 @@ public class SpecialMenuProvider {
                 methodMenuFactory_buildGuide = method;
             }
         } catch (ClassNotFoundException ignored) {
+            try {
+                Method method = ReflectionUtil.getMethod(Class.forName("me.matl114.logitech.utils.UtilClass.MenuClass.MenuFactory"), "buildGuide");
+                if (method != null) {
+                    method.setAccessible(true);
+                    methodMenuFactory_buildGuide = method;
+                }
+            } catch (ClassNotFoundException ignored2) {
+                try {
+                    Method method = ReflectionUtil.getMethod(Class.forName("me.matl114.logitech.utils.util_class.MenuClass.MenuFactory"), "buildGuide");
+                    if (method != null) {
+                        method.setAccessible(true);
+                        methodMenuFactory_buildGuide = method;
+                    }
+                } catch (ClassNotFoundException ignored3) {
+                    try {
+                        Method method = ReflectionUtil.getMethod(Class.forName("me.matl114.logitech.utils.util_class.menu_class.MenuFactory"), "buildGuide");
+                        if (method != null) {
+                            method.setAccessible(true);
+                            methodMenuFactory_buildGuide = method;
+                        }
+                    } catch (ClassNotFoundException ignored4) {
+                    }
+                }
+            }
         }
         try {
             Method method = ReflectionUtil.getMethod(Class.forName("me.matl114.logitech.Utils.UtilClass.MenuClass.CustomMenu"), "open");
@@ -139,6 +170,30 @@ public class SpecialMenuProvider {
                 methodCustomMenu_open = method;
             }
         } catch (ClassNotFoundException ignored) {
+            try {
+                Method method = ReflectionUtil.getMethod(Class.forName("me.matl114.logitech.utils.UtilClass.MenuClass.CustomMenu"), "open");
+                if (method != null) {
+                    method.setAccessible(true);
+                    methodCustomMenu_open = method;
+                }
+            } catch (ClassNotFoundException ignored2) {
+                try {
+                    Method method = ReflectionUtil.getMethod(Class.forName("me.matl114.logitech.utils.util_class.MenuClass.CustomMenu"), "open");
+                    if (method != null) {
+                        method.setAccessible(true);
+                        methodCustomMenu_open = method;
+                    }
+                } catch (ClassNotFoundException ignored3) {
+                    try {
+                        Method method = ReflectionUtil.getMethod(Class.forName("me.matl114.logitech.utils.util_class.menu_class.CustomMenu"), "open");
+                        if (method != null) {
+                            method.setAccessible(true);
+                            methodCustomMenu_open = method;
+                        }
+                    } catch (ClassNotFoundException ignored4) {
+                    }
+                }
+            }
         }
 
         SlimefunItem item = SlimefunItem.getById("LOGITECH_BUG");
@@ -215,13 +270,18 @@ public class SpecialMenuProvider {
         Debug.debug("methodPlayerProgress_get: " + (methodPlayerProgress_get != null));
         Debug.debug("methodNEGUI_openRecipe: " + (methodNEGUI_openRecipe != null));
         Debug.debug("methodNEGUI_openResearchScreen: " + (methodNEGUI_openResearchScreen != null));
+        Debug.debug("methodNexcavateRegistry_getResearchMap: " + (methodNexcavateRegistry_getResearchMap != null));
+        Debug.debug("objectNexcavate_registry: " + (objectNexcavate_registry != null));
         Debug.debug("-------------LogiTech-------------");
         Debug.debug("methodMenuUtils_createItemRecipeDisplay: " + (methodMenuUtils_createItemRecipeDisplay != null));
         Debug.debug("methodMenuFactory_build: " + (methodMenuFactory_buildGuide != null));
         Debug.debug("methodCustomMenu_open: " + (methodCustomMenu_open != null));
+        Debug.debug("classLogiTech_CustomSlimefunItem: " + (classLogiTech_CustomSlimefunItem != null));
         Debug.debug("-------------InfinityExpansion----------");
         Debug.debug("methodInfinityGroup_openInfinityRecipe: " + (methodInfinityGroup_openInfinityRecipe != null));
+        Debug.debug("objectInfinityExpansion_INFINITY: " + (objectInfinityExpansion_INFINITY != null));
         Debug.debug("constructorInfinityExpansion_BackEntry: " + (constructorInfinityExpansion_BackEntry != null));
+        Debug.debug("classInfinityExpansion_Singularity: " + (classInfinityExpansion_Singularity != null));
         Debug.debug("-------------ObsidianExpansion----------");
         Debug.debug("methodObsidianExpansion_openFORGERecipe: " + (methodObsidianExpansion_openFORGERecipe != null));
         Debug.debug("constructorObsidianExpansion_BackEntry: " + (constructorObsidianExpansion_BackEntry != null));
@@ -348,7 +408,13 @@ public class SpecialMenuProvider {
             return;
         }
 
-        Object menuFactory = methodMenuUtils_createItemRecipeDisplay.invoke(null, slimefunItem, new CustomMenuHandlerImpl(), null);
+        Object menuFactory;
+        try {
+            menuFactory = methodMenuUtils_createItemRecipeDisplay.invoke(null, slimefunItem, new CustomMenuHandlerImpl(), null);
+        } catch (Throwable ignored) {
+            menuFactory = methodMenuUtils_createItemRecipeDisplay.invoke(null, slimefunItem, null, null);
+        }
+
         if (menuFactory == null) {
             return;
         }
