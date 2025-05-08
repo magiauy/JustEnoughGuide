@@ -56,9 +56,8 @@ public enum FilterType {
             }
         } else {
             try {
-                if (SpecialMenuProvider.ENABLED_LogiTech && SpecialMenuProvider.classLogiTech_CustomSlimefunItem != null && SpecialMenuProvider.classLogiTech_CustomSlimefunItem != null && SpecialMenuProvider.classLogiTech_CustomSlimefunItem.isInstance(item)) {
-                    RecipeDisplayItem csi = (RecipeDisplayItem) item;
-                    display = csi.getDisplayRecipes();
+                if (SpecialMenuProvider.ENABLED_LogiTech && SpecialMenuProvider.classLogiTech_CustomSlimefunItem != null && SpecialMenuProvider.classLogiTech_CustomSlimefunItem.isInstance(item) && item instanceof RecipeDisplayItem rdi) {
+                    display = rdi.getDisplayRecipes();
                 }
             } catch (Throwable e) {
                 Debug.trace(e, "searching");

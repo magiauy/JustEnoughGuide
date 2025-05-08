@@ -34,8 +34,10 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.chat.ChatInput;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.collections.RandomizedSet;
 import io.github.thebusybiscuit.slimefun4.utils.ChatUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
+import me.matl114.logitech.SlimefunItem.Machines.AbstractMachine;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.AContainer;
+import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.MachineRecipe;
 import net.guizhanss.guizhanlib.minecraft.helper.inventory.ItemStackHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -51,6 +53,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -313,7 +316,61 @@ public class SearchGroup extends FlexItemGroup {
                                             if (Ooutputs == null) {
                                                 Object OOUTPUTS = ReflectionUtil.getValue(item, "OUTPUTS");
                                                 if (OOUTPUTS == null) {
-                                                    continue;
+                                                    Object Ooutput = ReflectionUtil.getValue(item, "output");
+                                                    if (Ooutput == null) {
+                                                        Object Ogeneration = ReflectionUtil.getValue(item, "generation");
+                                                        if (Ogeneration == null) {
+                                                            Object Otemplates = ReflectionUtil.getValue(item, "templates");
+                                                            if (Otemplates == null) {
+                                                                continue;
+                                                            }
+
+                                                            // RykenSlimeCustomizer CustomTemplateMachine
+                                                            else if (Otemplates instanceof List<?> templates) {
+                                                                for (Object template : templates) {
+                                                                    Object _Orecipes = ReflectionUtil.getValue(template, "recipes");
+                                                                    if (_Orecipes == null) {
+                                                                        Method method = ReflectionUtil.getMethod(template.getClass(), "recipes");
+                                                                        if (method != null) {
+                                                                            try {
+                                                                                method.setAccessible(true);
+                                                                                _Orecipes = method.invoke(template);
+                                                                            } catch (Throwable ignored) {
+                                                                            }
+                                                                        }
+                                                                    }
+
+                                                                    if (_Orecipes instanceof List<?> _recipes) {
+                                                                        for (Object _recipe : _recipes) {
+                                                                            if (_recipe instanceof MachineRecipe machineRecipe) {
+                                                                                ItemStack[] _output = machineRecipe.getOutput();
+                                                                                for (var __output : _output) {
+                                                                                    cache.add(ItemStackHelper.getDisplayName(__output));
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                        // RykenSlimeCustomizer CustomMaterialGenerator
+                                                        else if (Ogeneration instanceof List<?> generation) {
+                                                            if (!generation.isEmpty()) {
+                                                                Object first = generation.get(0);
+                                                                if (first instanceof ItemStack) {
+                                                                    for (var g : generation) {
+                                                                        if (g instanceof ItemStack itemStack) {
+                                                                            cache.add(ItemStackHelper.getDisplayName(itemStack));
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    // Chinese Localized SlimeCustomizer CustomMaterialGenerator
+                                                    else if (Ooutput instanceof ItemStack output) {
+                                                        cache.add(ItemStackHelper.getDisplayName(output));
+                                                    }
                                                 }
                                                 // InfinityExpansion StrainerBase
                                                 if (OOUTPUTS instanceof ItemStack[] outputs) {
@@ -454,6 +511,7 @@ public class SearchGroup extends FlexItemGroup {
                     Set<String> cache2 = new HashSet<>();
                     cache2.add(item2.getItemName());
                     SPECIAL_CACHE.put("VOID_HARVESTER", new SoftReference<>(cache2));
+                    SPECIAL_CACHE.put("INFINITY_VOID_HARVESTER", new SoftReference<>(cache2));
                 }
 
                 // InfinityExpansion MobDataCard
@@ -522,13 +580,13 @@ public class SearchGroup extends FlexItemGroup {
                             try {
                                 displayRecipes = mb.getDisplayRecipes();
                             } catch (Throwable e) {
-                                Debug.trace(e, "searching");
+                                Debug.trace(e, "initailizing searching");
                             }
                         } else if (SpecialMenuProvider.ENABLED_LogiTech && SpecialMenuProvider.classLogiTech_CustomSlimefunItem != null && SpecialMenuProvider.classLogiTech_CustomSlimefunItem.isInstance(slimefunItem) && slimefunItem instanceof RecipeDisplayItem rdi) {
                             try {
                                 displayRecipes = rdi.getDisplayRecipes();
                             } catch (Throwable e) {
-                                Debug.trace(e, "searching");
+                                Debug.trace(e, "initailizing searching");
                             }
                         }
                         if (displayRecipes != null) {
