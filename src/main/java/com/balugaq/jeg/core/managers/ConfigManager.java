@@ -5,6 +5,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -13,6 +14,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class is responsible for managing the configuration of the plugin.
@@ -38,6 +43,15 @@ public class ConfigManager extends AbstractManager {
     private final boolean BEGINNER_OPTION;
     private final @NotNull String SURVIVAL_GUIDE_TITLE;
     private final @NotNull String CHEAT_GUIDE_TITLE;
+    private final @NotNull List<String> SHARED_CHARS;
+    private final @NotNull List<String> BLACKLIST;
+    private final @NotNull List<String> MAIN_FORMAT;
+    @ApiStatus.Experimental
+    private final @NotNull List<String> NESTED_GROUP_FORMAT;
+    private final @NotNull List<String> SUB_GROUP_FORMAT;
+    private final @NotNull List<String> RECIPE_FORMAT;
+    private final @NotNull List<String> HELPER_FORMAT;
+    private final @NotNull Map<String, String> LOCAL_TRANSLATE;
     private final @NotNull JavaPlugin plugin;
 
     public ConfigManager(@NotNull JavaPlugin plugin) {
@@ -53,6 +67,95 @@ public class ConfigManager extends AbstractManager {
         this.CHEAT_GUIDE_TITLE = plugin.getConfig().getString("guide.cheat-guide-title", "&c&lSlimefun 指南 (作弊模式)         &e&l爱来自 JustEnoughGuide");
         this.RTS_SEARCH = plugin.getConfig().getBoolean("improvements.rts-search", true);
         this.BEGINNER_OPTION = plugin.getConfig().getBoolean("improvements.beginner-option", true);
+        var rawBlacklist = plugin.getConfig().getStringList("blacklist");
+        if (rawBlacklist == null || rawBlacklist.isEmpty()) {
+            this.BLACKLIST = new ArrayList<>();
+            this.BLACKLIST.add("快捷");
+        } else {
+            this.BLACKLIST = rawBlacklist;
+        }
+
+        var rawSharedChars = plugin.getConfig().getStringList("shared-chars");
+        if (rawSharedChars == null || rawSharedChars.isEmpty()) {
+            this.SHARED_CHARS = new ArrayList<>();
+            this.SHARED_CHARS.add("粘黏");
+            this.SHARED_CHARS.add("荧萤");
+            this.SHARED_CHARS.add("机器级");
+            this.SHARED_CHARS.add("灵零");
+            this.SHARED_CHARS.add("动力");
+        } else {
+            this.SHARED_CHARS = rawSharedChars;
+        }
+
+        var rawMainFormat = plugin.getConfig().getStringList("custom-format.main");
+        if (rawMainFormat == null || rawMainFormat.isEmpty()) {
+            this.MAIN_FORMAT = new ArrayList<>();
+            this.MAIN_FORMAT.add("BTBBBBRSB");
+            this.MAIN_FORMAT.add("GGGGGGGGG");
+            this.MAIN_FORMAT.add("GGGGGGGGG");
+            this.MAIN_FORMAT.add("GGGGGGGGG");
+            this.MAIN_FORMAT.add("GGGGGGGGG");
+            this.MAIN_FORMAT.add("BPBBCBBNB");
+        } else {
+            this.MAIN_FORMAT = rawMainFormat;
+        }
+
+        var rawNestedGroupFormat = plugin.getConfig().getStringList("custom-format.nested-group");
+        if (rawNestedGroupFormat == null || rawNestedGroupFormat.isEmpty()) {
+            this.NESTED_GROUP_FORMAT = new ArrayList<>();
+            this.NESTED_GROUP_FORMAT.add("BbBBBBRSB");
+            this.NESTED_GROUP_FORMAT.add("GGGGGGGGG");
+            this.NESTED_GROUP_FORMAT.add("GGGGGGGGG");
+            this.NESTED_GROUP_FORMAT.add("GGGGGGGGG");
+            this.NESTED_GROUP_FORMAT.add("GGGGGGGGG");
+            this.NESTED_GROUP_FORMAT.add("BPBBCBBNB");
+        } else {
+            this.NESTED_GROUP_FORMAT = rawNestedGroupFormat;
+        }
+
+        var rawSubGroupFormat = plugin.getConfig().getStringList("custom-format.sub-group");
+        if (rawSubGroupFormat == null || rawSubGroupFormat.isEmpty()) {
+            this.SUB_GROUP_FORMAT = new ArrayList<>();
+            this.SUB_GROUP_FORMAT.add("BbBBBBRSB");
+            this.SUB_GROUP_FORMAT.add("iiiiiiiii");
+            this.SUB_GROUP_FORMAT.add("iiiiiiiii");
+            this.SUB_GROUP_FORMAT.add("iiiiiiiii");
+            this.SUB_GROUP_FORMAT.add("iiiiiiiii");
+            this.SUB_GROUP_FORMAT.add("BPBcCBBNB");
+        } else {
+            this.SUB_GROUP_FORMAT = rawSubGroupFormat;
+        }
+
+        var rawRecipeFormat = plugin.getConfig().getStringList("custom-format.recipe");
+        if (rawRecipeFormat == null || rawRecipeFormat.isEmpty()) {
+            this.RECIPE_FORMAT = new ArrayList<>();
+            this.RECIPE_FORMAT.add("b  rrr  w");
+            this.RECIPE_FORMAT.add(" t rrr i ");
+            this.RECIPE_FORMAT.add("   rrr  R");
+        } else {
+            this.RECIPE_FORMAT = rawRecipeFormat;
+        }
+
+        var rawHelperFormat = plugin.getConfig().getStringList("custom-format.helper");
+        if (rawHelperFormat == null || rawHelperFormat.isEmpty()) {
+            this.HELPER_FORMAT = new ArrayList<>();
+            this.HELPER_FORMAT.add("BbBBBBRSB");
+            this.HELPER_FORMAT.add("B   A   B");
+            this.HELPER_FORMAT.add("BhhhhhhhB");
+            this.HELPER_FORMAT.add("BhhhhhhhB");
+            this.HELPER_FORMAT.add("BhhhhhhhB");
+            this.HELPER_FORMAT.add("BPBBCBBNB");
+        } else {
+            this.HELPER_FORMAT = rawHelperFormat;
+        }
+
+        this.LOCAL_TRANSLATE = new HashMap<>();
+        var c = plugin.getConfig().getConfigurationSection("local-translate");
+        if (c != null) {
+            for (var k : c.getKeys(false)) {
+                this.LOCAL_TRANSLATE.put(k, c.getString(k));
+            }
+        }
     }
 
     private void setupDefaultConfig() {
@@ -130,5 +233,37 @@ public class ConfigManager extends AbstractManager {
 
     public boolean isRTSSearch() {
         return RTS_SEARCH;
+    }
+
+    public @NotNull List<String> getSharedChars() {
+        return SHARED_CHARS;
+    }
+
+    public @NotNull List<String> getBlacklist() {
+        return BLACKLIST;
+    }
+
+    public @NotNull List<String> getMainFormat() {
+        return MAIN_FORMAT;
+    }
+
+    public @NotNull List<String> getNestedGroupFormat() {
+        return NESTED_GROUP_FORMAT;
+    }
+
+    public @NotNull List<String> getSubGroupFormat() {
+        return SUB_GROUP_FORMAT;
+    }
+
+    public @NotNull List<String> getRecipeFormat() {
+        return RECIPE_FORMAT;
+    }
+
+    public @NotNull List<String> getHelperFormat() {
+        return HELPER_FORMAT;
+    }
+
+    public @NotNull Map<String, String> getLocalTranslate() {
+        return LOCAL_TRANSLATE;
     }
 }

@@ -85,6 +85,7 @@ import java.util.logging.Level;
  * @author balugaq
  * @since 1.0
  */
+// todo - custom format support
 @SuppressWarnings({"deprecation", "unused"})
 public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements JEGSlimefunGuideImplementation {
     private static final int RTS_SLOT = 6;

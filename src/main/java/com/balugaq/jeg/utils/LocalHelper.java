@@ -1,9 +1,11 @@
 package com.balugaq.jeg.utils;
 
+import com.balugaq.jeg.implementation.JustEnoughGuide;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
@@ -20,11 +22,19 @@ public class LocalHelper {
     public static final String def = "未知附属";
     public static final Map<String, Map<String, SlimefunItemStack>> rscItems = new HashMap<>();
     // default language is zh-CN
+    // support color symbol
     public static final Map<String, String> addonLocals = new HashMap<>();
     // depends on rsc addons' info.yml
     public static final Map<String, Set<String>> rscLocals = new HashMap<>();
 
     static {
+        loadDefault();
+        for (var entry : JustEnoughGuide.getConfigManager().getLocalTranslate().entrySet()) {
+            addonLocals.put(entry.getKey(), ChatColor.translateAlternateColorCodes('&', entry.getValue()));
+        }
+    }
+
+    public static void loadDefault() {
         addonLocals.put("Slimefun", "粘液科技");
         addonLocals.put("ColoredEnderChests", "彩色末影箱");
         addonLocals.put("DyedBackpacks", "染色背包");
@@ -145,7 +155,7 @@ public class LocalHelper {
         addonLocals.put("RykenSlimeCustomizer", "Ryken自定义附属"); // Same as RykenSlimefunCustomizer
         addonLocals.put("RykenSlimefunCustomizer", "Ryken自定义附属"); // Same as RykenSlimeCustomizer
         addonLocals.put("FinalTECH-Changed", "乱序技艺-改版");
-        addonLocals.put("BloodAlchemy", "血炼金术");
+        addonLocals.put("BloodAlchemy", "血炼金工艺");
         addonLocals.put("Laboratory", "实验室");
         addonLocals.put("MobEngineering", "生物工程");
         addonLocals.put("TsingshanTechnology", "青山科技"); // Same as TsingshanTechnology-Fixed
@@ -208,12 +218,12 @@ public class LocalHelper {
         addonLocals.put("MoneyAndThings", "固态货币");
         addonLocals.put("BeyondHorizons", "以太");
         addonLocals.put("ChestTerminal", "箱子终端");
-        addonLocals.put("Hohenheim", "嬗变工艺");
-        addonLocals.put("BetterFarming", "工艺农场");
-        addonLocals.put("NewBeginnings", "新生");
+        addonLocals.put("Hohenheim", "嬗变工艺"); // Same as hohenheim
+        addonLocals.put("BetterFarming", "高级农场"); // Same as betterfarming
+        addonLocals.put("NewBeginnings", "新生"); // Same as New-Beginnings
         addonLocals.put("EndCombat", "终焉");
         addonLocals.put("EnderPanda", "末地熊猫");
-        addonLocals.put("SlimeVoid", "虚无空间");
+        addonLocals.put("SlimeVoid", "虚无粘液"); // Same as SlimefunVoid
         addonLocals.put("ArcaneExploration", "怪物强化");
         addonLocals.put("MagicXpansion", "霊幻之梦");
         addonLocals.put("SlimeQuest", "粘液任务");
@@ -259,6 +269,20 @@ public class LocalHelper {
         addonLocals.put("SlimefunZT", "SiciliaCraft");
         addonLocals.put("SlimefunAddon", "CAPTAINchad12自制拓展"); // Unbelievable...
         addonLocals.put("AngleTech", "倾斜科技");
+        addonLocals.put("magicexpansion", "魔法"); // Same as MagicExpansion
+        addonLocals.put("MagicExpansion", "魔法"); // Same as magicexpansion
+        addonLocals.put("SlimefunHopper", "粘液漏斗");
+        addonLocals.put("SlimefunAccessor", "远程访问器");
+        addonLocals.put("ExoticGardenComplex", "异域花园"); // Same as ExoticGarden
+        addonLocals.put("magic-powder", "魔芋工艺"); // Same as MagicPowder
+        addonLocals.put("Obsidian-Armor", "黑曜石合金装甲"); // Same as ObsidianArmor
+        addonLocals.put("BloodyAlchemy", "血炼金工艺"); // Same as BloodAlchemy
+        addonLocals.put("hohenheim", "嬗变工艺"); // Same as Hohenheim
+        addonLocals.put("HALsAddon", "终界之地"); // Same as slimestack
+        addonLocals.put("slimestack", "终界之地"); // Same as HALsAddon
+        addonLocals.put("SlimefunVoid", "虚无粘液"); // Same as SlimeVoid
+        addonLocals.put("betterfarming", "高级农场"); // Same as BetterFarming
+        addonLocals.put("New-Beginnings", "新生"); // Same as NewBeginnings
     }
 
     @Nonnull
@@ -326,7 +350,7 @@ public class LocalHelper {
             return getRSCLocalName(itemId);
         }
         String localName = addonLocals.get(addonName);
-        return localName == null ? callback : localName;
+        return ChatColor.translateAlternateColorCodes('&', localName == null ? callback : localName);
     }
 
     public static void addRSCLocal(String rscAddonName, String itemId) {

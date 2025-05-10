@@ -4,6 +4,7 @@ import com.balugaq.jeg.api.interfaces.JEGSlimefunGuideImplementation;
 import com.balugaq.jeg.api.interfaces.NotDisplayInCheatMode;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
+import com.balugaq.jeg.utils.formatter.Formats;
 import com.google.common.base.Preconditions;
 import io.github.thebusybiscuit.slimefun4.api.items.groups.FlexItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
@@ -44,8 +45,6 @@ import java.util.Set;
 @Getter
 @NotDisplayInCheatMode
 public abstract class GuideGroup extends FlexItemGroup {
-    private static final int PREVIOUS_SLOT = 46;
-    private static final int NEXT_SLOT = 52;
     private final Map<Integer, Set<Integer>> slots = new HashMap<>();
     private final Map<Integer, Map<Integer, ItemStack>> contents = new HashMap<>();
     private final Map<Integer, Map<Integer, ChestMenu.MenuClickHandler>> clickHandlers = new HashMap<>();
@@ -86,13 +85,6 @@ public abstract class GuideGroup extends FlexItemGroup {
             @Range(from = 9, to = 44) int slot,
             @NotNull ItemStack itemStack,
             @NotNull ChestMenu.MenuClickHandler handler) {
-        Preconditions.checkArgument(slot >= 9 && slot <= 44, "Slot must be between 9 and 44");
-        Preconditions.checkArgument(itemStack != null, "Item must not be null");
-        Preconditions.checkArgument(handler != null, "Handler must not be null");
-        Preconditions.checkArgument(itemStack.getType() != Material.AIR, "Item must not be air");
-        Preconditions.checkArgument(itemStack.getType().isItem(), "Item must be an item");
-        Preconditions.checkArgument(
-                slots.size() <= getContentSlots().length, "Too many guides in this group. Maximum of 36 allowed.");
 
         slots.computeIfAbsent(page, k -> new HashSet<>()).add(slot);
         contents.computeIfAbsent(page, k -> new LinkedHashMap<>()).put(slot, itemStack);
@@ -236,31 +228,35 @@ public abstract class GuideGroup extends FlexItemGroup {
                 menu.addMenuClickHandler(entry.getKey(), entry.getValue());
             }
 
-            menu.addItem(
-                    PREVIOUS_SLOT,
-                    ItemStackUtil.getCleanItem(ChestMenuUtils.getPreviousButton(
-                            player, page, (this.contents.size() - 1) / 36 + 1)));
-            menu.addMenuClickHandler(PREVIOUS_SLOT, (p, slot, item, action) -> {
-                if (page - 1 < 1) {
+            for (var s : Formats.helper.getChars('P')) {
+                menu.addItem(
+                        s,
+                        ItemStackUtil.getCleanItem(ChestMenuUtils.getPreviousButton(
+                                player, page, (this.contents.size() - 1) / 36 + 1)));
+                menu.addMenuClickHandler(s, (p, slot, item, action) -> {
+                    if (page - 1 < 1) {
+                        return false;
+                    }
+                    GuideUtil.removeLastEntry(playerProfile.getGuideHistory());
+                    open(player, playerProfile, slimefunGuideMode, Math.max(1, page - 1));
                     return false;
-                }
-                GuideUtil.removeLastEntry(playerProfile.getGuideHistory());
-                open(player, playerProfile, slimefunGuideMode, Math.max(1, page - 1));
-                return false;
-            });
+                });
+            }
 
-            menu.addItem(
-                    NEXT_SLOT,
-                    ItemStackUtil.getCleanItem(ChestMenuUtils.getNextButton(
-                            player, page, (this.contents.size() - 1) / 36 + 1)));
-            menu.addMenuClickHandler(NEXT_SLOT, (p, slot, item, action) -> {
-                if (page + 1 > this.contents.size()) {
+            for (var s : Formats.helper.getChars('N')) {
+                menu.addItem(
+                        s,
+                        ItemStackUtil.getCleanItem(ChestMenuUtils.getNextButton(
+                                player, page, (this.contents.size() - 1) / 36 + 1)));
+                menu.addMenuClickHandler(s, (p, slot, item, action) -> {
+                    if (page + 1 > this.contents.size()) {
+                        return false;
+                    }
+                    GuideUtil.removeLastEntry(playerProfile.getGuideHistory());
+                    open(player, playerProfile, slimefunGuideMode, Math.min(this.contents.size(), page + 1));
                     return false;
-                }
-                GuideUtil.removeLastEntry(playerProfile.getGuideHistory());
-                open(player, playerProfile, slimefunGuideMode, Math.min(this.contents.size(), page + 1));
-                return false;
-            });
+                });
+            }
 
             menu.open(player);
         } else {

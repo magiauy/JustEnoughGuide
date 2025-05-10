@@ -5,8 +5,10 @@ import com.balugaq.jeg.api.interfaces.JEGSlimefunGuideImplementation;
 import com.balugaq.jeg.api.interfaces.NotDisplayInCheatMode;
 import com.balugaq.jeg.api.objects.enums.FilterType;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
+import com.balugaq.jeg.utils.Debug;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.compatibility.Converter;
+import com.balugaq.jeg.utils.formatter.Formats;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
@@ -32,32 +34,25 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Getter
 @NotDisplayInCheatMode
 public class JEGGuideGroup extends ClassicGuideGroup {
-    private static final ItemStack HEADER = Converter.getItem(
+    public static final ItemStack HEADER = Converter.getItem(
             Material.BEACON,
             "&bJEG 使用指南",
             "&b作者: 大香蕉",
             "&bJEG 优化了粘液科技的指南，使其更人性化。",
             "&b查看以下指南书以快速上手 JEG 增加的功能。"
     );
-    private static final int[] GUIDE_SLOTS = {
-            19, 20, 21, 22, 23, 24, 25,
-            28, 29, 30, 31, 32, 33, 34,
-            37, 38, 39, 40, 41, 42, 43
-    };
+    public static final int[] GUIDE_SLOTS = Formats.helper.getChars('h').stream().mapToInt(i -> i).toArray();
 
-    private static final int[] BORDER_SLOTS = {
-            9, 17,
-            18, 26,
-            27, 35,
-            36, 44,
-    };
+    public static final int[] BORDER_SLOTS = Formats.helper.getChars('B').stream().mapToInt(i -> i).toArray();
 
     protected JEGGuideGroup(@NotNull NamespacedKey key, @NotNull ItemStack icon) {
         super(key, icon, Integer.MAX_VALUE);
         for (int slot : BORDER_SLOTS) {
             addGuide(slot, ChestMenuUtils.getBackground());
         }
-        addGuide(13, HEADER);
+        for (var s : Formats.helper.getChars('A')) {
+            addGuide(s, HEADER);
+        }
         final AtomicInteger index = new AtomicInteger(0);
         doIf(JustEnoughGuide.getConfigManager().isPinyinSearch(), () -> {
             addGuide(
@@ -425,7 +420,11 @@ public class JEGGuideGroup extends ClassicGuideGroup {
 
     public static void doIf(boolean expression, @NotNull Runnable runnable) {
         if (expression) {
-            runnable.run();
+            try {
+                runnable.run();
+            } catch (Throwable e) {
+                Debug.trace(e, "loading guide group");
+            }
         }
     }
 }

@@ -34,7 +34,6 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.chat.ChatInput;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.collections.RandomizedSet;
 import io.github.thebusybiscuit.slimefun4.utils.ChatUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import me.matl114.logitech.SlimefunItem.Machines.AbstractMachine;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.AContainer;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.MachineRecipe;
@@ -85,7 +84,9 @@ public class SearchGroup extends FlexItemGroup {
     public static final Map<Character, Reference<Set<SlimefunItem>>> CACHE = new HashMap<>(); // fast way for by item name
     public static final Map<Character, Reference<Set<SlimefunItem>>> CACHE2 = new HashMap<>(); // fast way for by display item name
     public static final Map<String, Reference<Set<String>>> SPECIAL_CACHE = new HashMap<>();
+    @Deprecated
     public static final Set<String> SHARED_CHARS = new HashSet<>();
+    @Deprecated
     public static final Set<String> BLACKLIST = new HashSet<>();
     public static final Boolean SHOW_HIDDEN_ITEM_GROUPS = Slimefun.getConfigManager().isShowHiddenItemGroupsInSearch();
     public static final Integer DEFAULT_HASH_SIZE = 5000;
@@ -278,9 +279,6 @@ public class SearchGroup extends FlexItemGroup {
             Debug.debug("Initializing Search Group...");
             Timer.start();
             Bukkit.getScheduler().runTaskAsynchronously(JAVA_PLUGIN, () -> {
-                // Blacklist
-                BLACKLIST.add("快捷");
-
                 // Initialize asynchronously
                 int i = 0;
                 for (SlimefunItem item : Slimefun.getRegistry().getEnabledSlimefunItems()) {
@@ -662,13 +660,7 @@ public class SearchGroup extends FlexItemGroup {
                 }
                 SPECIAL_CACHE.put("SMART_FACTORY", new SoftReference<>(items));
 
-                // shared cache
-                SHARED_CHARS.add("粘黏");
-                SHARED_CHARS.add("荧萤");
-                SHARED_CHARS.add("机器级");
-                SHARED_CHARS.add("灵零");
-                SHARED_CHARS.add("动力");
-                for (String s : SHARED_CHARS) {
+                for (String s : JustEnoughGuide.getConfigManager().getSharedChars()) {
                     Set<SlimefunItem> sharedItems = new HashSet<>();
                     for (char c : s.toCharArray()) {
                         Reference<Set<SlimefunItem>> ref = CACHE.get(c);
@@ -732,7 +724,7 @@ public class SearchGroup extends FlexItemGroup {
                 Debug.debug("Enabled items: " + ENABLED_ITEMS.size());
                 Debug.debug("Available items: " + AVAILABLE_ITEMS.size());
                 Debug.debug("Machine blocks cache: " + SPECIAL_CACHE.size());
-                Debug.debug("Shared cache: " + SHARED_CHARS.size());
+                Debug.debug("Shared cache: " + JustEnoughGuide.getConfigManager().getSharedChars().size());
                 Debug.debug("Cache 1 (Keywords): " + CACHE.size());
                 Debug.debug("Cache 2 (Display Recipes): " + CACHE2.size());
             });
@@ -762,7 +754,7 @@ public class SearchGroup extends FlexItemGroup {
     }
 
     public static boolean inBlacklist(String itemName) {
-        for (String s : BLACKLIST) {
+        for (String s : JustEnoughGuide.getConfigManager().getBlacklist()) {
             if (ChatColor.stripColor(itemName).contains(s)) {
                 return true;
             }
