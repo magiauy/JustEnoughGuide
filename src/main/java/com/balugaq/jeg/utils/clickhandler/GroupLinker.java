@@ -1,7 +1,7 @@
 package com.balugaq.jeg.utils.clickhandler;
 
 import com.balugaq.jeg.api.objects.ExtendedClickHandler;
-import com.balugaq.jeg.implementation.guide.SurvivalGuideImplementation;
+import com.balugaq.jeg.utils.GuideUtil;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
@@ -26,7 +26,7 @@ public class GroupLinker {
                     final ItemGroup itemGroup = sfItem.getItemGroup();
                     if (itemGroup != null) {
                         AtomicInteger page = new AtomicInteger(1);
-                        if (SurvivalGuideImplementation.isTaggedGroupType(itemGroup)) {
+                        if (GuideUtil.isTaggedGroupType(itemGroup)) {
                             page.set((itemGroup.getItems().indexOf(sfItem) / 36) + 1);
                         }
                         PlayerProfile.get(player, profile -> guide.openItemGroup(profile, itemGroup, page.get()));

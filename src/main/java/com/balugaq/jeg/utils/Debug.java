@@ -26,7 +26,7 @@ public class Debug {
 
     public static void debug(@NotNull Throwable e) {
         debug(e.getMessage());
-        e.printStackTrace();
+        trace(e);
     }
 
     public static void debug(@NotNull Object object) {
@@ -80,7 +80,7 @@ public class Debug {
         try {
             throw new Error();
         } catch (Throwable e) {
-            Debug.log(e);
+            trace(e);
         }
     }
 
@@ -113,7 +113,7 @@ public class Debug {
     }
 
     public static void log(@NotNull Throwable e) {
-        e.printStackTrace();
+        Debug.trace(e);
     }
 
     public static void log() {

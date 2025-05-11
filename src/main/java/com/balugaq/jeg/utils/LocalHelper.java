@@ -155,7 +155,7 @@ public class LocalHelper {
         addonLocals.put("RykenSlimeCustomizer", "Ryken自定义附属"); // Same as RykenSlimefunCustomizer
         addonLocals.put("RykenSlimefunCustomizer", "Ryken自定义附属"); // Same as RykenSlimeCustomizer
         addonLocals.put("FinalTECH-Changed", "乱序技艺-改版");
-        addonLocals.put("BloodAlchemy", "血炼金工艺");
+        addonLocals.put("BloodAlchemy", "血炼金工艺"); // Same as BloodyAlchemy
         addonLocals.put("Laboratory", "实验室");
         addonLocals.put("MobEngineering", "生物工程");
         addonLocals.put("TsingshanTechnology", "青山科技"); // Same as TsingshanTechnology-Fixed
@@ -178,7 +178,7 @@ public class LocalHelper {
         addonLocals.put("SlimefunAdvancements", "自定义粘液任务");
         addonLocals.put("SlimeHUD", "方块信息显示");
         addonLocals.put("RaySlimefunAddon", "高级自定义粘液附属");
-        addonLocals.put("SCrafter", "SC科技");
+        addonLocals.put("SCrafter", "SC科技"); // Same as SlimefunZT
         addonLocals.put("CrispyMachines", "酥脆机器");
         addonLocals.put("DimensionTraveler", "维度旅者");
         addonLocals.put("HardlessMachine", "弹跳工具");
@@ -236,10 +236,10 @@ public class LocalHelper {
         addonLocals.put("Tofu-Addons", "豆腐工艺");
         addonLocals.put("AdditionalWeaponry", "武器工厂");
         addonLocals.put("BoxOfChocolates", "巧克力工艺");
-        addonLocals.put("MagicPowder", "魔芋工艺");
+        addonLocals.put("MagicPowder", "魔芋工艺"); // Same as magic-powder
         addonLocals.put("XpCreator", "造物主工艺");
         addonLocals.put("SlimefunCombat", "原子弹模型");
-        addonLocals.put("ObsidianArmor", "黑曜石合金装甲");
+        addonLocals.put("ObsidianArmor", "黑曜石合金装甲"); // Same as Obsidian-Armor
         addonLocals.put("FinalGenerations", "世代同堂");
         addonLocals.put("Fusion", "工业反应堆 Fusion"); // Avoid conflict with BetterReactor
         addonLocals.put("Slimedustry", "粘液工业");
@@ -266,7 +266,7 @@ public class LocalHelper {
         addonLocals.put("SlimefunStackMachine", "粘液堆叠机器"); // Avoid conflict with StackMachine
         addonLocals.put("CraftableEnchantments", "附魔工艺");
         addonLocals.put("sj_Expansion", "sjの粘液拓展");
-        addonLocals.put("SlimefunZT", "SiciliaCraft");
+        addonLocals.put("SlimefunZT", "SC科技"); // Same as SCrafter
         addonLocals.put("SlimefunAddon", "CAPTAINchad12自制拓展"); // Unbelievable...
         addonLocals.put("AngleTech", "倾斜科技");
         addonLocals.put("magicexpansion", "魔法"); // Same as MagicExpansion

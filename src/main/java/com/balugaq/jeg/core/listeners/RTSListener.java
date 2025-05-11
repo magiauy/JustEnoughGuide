@@ -4,8 +4,6 @@ import com.balugaq.jeg.api.groups.RTSSearchGroup;
 import com.balugaq.jeg.api.groups.SearchGroup;
 import com.balugaq.jeg.api.objects.events.RTSEvents;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
-import com.balugaq.jeg.implementation.guide.CheatGuideImplementation;
-import com.balugaq.jeg.implementation.guide.SurvivalGuideImplementation;
 import com.balugaq.jeg.utils.Debug;
 import com.balugaq.jeg.utils.JEGVersionedItemFlag;
 import com.balugaq.jeg.utils.LocalHelper;
@@ -21,7 +19,6 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.skins.PlayerHead;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.skins.PlayerSkin;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.Getter;
-import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import net.guizhanss.guizhanlib.minecraft.helper.inventory.ItemStackHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -232,7 +229,7 @@ public class RTSListener implements Listener {
                     player.getInventory().setItem(FILL_ORDER[i], RTSSearchGroup.PLACEHOLDER.clone());
                 }
             }
-            /**
+            /*
              * Page buttons' icons.
              * For page buttons' click handler see {@link SurvivalGuideImplementation#createHeader(Player, PlayerProfile, ChestMenu)}
              * or {@link CheatGuideImplementation#createHeader(Player, PlayerProfile, ChestMenu)}

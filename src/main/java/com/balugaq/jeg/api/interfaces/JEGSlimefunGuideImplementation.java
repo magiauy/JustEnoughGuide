@@ -3,6 +3,7 @@ package com.balugaq.jeg.api.interfaces;
 import com.balugaq.jeg.api.groups.BookmarkGroup;
 import com.balugaq.jeg.api.groups.ItemMarkGroup;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
+import com.balugaq.jeg.utils.formatter.Format;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
@@ -37,6 +38,17 @@ public interface JEGSlimefunGuideImplementation extends SlimefunGuideImplementat
      */
     @ParametersAreNonnullByDefault
     void createHeader(Player p, PlayerProfile profile, ChestMenu menu);
+
+    /**
+     * Creates the header of the guide menu.
+     *
+     * @param p       The player.
+     * @param profile The player profile.
+     * @param menu    The guide menu.
+     * @param format  The loader of the gui
+     */
+    @ParametersAreNonnullByDefault
+    void createHeader(Player p, PlayerProfile profile, ChestMenu menu, Format format);
 
     /**
      * Creates a new guide menu for the player.

@@ -23,7 +23,7 @@ public class BeginnerUtils {
         }
 
         menu.addMenuClickHandler(slot, (BeginnerClickHandler) (player, clickedSlot, clickedItem, action) -> {
-            if (isNew(player) && action.isShiftClicked() && action.isRightClicked()) {
+            if (isNew(player) && action.isShiftClicked() && action.isRightClicked() && clickedItem != null) {
                 PlayerProfile.get(player, profile -> {
                     guide.openSearch(profile, ChatColor.stripColor(ItemStackHelper.getDisplayName(clickedItem)), true);
                 });
@@ -40,7 +40,7 @@ public class BeginnerUtils {
     }
 
     public static boolean isNew(Player player) {
-        return BeginnersGuideOption.getSelectedOption(player);
+        return BeginnersGuideOption.isEnabled(player);
     }
 
     public interface BeginnerClickHandler extends ExtendedClickHandler {

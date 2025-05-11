@@ -5,7 +5,6 @@ import com.balugaq.jeg.api.interfaces.NotDisplayInCheatMode;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
 import com.balugaq.jeg.utils.formatter.Formats;
-import com.google.common.base.Preconditions;
 import io.github.thebusybiscuit.slimefun4.api.items.groups.FlexItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.core.guide.GuideHistory;
@@ -16,7 +15,6 @@ import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.Getter;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -207,18 +205,20 @@ public abstract class GuideGroup extends FlexItemGroup {
             ChestMenu menu = new ChestMenu(getDisplayName(player));
             menu.setSize(getSize());
             if (isClassic()) {
-                jeg.createHeader(player, playerProfile, menu);
+                jeg.createHeader(player, playerProfile, menu, Formats.helper);
             }
-            menu.addItem(getBackSlot(), ItemStackUtil.getCleanItem(ChestMenuUtils.getBackButton(player)));
-            menu.addMenuClickHandler(getBackSlot(), (pl, s, is, action) -> {
-                GuideHistory guideHistory = playerProfile.getGuideHistory();
-                if (action.isShiftClicked()) {
-                    SlimefunGuide.openMainMenu(playerProfile, slimefunGuideMode, guideHistory.getMainMenuPage());
-                } else {
-                    guideHistory.goBack(Slimefun.getRegistry().getSlimefunGuide(SlimefunGuideMode.SURVIVAL_MODE));
-                }
-                return false;
-            });
+            for (var ss : Formats.helper.getChars('b')) {
+                menu.addItem(ss, ItemStackUtil.getCleanItem(ChestMenuUtils.getBackButton(player)));
+                menu.addMenuClickHandler(ss, (pl, s, is, action) -> {
+                    GuideHistory guideHistory = playerProfile.getGuideHistory();
+                    if (action.isShiftClicked()) {
+                        SlimefunGuide.openMainMenu(playerProfile, slimefunGuideMode, guideHistory.getMainMenuPage());
+                    } else {
+                        guideHistory.goBack(Slimefun.getRegistry().getSlimefunGuide(slimefunGuideMode));
+                    }
+                    return false;
+                });
+            }
 
             for (Map.Entry<Integer, ItemStack> entry : contents.getOrDefault(page, new LinkedHashMap<>()).entrySet()) {
                 menu.addItem(entry.getKey(), entry.getValue());
@@ -258,6 +258,10 @@ public abstract class GuideGroup extends FlexItemGroup {
                 });
             }
 
+            GuideUtil.addRTSButton(menu, player, playerProfile, Formats.sub, slimefunGuideMode, guide);
+            GuideUtil.addBookMarkButton(menu, player, playerProfile, Formats.sub, jeg, this);
+            GuideUtil.addItemMarkButton(menu, player, playerProfile, Formats.sub, jeg, this);
+
             menu.open(player);
         } else {
             player.sendMessage("§cJEG 模块未启用。你不能打开 JEG 使用指南。");
@@ -290,5 +294,6 @@ public abstract class GuideGroup extends FlexItemGroup {
      *
      * @return The slot where the back button should be placed.
      */
+    @Deprecated
     public abstract int getBackSlot();
 }

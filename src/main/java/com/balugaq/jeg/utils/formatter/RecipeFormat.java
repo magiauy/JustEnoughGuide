@@ -10,7 +10,8 @@ public class RecipeFormat extends Format {
         loadMapping(JustEnoughGuide.getConfigManager().getRecipeFormat());
     }
 
-    public void decorate(@SuppressWarnings("deprecation") ChestMenu menu, Player player) {
+    @Deprecated
+    public void decorate(ChestMenu menu, Player player) {
         super.decorate(menu, player);
     }
 }

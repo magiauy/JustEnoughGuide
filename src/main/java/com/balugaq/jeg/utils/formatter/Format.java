@@ -21,10 +21,11 @@ import java.util.function.Supplier;
 
 @Getter
 public abstract class Format {
-    @Setter
-    public int size = 54;
     public final Map<Integer, Character> mapping = new HashMap<>();
     public final Map<Character, ItemStackFormat> formats = new HashMap<>();
+    public final Map<Character, List<Integer>> cached = new HashMap<>();
+    @Setter
+    public int size = 54;
 
     public Format() {
         formats.put('B', new Background());
@@ -44,33 +45,31 @@ public abstract class Format {
 
     public abstract void loadMapping();
 
+    @Deprecated
     @OverridingMethodsMustInvokeSuper
-    public void decorate(@SuppressWarnings("deprecation") ChestMenu menu, Player player) {
+    public void decorate(ChestMenu menu, Player player) {
         for (var entry : mapping.entrySet()) {
             var format = formats.get(entry.getValue());
             if (format instanceof ItemStackSupplier supplier) {
                 menu.addItem(entry.getKey(), supplier.get());
-            }
-            else if (format instanceof Back function) {
+            } else if (format instanceof Back function) {
                 menu.addItem(entry.getKey(), function.apply(player));
-            }
-            else if (format instanceof Settings function) {
+            } else if (format instanceof Settings function) {
                 menu.addItem(entry.getKey(), function.apply(player));
-            }
-            else if (format instanceof Search function) {
+            } else if (format instanceof Search function) {
                 menu.addItem(entry.getKey(), function.apply(player));
             }
         }
     }
 
+    @Deprecated
     @OverridingMethodsMustInvokeSuper
-    public void decoratePage(@SuppressWarnings("deprecation") ChestMenu menu, Player player, int page, int maxPage) {
+    public void decoratePage(ChestMenu menu, Player player, int page, int maxPage) {
         for (var entry : mapping.entrySet()) {
             var format = formats.get(entry.getValue());
             if (format instanceof PagePrevious function) {
                 menu.addItem(entry.getKey(), function.apply(player, page, maxPage));
-            }
-            else if (format instanceof PageNext function) {
+            } else if (format instanceof PageNext function) {
                 menu.addItem(entry.getKey(), function.apply(player, page, maxPage));
             }
         }
@@ -93,13 +92,42 @@ public abstract class Format {
     }
 
     public List<Integer> getChars(char c) {
+        if (cached.containsKey(c)) {
+            return cached.get(c);
+        }
+
         List<Integer> list = new ArrayList<>();
         for (var entry : mapping.entrySet()) {
             if (entry.getValue() == c) {
                 list.add(entry.getKey());
             }
         }
+
+        cached.put(c, list);
         return list;
+    }
+
+    public interface ItemStackCiFunction<A, B, C> extends CiFunction<A, B, C, ItemStack>, ItemStackFormat {
+
+    }
+
+    public interface ItemStackBiFunction<A, B> extends BiFunction<A, B, ItemStack>, ItemStackFormat {
+        ItemStack apply(A a, B b);
+    }
+
+    public interface ItemStackFunction<A> extends Function<A, ItemStack>, ItemStackFormat {
+        ItemStack apply(A a);
+    }
+
+    public interface ItemStackSupplier extends Supplier<ItemStack>, ItemStackFormat {
+        ItemStack get();
+    }
+
+    public interface ItemStackFormat {
+    }
+
+    public interface CiFunction<A, B, C, R> {
+        R apply(A a, B b, C c);
     }
 
     public static class Background implements ItemStackSupplier {
@@ -181,28 +209,5 @@ public abstract class Format {
         public ItemStack get() {
             return Models.SPECIAL_MENU_ITEM;
         }
-    }
-
-    public interface ItemStackCiFunction<A, B, C> extends CiFunction<A, B, C, ItemStack>, ItemStackFormat {
-
-    }
-
-    public interface ItemStackBiFunction<A, B> extends BiFunction<A, B, ItemStack>, ItemStackFormat {
-        ItemStack apply(A a, B b);
-    }
-
-    public interface ItemStackFunction<A> extends Function<A, ItemStack>, ItemStackFormat {
-        ItemStack apply(A a);
-    }
-
-    public interface ItemStackSupplier extends Supplier<ItemStack>, ItemStackFormat {
-        ItemStack get();
-    }
-
-    public interface ItemStackFormat {
-    }
-
-    public interface CiFunction<A, B, C, R> {
-        R apply(A a, B b, C c);
     }
 }

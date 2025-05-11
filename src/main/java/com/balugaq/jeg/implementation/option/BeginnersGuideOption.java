@@ -20,6 +20,10 @@ public class BeginnersGuideOption implements SlimefunGuideOption<Boolean> {
         return new NamespacedKey(JustEnoughGuide.getInstance(), "beginners_guide");
     }
 
+    public static boolean isEnabled(Player p) {
+        return getSelectedOption(p);
+    }
+
     public static boolean getSelectedOption(Player p) {
         return !PersistentDataAPI.hasByte(p, key()) || PersistentDataAPI.getByte(p, key()) == (byte) 1;
     }
@@ -38,7 +42,7 @@ public class BeginnersGuideOption implements SlimefunGuideOption<Boolean> {
     public Optional<ItemStack> getDisplayItem(Player p, ItemStack guide) {
         boolean enabled = getSelectedOption(p, guide).orElse(true);
         ItemStack item = Converter.getItem(
-                getSelectedOption(p) ? Material.KNOWLEDGE_BOOK : Material.BOOK,
+                isEnabled(p) ? Material.KNOWLEDGE_BOOK : Material.BOOK,
                 "&b新手指引: &" + (enabled ? "a启用" : "4禁用"),
                 "",
                 "&7你现在可以选择是否",

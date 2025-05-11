@@ -10,7 +10,8 @@ public class SubGroupFormat extends Format {
         loadMapping(JustEnoughGuide.getConfigManager().getSubGroupFormat());
     }
 
-    public void decorate(@SuppressWarnings("deprecation") ChestMenu menu, Player player, int page, int maxPage) {
+    @Deprecated
+    public void decorate(ChestMenu menu, Player player, int page, int maxPage) {
         super.decorate(menu, player);
         super.decoratePage(menu, player, page, maxPage);
     }

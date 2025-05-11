@@ -4,7 +4,9 @@ import com.balugaq.jeg.api.groups.ClassicGuideGroup;
 import com.balugaq.jeg.api.interfaces.JEGSlimefunGuideImplementation;
 import com.balugaq.jeg.api.interfaces.NotDisplayInCheatMode;
 import com.balugaq.jeg.api.objects.enums.FilterType;
+import com.balugaq.jeg.api.objects.exceptions.ArgumentMissingException;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
+import com.balugaq.jeg.implementation.option.BeginnersGuideOption;
 import com.balugaq.jeg.utils.Debug;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.compatibility.Converter;
@@ -50,9 +52,17 @@ public class JEGGuideGroup extends ClassicGuideGroup {
         for (int slot : BORDER_SLOTS) {
             addGuide(slot, ChestMenuUtils.getBackground());
         }
+        boolean loaded = false;
         for (var s : Formats.helper.getChars('A')) {
             addGuide(s, HEADER);
+            loaded = true;
         }
+
+        if (!loaded) {
+            // Well... the user removed my author information
+            throw new ArgumentMissingException("You're not supposed to remove symbol 'A'... Which means Author Information.");
+        }
+
         final AtomicInteger index = new AtomicInteger(0);
         doIf(JustEnoughGuide.getConfigManager().isPinyinSearch(), () -> {
             addGuide(
@@ -66,7 +76,7 @@ public class JEGGuideGroup extends ClassicGuideGroup {
                             p.performCommand("sf search ding");
                         } catch (Throwable e) {
                             p.sendMessage("§c无法执行操作，请检查 Slimefun 是否正确安装。");
-                            e.printStackTrace();
+                            Debug.trace(e);
                         }
                         return false;
                     });
@@ -84,7 +94,7 @@ public class JEGGuideGroup extends ClassicGuideGroup {
                         p.performCommand("sf search a");
                     } catch (Throwable e) {
                         p.sendMessage("§c无法执行操作，请检查 Slimefun 是否正确安装。");
-                        e.printStackTrace();
+                        Debug.trace(e);
                     }
                     return false;
                 });
@@ -106,10 +116,6 @@ public class JEGGuideGroup extends ClassicGuideGroup {
                             }
 
                             SlimefunGuideImplementation guide = GuideUtil.getGuide(p, SlimefunGuideMode.SURVIVAL_MODE);
-                            if (guide == null) {
-                                p.sendMessage("§c无法获取指南，请检查是否正确安装 Slimefun。");
-                                return false;
-                            }
 
                             if (!(guide instanceof JEGSlimefunGuideImplementation jegGuide)) {
                                 p.sendMessage("§c功能未启用，无法使用此功能。");
@@ -132,7 +138,7 @@ public class JEGGuideGroup extends ClassicGuideGroup {
                             }
                         } catch (Throwable e) {
                             p.sendMessage("§c无法执行操作，请检查 Slimefun 是否正确安装。");
-                            e.printStackTrace();
+                            Debug.trace(e);
                         }
                         return false;
                     });
@@ -155,11 +161,6 @@ public class JEGGuideGroup extends ClassicGuideGroup {
                             }
 
                             SlimefunGuideImplementation guide = GuideUtil.getGuide(p, SlimefunGuideMode.SURVIVAL_MODE);
-                            if (guide == null) {
-                                p.sendMessage("§c无法获取指南，请检查是否正确安装 Slimefun。");
-                                return false;
-                            }
-
                             if (!(guide instanceof JEGSlimefunGuideImplementation jegGuide)) {
                                 p.sendMessage("§c功能未启用，无法使用此功能。");
                                 return false;
@@ -174,7 +175,7 @@ public class JEGGuideGroup extends ClassicGuideGroup {
                             jegGuide.openBookMarkGroup(p, profile);
                         } catch (Throwable e) {
                             p.sendMessage("§c无法执行操作，请检查 Slimefun 是否正确安装。");
-                            e.printStackTrace();
+                            Debug.trace(e);
                         }
                         return false;
                     });
@@ -196,11 +197,6 @@ public class JEGGuideGroup extends ClassicGuideGroup {
                         }
 
                         SlimefunGuideImplementation guide = GuideUtil.getGuide(p, SlimefunGuideMode.SURVIVAL_MODE);
-                        if (guide == null) {
-                            p.sendMessage("§c无法获取指南，请检查是否正确安装 Slimefun。");
-                            return false;
-                        }
-
                         if (!(guide instanceof JEGSlimefunGuideImplementation jegGuide)) {
                             p.sendMessage("§c功能未启用，无法使用此功能。");
                             return false;
@@ -221,7 +217,53 @@ public class JEGGuideGroup extends ClassicGuideGroup {
                         jegGuide.displayItem(profile, exampleItem, true);
                     } catch (Throwable e) {
                         p.sendMessage("§c无法执行操作，请检查 Slimefun 是否正确安装。");
-                        e.printStackTrace();
+                        Debug.trace(e);
+                    }
+                    return false;
+                });
+
+        addGuide(
+                GUIDE_SLOTS[index.getAndIncrement()],
+                Converter.getItem(
+                        Material.NAME_TAG,
+                        "&b功能: 快速搜索",
+                        "&b介绍: 当你在查阅一个物品的配方时，你可以快速搜索物品、材料、配方类型的名字",
+                        "&b      你可以 Shift + 右键 点击所需物品，你可以快速搜索物品、材料、配方类型的名字",
+                        "&b点击尝试功能。"
+                ), (p, s, i, a) -> {
+                    try {
+                        if (Slimefun.instance() == null) {
+                            p.sendMessage("§c无法获取 Slimefun 实例，无法使用此功能。");
+                            return false;
+                        }
+
+                        SlimefunGuideImplementation guide = GuideUtil.getGuide(p, SlimefunGuideMode.SURVIVAL_MODE);
+                        if (!(guide instanceof JEGSlimefunGuideImplementation jegGuide)) {
+                            p.sendMessage("§c功能未启用，无法使用此功能。");
+                            return false;
+                        }
+
+                        PlayerProfile profile = PlayerProfile.find(p).orElse(null);
+                        if (profile == null) {
+                            p.sendMessage("§c无法获取玩家资料，请检查是否正确安装 Slimefun。");
+                            return false;
+                        }
+
+                        if (!BeginnersGuideOption.isEnabled(p)) {
+                            p.sendMessage("§c此功能需要您在设置中启用新手指引。");
+                            return false;
+                        }
+
+                        SlimefunItem exampleItem = SlimefunItems.ELECTRIC_DUST_WASHER_3.getItem();
+                        if (exampleItem == null) {
+                            p.sendMessage("§c无法获取示例物品，请检查是否正确安装 Slimefun。");
+                            return false;
+                        }
+
+                        jegGuide.displayItem(profile, exampleItem, true);
+                    } catch (Throwable e) {
+                        p.sendMessage("§c无法执行操作，请检查 Slimefun 是否正确安装。");
+                        Debug.trace(e);
                     }
                     return false;
                 });
@@ -242,11 +284,6 @@ public class JEGGuideGroup extends ClassicGuideGroup {
                             }
 
                             SlimefunGuideImplementation guide = GuideUtil.getGuide(p, SlimefunGuideMode.SURVIVAL_MODE);
-                            if (guide == null) {
-                                p.sendMessage("§c无法获取指南，请检查是否正确安装 Slimefun。");
-                                return false;
-                            }
-
                             if (!(guide instanceof JEGSlimefunGuideImplementation jegGuide)) {
                                 p.sendMessage("§c功能未启用，无法使用此功能。");
                                 return false;
@@ -267,7 +304,7 @@ public class JEGGuideGroup extends ClassicGuideGroup {
                             jegGuide.displayItem(profile, exampleItem, true);
                         } catch (Throwable e) {
                             p.sendMessage("§c无法执行操作，请检查 Slimefun 是否正确安装。");
-                            e.printStackTrace();
+                            Debug.trace(e);
                         }
                         return false;
                     });
@@ -286,7 +323,7 @@ public class JEGGuideGroup extends ClassicGuideGroup {
                         p.performCommand("sf search 硫酸盐");
                     } catch (Throwable e) {
                         p.sendMessage("§c无法执行操作，请检查 Slimefun 是否正确安装。");
-                        e.printStackTrace();
+                        Debug.trace(e);
                     }
                     return false;
                 });
@@ -307,7 +344,7 @@ public class JEGGuideGroup extends ClassicGuideGroup {
                         p.performCommand("sf search " + flag_recipe_item_name + "电池");
                     } catch (Throwable e) {
                         p.sendMessage("§c无法执行操作，请检查 Slimefun 是否正确安装。");
-                        e.printStackTrace();
+                        Debug.trace(e);
                     }
                     return false;
                 });
@@ -328,7 +365,7 @@ public class JEGGuideGroup extends ClassicGuideGroup {
                         p.performCommand("sf search " + flag_recipe_type_name + "工作台");
                     } catch (Throwable e) {
                         p.sendMessage("§c无法执行操作，请检查 Slimefun 是否正确安装。");
-                        e.printStackTrace();
+                        Debug.trace(e);
                     }
                     return false;
                 });
@@ -349,7 +386,7 @@ public class JEGGuideGroup extends ClassicGuideGroup {
                         p.performCommand("sf search " + flag_display_item_name + "铜粉");
                     } catch (Throwable e) {
                         p.sendMessage("§c无法执行操作，请检查 Slimefun 是否正确安装。");
-                        e.printStackTrace();
+                        Debug.trace(e);
                     }
                     return false;
                 });
@@ -370,7 +407,7 @@ public class JEGGuideGroup extends ClassicGuideGroup {
                         p.performCommand("sf search " + flag_addon_name + "粘液科技");
                     } catch (Throwable e) {
                         p.sendMessage("§c无法执行操作，请检查 Slimefun 是否正确安装。");
-                        e.printStackTrace();
+                        Debug.trace(e);
                     }
                     return false;
                 });
@@ -391,7 +428,7 @@ public class JEGGuideGroup extends ClassicGuideGroup {
                         p.performCommand("sf search " + flag_item_name + "电池");
                     } catch (Throwable e) {
                         p.sendMessage("§c无法执行操作，请检查 Slimefun 是否正确安装。");
-                        e.printStackTrace();
+                        Debug.trace(e);
                     }
                     return false;
                 });
@@ -412,7 +449,7 @@ public class JEGGuideGroup extends ClassicGuideGroup {
                         p.performCommand("sf search " + flag_material_name + "iron");
                     } catch (Throwable e) {
                         p.sendMessage("§c无法执行操作，请检查 Slimefun 是否正确安装。");
-                        e.printStackTrace();
+                        Debug.trace(e);
                     }
                     return false;
                 });

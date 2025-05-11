@@ -1,12 +1,30 @@
 package com.balugaq.jeg.utils;
 
+import com.balugaq.jeg.api.groups.RTSSearchGroup;
+import com.balugaq.jeg.api.groups.SearchGroup;
+import com.balugaq.jeg.api.interfaces.BookmarkRelocation;
+import com.balugaq.jeg.api.interfaces.JEGSlimefunGuideImplementation;
+import com.balugaq.jeg.api.objects.events.RTSEvents;
+import com.balugaq.jeg.core.listeners.RTSListener;
+import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.compatibility.Converter;
+import com.balugaq.jeg.utils.formatter.Format;
+import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.groups.FlexItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.groups.LockedItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.groups.SeasonalItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.groups.SubItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.core.guide.GuideHistory;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
+import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.experimental.UtilityClass;
+import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
+import net.wesjd.anvilgui.AnvilGUI;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -94,5 +112,118 @@ public final class GuideUtil {
 
     public static @NotNull ItemStack getItemMarkMenuButton() {
         return ITEM_MARK_MENU_BUTTON;
+    }
+
+    public static boolean isTaggedGroupType(@NotNull ItemGroup itemGroup) {
+        Class<?> clazz = itemGroup.getClass();
+        return !(itemGroup instanceof FlexItemGroup) &&
+                (clazz == ItemGroup.class
+                        || clazz == SubItemGroup.class
+                        || clazz == LockedItemGroup.class
+                        || clazz == SeasonalItemGroup.class
+                        || itemGroup instanceof BookmarkRelocation
+                        || clazz.getName().equalsIgnoreCase("me.voper.slimeframe.implementation.groups.ChildGroup")
+                        || clazz.getName().endsWith("DummyItemGroup")
+                        || clazz.getName().endsWith("SubGroup"));
+    }
+
+    public static void addRTSButton(ChestMenu menu, Player p, PlayerProfile profile, Format format, SlimefunGuideMode mode, SlimefunGuideImplementation implementation) {
+        if (JustEnoughGuide.getConfigManager().isRTSSearch()) {
+            for (var ss : format.getChars('R')) {
+                menu.addItem(ss, ItemStackUtil.getCleanItem(Models.RTS_ITEM), (pl, slot, itemstack, action) -> {
+                    try {
+                        RTSSearchGroup.newRTSInventoryFor(pl, mode, (s, stateSnapshot) -> {
+                            if (s == AnvilGUI.Slot.INPUT_LEFT) {
+                                // back button clicked
+                                GuideHistory history = profile.getGuideHistory();
+                                if (action.isShiftClicked()) {
+                                    implementation.openMainMenu(profile, profile.getGuideHistory().getMainMenuPage());
+                                } else {
+                                    history.goBack(implementation);
+                                }
+                                return;
+                            } else if (s == AnvilGUI.Slot.INPUT_RIGHT) {
+                                // previous page button clicked
+                                SearchGroup rts = RTSSearchGroup.RTS_SEARCH_GROUPS.get(pl);
+                                if (rts != null) {
+                                    int oldPage = RTSSearchGroup.RTS_PAGES.getOrDefault(pl, 1);
+                                    int newPage = Math.max(1, oldPage - 1);
+                                    RTSEvents.PageChangeEvent event = new RTSEvents.PageChangeEvent(pl, RTSSearchGroup.RTS_PLAYERS.get(pl), oldPage, newPage, mode);
+                                    Bukkit.getPluginManager().callEvent(event);
+                                    if (!event.isCancelled()) {
+                                        synchronized (RTSSearchGroup.RTS_PAGES) {
+                                            RTSSearchGroup.RTS_PAGES.put(pl, newPage);
+                                        }
+                                    }
+                                }
+                            } else if (s == AnvilGUI.Slot.OUTPUT) {
+                                // next page button clicked
+                                SearchGroup rts = RTSSearchGroup.RTS_SEARCH_GROUPS.get(pl);
+                                if (rts != null) {
+                                    int oldPage = RTSSearchGroup.RTS_PAGES.getOrDefault(pl, 1);
+                                    int newPage = Math.min((rts.slimefunItemList.size() - 1) / RTSListener.FILL_ORDER.length + 1, oldPage + 1);
+                                    RTSEvents.PageChangeEvent event = new RTSEvents.PageChangeEvent(pl, RTSSearchGroup.RTS_PLAYERS.get(pl), oldPage, newPage, mode);
+                                    Bukkit.getPluginManager().callEvent(event);
+                                    if (!event.isCancelled()) {
+                                        synchronized (RTSSearchGroup.RTS_PAGES) {
+                                            RTSSearchGroup.RTS_PAGES.put(pl, newPage);
+                                        }
+                                    }
+                                }
+                            }
+                        }, new int[]{AnvilGUI.Slot.INPUT_LEFT, AnvilGUI.Slot.INPUT_RIGHT, AnvilGUI.Slot.OUTPUT}, null);
+                    } catch (Throwable ignored) {
+                        p.sendMessage(ChatColor.RED + "不兼容的版本! 无法使用实时搜索");
+                    }
+                    return false;
+                });
+            }
+        } else {
+            for (var ss : format.getChars('R')) {
+                menu.addItem(ss, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
+            }
+        }
+    }
+
+    public static void addBookMarkButton(ChestMenu menu, Player p, PlayerProfile profile, Format format, JEGSlimefunGuideImplementation implementation, ItemGroup itemGroup) {
+        if (JustEnoughGuide.getConfigManager().isBookmark()) {
+            BookmarkRelocation b = itemGroup instanceof BookmarkRelocation bookmarkRelocation ? bookmarkRelocation : null;
+            for (var s : b != null ? b.getBookMark(implementation, p) : format.getChars('C')) {
+                menu.addItem(
+                        s,
+                        ItemStackUtil.getCleanItem(getBookMarkMenuButton()),
+                        (pl, slot, itemstack, action) -> {
+                            implementation.openBookMarkGroup(pl, profile);
+                            return false;
+                        });
+            }
+        } else {
+            for (var s : format.getChars('C')) {
+                menu.addItem(
+                        s,
+                        ChestMenuUtils.getBackground(),
+                        ChestMenuUtils.getEmptyClickHandler()
+                );
+            }
+        }
+    }
+
+    public static void addItemMarkButton(ChestMenu menu, Player p, PlayerProfile profile, Format format, JEGSlimefunGuideImplementation implementation, ItemGroup itemGroup) {
+        if (itemGroup != null && JustEnoughGuide.getConfigManager().isBookmark() && isTaggedGroupType(itemGroup)) {
+            BookmarkRelocation b = itemGroup instanceof BookmarkRelocation relocation ? relocation : null;
+            for (var ss : b != null ? b.getItemMark(implementation, p) : format.getChars('c')) {
+                menu.addItem(
+                        ss,
+                        ItemStackUtil.getCleanItem(getItemMarkMenuButton()),
+                        (pl, slot, itemstack, action) -> {
+                            implementation.openItemMarkGroup(itemGroup, pl, profile);
+                            return false;
+                        });
+            }
+        } else {
+            for (var ss : format.getChars('c')) {
+                menu.addItem(ss, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
+            }
+        }
     }
 }
