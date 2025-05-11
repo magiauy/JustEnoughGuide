@@ -21,7 +21,7 @@ blacklist:
 banlist: []
 
 # 搜索时每组词间相通
-shared_chars:
+shared-chars:
   - "粘黏"
   - "荧萤"
   - "机器级"
