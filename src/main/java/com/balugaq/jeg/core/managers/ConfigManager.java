@@ -46,12 +46,14 @@ public class ConfigManager extends AbstractManager {
     private final @NotNull List<String> SHARED_CHARS;
     private final @NotNull List<String> BLACKLIST;
     private final @NotNull List<String> MAIN_FORMAT;
-    @ApiStatus.Experimental
     private final @NotNull List<String> NESTED_GROUP_FORMAT;
     private final @NotNull List<String> SUB_GROUP_FORMAT;
     private final @NotNull List<String> RECIPE_FORMAT;
     private final @NotNull List<String> HELPER_FORMAT;
+    private final @NotNull List<String> RECIPE_VANILLA_FORMAT;
+    private final @NotNull List<String> RECIPE_DISPLAY_FORMAT;
     private final @NotNull Map<String, String> LOCAL_TRANSLATE;
+    private final @NotNull List<String> BANLIST;
     private final @NotNull JavaPlugin plugin;
 
     public ConfigManager(@NotNull JavaPlugin plugin) {
@@ -83,6 +85,8 @@ public class ConfigManager extends AbstractManager {
             this.SHARED_CHARS.add("机器级");
             this.SHARED_CHARS.add("灵零");
             this.SHARED_CHARS.add("动力");
+            this.SHARED_CHARS.add("拆反");
+            this.SHARED_CHARS.add("解向");
         } else {
             this.SHARED_CHARS = rawSharedChars;
         }
@@ -131,7 +135,7 @@ public class ConfigManager extends AbstractManager {
             this.RECIPE_FORMAT = new ArrayList<>();
             this.RECIPE_FORMAT.add("b  rrr  w");
             this.RECIPE_FORMAT.add(" t rrr i ");
-            this.RECIPE_FORMAT.add("   rrr  R");
+            this.RECIPE_FORMAT.add("   rrr  E");
         } else {
             this.RECIPE_FORMAT = rawRecipeFormat;
         }
@@ -149,6 +153,30 @@ public class ConfigManager extends AbstractManager {
             this.HELPER_FORMAT = rawHelperFormat;
         }
 
+        var rawRecipeVanillaFormat = plugin.getConfig().getStringList("custom-format.recipe-vanilla");
+        if (rawRecipeVanillaFormat == null || rawRecipeVanillaFormat.isEmpty()) {
+            this.RECIPE_VANILLA_FORMAT = new ArrayList<>();
+            this.RECIPE_VANILLA_FORMAT.add("b  rrr  w");
+            this.RECIPE_VANILLA_FORMAT.add(" t rrr i ");
+            this.RECIPE_VANILLA_FORMAT.add("   rrr   ");
+            this.RECIPE_VANILLA_FORMAT.add("BPBBBBBNB");
+        } else {
+            this.RECIPE_VANILLA_FORMAT = rawRecipeVanillaFormat;
+        }
+
+        var rawRecipeDisplayFormat = plugin.getConfig().getStringList("custom-format.recipe-display");
+        if (rawRecipeDisplayFormat == null || rawRecipeDisplayFormat.isEmpty()) {
+            this.RECIPE_DISPLAY_FORMAT = new ArrayList<>();
+            this.RECIPE_DISPLAY_FORMAT.add("b  rrr  w");
+            this.RECIPE_DISPLAY_FORMAT.add(" t rrr i ");
+            this.RECIPE_DISPLAY_FORMAT.add("   rrr  E");
+            this.RECIPE_DISPLAY_FORMAT.add("BPBBBBBNB");
+            this.RECIPE_DISPLAY_FORMAT.add("ddddddddd");
+            this.RECIPE_DISPLAY_FORMAT.add("ddddddddd");
+        } else {
+            this.RECIPE_DISPLAY_FORMAT = rawRecipeDisplayFormat;
+        }
+
         this.LOCAL_TRANSLATE = new HashMap<>();
         var c = plugin.getConfig().getConfigurationSection("local-translate");
         if (c != null) {
@@ -156,6 +184,8 @@ public class ConfigManager extends AbstractManager {
                 this.LOCAL_TRANSLATE.put(k, c.getString(k));
             }
         }
+
+        this.BANLIST = plugin.getConfig().getStringList("banlist");
     }
 
     private void setupDefaultConfig() {
@@ -263,7 +293,19 @@ public class ConfigManager extends AbstractManager {
         return HELPER_FORMAT;
     }
 
+    public @NotNull List<String> getRecipeVanillaFormat() {
+        return RECIPE_VANILLA_FORMAT;
+    }
+
+    public @NotNull List<String> getRecipeDisplayFormat() {
+        return RECIPE_DISPLAY_FORMAT;
+    }
+
     public @NotNull Map<String, String> getLocalTranslate() {
         return LOCAL_TRANSLATE;
+    }
+
+    public @NotNull List<String> getBanlist() {
+        return BANLIST;
     }
 }

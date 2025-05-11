@@ -7,22 +7,26 @@ import com.balugaq.jeg.api.interfaces.JEGSlimefunGuideImplementation;
 import com.balugaq.jeg.api.interfaces.NotDisplayInSurvivalMode;
 import com.balugaq.jeg.core.listeners.GuideListener;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
+import com.balugaq.jeg.utils.Debug;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
-import com.balugaq.jeg.utils.LocalHelper;
 import com.balugaq.jeg.utils.Models;
+import com.balugaq.jeg.utils.ReflectionUtil;
 import com.balugaq.jeg.utils.SpecialMenuProvider;
 import com.balugaq.jeg.utils.clickhandler.BeginnerUtils;
 import com.balugaq.jeg.utils.clickhandler.GroupLinker;
 import com.balugaq.jeg.utils.compatibility.Converter;
 import com.balugaq.jeg.utils.formatter.Format;
 import com.balugaq.jeg.utils.formatter.Formats;
+import com.balugaq.jeg.utils.formatter.RecipeDisplayFormat;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.api.events.PlayerPreResearchEvent;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.groups.FlexItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.groups.LockedItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.groups.NestedItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.groups.SubItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.api.researches.Research;
@@ -48,7 +52,6 @@ import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu.MenuClickHan
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -84,15 +87,18 @@ import java.util.logging.Level;
 public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implements JEGSlimefunGuideImplementation {
     @Deprecated
     public static final int RTS_SLOT = 6;
+    @Deprecated
     public static final ItemStack RTS_ITEM = Models.RTS_ITEM;
-    public static final NamespacedKey UNLOCK_ITEM_KEY = new NamespacedKey(JustEnoughGuide.getInstance(), "unlock_item");
-    public static final int MAX_ITEM_GROUPS = Formats.main.getChars('G').size();
-    public static final int MAX_ITEMS = Formats.sub.getChars('i').size();
     @Deprecated
     public static final int SPECIAL_MENU_SLOT = 26;
+    @Deprecated
     public static final ItemStack SPECIAL_MENU_ITEM = Models.SPECIAL_MENU_ITEM;
-
+    @Deprecated
     public static final int[] recipeSlots = Formats.recipe.getChars('r').stream().sorted().limit(9).mapToInt(i -> i).toArray();
+
+    public static final int MAX_ITEM_GROUPS = Formats.main.getChars('G').size();
+    public static final int MAX_ITEMS = Formats.sub.getChars('i').size();
+
     public final @NotNull ItemStack item;
 
     public SurvivalGuideImplementation() {
@@ -115,70 +121,6 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         item = new SlimefunGuideItem(this, name);
     }
 
-    @ParametersAreNonnullByDefault
-    private static @NotNull ItemStack getDisplayItem(Player p, boolean isSlimefunRecipe, ItemStack item) {
-        if (isSlimefunRecipe) {
-            SlimefunItem slimefunItem = SlimefunItem.getByItem(item);
-
-            if (slimefunItem == null) {
-                return item;
-            }
-
-            ItemGroup itemGroup = slimefunItem.getItemGroup();
-            if (slimefunItem.isDisabledIn(p.getWorld())) {
-                return ItemStackUtil.getCleanItem(Converter.getItem(
-                        Material.BARRIER,
-                        ItemUtils.getItemName(item),
-                        "&4&l 该 Slimefun 物品已被禁用"
-                ));
-            }
-            String lore = hasPermission(p, slimefunItem)
-                    ? String.format(
-                    "&f需要在 %s 中解锁",
-                    (LocalHelper.getAddonName(itemGroup, slimefunItem.getId())) + ChatColor.WHITE + " - " + LocalHelper.getDisplayName(itemGroup, p))
-                    : "&f无权限";
-            Research research = slimefunItem.getResearch();
-            if (research == null) {
-                return ItemStackUtil.getCleanItem(
-                        slimefunItem.canUse(p, false)
-                                ? item
-                                : Converter.getItem(Converter.getItem(
-                                Material.BARRIER,
-                                ItemUtils.getItemName(item),
-                                "&4&l" + Slimefun.getLocalization().getMessage(p, "guide.locked"),
-                                "",
-                                lore), meta -> {
-                            meta.getPersistentDataContainer().set(UNLOCK_ITEM_KEY, PersistentDataType.STRING, slimefunItem.getId());
-                        }));
-            } else {
-                String cost = VaultIntegration.isEnabled() ? String.format("%.2f", research.getCurrencyCost()) + " 游戏币" : research.getLevelCost() + " 级经验";
-                return ItemStackUtil.getCleanItem(
-                        slimefunItem.canUse(p, false)
-                                ? item
-                                : Converter.getItem(Converter.getItem(
-                                Material.BARRIER,
-                                ItemUtils.getItemName(item),
-                                "&4&l" + Slimefun.getLocalization().getMessage(p, "guide.locked"),
-                                "",
-                                lore,
-                                "",
-                                "&a单击解锁",
-                                "",
-                                "&7需要",
-                                "&b" + cost), meta -> {
-                            meta.getPersistentDataContainer().set(UNLOCK_ITEM_KEY, PersistentDataType.STRING, slimefunItem.getId());
-                        }));
-            }
-        } else {
-            return item;
-        }
-    }
-
-    @ParametersAreNonnullByDefault
-    private static boolean hasPermission(Player p, SlimefunItem item) {
-        return Slimefun.getPermissionsService().hasPermission(p, item);
-    }
-
     @Override
     public @NotNull SlimefunGuideMode getMode() {
         return SlimefunGuideMode.SURVIVAL_MODE;
@@ -196,7 +138,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
      * @param profile The {@link PlayerProfile} of the {@link Player}
      * @return a {@link List} of visible {@link ItemGroup} instances
      */
-    protected @NotNull List<ItemGroup> getVisibleItemGroups(@NotNull Player p, @NotNull PlayerProfile profile) {
+    public @NotNull List<ItemGroup> getVisibleItemGroups(@NotNull Player p, @NotNull PlayerProfile profile) {
         List<ItemGroup> groups = new LinkedList<>();
 
         for (ItemGroup group : Slimefun.getRegistry().getAllItemGroups()) {
@@ -288,16 +230,13 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
             });
         }
 
-        GuideUtil.addRTSButton(menu, p, profile, Formats.main, getMode(), this);
-        GuideUtil.addBookMarkButton(menu, p, profile, Formats.main, this, null);
-        GuideUtil.addItemMarkButton(menu, p, profile, Formats.main, this, null);
-
         GuideListener.guideModeMap.put(p, getMode());
 
         menu.open(p);
     }
 
-    private void showItemGroup(
+    @Override
+    public void showItemGroup(
             @NotNull ChestMenu menu, @NotNull Player p, @NotNull PlayerProfile profile, ItemGroup group, int index) {
         if (!(group instanceof LockedItemGroup)
                 || !isSurvivalMode()
@@ -352,12 +291,10 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
             return;
         }
 
-        /* todo - Modify NestedItemGroup's GUI
-
         if (itemGroup instanceof NestedItemGroup nested && itemGroup.getClass() == NestedItemGroup.class) {
-
+            openNestedItemGroup(p, profile, nested, page);
+            return;
         }
-        */
 
         if (itemGroup instanceof FlexItemGroup flexItemGroup) {
             flexItemGroup.open(p, profile, getMode());
@@ -423,7 +360,84 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         menu.open(p);
     }
 
-    private void displaySlimefunItem(
+    public void openNestedItemGroup(@NotNull Player p, @NotNull PlayerProfile profile, @NotNull NestedItemGroup nested, int page) {
+        GuideHistory history = profile.getGuideHistory();
+
+        history.add(nested, page);
+
+        ChestMenu menu = new ChestMenu(Slimefun.getLocalization().getMessage(p, "guide.title.main"));
+
+        menu.setEmptySlotsClickable(false);
+
+        menu.addMenuOpeningHandler(p2 -> {
+            try {
+                SoundEffect.GUIDE_BUTTON_CLICK_SOUND.playFor(p2);
+            } catch (Throwable ignored) {
+            }
+        });
+
+        this.createHeader(p, profile, menu, Formats.nested);
+
+        var ss = Formats.nested.getChars('G');
+        var groupsPerPage = ss.size();
+
+        try {
+            @SuppressWarnings("unchecked") List<SubItemGroup> subGroups = (List<SubItemGroup>) ReflectionUtil.getValue(nested, "subGroups");
+            if (subGroups == null) {
+                return;
+            }
+
+            int t = 0;
+            int target = groupsPerPage * (page - 1) - 1;
+            for (int i = 0; i < subGroups.size() && t < groupsPerPage; i++) {
+                target = groupsPerPage * (page - 1) + i;
+                if (target >= subGroups.size()) {
+                    break;
+                }
+
+                SubItemGroup subGroup = subGroups.get(target);
+                if (subGroup.isVisibleInNested(p)) {
+                    menu.addItem(ss.get(t), subGroup.getItem(p));
+                    menu.addMenuClickHandler(ss.get(t), (pl, slot, item, action) -> {
+                        SlimefunGuide.openItemGroup(profile, subGroup, getMode(), 1);
+                        return false;
+                    });
+                    t+=1;
+                }
+            }
+
+            int pages = target == subGroups.size() - 1 ? page : (subGroups.size() - 1) / groupsPerPage + 1;
+            for (var s :  Formats.nested.getChars('P')) {
+                menu.addItem(s, ChestMenuUtils.getPreviousButton(p, page, pages));
+                menu.addMenuClickHandler(s, (pl, slot, item, action) -> {
+                    int next = page - 1;
+                    if (next > 0) {
+                        this.openNestedItemGroup(p, profile, nested, next);
+                    }
+
+                    return false;
+                });
+            }
+
+            for (var s : Formats.nested.getChars('N')) {
+                menu.addItem(s, ChestMenuUtils.getNextButton(p, page, pages));
+                menu.addMenuClickHandler(s, (pl, slot, item, action) -> {
+                    int next = page + 1;
+                    if (next <= pages) {
+                        this.openNestedItemGroup(p, profile, nested, next);
+                    }
+
+                    return false;
+                });
+            }
+
+            menu.open(p);
+        } catch (Throwable e) {
+            Debug.trace(e);
+        }
+    }
+
+    public void displaySlimefunItem(
             @NotNull ChestMenu menu,
             @NotNull ItemGroup itemGroup,
             @NotNull Player p,
@@ -433,7 +447,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
             int index) {
         Research research = sfitem.getResearch();
 
-        if (isSurvivalMode() && !hasPermission(p, sfitem)) {
+        if (isSurvivalMode() && !JEGSlimefunGuideImplementation.hasPermission(p, sfitem)) {
             List<String> message = Slimefun.getPermissionsService().getLore(sfitem);
             menu.addItem(
                     index,
@@ -539,6 +553,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
             return;
         }
 
+        // Not SlimefunItem
         if (!Slimefun.getConfigManager().isShowVanillaRecipes()) {
             return;
         }
@@ -552,8 +567,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         showMinecraftRecipe(recipes, index, item, profile, p, addToHistory);
     }
 
-    // todo - Minecraft recipe, custom format
-    private void showMinecraftRecipe(
+    public void showMinecraftRecipe(
             Recipe @NotNull [] recipes,
             int index,
             @NotNull ItemStack item,
@@ -595,35 +609,39 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
             profile.getGuideHistory().add(item, index);
         }
 
-        displayItem(menu, profile, p, item, result, recipeType, recipeItems, task);
+        displayItem(menu, profile, p, item, result, recipeType, recipeItems, task, Formats.recipe_vanilla);
 
         if (recipes.length > 1) {
-            for (int i = 27; i < 36; i++) {
+            for (var s : Formats.recipe_vanilla.getChars('B')) {
                 menu.addItem(
-                        i,
+                        s,
                         ItemStackUtil.getCleanItem(ChestMenuUtils.getBackground()),
                         ChestMenuUtils.getEmptyClickHandler());
             }
 
-            menu.addItem(
-                    28,
-                    ItemStackUtil.getCleanItem(ChestMenuUtils.getPreviousButton(p, index + 1, recipes.length)),
-                    (pl, slot, action, stack) -> {
-                        if (index > 0) {
-                            showMinecraftRecipe(recipes, index - 1, item, profile, p, true);
-                        }
-                        return false;
-                    });
+            for (var s : Formats.recipe_vanilla.getChars('P')) {
+                menu.addItem(
+                        s,
+                        ItemStackUtil.getCleanItem(ChestMenuUtils.getPreviousButton(p, index + 1, recipes.length)),
+                        (pl, slot, action, stack) -> {
+                            if (index > 0) {
+                                showMinecraftRecipe(recipes, index - 1, item, profile, p, true);
+                            }
+                            return false;
+                        });
+            }
 
-            menu.addItem(
-                    34,
-                    ItemStackUtil.getCleanItem(ChestMenuUtils.getNextButton(p, index + 1, recipes.length)),
-                    (pl, slot, action, stack) -> {
-                        if (index < recipes.length - 1) {
-                            showMinecraftRecipe(recipes, index + 1, item, profile, p, true);
-                        }
-                        return false;
-                    });
+            for (var s : Formats.recipe_vanilla.getChars('N')) {
+                menu.addItem(
+                        s,
+                        ItemStackUtil.getCleanItem(ChestMenuUtils.getNextButton(p, index + 1, recipes.length)),
+                        (pl, slot, action, stack) -> {
+                            if (index < recipes.length - 1) {
+                                showMinecraftRecipe(recipes, index + 1, item, profile, p, true);
+                            }
+                            return false;
+                        });
+            }
         }
 
         menu.open(p);
@@ -633,15 +651,16 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         }
     }
 
-    private <T extends Recipe> void showRecipeChoices(
+    public <T extends Recipe> void showRecipeChoices(
             @NotNull T recipe, ItemStack[] recipeItems, @NotNull AsyncRecipeChoiceTask task) {
         RecipeChoice[] choices = Slimefun.getMinecraftRecipeService().getRecipeShape(recipe);
 
+        var recipeSlots = Formats.recipe_vanilla.getChars('r');
         if (choices.length == 1 && choices[0] instanceof MaterialChoice materialChoice) {
             recipeItems[4] = new ItemStack(materialChoice.getChoices().get(0));
 
             if (materialChoice.getChoices().size() > 1) {
-                task.add(recipeSlots[4], materialChoice);
+                task.add(recipeSlots.get(4), materialChoice);
             }
         } else {
             for (int i = 0; i < choices.length; i++) {
@@ -649,7 +668,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
                     recipeItems[i] = new ItemStack(materialChoice.getChoices().get(0));
 
                     if (materialChoice.getChoices().size() > 1) {
-                        task.add(recipeSlots[i], materialChoice);
+                        task.add(recipeSlots.get(i), materialChoice);
                     }
                 }
             }
@@ -663,7 +682,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
     }
 
     @ParametersAreNonnullByDefault
-    public void displayItem(PlayerProfile profile, SlimefunItem item, boolean addToHistory, boolean maybeSpecial) {
+    public void displayItem(PlayerProfile profile, SlimefunItem item, boolean addToHistory, boolean maybeSpecial, Format format) {
         Player p = profile.getPlayer();
 
         if (p == null) {
@@ -674,7 +693,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         Optional<String> wiki = item.getWikipage();
 
         if (wiki.isPresent()) {
-            for (var s : Formats.recipe.getChars('w')) {
+            for (var s : format.getChars('w')) {
                 menu.addItem(
                         s,
                         ItemStackUtil.getCleanItem(Converter.getItem(
@@ -703,15 +722,15 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         RecipeType recipeType = item.getRecipeType();
         ItemStack[] recipe = item.getRecipe();
 
-        displayItem(menu, profile, p, item, result, recipeType, recipe, task);
+        displayItem(menu, profile, p, item, result, recipeType, recipe, task, format);
 
         if (item instanceof RecipeDisplayItem recipeDisplayItem) {
             displayRecipes(p, profile, menu, recipeDisplayItem, 0);
         }
 
         if (maybeSpecial && SpecialMenuProvider.isSpecialItem(item)) {
-            for (var s : Formats.recipe.getChars('E')) {
-                menu.addItem(s, SPECIAL_MENU_ITEM, (pl, slot, itemstack, action) -> {
+            for (var s : format.getChars('E')) {
+                menu.addItem(s, Models.SPECIAL_MENU_ITEM, (pl, slot, itemstack, action) -> {
                     try {
                         SpecialMenuProvider.open(profile.getPlayer(), profile, getMode(), item);
                     } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
@@ -729,7 +748,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         }
     }
 
-    private void displayItem(
+    public void displayItem(
             @NotNull ChestMenu menu,
             @NotNull PlayerProfile profile,
             @NotNull Player p,
@@ -738,14 +757,27 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
             @NotNull RecipeType recipeType,
             ItemStack[] recipe,
             @NotNull AsyncRecipeChoiceTask task) {
-        for (var s : Formats.recipe.getChars('b')) {
+        displayItem(menu, profile, p, item, output, recipeType, recipe, task, Formats.recipe);
+    }
+
+    public void displayItem(
+            @NotNull ChestMenu menu,
+            @NotNull PlayerProfile profile,
+            @NotNull Player p,
+            Object item,
+            ItemStack output,
+            @NotNull RecipeType recipeType,
+            ItemStack[] recipe,
+            @NotNull AsyncRecipeChoiceTask task,
+            Format format) {
+        for (var s : format.getChars('b')) {
             addBackButton(menu, s, p, profile);
         }
 
         MenuClickHandler clickHandler = (pl, slot, itemstack, action) -> {
             try {
                 if (itemstack != null && itemstack.getType() != Material.AIR) {
-                    String id = itemstack.getItemMeta().getPersistentDataContainer().get(UNLOCK_ITEM_KEY, PersistentDataType.STRING);
+                    String id = itemstack.getItemMeta().getPersistentDataContainer().get(JEGSlimefunGuideImplementation.UNLOCK_ITEM_KEY, PersistentDataType.STRING);
                     if (id != null) {
                         SlimefunItem sfItem = SlimefunItem.getById(id);
                         if (sfItem != null && !sfItem.isDisabledIn(p.getWorld())) {
@@ -757,7 +789,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
                                         // re-open
                                         p.closeInventory();
                                         GuideUtil.removeLastEntry(profile.getGuideHistory());
-                                        displayItem(menu, profile, p, item, output, recipeType, recipe, task);
+                                        displayItem(menu, profile, p, item, output, recipeType, recipe, task, format);
                                         menu.open(p);
                                     } else {
                                         PlayerPreResearchEvent event = new PlayerPreResearchEvent(p, research, sfItem);
@@ -769,7 +801,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
                                                     // re-open
                                                     p2.closeInventory();
                                                     GuideUtil.removeLastEntry(profile.getGuideHistory());
-                                                    displayItem(menu, profile, p2, item, output, recipeType, recipe, task);
+                                                    displayItem(menu, profile, p2, item, output, recipeType, recipe, task, format);
                                                     menu.open(p2);
                                                 });
                                             } else {
@@ -792,79 +824,33 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
 
         boolean isSlimefunRecipe = item instanceof SlimefunItem;
 
+        var recipeSlots = format.getChars('r');
         for (int i = 0; i < 9; i++) {
-            ItemStack recipeItem = getDisplayItem(p, isSlimefunRecipe, recipe[i]);
-            menu.addItem(recipeSlots[i], ItemStackUtil.getCleanItem(recipeItem), clickHandler);
-            BeginnerUtils.applyBeginnersGuide(this, menu, recipeSlots[i]);
-            GroupLinker.applyGroupLinker(this, menu, recipeSlots[i]);
+            ItemStack recipeItem = JEGSlimefunGuideImplementation.getDisplayItem(p, isSlimefunRecipe, recipe[i]);
+            menu.addItem(recipeSlots.get(i), ItemStackUtil.getCleanItem(recipeItem), clickHandler);
+            BeginnerUtils.applyBeginnersGuide(this, menu, recipeSlots.get(i));
+            GroupLinker.applyGroupLinker(this, menu, recipeSlots.get(i));
 
             if (recipeItem != null && item instanceof MultiBlockMachine) {
                 for (Tag<Material> tag : MultiBlock.getSupportedTags()) {
                     if (tag.isTagged(recipeItem.getType())) {
-                        task.add(recipeSlots[i], tag);
+                        task.add(recipeSlots.get(i), tag);
                         break;
                     }
                 }
             }
         }
 
-        for (var s : Formats.recipe.getChars('t')) {
+        for (var s : format.getChars('t')) {
             menu.addItem(s, ItemStackUtil.getCleanItem(recipeType.getItem(p)), ChestMenuUtils.getEmptyClickHandler());
             BeginnerUtils.applyBeginnersGuide(this, menu, s);
             GroupLinker.applyGroupLinker(this, menu, s);
         }
-        for (var s : Formats.recipe.getChars('i')) {
+        for (var s : format.getChars('i')) {
             menu.addItem(s, ItemStackUtil.getCleanItem(output), ChestMenuUtils.getEmptyClickHandler());
             BeginnerUtils.applyBeginnersGuide(this, menu, s);
             GroupLinker.applyGroupLinker(this, menu, s);
         }
-    }
-
-    @ParametersAreNonnullByDefault
-    public void createHeader(Player p, PlayerProfile profile, ChestMenu menu) {
-        createHeader(p, profile, menu, Formats.main);
-    }
-
-    @ParametersAreNonnullByDefault
-    @ApiStatus.Experimental
-    public void createHeader(Player p, PlayerProfile profile, ChestMenu menu, Format format) {
-        for (var s : format.getChars('B')) {
-            menu.addItem(
-                    s,
-                    ItemStackUtil.getCleanItem(ChestMenuUtils.getBackground()),
-                    ChestMenuUtils.getEmptyClickHandler());
-        }
-
-        for (var s : format.getChars('b')) {
-            addBackButton(menu, s, p, profile);
-        }
-
-        // Settings Panel
-        for (var s : format.getChars('T')) {
-            menu.addItem(s, ItemStackUtil.getCleanItem(ChestMenuUtils.getMenuButton(p)));
-            menu.addMenuClickHandler(s, (pl, slot, item, action) -> {
-                SlimefunGuideSettings.openSettings(pl, pl.getInventory().getItemInMainHand());
-                return false;
-            });
-        }
-
-        // Search feature!
-        for (var s : format.getChars('S')) {
-            menu.addItem(s, ItemStackUtil.getCleanItem(ChestMenuUtils.getSearchButton(p)));
-            menu.addMenuClickHandler(s, (pl, slot, item, action) -> {
-                pl.closeInventory();
-
-                Slimefun.getLocalization().sendMessage(pl, "guide.search.message");
-                ChatInput.waitForPlayer(
-                        JustEnoughGuide.getInstance(), pl, msg -> openSearch(profile, msg, isSurvivalMode()));
-
-                return false;
-            });
-        }
-
-        GuideUtil.addRTSButton(menu, p, profile, Formats.main, getMode(), this);
-        GuideUtil.addBookMarkButton(menu, p, profile, Formats.main, this, null);
-        GuideUtil.addItemMarkButton(menu, p, profile, Formats.main, this, null);
     }
 
     @ParametersAreNonnullByDefault
@@ -905,7 +891,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         GuideUtil.addItemMarkButton(menu, p, profile, Formats.main, this, itemGroup);
     }
 
-    private void addBackButton(@NotNull ChestMenu menu, int slot, @NotNull Player p, @NotNull PlayerProfile profile) {
+    public void addBackButton(@NotNull ChestMenu menu, int slot, @NotNull Player p, @NotNull PlayerProfile profile) {
         GuideHistory history = profile.getGuideHistory();
 
         if (isSurvivalMode() && history.size() > 1) {
@@ -935,75 +921,69 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         }
     }
 
-    // todo - RecipeDisplayItem, custom format
     @ParametersAreNonnullByDefault
-    private void displayRecipes(Player p, PlayerProfile profile, ChestMenu menu, RecipeDisplayItem sfItem, int page) {
+    public void displayRecipes(Player p, PlayerProfile profile, ChestMenu menu, RecipeDisplayItem sfItem, int page) {
         List<ItemStack> recipes = sfItem.getDisplayRecipes();
 
         if (!recipes.isEmpty()) {
-            menu.addItem(53, ItemStackUtil.getCleanItem(null));
+            menu.addItem(Formats.recipe_display.getSize() - 1, ItemStackUtil.getCleanItem(null));
 
             if (page == 0) {
-                for (int i = 27; i < 36; i++) {
+                for (var s : Formats.recipe_display.getChars('B')) {
                     menu.replaceExistingItem(
-                            i,
+                            s,
                             ItemStackUtil.getCleanItem(Converter.getItem(
                                     ChestMenuUtils.getBackground(), sfItem.getRecipeSectionLabel(p))));
-                    menu.addMenuClickHandler(i, ChestMenuUtils.getEmptyClickHandler());
+                    menu.addMenuClickHandler(s, ChestMenuUtils.getEmptyClickHandler());
                 }
             }
 
-            int pages = (recipes.size() - 1) / 18 + 1;
+            var ds = Formats.recipe_display.getChars('d');
+            var l = ds.size();
+            int pages = (recipes.size() - 1) / l + 1;
 
-            menu.replaceExistingItem(
-                    28, ItemStackUtil.getCleanItem(ChestMenuUtils.getPreviousButton(p, page + 1, pages)));
-            menu.addMenuClickHandler(28, (pl, slot, itemstack, action) -> {
-                if (page > 0) {
-                    displayRecipes(pl, profile, menu, sfItem, page - 1);
-                    SoundEffect.GUIDE_BUTTON_CLICK_SOUND.playFor(pl);
-                }
+            for (var s : Formats.recipe_display.getChars('P')) {
+                menu.replaceExistingItem(
+                        s, ItemStackUtil.getCleanItem(ChestMenuUtils.getPreviousButton(p, page + 1, pages)));
+                menu.addMenuClickHandler(s, (pl, slot, itemstack, action) -> {
+                    if (page > 0) {
+                        displayRecipes(pl, profile, menu, sfItem, page - 1);
+                        SoundEffect.GUIDE_BUTTON_CLICK_SOUND.playFor(pl);
+                    }
 
-                return false;
-            });
+                    return false;
+                });
+            }
 
-            menu.replaceExistingItem(34, ItemStackUtil.getCleanItem(ChestMenuUtils.getNextButton(p, page + 1, pages)));
-            menu.addMenuClickHandler(34, (pl, slot, itemstack, action) -> {
-                if (recipes.size() > (18 * (page + 1))) {
-                    displayRecipes(pl, profile, menu, sfItem, page + 1);
-                    SoundEffect.GUIDE_BUTTON_CLICK_SOUND.playFor(pl);
-                }
+            for (var s : Formats.recipe_display.getChars('N')) {
+                menu.replaceExistingItem(s, ItemStackUtil.getCleanItem(ChestMenuUtils.getNextButton(p, page + 1, pages)));
+                menu.addMenuClickHandler(s, (pl, slot, itemstack, action) -> {
+                    if (recipes.size() > (l * (page + 1))) {
+                        displayRecipes(pl, profile, menu, sfItem, page + 1);
+                        SoundEffect.GUIDE_BUTTON_CLICK_SOUND.playFor(pl);
+                    }
 
-                return false;
-            });
+                    return false;
+                });
+            }
 
-            int inputs = 36;
-            int outputs = 45;
-
-            for (int i = 0; i < 18; i++) {
-                int slot;
-
-                if (i % 2 == 0) {
-                    slot = inputs;
-                    inputs++;
-                } else {
-                    slot = outputs;
-                    outputs++;
-                }
-
-                addDisplayRecipe(menu, profile, recipes, slot, i, page);
+            var fds = RecipeDisplayFormat.fenceShuffle(ds);
+            for (int i = 0; i < l; i++) {
+                addDisplayRecipe(menu, profile, recipes, fds.get(i), i, page);
             }
         }
     }
 
-    private void addDisplayRecipe(
+    public void addDisplayRecipe(
             @NotNull ChestMenu menu,
             @NotNull PlayerProfile profile,
             @NotNull List<ItemStack> recipes,
             int slot,
             int i,
             int page) {
-        if ((i + (page * 18)) < recipes.size()) {
-            ItemStack displayItem = recipes.get(i + (page * 18));
+        var l = Formats.recipe_display.getChars('d').size();
+        if ((i + (page * l)) < recipes.size()) {
+            ItemStack displayItem = recipes.get(i + (page * l));
 
             /*
              * We want to clone this item to avoid corrupting the original
@@ -1029,17 +1009,8 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         }
     }
 
-    @NotNull
-    public ChestMenu create(@NotNull Player p) {
-        ChestMenu menu = new ChestMenu(JustEnoughGuide.getConfigManager().getSurvivalGuideTitle());
-
-        menu.setEmptySlotsClickable(false);
-        menu.addMenuOpeningHandler(SoundEffect.GUIDE_BUTTON_CLICK_SOUND::playFor);
-        return menu;
-    }
-
     @ParametersAreNonnullByDefault
-    private void printErrorMessage(Player p, Throwable x) {
+    public void printErrorMessage(Player p, Throwable x) {
         p.sendMessage(ChatColor.DARK_RED + "服务器发生了一个内部错误. 请联系管理员处理.");
         JustEnoughGuide.getInstance().getLogger().log(Level.SEVERE, "在打开指南书里的 Slimefun 物品时发生了意外!", x);
         JustEnoughGuide.getInstance().getLogger().warning("我们正在尝试恢复玩家 \"" + p.getName() + "\" 的指南...");
@@ -1051,7 +1022,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
     }
 
     @ParametersAreNonnullByDefault
-    private void printErrorMessage(Player p, SlimefunItem item, Throwable x) {
+    public void printErrorMessage(Player p, SlimefunItem item, Throwable x) {
         p.sendMessage(ChatColor.DARK_RED
                 + "An internal server error has occurred. Please inform an admin, check the console for"
                 + " further info.");

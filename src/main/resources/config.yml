@@ -13,25 +13,33 @@ improvements:
   rts-search: true
   beginner-option: true
 
+# 禁止搜索非限定词时出现名字包含以下任意词的物品
 blacklist:
   - "快捷"
 
+# 禁止任何形式搜出名字包含以下任意词的物品
+banlist: []
+
+# 搜索时每组词间相通
 shared_chars:
   - "粘黏"
   - "荧萤"
   - "机器级"
   - "灵零"
   - "动力"
+  - "拆反"
+  - "解向"
 
 custom-format:
   # 粘液书主界面
   # B = 背景板
+  # b = 返回
   # T = 设置
   # R = 实时搜索（功能未开启则为背景板显示）
+  # C = 收藏物列表（功能未开启则为背景板显示）
   # S = 搜索
   # G = 物品组
   # P = 上一页
-  # C = 收藏物列表（功能未开启则为背景板显示）
   # N = 下一页
   main:
     - "BTBBBBRSB"
@@ -40,15 +48,33 @@ custom-format:
     - "GGGGGGGGG"
     - "GGGGGGGGG"
     - "BPBBCBBNB"
+  # 父分类界面
+  # B = 背景板
+  # b = 返回
+  # T = 设置
+  # R = 实时搜索（功能未开启则为背景板显示）
+  # C = 收藏物列表（功能未开启则为背景板显示）
+  # S = 搜索
+  # G = 物品组
+  # P = 上一页
+  # N = 下一页
+  nested-group:
+    - "BbBBBBRSB"
+    - "GGGGGGGGG"
+    - "GGGGGGGGG"
+    - "GGGGGGGGG"
+    - "GGGGGGGGG"
+    - "BPBBCBBNB"
   # 物品分类
   # B = 背景板
   # b = 返回
+  # T = 设置
   # R = 实时搜索（功能未开启则为背景板显示）
+  # C = 收藏物列表（功能未开启则为背景板显示）
+  # c = 收藏物品（功能未开启则为背景板显示）
   # S = 搜索
   # i = 物品
   # P = 上一页
-  # c = 收藏物品（功能未开启则为背景板显示）
-  # C = 收藏物列表（功能未开启则为背景板显示）
   # N = 下一页
   sub-group:
     - "BbBBBBRSB"
@@ -58,32 +84,73 @@ custom-format:
     - "iiiiiiiii"
     - "BPBcCBBNB"
   # 配方展示
+  # B = 背景板
   # b = 返回
+  # T = 设置
+  # R = 实时搜索（功能未开启则为背景板显示）
+  # C = 收藏物列表（功能未开启则为背景板显示）
+  # S = 搜索
   # r = 材料
   # w = Wiki 链接
   # t = 配方类型
   # i = 输出物品
   # E = 超大配方
-  # B = 背景板
-  # P = 上一页
-  # N = 下一页
-  # d = 配方展示
   recipe:
     - "b  rrr  w"
     - " t rrr i "
     - "   rrr  E"
-  #  - "BPBBBBBNB" # Unstable
-  #  - "ddddddddd" # Unstable
-  #  - "ddddddddd" # Unstable
+  # 配方展示 - 原版物品
+  # B = 背景板
+  # b = 返回
+  # T = 设置
+  # R = 实时搜索（功能未开启则为背景板显示）
+  # C = 收藏物列表（功能未开启则为背景板显示）
+  # S = 搜索
+  # r = 材料
+  # w = Wiki 链接
+  # t = 配方类型
+  # i = 输出物品
+  # P = 上一页
+  # N = 下一页
+  recipe_vanilla:
+    - "b  rrr  w"
+    - " t rrr i "
+    - "   rrr   "
+    - "BPBBBBBNB"
+  # 配方展示 - 配方展示物品
+  # B = 背景板
+  # b = 返回
+  # T = 设置
+  # R = 实时搜索（功能未开启则为背景板显示）
+  # C = 收藏物列表（功能未开启则为背景板显示）
+  # S = 搜索
+  # r = 材料
+  # w = Wiki 链接
+  # t = 配方类型
+  # i = 输出物品
+  # E = 超大配方
+  # P = 上一页
+  # N = 下一页
+  # d = 配方展示
+  recipe_display:
+    - "b  rrr  w"
+    - " t rrr i "
+    - "   rrr  E"
+    - "BPBBBBBNB"
+    - "ddddddddd"
+    - "ddddddddd"
   # 指南帮助
   # B = 背景板
   # b = 返回
+  # T = 设置
+  # R = 实时搜索（功能未开启则为背景板显示）
+  # C = 收藏物列表（功能未开启则为背景板显示）
+  # S = 搜索
   # R = 实时搜索
   # S = 搜索
   # A = 作者信息
   # h = 功能展示
   # P = 上一页
-  # C = 收藏物列表（功能未开启则为背景板显示）
   # N = 下一页
   helper:
     - "BbBBBBRSB"

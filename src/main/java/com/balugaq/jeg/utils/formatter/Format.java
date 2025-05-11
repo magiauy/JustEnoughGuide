@@ -9,6 +9,7 @@ import lombok.Setter;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.ApiStatus;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import java.util.function.Supplier;
 @Getter
 public abstract class Format {
     public final Map<Integer, Character> mapping = new HashMap<>();
+    @Deprecated
     public final Map<Character, ItemStackFormat> formats = new HashMap<>();
     public final Map<Character, List<Integer>> cached = new HashMap<>();
     @Setter
@@ -75,6 +77,7 @@ public abstract class Format {
         }
     }
 
+    @ApiStatus.Obsolete
     public void loadMapping(List<String> format) {
         int index = -1;
         for (var string : format) {
@@ -87,10 +90,12 @@ public abstract class Format {
         }
     }
 
+    @ApiStatus.Obsolete
     public List<Integer> getChars(String s) {
         return getChars(s.toCharArray()[0]);
     }
 
+    @ApiStatus.Obsolete
     public List<Integer> getChars(char c) {
         if (cached.containsKey(c)) {
             return cached.get(c);
@@ -107,29 +112,36 @@ public abstract class Format {
         return list;
     }
 
+    @Deprecated
     public interface ItemStackCiFunction<A, B, C> extends CiFunction<A, B, C, ItemStack>, ItemStackFormat {
 
     }
 
+    @Deprecated
     public interface ItemStackBiFunction<A, B> extends BiFunction<A, B, ItemStack>, ItemStackFormat {
         ItemStack apply(A a, B b);
     }
 
+    @Deprecated
     public interface ItemStackFunction<A> extends Function<A, ItemStack>, ItemStackFormat {
         ItemStack apply(A a);
     }
 
+    @Deprecated
     public interface ItemStackSupplier extends Supplier<ItemStack>, ItemStackFormat {
         ItemStack get();
     }
 
+    @Deprecated
     public interface ItemStackFormat {
     }
 
+    @Deprecated
     public interface CiFunction<A, B, C, R> {
         R apply(A a, B b, C c);
     }
 
+    @Deprecated
     public static class Background implements ItemStackSupplier {
         @Override
         public ItemStack get() {
@@ -137,6 +149,7 @@ public abstract class Format {
         }
     }
 
+    @Deprecated
     public static class Back implements ItemStackFunction<Player> {
         @Override
         public ItemStack apply(Player player) {
@@ -149,6 +162,7 @@ public abstract class Format {
         }
     }
 
+    @Deprecated
     public static class PagePrevious implements ItemStackCiFunction<Player, Integer, Integer> {
         @Override
         public ItemStack apply(Player player, Integer page, Integer maxPage) {
@@ -156,6 +170,7 @@ public abstract class Format {
         }
     }
 
+    @Deprecated
     public static class PageNext implements ItemStackCiFunction<Player, Integer, Integer> {
         @Override
         public ItemStack apply(Player player, Integer page, Integer maxPage) {
@@ -163,6 +178,7 @@ public abstract class Format {
         }
     }
 
+    @Deprecated
     public static class BookMark implements ItemStackSupplier {
         @Override
         public ItemStack get() {
@@ -172,6 +188,7 @@ public abstract class Format {
         }
     }
 
+    @Deprecated
     public static class ItemMark implements ItemStackSupplier {
         @Override
         public ItemStack get() {
@@ -181,6 +198,7 @@ public abstract class Format {
         }
     }
 
+    @Deprecated
     public static class Settings implements ItemStackFunction<Player> {
         @Override
         public ItemStack apply(Player p) {
@@ -188,6 +206,7 @@ public abstract class Format {
         }
     }
 
+    @Deprecated
     public static class Search implements ItemStackFunction<Player> {
         @Override
         public ItemStack apply(Player p) {
@@ -195,6 +214,7 @@ public abstract class Format {
         }
     }
 
+    @Deprecated
     public static class RealTimeSearch implements ItemStackSupplier {
         @Override
         public ItemStack get() {
@@ -204,6 +224,7 @@ public abstract class Format {
         }
     }
 
+    @Deprecated
     public static class BigRecipe implements ItemStackSupplier {
         @Override
         public ItemStack get() {
