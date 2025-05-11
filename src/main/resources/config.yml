@@ -112,7 +112,7 @@ custom-format:
   # i = 输出物品
   # P = 上一页
   # N = 下一页
-  recipe_vanilla:
+  recipe-vanilla:
     - "b  rrr  w"
     - " t rrr i "
     - "   rrr   "
@@ -132,7 +132,7 @@ custom-format:
   # P = 上一页
   # N = 下一页
   # d = 配方展示
-  recipe_display:
+  recipe-display:
     - "b  rrr  w"
     - " t rrr i "
     - "   rrr  E"
