@@ -4,7 +4,6 @@ import city.norain.slimefun4.VaultIntegration;
 import com.balugaq.jeg.api.groups.BookmarkGroup;
 import com.balugaq.jeg.api.groups.ItemMarkGroup;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
-import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
 import com.balugaq.jeg.utils.LocalHelper;
 import com.balugaq.jeg.utils.compatibility.Converter;
@@ -12,29 +11,33 @@ import com.balugaq.jeg.utils.formatter.Format;
 import com.balugaq.jeg.utils.formatter.Formats;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import io.github.thebusybiscuit.slimefun4.api.items.groups.NestedItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
+import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.api.researches.Research;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation;
-import io.github.thebusybiscuit.slimefun4.core.guide.options.SlimefunGuideSettings;
 import io.github.thebusybiscuit.slimefun4.core.services.sounds.SoundEffect;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
-import io.github.thebusybiscuit.slimefun4.libraries.dough.chat.ChatInput;
+import io.github.thebusybiscuit.slimefun4.implementation.tasks.AsyncRecipeChoiceTask;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.ItemUtils;
-import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.persistence.PersistentDataType;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+/**
+ * @author balugaq
+ * @since 1.0
+ */
 @SuppressWarnings("deprecation")
 public interface JEGSlimefunGuideImplementation extends SlimefunGuideImplementation {
     NamespacedKey UNLOCK_ITEM_KEY = new NamespacedKey(JustEnoughGuide.getInstance(), "unlock_item");
@@ -103,60 +106,7 @@ public interface JEGSlimefunGuideImplementation extends SlimefunGuideImplementat
         return Slimefun.getPermissionsService().hasPermission(p, item);
     }
 
-    void showItemGroup(
-            @NotNull ChestMenu menu, @NotNull Player p, @NotNull PlayerProfile profile, ItemGroup group, int index);
-
-    @ParametersAreNonnullByDefault
-    default void displayItem(PlayerProfile profile, SlimefunItem item, boolean addToHistory, boolean maybeSpecial) {
-        displayItem(profile, item, addToHistory, maybeSpecial, item instanceof RecipeDisplayItem ? Formats.recipe_display : Formats.recipe);
-    }
-
-    @ParametersAreNonnullByDefault
-    default void createHeader(Player p, PlayerProfile profile, ChestMenu menu) {
-        createHeader(p, profile, menu, Formats.main);
-    }
-
-    @ParametersAreNonnullByDefault
-    @ApiStatus.Experimental
-    default void createHeader(Player p, PlayerProfile profile, ChestMenu menu, Format format) {
-        for (var s : format.getChars('B')) {
-            menu.addItem(
-                    s,
-                    ItemStackUtil.getCleanItem(ChestMenuUtils.getBackground()),
-                    ChestMenuUtils.getEmptyClickHandler());
-        }
-
-        for (var s : format.getChars('b')) {
-            addBackButton(menu, s, p, profile);
-        }
-
-        // Settings Panel
-        for (var s : format.getChars('T')) {
-            menu.addItem(s, ItemStackUtil.getCleanItem(ChestMenuUtils.getMenuButton(p)));
-            menu.addMenuClickHandler(s, (pl, slot, item, action) -> {
-                SlimefunGuideSettings.openSettings(pl, pl.getInventory().getItemInMainHand());
-                return false;
-            });
-        }
-
-        // Search feature!
-        for (var s : format.getChars('S')) {
-            menu.addItem(s, ItemStackUtil.getCleanItem(ChestMenuUtils.getSearchButton(p)));
-            menu.addMenuClickHandler(s, (pl, slot, item, action) -> {
-                pl.closeInventory();
-
-                Slimefun.getLocalization().sendMessage(pl, "guide.search.message");
-                ChatInput.waitForPlayer(
-                        JustEnoughGuide.getInstance(), pl, msg -> openSearch(profile, msg, isSurvivalMode()));
-
-                return false;
-            });
-        }
-
-        GuideUtil.addRTSButton(menu, p, profile, format, getMode(), this);
-        GuideUtil.addBookMarkButton(menu, p, profile, format, this, null);
-        GuideUtil.addItemMarkButton(menu, p, profile, format, this, null);
-    }
+    void showItemGroup(@NotNull ChestMenu menu, @NotNull Player p, @NotNull PlayerProfile profile, ItemGroup group, int index);
 
     @NotNull
     default ChestMenu create(@NotNull Player p) {
@@ -193,4 +143,83 @@ public interface JEGSlimefunGuideImplementation extends SlimefunGuideImplementat
             @NotNull ItemGroup itemGroup, @NotNull Player player, @NotNull PlayerProfile profile) {
         new ItemMarkGroup(this, itemGroup, player).open(player, profile, getMode());
     }
+
+    void openNestedItemGroup(@NotNull Player p, @NotNull PlayerProfile profile, @NotNull NestedItemGroup nested, int page);
+
+    void displaySlimefunItem(
+            @NotNull ChestMenu menu,
+            @NotNull ItemGroup itemGroup,
+            @NotNull Player p,
+            @NotNull PlayerProfile profile,
+            @NotNull SlimefunItem sfitem,
+            int page,
+            int index);
+
+    @ParametersAreNonnullByDefault
+    void openSearch(PlayerProfile profile, String input, int page, boolean addToHistory);
+
+    void showMinecraftRecipe(
+            Recipe @NotNull [] recipes,
+            int index,
+            @NotNull ItemStack item,
+            @NotNull PlayerProfile profile,
+            @NotNull Player p,
+            boolean addToHistory);
+
+    <T extends Recipe> void showRecipeChoices(
+            @NotNull T recipe, ItemStack[] recipeItems, @NotNull AsyncRecipeChoiceTask task);
+
+    @ParametersAreNonnullByDefault
+    default void displayItem(PlayerProfile profile, SlimefunItem item, boolean addToHistory, boolean maybeSpecial) {
+        displayItem(profile, item, addToHistory, maybeSpecial, item instanceof RecipeDisplayItem ? Formats.recipe_display : Formats.recipe);
+    }
+
+    @ParametersAreNonnullByDefault
+    void displayItem(PlayerProfile profile, SlimefunItem item, boolean addToHistory, boolean maybeSpecial, Format format);
+
+    void displayItem(
+            @NotNull ChestMenu menu,
+            @NotNull PlayerProfile profile,
+            @NotNull Player p,
+            Object item,
+            ItemStack output,
+            @NotNull RecipeType recipeType,
+            ItemStack[] recipe,
+            @NotNull AsyncRecipeChoiceTask task);
+
+    void displayItem(
+            @NotNull ChestMenu menu,
+            @NotNull PlayerProfile profile,
+            @NotNull Player p,
+            Object item,
+            ItemStack output,
+            @NotNull RecipeType recipeType,
+            ItemStack[] recipe,
+            @NotNull AsyncRecipeChoiceTask task,
+            Format format);
+
+    @ParametersAreNonnullByDefault
+    void createHeader(Player p, PlayerProfile profile, ChestMenu menu, Format format);
+
+    @ParametersAreNonnullByDefault
+    void createHeader(Player p, PlayerProfile profile, ChestMenu menu, ItemGroup itemGroup);
+
+    void addBackButton(@NotNull ChestMenu menu, int slot, @NotNull Player p, @NotNull PlayerProfile profile);
+
+    @ParametersAreNonnullByDefault
+    void displayRecipes(Player p, PlayerProfile profile, ChestMenu menu, RecipeDisplayItem sfItem, int page);
+
+    void addDisplayRecipe(
+            @NotNull ChestMenu menu,
+            @NotNull PlayerProfile profile,
+            @NotNull List<ItemStack> recipes,
+            int slot,
+            int i,
+            int page);
+
+    @ParametersAreNonnullByDefault
+    void printErrorMessage(Player p, Throwable x);
+
+    @ParametersAreNonnullByDefault
+    void printErrorMessage(Player p, SlimefunItem item, Throwable x);
 }

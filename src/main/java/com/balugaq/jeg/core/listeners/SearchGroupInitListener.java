@@ -5,6 +5,10 @@ import io.github.thebusybiscuit.slimefun4.api.events.SlimefunItemRegistryFinaliz
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+/**
+ * @author balugaq
+ * @since 1.1
+ */
 public class SearchGroupInitListener implements Listener {
     /**
      * Initialize the SearchGroup

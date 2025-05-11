@@ -17,6 +17,10 @@ import java.lang.invoke.MethodType;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * @author balugaq
+ * @since 1.4
+ */
 @ApiStatus.Experimental
 public class Converter {
     public static final ItemStack AIR = new ItemStack(Material.AIR);

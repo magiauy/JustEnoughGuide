@@ -20,6 +20,10 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+/**
+ * @author balugaq
+ * @since 1.6
+ */
 @Getter
 public abstract class Format {
     public final Map<Integer, Character> mapping = new HashMap<>();

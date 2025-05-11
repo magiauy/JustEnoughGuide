@@ -15,6 +15,9 @@ import java.lang.annotation.Target;
  * public class MyGroup extends ItemGroup {
  * //...
  * }
+ *
+ * @author balugaq
+ * @since 1.1
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)

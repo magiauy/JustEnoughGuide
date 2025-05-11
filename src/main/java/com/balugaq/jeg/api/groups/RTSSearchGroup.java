@@ -40,6 +40,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
+/**
+ * @author balugaq
+ * @since 1.3
+ */
 @SuppressWarnings("unused")
 @NotDisplayInSurvivalMode
 @NotDisplayInCheatMode

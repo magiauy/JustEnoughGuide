@@ -1,0 +1,1 @@
+package com.balugaq.jeg.api.objects.exceptions;

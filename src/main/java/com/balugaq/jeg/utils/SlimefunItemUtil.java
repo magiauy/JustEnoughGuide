@@ -11,6 +11,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
+/**
+ * @author balugaq
+ * @since 1.1
+ */
 @SuppressWarnings("unused")
 @UtilityClass
 public class SlimefunItemUtil {

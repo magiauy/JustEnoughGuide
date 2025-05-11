@@ -7,6 +7,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * @author balugaq
+ * @since 1.0
+ */
 @SuppressWarnings({"unused"})
 public class Debug {
     private static final String debugPrefix = "[Debug] ";

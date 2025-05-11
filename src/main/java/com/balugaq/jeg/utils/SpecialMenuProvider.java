@@ -25,6 +25,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 
+/**
+ * @author balugaq
+ * @since 1.3
+ */
 @SuppressWarnings({"unchecked", "unused", "deprecation"})
 @UtilityClass
 public class SpecialMenuProvider {

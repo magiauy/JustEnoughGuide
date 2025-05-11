@@ -37,7 +37,8 @@ import java.lang.reflect.Method;
 /**
  * This class contains utility methods for the guide system.
  *
- * @author Final_ROOT, balugaq
+ * @author Final_ROOT
+ * @author balugaq
  * @since 1.0
  */
 @UtilityClass

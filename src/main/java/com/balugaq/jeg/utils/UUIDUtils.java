@@ -4,6 +4,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
+/**
+ * @author Ddggdd135
+ * @since 1.4
+ */
 public class UUIDUtils {
     public static byte[] toByteArray(@NotNull UUID uuid) {
         long mostSigBits = uuid.getMostSignificantBits();

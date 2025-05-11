@@ -18,6 +18,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * @author balugaq
+ * @since 1.2
+ */
 public class LocalHelper {
     public static final String def = "未知附属";
     public static final Map<String, Map<String, SlimefunItemStack>> rscItems = new HashMap<>();

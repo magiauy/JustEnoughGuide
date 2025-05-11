@@ -7,20 +7,14 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author balugaq
+ * @since 1.6
+ */
 public class RecipeDisplayFormat extends Format {
-    @Override
-    public void loadMapping() {
-        loadMapping(JustEnoughGuide.getConfigManager().getRecipeDisplayFormat());
-    }
-
-    @Deprecated
-    public void decorate(ChestMenu menu, Player player) {
-        super.decorate(menu, player);
-    }
-
     public static List<Integer> fenceShuffle(List<Integer> list) {
         int size = list.size();
-        int splitPoint = (size + 1) / 2; // 分割点（处理奇数长度情况）
+        int splitPoint = (size + 1) / 2;
 
         List<Integer> firstHalf = new ArrayList<>(list.subList(0, splitPoint));
         List<Integer> secondHalf = new ArrayList<>(list.subList(splitPoint, size));
@@ -37,5 +31,15 @@ public class RecipeDisplayFormat extends Format {
         }
 
         return result;
+    }
+
+    @Override
+    public void loadMapping() {
+        loadMapping(JustEnoughGuide.getConfigManager().getRecipeDisplayFormat());
+    }
+
+    @Deprecated
+    public void decorate(ChestMenu menu, Player player) {
+        super.decorate(menu, player);
     }
 }

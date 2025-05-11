@@ -5,6 +5,10 @@ import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * @author balugaq
+ * @since 1.3
+ */
 public class Models {
     public static final ItemStack RTS_ITEM = Converter.getItem(new SlimefunItemStack("_UI_RTS_ICON", Converter.getItem(Material.ANVIL, "&b实时搜索", "")));
     public static final ItemStack SPECIAL_MENU_ITEM = Converter.getItem(new SlimefunItemStack("_UI_SPECIAL_MENU_ICON", Converter.getItem(Material.COMPASS, "&b超大配方", "", "&a点击打开超大配方(若有)")));

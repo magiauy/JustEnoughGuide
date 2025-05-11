@@ -18,6 +18,10 @@ import java.lang.ref.Reference;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * @author balugaq
+ * @since 1.1
+ */
 @Getter
 public enum FilterType {
     BY_RECIPE_ITEM_NAME("#", (player, item, lowerFilterValue, pinyin) -> {

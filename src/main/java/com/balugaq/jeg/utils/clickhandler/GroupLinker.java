@@ -10,6 +10,10 @@ import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * @author balugaq
+ * @since 1.5
+ */
 @SuppressWarnings("deprecation")
 public class GroupLinker {
     public static void applyGroupLinker(SlimefunGuideImplementation guide, ChestMenu menu, int slot) {

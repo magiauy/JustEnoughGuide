@@ -21,6 +21,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * @author balugaq
+ * @since 1.3
+ */
 @Getter
 public class RTSBackpackManager extends AbstractManager {
     private static final int IDENTIFIER_SLOT = 53;

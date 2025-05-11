@@ -10,6 +10,10 @@ import net.guizhanss.guizhanlib.minecraft.helper.inventory.ItemStackHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+/**
+ * @author balugaq
+ * @since 1.5
+ */
 @SuppressWarnings("deprecation")
 public class BeginnerUtils {
     public static void applyBeginnersGuide(SlimefunGuideImplementation guide, ChestMenu menu, int slot) {

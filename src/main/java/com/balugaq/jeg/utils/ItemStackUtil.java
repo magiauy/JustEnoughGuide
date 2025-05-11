@@ -8,6 +8,9 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * This class provides utility methods for working with ItemStacks.
+ *
+ * @author balugaq
+ * @since 1.1
  */
 @UtilityClass
 public final class ItemStackUtil {

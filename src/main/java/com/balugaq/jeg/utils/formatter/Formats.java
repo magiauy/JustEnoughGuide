@@ -1,5 +1,9 @@
 package com.balugaq.jeg.utils.formatter;
 
+/**
+ * @author balugaq
+ * @since 1.6
+ */
 public class Formats {
     public static final MainFormat main = new MainFormat();
     public static final NestedGroupFormat nested = new NestedGroupFormat();

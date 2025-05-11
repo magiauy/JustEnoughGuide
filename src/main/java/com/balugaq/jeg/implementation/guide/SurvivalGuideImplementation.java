@@ -138,6 +138,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
      * @param profile The {@link PlayerProfile} of the {@link Player}
      * @return a {@link List} of visible {@link ItemGroup} instances
      */
+    @Override
     public @NotNull List<ItemGroup> getVisibleItemGroups(@NotNull Player p, @NotNull PlayerProfile profile) {
         List<ItemGroup> groups = new LinkedList<>();
 
@@ -360,6 +361,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         menu.open(p);
     }
 
+    @Override
     public void openNestedItemGroup(@NotNull Player p, @NotNull PlayerProfile profile, @NotNull NestedItemGroup nested, int page) {
         GuideHistory history = profile.getGuideHistory();
 
@@ -402,12 +404,12 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
                         SlimefunGuide.openItemGroup(profile, subGroup, getMode(), 1);
                         return false;
                     });
-                    t+=1;
+                    t += 1;
                 }
             }
 
             int pages = target == subGroups.size() - 1 ? page : (subGroups.size() - 1) / groupsPerPage + 1;
-            for (var s :  Formats.nested.getChars('P')) {
+            for (var s : Formats.nested.getChars('P')) {
                 menu.addItem(s, ChestMenuUtils.getPreviousButton(p, page, pages));
                 menu.addMenuClickHandler(s, (pl, slot, item, action) -> {
                     int next = page - 1;
@@ -437,6 +439,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         }
     }
 
+    @Override
     public void displaySlimefunItem(
             @NotNull ChestMenu menu,
             @NotNull ItemGroup itemGroup,
@@ -524,6 +527,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
     }
 
     @ParametersAreNonnullByDefault
+    @Override
     public void openSearch(PlayerProfile profile, String input, int page, boolean addToHistory) {
         Player p = profile.getPlayer();
 
@@ -567,6 +571,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         showMinecraftRecipe(recipes, index, item, profile, p, addToHistory);
     }
 
+    @Override
     public void showMinecraftRecipe(
             Recipe @NotNull [] recipes,
             int index,
@@ -651,6 +656,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         }
     }
 
+    @Override
     public <T extends Recipe> void showRecipeChoices(
             @NotNull T recipe, ItemStack[] recipeItems, @NotNull AsyncRecipeChoiceTask task) {
         RecipeChoice[] choices = Slimefun.getMinecraftRecipeService().getRecipeShape(recipe);
@@ -681,6 +687,13 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         displayItem(profile, item, addToHistory, true);
     }
 
+    @Override
+    @ParametersAreNonnullByDefault
+    public void displayItem(PlayerProfile profile, SlimefunItem item, boolean addToHistory, boolean maybeSpecial) {
+        displayItem(profile, item, addToHistory, true, item instanceof RecipeDisplayItem ? Formats.recipe_display : Formats.recipe);
+    }
+
+    @Override
     @ParametersAreNonnullByDefault
     public void displayItem(PlayerProfile profile, SlimefunItem item, boolean addToHistory, boolean maybeSpecial, Format format) {
         Player p = profile.getPlayer();
@@ -748,6 +761,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         }
     }
 
+    @Override
     public void displayItem(
             @NotNull ChestMenu menu,
             @NotNull PlayerProfile profile,
@@ -760,6 +774,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         displayItem(menu, profile, p, item, output, recipeType, recipe, task, Formats.recipe);
     }
 
+    @Override
     public void displayItem(
             @NotNull ChestMenu menu,
             @NotNull PlayerProfile profile,
@@ -853,6 +868,57 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         }
     }
 
+    @Override
+    @ParametersAreNonnullByDefault
+    public void createHeader(Player p, PlayerProfile profile, ChestMenu menu) {
+        createHeader(p, profile, menu, Formats.main);
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
+    @ApiStatus.Experimental
+    public void createHeader(Player p, PlayerProfile profile, ChestMenu menu, Format format) {
+        for (var s : format.getChars('B')) {
+            menu.addItem(
+                    s,
+                    ItemStackUtil.getCleanItem(ChestMenuUtils.getBackground()),
+                    ChestMenuUtils.getEmptyClickHandler());
+        }
+
+        for (var s : format.getChars('b')) {
+            addBackButton(menu, s, p, profile);
+        }
+
+        // Settings Panel
+        for (var s : format.getChars('T')) {
+            menu.addItem(s, ItemStackUtil.getCleanItem(ChestMenuUtils.getMenuButton(p)));
+            menu.addMenuClickHandler(s, (pl, slot, item, action) -> {
+                SlimefunGuideSettings.openSettings(pl, pl.getInventory().getItemInMainHand());
+                return false;
+            });
+        }
+
+        // Search feature!
+        for (var s : format.getChars('S')) {
+            menu.addItem(s, ItemStackUtil.getCleanItem(ChestMenuUtils.getSearchButton(p)));
+            menu.addMenuClickHandler(s, (pl, slot, item, action) -> {
+                pl.closeInventory();
+
+                Slimefun.getLocalization().sendMessage(pl, "guide.search.message");
+                ChatInput.waitForPlayer(
+                        JustEnoughGuide.getInstance(), pl, msg -> openSearch(profile, msg, isSurvivalMode()));
+
+                return false;
+            });
+        }
+
+        GuideUtil.addRTSButton(menu, p, profile, Formats.main, getMode(), this);
+        GuideUtil.addBookMarkButton(menu, p, profile, Formats.main, this, null);
+        GuideUtil.addItemMarkButton(menu, p, profile, Formats.main, this, null);
+    }
+
+
+    @Override
     @ParametersAreNonnullByDefault
     @ApiStatus.Experimental
     public void createHeader(Player p, PlayerProfile profile, ChestMenu menu, ItemGroup itemGroup) {
@@ -891,6 +957,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         GuideUtil.addItemMarkButton(menu, p, profile, Formats.main, this, itemGroup);
     }
 
+    @Override
     public void addBackButton(@NotNull ChestMenu menu, int slot, @NotNull Player p, @NotNull PlayerProfile profile) {
         GuideHistory history = profile.getGuideHistory();
 
@@ -921,6 +988,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         }
     }
 
+    @Override
     @ParametersAreNonnullByDefault
     public void displayRecipes(Player p, PlayerProfile profile, ChestMenu menu, RecipeDisplayItem sfItem, int page) {
         List<ItemStack> recipes = sfItem.getDisplayRecipes();
@@ -974,6 +1042,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         }
     }
 
+    @Override
     public void addDisplayRecipe(
             @NotNull ChestMenu menu,
             @NotNull PlayerProfile profile,
@@ -1009,6 +1078,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         }
     }
 
+    @Override
     @ParametersAreNonnullByDefault
     public void printErrorMessage(Player p, Throwable x) {
         p.sendMessage(ChatColor.DARK_RED + "服务器发生了一个内部错误. 请联系管理员处理.");
@@ -1021,6 +1091,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         GuideUtil.removeLastEntry(profile.getGuideHistory());
     }
 
+    @Override
     @ParametersAreNonnullByDefault
     public void printErrorMessage(Player p, SlimefunItem item, Throwable x) {
         p.sendMessage(ChatColor.DARK_RED

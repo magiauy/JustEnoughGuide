@@ -10,9 +10,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-
 /**
  * @author Final_ROOT
+ * @author balugaq
+ * @since 1.0
  */
 @SuppressWarnings({"unchecked", "unused"})
 @UtilityClass

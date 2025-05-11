@@ -13,6 +13,10 @@ import org.bukkit.inventory.InventoryView;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * @author balugaq
+ * @since 1.3
+ */
 public class RTSEvents {
     /**
      * Represents the event when the RTS is closed.

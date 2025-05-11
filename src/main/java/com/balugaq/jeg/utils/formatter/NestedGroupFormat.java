@@ -4,6 +4,10 @@ import com.balugaq.jeg.implementation.JustEnoughGuide;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import org.bukkit.entity.Player;
 
+/**
+ * @author balugaq
+ * @since 1.6
+ */
 public class NestedGroupFormat extends Format {
     @Override
     public void loadMapping() {

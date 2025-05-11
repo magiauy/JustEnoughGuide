@@ -18,6 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * @author balugaq
+ * @since 1.4
+ */
 @ApiStatus.Experimental
 public class CustomItemStack implements Cloneable {
     private final ItemStack delegate;
