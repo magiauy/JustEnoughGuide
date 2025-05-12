@@ -14,6 +14,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
+/**
+ * This class is used to represent the option to show the beginner's guide.
+ * which is editable in the settings menu.
+ *
+ * @author balugaq
+ * @since 1.5
+ */
 public class BeginnersGuideOption implements SlimefunGuideOption<Boolean> {
 
     public static @NotNull NamespacedKey key() {

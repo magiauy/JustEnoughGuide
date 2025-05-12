@@ -10,8 +10,17 @@ import org.bukkit.inventory.ItemStack;
  * @since 1.3
  */
 public class Models {
-    public static final ItemStack RTS_ITEM = Converter.getItem(new SlimefunItemStack("_UI_RTS_ICON", Converter.getItem(Material.ANVIL, "&b实时搜索", "")));
-    public static final ItemStack SPECIAL_MENU_ITEM = Converter.getItem(new SlimefunItemStack("_UI_SPECIAL_MENU_ICON", Converter.getItem(Material.COMPASS, "&b超大配方", "", "&a点击打开超大配方(若有)")));
+    public static final ItemStack RTS_ITEM = Converter.getItem(new SlimefunItemStack("_UI_RTS_ICON", Converter.getItem(
+            Material.ANVIL,
+            "&b实时搜索",
+            ""
+    )));
+    public static final ItemStack SPECIAL_MENU_ITEM = Converter.getItem(new SlimefunItemStack("_UI_SPECIAL_MENU_ICON", Converter.getItem(
+            Material.COMPASS,
+            "&b超大配方",
+            "",
+            "&a点击打开超大配方(若有)"
+    )));
     public static final ItemStack INPUT_TEXT_ICON = Converter.getItem(new SlimefunItemStack("_UI_RTS_INPUT_TEXT_ICON", Converter.getItem(
             Material.PAPER,
             "&f搜索: &7在上方输入搜索词",

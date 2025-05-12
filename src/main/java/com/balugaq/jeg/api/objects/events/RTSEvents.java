@@ -20,6 +20,9 @@ import org.jetbrains.annotations.Nullable;
 public class RTSEvents {
     /**
      * Represents the event when the RTS is closed.
+     *
+     * @author balugaq
+     * @since 1.3
      */
     @Getter
     public static class CloseRTSEvent extends Event {
@@ -65,6 +68,9 @@ public class RTSEvents {
 
     /**
      * Represents the event when the RTS is opened.
+     *
+     * @author balugaq
+     * @since 1.3
      */
     @Getter
     public static class OpenRTSEvent extends Event {
@@ -125,6 +131,9 @@ public class RTSEvents {
 
     /**
      * Represents the event when the search term changes in the RTS.
+     *
+     * @author balugaq
+     * @since 1.3
      */
     @Getter
     public static class SearchTermChangeEvent extends Event {
@@ -179,6 +188,9 @@ public class RTSEvents {
 
     /**
      * Represents the event when an item in the anvil GUI is clicked.
+     *
+     * @author balugaq
+     * @since 1.3
      */
     @Getter
     public static class ClickAnvilItemEvent extends Event implements Cancellable {
@@ -248,6 +260,9 @@ public class RTSEvents {
 
     /**
      * Represents the event when the page changes in the RTS.
+     *
+     * @author balugaq
+     * @since 1.3
      */
     @Getter
     public static class PageChangeEvent extends Event implements Cancellable {

@@ -11,5 +11,6 @@ package com.balugaq.jeg.api.groups;
  * @see com.balugaq.jeg.api.groups.ClassicGuideGroup
  * @see com.balugaq.jeg.api.groups.HiddenItemsGroup
  * @see com.balugaq.jeg.api.groups.NexcavateItemsGroup
+ * @see com.balugaq.jeg.api.groups.RTSSearchGroup
  * @since 1.0
  */

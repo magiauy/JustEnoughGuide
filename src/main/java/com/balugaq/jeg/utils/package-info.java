@@ -13,5 +13,7 @@ package com.balugaq.jeg.utils;
  * @see com.balugaq.jeg.utils.SlimefunItemUtil
  * @see com.balugaq.jeg.utils.SpecialMenuProvider
  * @see com.balugaq.jeg.utils.UUIDUtils
+ * @see com.balugaq.jeg.utils.Debug
+ * @see com.balugaq.jeg.utils.Models
  * @since 1.0
  */
