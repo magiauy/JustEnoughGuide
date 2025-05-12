@@ -68,9 +68,7 @@ import java.util.Map;
 import java.util.logging.Level;
 
 /**
- * This class used to create groups to display all the marked items in the guide.
- * Displayed items are already marked in {@link ItemMarkGroup}
- * Players can't open this group if players haven't marked any item.
+ * This class used to create groups to display all the Nexcavate items in the guide.
  *
  * @author balugaq
  * @since 1.1
