@@ -86,7 +86,7 @@ public interface JEGSlimefunGuideImplementation extends SlimefunGuideImplementat
                         "&4&l 该 Slimefun 物品已被禁用"
                 ));
             }
-            String lore = hasPermission(p, slimefunItem)
+            String lore = hasPermission0(p, slimefunItem)
                     ? String.format(
                     "&f需要在 %s 中解锁",
                     (LocalHelper.getAddonName(itemGroup, slimefunItem.getId())) + ChatColor.WHITE + " - " + LocalHelper.getDisplayName(itemGroup, p))
@@ -129,14 +129,14 @@ public interface JEGSlimefunGuideImplementation extends SlimefunGuideImplementat
     }
 
     @ParametersAreNonnullByDefault
-    static boolean hasPermission(Player p, SlimefunItem item) {
+    static boolean hasPermission0(Player p, SlimefunItem item) {
         return Slimefun.getPermissionsService().hasPermission(p, item);
     }
 
-    void showItemGroup(@NotNull ChestMenu menu, @NotNull Player p, @NotNull PlayerProfile profile, ItemGroup group, int index);
+    void showItemGroup0(@NotNull ChestMenu menu, @NotNull Player p, @NotNull PlayerProfile profile, ItemGroup group, int index);
 
     @NotNull
-    default ChestMenu create(@NotNull Player p) {
+    default ChestMenu create0(@NotNull Player p) {
         ChestMenu menu = new ChestMenu(JustEnoughGuide.getConfigManager().getSurvivalGuideTitle());
 
         menu.setEmptySlotsClickable(false);
@@ -173,7 +173,7 @@ public interface JEGSlimefunGuideImplementation extends SlimefunGuideImplementat
 
     void openNestedItemGroup(@NotNull Player p, @NotNull PlayerProfile profile, @NotNull NestedItemGroup nested, int page);
 
-    void displaySlimefunItem(
+    void displaySlimefunItem0(
             @NotNull ChestMenu menu,
             @NotNull ItemGroup itemGroup,
             @NotNull Player p,
@@ -185,7 +185,7 @@ public interface JEGSlimefunGuideImplementation extends SlimefunGuideImplementat
     @ParametersAreNonnullByDefault
     void openSearch(PlayerProfile profile, String input, int page, boolean addToHistory);
 
-    void showMinecraftRecipe(
+    void showMinecraftRecipe0(
             Recipe @NotNull [] recipes,
             int index,
             @NotNull ItemStack item,
@@ -193,7 +193,7 @@ public interface JEGSlimefunGuideImplementation extends SlimefunGuideImplementat
             @NotNull Player p,
             boolean addToHistory);
 
-    <T extends Recipe> void showRecipeChoices(
+    <T extends Recipe> void showRecipeChoices0(
             @NotNull T recipe, ItemStack[] recipeItems, @NotNull AsyncRecipeChoiceTask task);
 
     @ParametersAreNonnullByDefault
@@ -204,7 +204,7 @@ public interface JEGSlimefunGuideImplementation extends SlimefunGuideImplementat
     @ParametersAreNonnullByDefault
     void displayItem(PlayerProfile profile, SlimefunItem item, boolean addToHistory, boolean maybeSpecial, Format format);
 
-    void displayItem(
+    void displayItem0(
             @NotNull ChestMenu menu,
             @NotNull PlayerProfile profile,
             @NotNull Player p,
@@ -231,12 +231,12 @@ public interface JEGSlimefunGuideImplementation extends SlimefunGuideImplementat
     @ParametersAreNonnullByDefault
     void createHeader(Player p, PlayerProfile profile, ChestMenu menu, ItemGroup itemGroup);
 
-    void addBackButton(@NotNull ChestMenu menu, int slot, @NotNull Player p, @NotNull PlayerProfile profile);
+    void addBackButton0(@NotNull ChestMenu menu, int slot, @NotNull Player p, @NotNull PlayerProfile profile);
 
     @ParametersAreNonnullByDefault
-    void displayRecipes(Player p, PlayerProfile profile, ChestMenu menu, RecipeDisplayItem sfItem, int page);
+    void displayRecipes0(Player p, PlayerProfile profile, ChestMenu menu, RecipeDisplayItem sfItem, int page);
 
-    void addDisplayRecipe(
+    void addDisplayRecipe0(
             @NotNull ChestMenu menu,
             @NotNull PlayerProfile profile,
             @NotNull List<ItemStack> recipes,
@@ -245,8 +245,8 @@ public interface JEGSlimefunGuideImplementation extends SlimefunGuideImplementat
             int page);
 
     @ParametersAreNonnullByDefault
-    void printErrorMessage(Player p, Throwable x);
+    void printErrorMessage0(Player p, Throwable x);
 
     @ParametersAreNonnullByDefault
-    void printErrorMessage(Player p, SlimefunItem item, Throwable x);
+    void printErrorMessage0(Player p, SlimefunItem item, Throwable x);
 }
