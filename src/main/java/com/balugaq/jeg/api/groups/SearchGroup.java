@@ -660,13 +660,13 @@ public class SearchGroup extends FlexItemGroup {
                             try {
                                 displayRecipes = mb.getDisplayRecipes();
                             } catch (Throwable e) {
-                                Debug.trace(e, "initailizing searching");
+                                Debug.trace(e, "init searching");
                             }
                         } else if (SpecialMenuProvider.ENABLED_LogiTech && SpecialMenuProvider.classLogiTech_CustomSlimefunItem != null && SpecialMenuProvider.classLogiTech_CustomSlimefunItem.isInstance(slimefunItem) && slimefunItem instanceof RecipeDisplayItem rdi) {
                             try {
                                 displayRecipes = rdi.getDisplayRecipes();
                             } catch (Throwable e) {
-                                Debug.trace(e, "initailizing searching");
+                                Debug.trace(e, "init searching");
                             }
                         }
                         if (displayRecipes != null) {

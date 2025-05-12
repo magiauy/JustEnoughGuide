@@ -81,7 +81,7 @@ public class RTSBackpackManager extends AbstractManager {
     /**
      * Saves the player's inventory backup to a backpack.
      *
-     * @param player the player whose inventory to backup
+     * @param player the player whose inventory to back up
      */
     public void saveInventoryBackupFor(@NotNull Player player) {
         PlayerProfile profile = PlayerProfile.find(player).orElse(null);

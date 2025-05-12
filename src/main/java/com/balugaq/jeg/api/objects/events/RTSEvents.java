@@ -127,7 +127,7 @@ public class RTSEvents {
          * @param guideMode        The guide mode.
          * @param presetSearchTerm The preset search term.
          */
-        public OpenRTSEvent(Player player, AnvilInventory openingInventory, SlimefunGuideMode guideMode, String presetSearchTerm) {
+        public OpenRTSEvent(Player player, AnvilInventory openingInventory, SlimefunGuideMode guideMode, @Nullable String presetSearchTerm) {
             super(!Bukkit.isPrimaryThread());
             this.player = player;
             this.openingInventory = openingInventory;

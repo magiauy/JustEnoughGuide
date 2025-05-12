@@ -438,7 +438,7 @@ public class LocalHelper {
                     rscItems.put(name, read);
                 }
             } catch (Throwable e) {
-                e.printStackTrace();
+                Debug.trace(e);
             }
         }
 

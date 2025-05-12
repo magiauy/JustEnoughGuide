@@ -28,6 +28,7 @@
 package com.balugaq.jeg.core.managers;
 
 import com.balugaq.jeg.api.managers.AbstractManager;
+import com.balugaq.jeg.utils.Debug;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -234,7 +235,7 @@ public class ConfigManager extends AbstractManager {
         try {
             existingConfig.save(existingFile);
         } catch (IOException e) {
-            e.printStackTrace();
+            Debug.trace(e);
         }
     }
 

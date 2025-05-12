@@ -351,7 +351,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             menu.addMenuClickHandler(s, (pl, slot, item, action) -> {
                 int previous = page - 1;
 
-                if (previous != page && previous > 0) {
+                if (previous > 0) {
                     openMainMenu(profile, previous);
                 }
 
@@ -364,7 +364,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             menu.addMenuClickHandler(s, (pl, slot, item, action) -> {
                 int next = page + 1;
 
-                if (next != page && next <= pages) {
+                if (next <= pages) {
                     openMainMenu(profile, next);
                 }
 
@@ -455,7 +455,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             menu.addMenuClickHandler(s, (pl, slot, item, action) -> {
                 int previous = page - 1;
 
-                if (previous != page && previous > 0) {
+                if (previous > 0) {
                     openItemGroup(profile, itemGroup, previous);
                 }
 
@@ -468,7 +468,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             menu.addMenuClickHandler(s, (pl, slot, item, action) -> {
                 int next = page + 1;
 
-                if (next != page && next <= pages) {
+                if (next <= pages) {
                     openItemGroup(profile, itemGroup, next);
                 }
 
@@ -886,7 +886,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                     try {
                         SpecialMenuProvider.open(profile.getPlayer(), profile, getMode(), item);
                     } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                        e.printStackTrace();
+                        Debug.trace(e);
                     }
                     return false;
                 });

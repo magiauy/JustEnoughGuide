@@ -111,6 +111,7 @@ public class HiddenItemsGroup extends FlexItemGroup {
                 slimefunItemList.add(item);
             }
             try {
+                // Intentionally provide a null value
                 if (!item.getItemGroup().isAccessible(null)) {
                     slimefunItemList.add(item);
                 }

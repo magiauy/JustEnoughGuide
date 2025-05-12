@@ -52,7 +52,7 @@ public class ReflectionUtil {
             declaredField.setAccessible(true);
             declaredField.set(object, value);
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
+            Debug.trace(e);
             return false;
         }
         return true;
@@ -64,7 +64,7 @@ public class ReflectionUtil {
             declaredField.setAccessible(true);
             declaredField.set(null, value);
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
+            Debug.trace(e);
             return false;
         }
         return true;
@@ -76,7 +76,7 @@ public class ReflectionUtil {
             declaredField.setAccessible(true);
             return (T) declaredField.get(null);
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
+            Debug.trace(e);
             return null;
         }
     }
@@ -169,7 +169,7 @@ public class ReflectionUtil {
                 return field.get(object);
             }
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            Debug.trace(e);
             return null;
         }
 
@@ -208,7 +208,7 @@ public class ReflectionUtil {
         try {
             return clazz.getDeclaredConstructor(parameterTypes);
         } catch (NoSuchMethodException e) {
-            e.printStackTrace();
+            Debug.trace(e);
             return null;
         }
     }
@@ -222,7 +222,7 @@ public class ReflectionUtil {
                 return method.invoke(object, args);
             }
         } catch (InvocationTargetException | IllegalAccessException e) {
-            e.printStackTrace();
+            Debug.trace(e);
         }
         return null;
     }
@@ -236,7 +236,7 @@ public class ReflectionUtil {
                 return method.invoke(null, args);
             }
         } catch (InvocationTargetException | IllegalAccessException e) {
-            e.printStackTrace();
+            Debug.trace(e);
         }
         return null;
     }

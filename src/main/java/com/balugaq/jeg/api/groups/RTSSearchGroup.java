@@ -76,9 +76,7 @@ import java.util.function.Function;
 @NotDisplayInCheatMode
 @Getter
 public class RTSSearchGroup extends FlexItemGroup {
-    public static final ItemStack PLACEHOLDER = Converter.getItem(Converter.getItem(Material.LIGHT_GRAY_STAINED_GLASS_PANE, "&a", "&a", "&a"), meta -> {
-        meta.getPersistentDataContainer().set(RTSListener.FAKE_ITEM_KEY, PersistentDataType.STRING, "____JEG_FAKE_ITEM____");
-    });
+    public static final ItemStack PLACEHOLDER = Converter.getItem(Converter.getItem(Material.LIGHT_GRAY_STAINED_GLASS_PANE, "&a", "&a", "&a"), meta -> meta.getPersistentDataContainer().set(RTSListener.FAKE_ITEM_KEY, PersistentDataType.STRING, "____JEG_FAKE_ITEM____"));
     // Use RTS_SEARCH_GROUPS, RTS_PAGES, RTS_PLAYERS or RTS_SEARCH_TERMS must be by keyword "synchronized"
     public static final Map<Player, SearchGroup> RTS_SEARCH_GROUPS = new ConcurrentHashMap<>();
     public static final Map<Player, Integer> RTS_PAGES = new ConcurrentHashMap<>();

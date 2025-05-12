@@ -89,6 +89,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.InvocationTargetException;
@@ -237,7 +238,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
             menu.addMenuClickHandler(s, (pl, slot, item, action) -> {
                 int previous = page - 1;
 
-                if (previous != page && previous > 0) {
+                if (previous > 0) {
                     openMainMenu(profile, previous);
                 }
 
@@ -250,7 +251,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
             menu.addMenuClickHandler(s, (pl, slot, item, action) -> {
                 int next = page + 1;
 
-                if (next != page && next <= pages) {
+                if (next <= pages) {
                     openMainMenu(profile, next);
                 }
 
@@ -343,7 +344,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
             menu.addMenuClickHandler(s, (pl, slot, item, action) -> {
                 int previous = page - 1;
 
-                if (previous != page && previous > 0) {
+                if (previous > 0) {
                     openItemGroup(profile, itemGroup, previous);
                 }
 
@@ -356,7 +357,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
             menu.addMenuClickHandler(s, (pl, slot, item, action) -> {
                 int next = page + 1;
 
-                if (next != page && next <= pages) {
+                if (next <= pages) {
                     openItemGroup(profile, itemGroup, next);
                 }
 
@@ -570,7 +571,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
 
     @Override
     @ParametersAreNonnullByDefault
-    public void displayItem(PlayerProfile profile, ItemStack item, int index, boolean addToHistory) {
+    public void displayItem(PlayerProfile profile, @Nullable ItemStack item, int index, boolean addToHistory) {
         Player p = profile.getPlayer();
 
         if (p == null || item == null || item.getType() == Material.AIR) {
@@ -774,7 +775,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
                     try {
                         SpecialMenuProvider.open(profile.getPlayer(), profile, getMode(), item);
                     } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                        e.printStackTrace();
+                        Debug.trace(e);
                     }
                     return false;
                 });

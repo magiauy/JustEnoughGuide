@@ -101,9 +101,7 @@ public interface JEGSlimefunGuideImplementation extends SlimefunGuideImplementat
                                 ItemUtils.getItemName(item),
                                 "&4&l" + Slimefun.getLocalization().getMessage(p, "guide.locked"),
                                 "",
-                                lore), meta -> {
-                            meta.getPersistentDataContainer().set(UNLOCK_ITEM_KEY, PersistentDataType.STRING, slimefunItem.getId());
-                        }));
+                                lore), meta -> meta.getPersistentDataContainer().set(UNLOCK_ITEM_KEY, PersistentDataType.STRING, slimefunItem.getId())));
             } else {
                 String cost = VaultIntegration.isEnabled() ? String.format("%.2f", research.getCurrencyCost()) + " 游戏币" : research.getLevelCost() + " 级经验";
                 return ItemStackUtil.getCleanItem(
@@ -119,9 +117,7 @@ public interface JEGSlimefunGuideImplementation extends SlimefunGuideImplementat
                                 "&a单击解锁",
                                 "",
                                 "&7需要",
-                                "&b" + cost), meta -> {
-                            meta.getPersistentDataContainer().set(UNLOCK_ITEM_KEY, PersistentDataType.STRING, slimefunItem.getId());
-                        }));
+                                "&b" + cost), meta -> meta.getPersistentDataContainer().set(UNLOCK_ITEM_KEY, PersistentDataType.STRING, slimefunItem.getId())));
             }
         } else {
             return item;

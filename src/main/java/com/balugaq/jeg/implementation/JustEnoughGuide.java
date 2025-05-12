@@ -37,6 +37,7 @@ import com.balugaq.jeg.implementation.guide.CheatGuideImplementation;
 import com.balugaq.jeg.implementation.guide.SurvivalGuideImplementation;
 import com.balugaq.jeg.implementation.items.GroupSetup;
 import com.balugaq.jeg.implementation.option.BeginnersGuideOption;
+import com.balugaq.jeg.utils.Debug;
 import com.balugaq.jeg.utils.MinecraftVersion;
 import com.balugaq.jeg.utils.ReflectionUtil;
 import com.balugaq.jeg.utils.UUIDUtils;
@@ -254,7 +255,7 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
             }
         } catch (NoClassDefFoundError | NullPointerException | UnsupportedClassVersionError e) {
             getLogger().info("自动更新失败: " + e.getMessage());
-            e.printStackTrace();
+            Debug.trace(e);
         }
     }
 
@@ -326,7 +327,7 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
      * @return the JavaPlugin instance
      */
     @Override
-    public JavaPlugin getJavaPlugin() {
+    public @NotNull JavaPlugin getJavaPlugin() {
         return this;
     }
 

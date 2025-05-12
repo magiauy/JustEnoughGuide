@@ -91,23 +91,21 @@ public class JEGGuideGroup extends ClassicGuideGroup {
         }
 
         final AtomicInteger index = new AtomicInteger(0);
-        doIf(JustEnoughGuide.getConfigManager().isPinyinSearch(), () -> {
-            addGuide(
-                    GUIDE_SLOTS[index.getAndIncrement()],
-                    Converter.getItem(Material.CLOCK,
-                            "&b功能: 拼音搜索",
-                            "&b介绍: 你可以通过拼音搜索指南来快速找到你想要的物品。",
-                            "&b点击尝试功能。"
-                    ), (p, s, i, a) -> {
-                        try {
-                            p.performCommand("sf search ding");
-                        } catch (Throwable e) {
-                            p.sendMessage("§c无法执行操作，请检查 Slimefun 是否正确安装。");
-                            Debug.trace(e);
-                        }
-                        return false;
-                    });
-        });
+        doIf(JustEnoughGuide.getConfigManager().isPinyinSearch(), () -> addGuide(
+                GUIDE_SLOTS[index.getAndIncrement()],
+                Converter.getItem(Material.CLOCK,
+                        "&b功能: 拼音搜索",
+                        "&b介绍: 你可以通过拼音搜索指南来快速找到你想要的物品。",
+                        "&b点击尝试功能。"
+                ), (p, s, i, a) -> {
+                    try {
+                        p.performCommand("sf search ding");
+                    } catch (Throwable e) {
+                        p.sendMessage("§c无法执行操作，请检查 Slimefun 是否正确安装。");
+                        Debug.trace(e);
+                    }
+                    return false;
+                }));
 
         addGuide(
                 GUIDE_SLOTS[index.getAndIncrement()],
@@ -126,87 +124,83 @@ public class JEGGuideGroup extends ClassicGuideGroup {
                     return false;
                 });
 
-        doIf(JustEnoughGuide.getConfigManager().isBookmark(), () -> {
-            addGuide(
-                    GUIDE_SLOTS[index.getAndIncrement()],
-                    Converter.getItem(
-                            Material.BOOK,
-                            "&b功能: 标记物品",
-                            "&b介绍: 你可以打开一个物品组，对于支持的附属。",
-                            "&b      你可以点击物品组界面下方的“书”图标以进入标记状态。",
-                            "&a      点击返回按钮以退出标记状态。",
-                            "&b点击尝试功能。"
-                    ), (p, s, i, a) -> {
-                        try {
-                            if (Slimefun.instance() == null) {
-                                p.sendMessage("§c无法获取 Slimefun 实例，无法使用此功能。");
-                            }
-
-                            SlimefunGuideImplementation guide = GuideUtil.getGuide(p, SlimefunGuideMode.SURVIVAL_MODE);
-
-                            if (!(guide instanceof JEGSlimefunGuideImplementation jegGuide)) {
-                                p.sendMessage("§c功能未启用，无法使用此功能。");
-                                return false;
-                            }
-
-                            PlayerProfile profile = PlayerProfile.find(p).orElse(null);
-                            if (profile == null) {
-                                p.sendMessage("§c无法获取玩家资料，请检查是否正确安装 Slimefun。");
-                                return false;
-                            }
-
-                            for (ItemGroup itemGroup : Slimefun.getRegistry().getAllItemGroups()) {
-                                if (itemGroup
-                                        .getKey()
-                                        .equals(new NamespacedKey(Slimefun.instance(), "basic_machines"))) {
-                                    jegGuide.openItemMarkGroup(itemGroup, p, profile);
-                                    return false;
-                                }
-                            }
-                        } catch (Throwable e) {
-                            p.sendMessage("§c无法执行操作，请检查 Slimefun 是否正确安装。");
-                            Debug.trace(e);
+        doIf(JustEnoughGuide.getConfigManager().isBookmark(), () -> addGuide(
+                GUIDE_SLOTS[index.getAndIncrement()],
+                Converter.getItem(
+                        Material.BOOK,
+                        "&b功能: 标记物品",
+                        "&b介绍: 你可以打开一个物品组，对于支持的附属。",
+                        "&b      你可以点击物品组界面下方的“书”图标以进入标记状态。",
+                        "&a      点击返回按钮以退出标记状态。",
+                        "&b点击尝试功能。"
+                ), (p, s, i, a) -> {
+                    try {
+                        if (Slimefun.instance() == null) {
+                            p.sendMessage("§c无法获取 Slimefun 实例，无法使用此功能。");
                         }
-                        return false;
-                    });
-        });
 
-        doIf(JustEnoughGuide.getConfigManager().isBookmark(), () -> {
-            addGuide(
-                    GUIDE_SLOTS[index.getAndIncrement()],
-                    Converter.getItem(
-                            Material.NETHER_STAR,
-                            "&b功能: 查阅标记物品",
-                            "&b介绍: 你可以查看你标记过的物品。",
-                            "&b      你可以点击物品组界面下方的“下界之星”图标以查看标记过的物品。",
-                            "&a      点击返回按钮以退出查看状态。",
-                            "&b点击尝试功能。"
-                    ), (p, s, i, a) -> {
-                        try {
-                            if (Slimefun.instance() == null) {
-                                p.sendMessage("§c无法获取 Slimefun 实例，无法使用此功能。");
-                            }
+                        SlimefunGuideImplementation guide = GuideUtil.getGuide(p, SlimefunGuideMode.SURVIVAL_MODE);
 
-                            SlimefunGuideImplementation guide = GuideUtil.getGuide(p, SlimefunGuideMode.SURVIVAL_MODE);
-                            if (!(guide instanceof JEGSlimefunGuideImplementation jegGuide)) {
-                                p.sendMessage("§c功能未启用，无法使用此功能。");
-                                return false;
-                            }
-
-                            PlayerProfile profile = PlayerProfile.find(p).orElse(null);
-                            if (profile == null) {
-                                p.sendMessage("§c无法获取玩家资料，请检查是否正确安装 Slimefun。");
-                                return false;
-                            }
-
-                            jegGuide.openBookMarkGroup(p, profile);
-                        } catch (Throwable e) {
-                            p.sendMessage("§c无法执行操作，请检查 Slimefun 是否正确安装。");
-                            Debug.trace(e);
+                        if (!(guide instanceof JEGSlimefunGuideImplementation jegGuide)) {
+                            p.sendMessage("§c功能未启用，无法使用此功能。");
+                            return false;
                         }
-                        return false;
-                    });
-        });
+
+                        PlayerProfile profile = PlayerProfile.find(p).orElse(null);
+                        if (profile == null) {
+                            p.sendMessage("§c无法获取玩家资料，请检查是否正确安装 Slimefun。");
+                            return false;
+                        }
+
+                        for (ItemGroup itemGroup : Slimefun.getRegistry().getAllItemGroups()) {
+                            if (itemGroup
+                                    .getKey()
+                                    .equals(new NamespacedKey(Slimefun.instance(), "basic_machines"))) {
+                                jegGuide.openItemMarkGroup(itemGroup, p, profile);
+                                return false;
+                            }
+                        }
+                    } catch (Throwable e) {
+                        p.sendMessage("§c无法执行操作，请检查 Slimefun 是否正确安装。");
+                        Debug.trace(e);
+                    }
+                    return false;
+                }));
+
+        doIf(JustEnoughGuide.getConfigManager().isBookmark(), () -> addGuide(
+                GUIDE_SLOTS[index.getAndIncrement()],
+                Converter.getItem(
+                        Material.NETHER_STAR,
+                        "&b功能: 查阅标记物品",
+                        "&b介绍: 你可以查看你标记过的物品。",
+                        "&b      你可以点击物品组界面下方的“下界之星”图标以查看标记过的物品。",
+                        "&a      点击返回按钮以退出查看状态。",
+                        "&b点击尝试功能。"
+                ), (p, s, i, a) -> {
+                    try {
+                        if (Slimefun.instance() == null) {
+                            p.sendMessage("§c无法获取 Slimefun 实例，无法使用此功能。");
+                        }
+
+                        SlimefunGuideImplementation guide = GuideUtil.getGuide(p, SlimefunGuideMode.SURVIVAL_MODE);
+                        if (!(guide instanceof JEGSlimefunGuideImplementation jegGuide)) {
+                            p.sendMessage("§c功能未启用，无法使用此功能。");
+                            return false;
+                        }
+
+                        PlayerProfile profile = PlayerProfile.find(p).orElse(null);
+                        if (profile == null) {
+                            p.sendMessage("§c无法获取玩家资料，请检查是否正确安装 Slimefun。");
+                            return false;
+                        }
+
+                        jegGuide.openBookMarkGroup(p, profile);
+                    } catch (Throwable e) {
+                        p.sendMessage("§c无法执行操作，请检查 Slimefun 是否正确安装。");
+                        Debug.trace(e);
+                    }
+                    return false;
+                }));
 
         addGuide(
                 GUIDE_SLOTS[index.getAndIncrement()],
@@ -295,47 +289,45 @@ public class JEGGuideGroup extends ClassicGuideGroup {
                     return false;
                 });
 
-        doIf(Slimefun.getConfigManager().isResearchingEnabled(), () -> {
-            addGuide(
-                    GUIDE_SLOTS[index.getAndIncrement()],
-                    Converter.getItem(
-                            Material.ENCHANTED_BOOK,
-                            "&b功能: 便携研究",
-                            "&b介绍: 你可以当你在查看物品的配方时，如果有未解锁的物品，可以点击以快速解锁。",
-                            "&b点击尝试功能。"
-                    ), (p, s, i, a) -> {
-                        try {
-                            if (Slimefun.instance() == null) {
-                                p.sendMessage("§c无法获取 Slimefun 实例，无法使用此功能。");
-                                return false;
-                            }
-
-                            SlimefunGuideImplementation guide = GuideUtil.getGuide(p, SlimefunGuideMode.SURVIVAL_MODE);
-                            if (!(guide instanceof JEGSlimefunGuideImplementation jegGuide)) {
-                                p.sendMessage("§c功能未启用，无法使用此功能。");
-                                return false;
-                            }
-
-                            PlayerProfile profile = PlayerProfile.find(p).orElse(null);
-                            if (profile == null) {
-                                p.sendMessage("§c无法获取玩家资料，请检查是否正确安装 Slimefun。");
-                                return false;
-                            }
-
-                            SlimefunItem exampleItem = SlimefunItems.ELECTRIC_DUST_WASHER_3.getItem();
-                            if (exampleItem == null) {
-                                p.sendMessage("§c无法获取示例物品，请检查是否正确安装 Slimefun。");
-                                return false;
-                            }
-
-                            jegGuide.displayItem(profile, exampleItem, true);
-                        } catch (Throwable e) {
-                            p.sendMessage("§c无法执行操作，请检查 Slimefun 是否正确安装。");
-                            Debug.trace(e);
+        doIf(Slimefun.getConfigManager().isResearchingEnabled(), () -> addGuide(
+                GUIDE_SLOTS[index.getAndIncrement()],
+                Converter.getItem(
+                        Material.ENCHANTED_BOOK,
+                        "&b功能: 便携研究",
+                        "&b介绍: 你可以当你在查看物品的配方时，如果有未解锁的物品，可以点击以快速解锁。",
+                        "&b点击尝试功能。"
+                ), (p, s, i, a) -> {
+                    try {
+                        if (Slimefun.instance() == null) {
+                            p.sendMessage("§c无法获取 Slimefun 实例，无法使用此功能。");
+                            return false;
                         }
-                        return false;
-                    });
-        });
+
+                        SlimefunGuideImplementation guide = GuideUtil.getGuide(p, SlimefunGuideMode.SURVIVAL_MODE);
+                        if (!(guide instanceof JEGSlimefunGuideImplementation jegGuide)) {
+                            p.sendMessage("§c功能未启用，无法使用此功能。");
+                            return false;
+                        }
+
+                        PlayerProfile profile = PlayerProfile.find(p).orElse(null);
+                        if (profile == null) {
+                            p.sendMessage("§c无法获取玩家资料，请检查是否正确安装 Slimefun。");
+                            return false;
+                        }
+
+                        SlimefunItem exampleItem = SlimefunItems.ELECTRIC_DUST_WASHER_3.getItem();
+                        if (exampleItem == null) {
+                            p.sendMessage("§c无法获取示例物品，请检查是否正确安装 Slimefun。");
+                            return false;
+                        }
+
+                        jegGuide.displayItem(profile, exampleItem, true);
+                    } catch (Throwable e) {
+                        p.sendMessage("§c无法执行操作，请检查 Slimefun 是否正确安装。");
+                        Debug.trace(e);
+                    }
+                    return false;
+                }));
 
         addGuide(
                 GUIDE_SLOTS[index.getAndIncrement()],

@@ -608,7 +608,7 @@ public class RTSListener implements Listener {
         Player player = (Player) event.getWhoClicked();
         if (!isRTSPlayer(player)) {
             ItemStack itemStack = event.getCurrentItem();
-            if (itemStack != null && isFakeItem(itemStack)) {
+            if (isFakeItem(itemStack)) {
                 event.setCancelled(true);
             }
         }
@@ -641,7 +641,7 @@ public class RTSListener implements Listener {
             return;
         } else {
             ItemStack itemStack = event.getItem();
-            if (itemStack != null && isFakeItem(itemStack)) {
+            if (isFakeItem(itemStack)) {
                 event.cancel();
                 return;
             }
@@ -661,7 +661,7 @@ public class RTSListener implements Listener {
             return;
         } else {
             ItemStack itemStack = player.getInventory().getItem(event.getHand());
-            if (itemStack != null && isFakeItem(itemStack)) {
+            if (isFakeItem(itemStack)) {
                 event.setCancelled(true);
                 return;
             }

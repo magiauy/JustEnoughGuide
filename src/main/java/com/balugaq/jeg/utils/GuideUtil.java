@@ -130,7 +130,7 @@ public final class GuideUtil {
             getLastEntry.setAccessible(true);
             getLastEntry.invoke(guideHistory, true);
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-            e.printStackTrace();
+            Debug.trace(e);
         }
     }
 

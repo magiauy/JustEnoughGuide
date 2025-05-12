@@ -191,9 +191,7 @@ public class BookmarkManager extends AbstractManager {
             return;
         }
 
-        ItemStack itemStack = ItemStackUtil.getCleanItem(Converter.getItem(bookmarksItem, itemMeta -> {
-            itemMeta.setLore(new ArrayList<>());
-        }));
+        ItemStack itemStack = ItemStackUtil.getCleanItem(Converter.getItem(bookmarksItem, itemMeta -> itemMeta.setLore(new ArrayList<>())));
 
         backpack.getInventory().setItem(DATA_ITEM_SLOT, itemStack);
         operateController(controller -> {
@@ -279,13 +277,11 @@ public class BookmarkManager extends AbstractManager {
 
     @NotNull
     public ItemStack markItemAsBookmarksItem(@NotNull ItemStack itemStack, @NotNull Player player) {
-        return ItemStackUtil.getCleanItem(Converter.getItem(itemStack, itemMeta -> {
-            itemMeta.getPersistentDataContainer()
-                    .set(
-                            BOOKMARKS_KEY,
-                            PersistentDataType.STRING,
-                            player.getUniqueId().toString());
-        }));
+        return ItemStackUtil.getCleanItem(Converter.getItem(itemStack, itemMeta -> itemMeta.getPersistentDataContainer()
+                .set(
+                        BOOKMARKS_KEY,
+                        PersistentDataType.STRING,
+                        player.getUniqueId().toString())));
     }
 
     public boolean isBookmarksItem(@NotNull ItemStack itemStack, @NotNull Player player) {
