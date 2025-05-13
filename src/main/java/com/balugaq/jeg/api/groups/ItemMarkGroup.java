@@ -38,6 +38,7 @@ import com.balugaq.jeg.utils.ItemStackUtil;
 import com.balugaq.jeg.utils.JEGVersionedItemFlag;
 import com.balugaq.jeg.utils.LocalHelper;
 import com.balugaq.jeg.utils.compatibility.Converter;
+import com.balugaq.jeg.utils.compatibility.Sounds;
 import com.balugaq.jeg.utils.formatter.Formats;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
@@ -56,7 +57,6 @@ import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -220,7 +220,7 @@ public class ItemMarkGroup extends FlexItemGroup {
         ChestMenu chestMenu = new ChestMenu("添加收藏物 - JEG");
 
         chestMenu.setEmptySlotsClickable(false);
-        chestMenu.addMenuOpeningHandler(pl -> pl.playSound(pl.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1, 1));
+        chestMenu.addMenuOpeningHandler(pl -> pl.playSound(pl.getLocation(), Sounds.GUIDE_BUTTON_CLICK_SOUND, 1, 1));
 
         for (var ss : itemGroup instanceof BookmarkRelocation relocation ?
                 relocation.getBackButton(implementation, player) :
@@ -356,7 +356,7 @@ public class ItemMarkGroup extends FlexItemGroup {
                         try {
                             JustEnoughGuide.getBookmarkManager().addBookmark(pl, slimefunItem);
                             pl.sendMessage(ChatColor.GREEN + "已添加到收藏列表!");
-                            pl.playSound(pl.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
+                            pl.playSound(pl.getLocation(), Sounds.COLLECTED_ITEM, 1f, 1f);
                         } catch (Exception | LinkageError x) {
                             printErrorMessage(pl, slimefunItem, x);
                         }

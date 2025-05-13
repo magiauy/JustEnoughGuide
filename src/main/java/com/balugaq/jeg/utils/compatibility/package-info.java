@@ -34,5 +34,6 @@ package com.balugaq.jeg.utils.compatibility;
  * @author balugaq
  * @see com.balugaq.jeg.utils.compatibility.Converter
  * @see com.balugaq.jeg.utils.compatibility.CustomItemStack
+ * @see com.balugaq.jeg.utils.compatibility.Sounds
  * @since 1.4
  */

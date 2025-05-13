@@ -45,6 +45,7 @@ import com.balugaq.jeg.utils.SpecialMenuProvider;
 import com.balugaq.jeg.utils.clickhandler.BeginnerUtils;
 import com.balugaq.jeg.utils.clickhandler.GroupLinker;
 import com.balugaq.jeg.utils.compatibility.Converter;
+import com.balugaq.jeg.utils.compatibility.Sounds;
 import com.balugaq.jeg.utils.formatter.Format;
 import com.balugaq.jeg.utils.formatter.Formats;
 import com.balugaq.jeg.utils.formatter.RecipeDisplayFormat;
@@ -66,7 +67,6 @@ import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
 import io.github.thebusybiscuit.slimefun4.core.guide.options.SlimefunGuideSettings;
 import io.github.thebusybiscuit.slimefun4.core.multiblocks.MultiBlock;
 import io.github.thebusybiscuit.slimefun4.core.multiblocks.MultiBlockMachine;
-import io.github.thebusybiscuit.slimefun4.core.services.sounds.SoundEffect;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.implementation.guide.CheatSheetSlimefunGuide;
 import io.github.thebusybiscuit.slimefun4.implementation.tasks.AsyncRecipeChoiceTask;
@@ -512,7 +512,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
 
         menu.addMenuOpeningHandler(p2 -> {
             try {
-                SoundEffect.GUIDE_BUTTON_CLICK_SOUND.playFor(p2);
+                Sounds.playFor(p2, Sounds.GUIDE_BUTTON_CLICK_SOUND);
             } catch (Throwable ignored) {
             }
         });
@@ -1115,7 +1115,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                 menu.addMenuClickHandler(s, (pl, slot, itemstack, action) -> {
                     if (page > 0) {
                         displayRecipes0(pl, profile, menu, sfItem, page - 1);
-                        SoundEffect.GUIDE_BUTTON_CLICK_SOUND.playFor(pl);
+                        Sounds.playFor(pl, Sounds.GUIDE_BUTTON_CLICK_SOUND);
                     }
 
                     return false;
@@ -1127,7 +1127,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                 menu.addMenuClickHandler(s, (pl, slot, itemstack, action) -> {
                     if (recipes.size() > (l * (page + 1))) {
                         displayRecipes0(pl, profile, menu, sfItem, page + 1);
-                        SoundEffect.GUIDE_BUTTON_CLICK_SOUND.playFor(pl);
+                        Sounds.playFor(pl, Sounds.GUIDE_BUTTON_CLICK_SOUND);
                     }
 
                     return false;
@@ -1184,7 +1184,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
         ChestMenu menu = new ChestMenu(JustEnoughGuide.getConfigManager().getCheatGuideTitle());
 
         menu.setEmptySlotsClickable(false);
-        menu.addMenuOpeningHandler(SoundEffect.GUIDE_BUTTON_CLICK_SOUND::playFor);
+        menu.addMenuOpeningHandler(pl -> Sounds.playFor(pl, Sounds.GUIDE_BUTTON_CLICK_SOUND));
         return menu;
     }
 

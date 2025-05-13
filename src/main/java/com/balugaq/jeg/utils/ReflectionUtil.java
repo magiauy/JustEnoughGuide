@@ -70,7 +70,18 @@ public class ReflectionUtil {
         return true;
     }
 
-    public static <T> @Nullable T getStaticValue(@NotNull Class<T> clazz, @NotNull String field) {
+    public static @Nullable Object getStaticValue(@NotNull Class<?> clazz, @NotNull String field) {
+        try {
+            Field declaredField = clazz.getDeclaredField(field);
+            declaredField.setAccessible(true);
+            return declaredField.get(null);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            Debug.trace(e);
+            return null;
+        }
+    }
+
+    public static <T> @Nullable T getStaticValue(@NotNull Class<?> clazz, @NotNull String field, Class<T> cast) {
         try {
             Field declaredField = clazz.getDeclaredField(field);
             declaredField.setAccessible(true);
@@ -158,6 +169,21 @@ public class ReflectionUtil {
             }
             clazz = clazz.getSuperclass();
         }
+        return null;
+    }
+
+    public static <T> @Nullable T getValue(@NotNull Object object, @NotNull String fieldName, Class<T> cast) {
+        try {
+            Field field = getField(object.getClass(), fieldName);
+            if (field != null) {
+                field.setAccessible(true);
+                return (T) field.get(object);
+            }
+        } catch (IllegalAccessException e) {
+            Debug.trace(e);
+            return null;
+        }
+
         return null;
     }
 
