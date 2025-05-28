@@ -163,7 +163,7 @@
         <dependency>
             <groupId>com.github.SlimefunGuguProject</groupId>
             <artifactId>Slimefun4</artifactId>
-            <version>b39097e015</version>
+            <version>38953fe13a</version>
             <scope>provided</scope>
         </dependency>
 

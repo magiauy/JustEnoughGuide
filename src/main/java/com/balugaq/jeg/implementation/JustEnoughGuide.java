@@ -145,7 +145,6 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
      */
     @Override
     public void onEnable() {
-        Preconditions.checkArgument(instance == null, "JustEnoughGuide 已被启用！");
         instance = this;
 
         getLogger().info("正在加载配置文件...");
@@ -264,7 +263,6 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
      */
     @Override
     public void onDisable() {
-        Preconditions.checkArgument(instance != null, "JustEnoughGuide 未被启用！");
         GroupSetup.shutdown();
 
         Field field = ReflectionUtil.getField(Slimefun.getRegistry().getClass(), "guides");

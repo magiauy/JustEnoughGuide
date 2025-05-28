@@ -34,6 +34,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+
 /**
  * @author balugaq
  * @since 1.0
@@ -179,5 +181,29 @@ public class Debug {
         }
 
         e.printStackTrace();
+    }
+
+    public static void traceExactly(@NotNull Throwable e, @Nullable String doing, @Nullable Integer code) {
+        init();
+        plugin.getLogger().severe("====================AN FATAL OCCURRED" + (doing != null ? (" WHEN " + doing.toUpperCase()) : "") + "====================");
+        plugin.getLogger().severe("DO NOT REPORT THIS ERROR TO JustEnoughGuide DEVELOPERS!!! THIS IS NOT A JustEnoughGuide BUG!");
+        if (code != null) {
+            plugin.getLogger().severe("Error code: " + code);
+        }
+        plugin.getLogger().severe("If you are sure that this is a JustEnoughGuide bug, please report to " + JustEnoughGuide.getInstance().getBugTrackerURL());
+        if (doing != null) {
+            plugin.getLogger().severe("An unexpected error occurred while " + doing);
+        } else {
+            plugin.getLogger().severe("An unexpected error occurred.");
+        }
+
+        e.printStackTrace();
+
+        plugin.getLogger().severe("ALL EXCEPTION INFORMATION IS BELOW:");
+        plugin.getLogger().severe("message: " + e.getMessage());
+        plugin.getLogger().severe("localizedMessage: " + e.getLocalizedMessage());
+        plugin.getLogger().severe("cause: " + e.getCause());
+        plugin.getLogger().severe("stackTrace: " + Arrays.toString(e.getStackTrace()));
+        plugin.getLogger().severe("suppressed: " + Arrays.toString(e.getSuppressed()));
     }
 }

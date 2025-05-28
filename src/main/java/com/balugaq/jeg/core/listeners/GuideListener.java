@@ -27,6 +27,7 @@
 
 package com.balugaq.jeg.core.listeners;
 
+import com.balugaq.jeg.utils.Debug;
 import com.balugaq.jeg.utils.GuideUtil;
 import io.github.thebusybiscuit.slimefun4.api.events.SlimefunGuideOpenEvent;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
@@ -52,6 +53,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Getter
 public class GuideListener implements Listener {
+    public static final int FATAL_ERROR_CODE = 6404;
     public static final Map<Player, SlimefunGuideMode> guideModeMap = new ConcurrentHashMap<>();
 
     @EventHandler(priority = EventPriority.LOW)
@@ -59,7 +61,14 @@ public class GuideListener implements Listener {
         if (!e.isCancelled()) {
             e.setCancelled(true);
 
-            openGuide(e.getPlayer(), e.getGuideLayout());
+            try {
+                openGuide(e.getPlayer(), e.getGuideLayout());
+            } catch (Exception ex) {
+                Debug.traceExactly(ex, "opening guide", FATAL_ERROR_CODE);
+                PlayerProfile.find(e.getPlayer()).ifPresent(profile -> {
+                    GuideUtil.removeLastEntry(profile.getGuideHistory());
+                });
+            }
         }
     }
 
