@@ -32,8 +32,10 @@ import com.balugaq.jeg.api.interfaces.NotDisplayInCheatMode;
 import com.balugaq.jeg.api.interfaces.NotDisplayInSurvivalMode;
 import com.balugaq.jeg.api.objects.Timer;
 import com.balugaq.jeg.api.objects.enums.FilterType;
+import com.balugaq.jeg.api.objects.events.GuideEvents;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.Debug;
+import com.balugaq.jeg.utils.EventUtil;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
 import com.balugaq.jeg.utils.JEGVersionedItemFlag;
@@ -924,21 +926,21 @@ public class SearchGroup extends FlexItemGroup {
 
         for (var ss : Formats.sub.getChars('b')) {
             chestMenu.addItem(ss, ItemStackUtil.getCleanItem(ChestMenuUtils.getBackButton(player, "", "&f左键: &7返回上一页", "&fShift + 左键: &7返回主菜单")));
-            chestMenu.addMenuClickHandler(ss, (pl, s, is, action) -> {
+            chestMenu.addMenuClickHandler(ss, (pl, s, is, action) -> EventUtil.callEvent(new GuideEvents.BackButtonClickEvent(pl, is, s, action, chestMenu, implementation)).ifSuccess(() -> {
                 GuideHistory guideHistory = playerProfile.getGuideHistory();
                 if (action.isShiftClicked()) {
                     SlimefunGuide.openMainMenu(playerProfile, slimefunGuideMode, guideHistory.getMainMenuPage());
                 } else {
-                    guideHistory.goBack(Slimefun.getRegistry().getSlimefunGuide(slimefunGuideMode));
+                    guideHistory.goBack(implementation);
                 }
                 return false;
-            });
+            }));
         }
 
         // Search feature!
         for (var ss : Formats.sub.getChars('S')) {
             chestMenu.addItem(ss, ItemStackUtil.getCleanItem(ChestMenuUtils.getSearchButton(player)));
-            chestMenu.addMenuClickHandler(ss, (pl, slot, item, action) -> {
+            chestMenu.addMenuClickHandler(ss, (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.SearchButtonClickEvent(pl, item, slot, action, chestMenu, implementation)).ifSuccess(() -> {
                 pl.closeInventory();
 
                 Slimefun.getLocalization().sendMessage(pl, "guide.search.message");
@@ -949,7 +951,7 @@ public class SearchGroup extends FlexItemGroup {
                                 playerProfile, msg, implementation.getMode() == SlimefunGuideMode.SURVIVAL_MODE));
 
                 return false;
-            });
+            }));
         }
 
         for (var ss : Formats.sub.getChars('P')) {
@@ -957,12 +959,12 @@ public class SearchGroup extends FlexItemGroup {
                     ss,
                     ItemStackUtil.getCleanItem(ChestMenuUtils.getPreviousButton(
                             player, this.page, (this.slimefunItemList.size() - 1) / Formats.sub.getChars('i').size() + 1)));
-            chestMenu.addMenuClickHandler(ss, (p, slot, item, action) -> {
+            chestMenu.addMenuClickHandler(ss, (p, slot, item, action) -> EventUtil.callEvent(new GuideEvents.PreviousButtonClickEvent(p, item, slot, action, chestMenu, implementation)).ifSuccess(() -> {
                 GuideUtil.removeLastEntry(playerProfile.getGuideHistory());
                 SearchGroup searchGroup = this.getByPage(Math.max(this.page - 1, 1));
                 searchGroup.open(player, playerProfile, slimefunGuideMode);
                 return false;
-            });
+            }));
         }
 
         for (var ss : Formats.sub.getChars('N')) {
@@ -970,13 +972,13 @@ public class SearchGroup extends FlexItemGroup {
                     ss,
                     ItemStackUtil.getCleanItem(ChestMenuUtils.getNextButton(
                             player, this.page, (this.slimefunItemList.size() - 1) / Formats.sub.getChars('i').size() + 1)));
-            chestMenu.addMenuClickHandler(ss, (p, slot, item, action) -> {
+            chestMenu.addMenuClickHandler(ss, (p, slot, item, action) -> EventUtil.callEvent(new GuideEvents.NextButtonClickEvent(p, item, slot, action, chestMenu, implementation)).ifSuccess(() -> {
                 GuideUtil.removeLastEntry(playerProfile.getGuideHistory());
                 SearchGroup searchGroup = this.getByPage(
                         Math.min(this.page + 1, (this.slimefunItemList.size() - 1) / Formats.sub.getChars('i').size() + 1));
                 searchGroup.open(player, playerProfile, slimefunGuideMode);
                 return false;
-            });
+            }));
         }
 
         for (var ss : Formats.sub.getChars('B')) {
@@ -1010,7 +1012,7 @@ public class SearchGroup extends FlexItemGroup {
                             ItemFlag.HIDE_ENCHANTS,
                             JEGVersionedItemFlag.HIDE_ADDITIONAL_TOOLTIP);
                 }));
-                chestMenu.addItem(contentSlots.get(i), ItemStackUtil.getCleanItem(itemstack), (pl, slot, itm, action) -> {
+                chestMenu.addItem(contentSlots.get(i), ItemStackUtil.getCleanItem(itemstack), (pl, slot, itm, action) -> EventUtil.callEvent(new GuideEvents.ItemButtonClickEvent(pl, itm, slot, action, chestMenu, implementation)).ifSuccess(() -> {
                     try {
                         if (implementation.getMode() != SlimefunGuideMode.SURVIVAL_MODE
                                 && (pl.isOp() || pl.hasPermission("slimefun.cheat.items"))) {
@@ -1023,7 +1025,7 @@ public class SearchGroup extends FlexItemGroup {
                     }
 
                     return false;
-                });
+                }));
                 BeginnerUtils.applyBeginnersGuide(implementation, chestMenu, contentSlots.get(i));
                 GroupLinker.applyGroupLinker(implementation, chestMenu, contentSlots.get(i));
             }

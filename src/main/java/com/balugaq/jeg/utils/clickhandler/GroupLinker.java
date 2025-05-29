@@ -28,6 +28,8 @@
 package com.balugaq.jeg.utils.clickhandler;
 
 import com.balugaq.jeg.api.objects.ExtendedClickHandler;
+import com.balugaq.jeg.api.objects.events.GuideEvents;
+import com.balugaq.jeg.utils.EventUtil;
 import com.balugaq.jeg.utils.GuideUtil;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
@@ -60,8 +62,10 @@ public class GroupLinker {
                         if (GuideUtil.isTaggedGroupType(itemGroup)) {
                             page.set((itemGroup.getItems().indexOf(sfItem) / 36) + 1);
                         }
-                        PlayerProfile.get(player, profile -> guide.openItemGroup(profile, itemGroup, page.get()));
-                        return false;
+                        return EventUtil.callEvent(new GuideEvents.GroupLinkButtonClickEvent(player, clickedItem, clickedSlot, action, menu, guide)).ifSuccess(() -> {
+                            PlayerProfile.get(player, profile -> guide.openItemGroup(profile, itemGroup, page.get()));
+                            return false;
+                        });
                     }
                 }
             }

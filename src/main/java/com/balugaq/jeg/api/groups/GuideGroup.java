@@ -29,6 +29,8 @@ package com.balugaq.jeg.api.groups;
 
 import com.balugaq.jeg.api.interfaces.JEGSlimefunGuideImplementation;
 import com.balugaq.jeg.api.interfaces.NotDisplayInCheatMode;
+import com.balugaq.jeg.api.objects.events.GuideEvents;
+import com.balugaq.jeg.utils.EventUtil;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
 import com.balugaq.jeg.utils.formatter.Formats;
@@ -236,7 +238,7 @@ public abstract class GuideGroup extends FlexItemGroup {
             }
             for (var ss : Formats.helper.getChars('b')) {
                 menu.addItem(ss, ItemStackUtil.getCleanItem(ChestMenuUtils.getBackButton(player)));
-                menu.addMenuClickHandler(ss, (pl, s, is, action) -> {
+                menu.addMenuClickHandler(ss, (pl, s, is, action) -> EventUtil.callEvent(new GuideEvents.BackButtonClickEvent(pl, is, s, action, menu, guide)).ifSuccess(() -> {
                     GuideHistory guideHistory = playerProfile.getGuideHistory();
                     if (action.isShiftClicked()) {
                         SlimefunGuide.openMainMenu(playerProfile, slimefunGuideMode, guideHistory.getMainMenuPage());
@@ -244,7 +246,7 @@ public abstract class GuideGroup extends FlexItemGroup {
                         guideHistory.goBack(Slimefun.getRegistry().getSlimefunGuide(slimefunGuideMode));
                     }
                     return false;
-                });
+                }));
             }
 
             for (Map.Entry<Integer, ItemStack> entry : contents.getOrDefault(page, new LinkedHashMap<>()).entrySet()) {
@@ -252,7 +254,11 @@ public abstract class GuideGroup extends FlexItemGroup {
             }
 
             for (Map.Entry<Integer, ChestMenu.MenuClickHandler> entry : clickHandlers.getOrDefault(page, new LinkedHashMap<>()).entrySet()) {
-                menu.addMenuClickHandler(entry.getKey(), entry.getValue());
+                menu.addMenuClickHandler(entry.getKey(), (p, s, i, a) ->
+                        EventUtil.callEvent(new GuideEvents.FeatureButtonClickEvent(p, i, s, a, menu, guide)).ifSuccess(
+                                () -> entry.getValue().onClick(p, s, i, a)
+                        )
+                );
             }
 
             for (var s : Formats.helper.getChars('P')) {
@@ -260,14 +266,14 @@ public abstract class GuideGroup extends FlexItemGroup {
                         s,
                         ItemStackUtil.getCleanItem(ChestMenuUtils.getPreviousButton(
                                 player, page, (this.contents.size() - 1) / 36 + 1)));
-                menu.addMenuClickHandler(s, (p, slot, item, action) -> {
+                menu.addMenuClickHandler(s, (p, slot, item, action) -> EventUtil.callEvent(new GuideEvents.PreviousButtonClickEvent(p, item, slot, action, menu, guide)).ifSuccess(() -> {
                     if (page - 1 < 1) {
                         return false;
                     }
                     GuideUtil.removeLastEntry(playerProfile.getGuideHistory());
                     open(player, playerProfile, slimefunGuideMode, Math.max(1, page - 1));
                     return false;
-                });
+                }));
             }
 
             for (var s : Formats.helper.getChars('N')) {
@@ -275,14 +281,14 @@ public abstract class GuideGroup extends FlexItemGroup {
                         s,
                         ItemStackUtil.getCleanItem(ChestMenuUtils.getNextButton(
                                 player, page, (this.contents.size() - 1) / 36 + 1)));
-                menu.addMenuClickHandler(s, (p, slot, item, action) -> {
+                menu.addMenuClickHandler(s, (p, slot, item, action) -> EventUtil.callEvent(new GuideEvents.NextButtonClickEvent(p, item, slot, action, menu, guide)).ifSuccess(() -> {
                     if (page + 1 > this.contents.size()) {
                         return false;
                     }
                     GuideUtil.removeLastEntry(playerProfile.getGuideHistory());
                     open(player, playerProfile, slimefunGuideMode, Math.min(this.contents.size(), page + 1));
                     return false;
-                });
+                }));
             }
 
             GuideUtil.addRTSButton(menu, player, playerProfile, Formats.sub, slimefunGuideMode, guide);

@@ -182,9 +182,9 @@ public class LocalHelper {
         addonLocals.put("SFMobDrops", "自定义生物掉落");
         addonLocals.put("Drugfun", "自定义医药用品");
         addonLocals.put("SlimefunNukes", "粘液核弹");
-        addonLocals.put("SlimeCustomizer", "自定义粘液附属");
-        addonLocals.put("RykenSlimeCustomizer", "Ryken自定义附属"); // Same as RykenSlimefunCustomizer
-        addonLocals.put("RykenSlimefunCustomizer", "Ryken自定义附属"); // Same as RykenSlimeCustomizer
+        addonLocals.put("SlimeCustomizer", "自定义粘液附属"); // Avoid conflict with RaySlimefunAddon, RykenSlimefunCustomizer, RykenSlimeCustomizer
+        addonLocals.put("RykenSlimeCustomizer", "Ryken自定义附属"); // Same as RykenSlimefunCustomizer, avoid conflict with RaySlimefunAddon
+        addonLocals.put("RykenSlimefunCustomizer", "Ryken自定义附属"); // Same as RykenSlimeCustomizer, avoid conflict with RaySlimefunAddon
         addonLocals.put("FinalTECH-Changed", "乱序技艺-改版");
         addonLocals.put("BloodAlchemy", "血炼金工艺"); // Same as BloodyAlchemy
         addonLocals.put("Laboratory", "实验室");
@@ -208,7 +208,7 @@ public class LocalHelper {
         addonLocals.put("SfChunkInfo", "区块信息");
         addonLocals.put("SlimefunAdvancements", "自定义粘液任务");
         addonLocals.put("SlimeHUD", "方块信息显示");
-        addonLocals.put("RaySlimefunAddon", "高级自定义粘液附属");
+        addonLocals.put("RaySlimefunAddon", "高级自定义粘液附属"); // Avoid conflict with SlimeCustomizer, RykenSlimefunCustomizer, RykenSlimeCustomizer
         addonLocals.put("SCrafter", "SC科技"); // Same as SlimefunZT
         addonLocals.put("CrispyMachines", "酥脆机器");
         addonLocals.put("DimensionTraveler", "维度旅者");
@@ -421,21 +421,25 @@ public class LocalHelper {
                     return def;
                 }
                 Object addonManager = ReflectionUtil.getValue(rsc, "addonManager");
-                Object projectAddons = ReflectionUtil.getValue(addonManager, "projectAddons");
-                @SuppressWarnings("unchecked") Map<Object, Object> map = (Map<Object, Object>) projectAddons;
-                for (Map.Entry<Object, Object> entry : map.entrySet()) {
-                    Object addon = entry.getValue();
-                    Object addonName = ReflectionUtil.getValue(addon, "addonName");
-                    String name = (String) addonName;
-                    Object preloadItems = ReflectionUtil.getValue(addon, "preloadItems");
-                    @SuppressWarnings("unchecked") Map<Object, Object> items = (Map<Object, Object>) preloadItems;
-                    Map<String, SlimefunItemStack> read = new HashMap<>();
-                    for (Map.Entry<Object, Object> itemEntry : items.entrySet()) {
-                        String id = (String) itemEntry.getKey();
-                        SlimefunItemStack item = (SlimefunItemStack) itemEntry.getValue();
-                        read.put(id, item);
+                if (addonManager != null) {
+                    Object projectAddons = ReflectionUtil.getValue(addonManager, "projectAddons");
+                    @SuppressWarnings("unchecked") Map<Object, Object> map = (Map<Object, Object>) projectAddons;
+                    if (map != null) {
+                        for (Map.Entry<Object, Object> entry : map.entrySet()) {
+                            Object addon = entry.getValue();
+                            Object addonName = ReflectionUtil.getValue(addon, "addonName");
+                            String name = (String) addonName;
+                            Object preloadItems = ReflectionUtil.getValue(addon, "preloadItems");
+                            @SuppressWarnings("unchecked") Map<Object, Object> items = (Map<Object, Object>) preloadItems;
+                            Map<String, SlimefunItemStack> read = new HashMap<>();
+                            for (Map.Entry<Object, Object> itemEntry : items.entrySet()) {
+                                String id = (String) itemEntry.getKey();
+                                SlimefunItemStack item = (SlimefunItemStack) itemEntry.getValue();
+                                read.put(id, item);
+                            }
+                            rscItems.put(name, read);
+                        }
                     }
-                    rscItems.put(name, read);
                 }
             } catch (Throwable e) {
                 Debug.trace(e);

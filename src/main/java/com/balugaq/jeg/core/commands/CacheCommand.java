@@ -131,12 +131,8 @@ public class CacheCommand implements JEGCommand {
         Map<Character, Reference<Set<SlimefunItem>>> cache;
         String command = args[2];
         switch (section) {
-            case "1" -> {
-                cache = SearchGroup.CACHE;
-            }
-            case "2" -> {
-                cache = SearchGroup.CACHE2;
-            }
+            case "1" -> cache = SearchGroup.CACHE;
+            case "2" -> cache = SearchGroup.CACHE2;
             default -> {
                 sender.sendMessage(ChatColor.RED + "Invalid section number. Please choose 1 or 2.");
                 return;

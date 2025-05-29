@@ -28,8 +28,6 @@
 package com.balugaq.jeg.utils.formatter;
 
 import com.balugaq.jeg.implementation.JustEnoughGuide;
-import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,10 +61,5 @@ public class RecipeDisplayFormat extends Format {
     @Override
     public void loadMapping() {
         loadMapping(JustEnoughGuide.getConfigManager().getRecipeDisplayFormat());
-    }
-
-    @Deprecated
-    public void decorate(ChestMenu menu, Player player) {
-        super.decorate(menu, player);
     }
 }

@@ -278,9 +278,9 @@ local-translate:
   SFMobDrops: "自定义生物掉落"
   Drugfun: "自定义医药用品"
   SlimefunNukes: "粘液核弹"
-  SlimeCustomizer: "自定义粘液附属"
-  RykenSlimeCustomizer: "Ryken自定义附属" # Same as RykenSlimefunCustomizer
-  RykenSlimefunCustomizer: "Ryken自定义附属" # Same as RykenSlimeCustomizer
+  SlimeCustomizer: "自定义粘液附属" # Avoid conflict with RaySlimefunAddon, RykenSlimefunCustomizer, RykenSlimeCustomizer
+  RykenSlimeCustomizer: "Ryken自定义附属" # Same as RykenSlimefunCustomizer, avoid conflict with RaySlimefunAddon
+  RykenSlimefunCustomizer: "Ryken自定义附属" # Same as RykenSlimeCustomizer, avoid conflict with RaySlimefunAddon
   FinalTECH-Changed: "乱序技艺-改版"
   BloodAlchemy: "血炼金工艺" # Same as BloodyAlchemy
   Laboratory: "实验室"
@@ -304,8 +304,8 @@ local-translate:
   SfChunkInfo: "区块信息"
   SlimefunAdvancements: "自定义粘液任务"
   SlimeHUD: "方块信息显示"
-  RaySlimefunAddon: "高级自定义粘液附属"
-  SCrafter: "SC科技"
+  RaySlimefunAddon: "高级自定义粘液附属" # Avoid conflict with SlimeCustomizer, RykenSlimefunCustomizer, RykenSlimeCustomizer
+  SCrafter: "SC科技" # Same as SlimefunZT
   CrispyMachines: "酥脆机器"
   DimensionTraveler: "维度旅者"
   HardlessMachine: "弹跳工具"
@@ -393,7 +393,7 @@ local-translate:
   SlimefunStackMachine: "粘液堆叠机器" # Avoid conflict with StackMachine
   CraftableEnchantments: "附魔工艺"
   sj_Expansion: "sjの粘液拓展"
-  SlimefunZT: "SiciliaCraft"
+  SlimefunZT: "SC科技" # Same as SCraft
   SlimefunAddon: "CAPTAINchad12自制拓展" # Unbelievable...
   AngleTech: "倾斜科技"
   magicexpansion: "魔法" # Same as MagicExpansion
@@ -412,7 +412,7 @@ local-translate:
   New-Beginnings: "新生" # Same as NewBeginnings
 
 # Do not change this value unless you know what you are doing.
-config-version: 1.6
+config-version: 1.7
 
 # Do not change this value unless you know what you are doing.
 debug: false

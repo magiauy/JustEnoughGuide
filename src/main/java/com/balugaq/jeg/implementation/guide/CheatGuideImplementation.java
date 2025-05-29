@@ -33,9 +33,11 @@ import com.balugaq.jeg.api.interfaces.BookmarkRelocation;
 import com.balugaq.jeg.api.interfaces.DisplayInCheatMode;
 import com.balugaq.jeg.api.interfaces.JEGSlimefunGuideImplementation;
 import com.balugaq.jeg.api.interfaces.NotDisplayInCheatMode;
+import com.balugaq.jeg.api.objects.events.GuideEvents;
 import com.balugaq.jeg.core.listeners.GuideListener;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.Debug;
+import com.balugaq.jeg.utils.EventUtil;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
 import com.balugaq.jeg.utils.LocalHelper;
@@ -452,7 +454,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
 
         for (var s : Formats.sub.getChars('P')) {
             menu.addItem(s, ItemStackUtil.getCleanItem(ChestMenuUtils.getPreviousButton(p, page, pages)));
-            menu.addMenuClickHandler(s, (pl, slot, item, action) -> {
+            menu.addMenuClickHandler(s, (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.PreviousButtonClickEvent(pl, item, slot, action, menu, this)).ifSuccess(() -> {
                 int previous = page - 1;
 
                 if (previous > 0) {
@@ -460,12 +462,12 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                 }
 
                 return false;
-            });
+            }));
         }
 
         for (var s : Formats.sub.getChars('N')) {
             menu.addItem(s, ItemStackUtil.getCleanItem(ChestMenuUtils.getNextButton(p, page, pages)));
-            menu.addMenuClickHandler(s, (pl, slot, item, action) -> {
+            menu.addMenuClickHandler(s, (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.NextButtonClickEvent(pl, item, slot, action, menu, this)).ifSuccess(() -> {
                 int next = page + 1;
 
                 if (next <= pages) {
@@ -473,7 +475,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                 }
 
                 return false;
-            });
+            }));
         }
 
         var indexes = Formats.sub.getChars('i');
@@ -539,10 +541,10 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                 SubItemGroup subGroup = subGroups.get(target);
                 if (subGroup.isVisibleInNested(p)) {
                     menu.addItem(ss.get(t), subGroup.getItem(p));
-                    menu.addMenuClickHandler(ss.get(t), (pl, slot, item, action) -> {
+                    menu.addMenuClickHandler(ss.get(t), (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.ItemGroupButtonClickEvent(pl, item, slot, action, menu, this)).ifSuccess(() -> {
                         SlimefunGuide.openItemGroup(profile, subGroup, getMode(), 1);
                         return false;
-                    });
+                    }));
                     t += 1;
                 }
             }
@@ -550,26 +552,26 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             int pages = target == subGroups.size() - 1 ? page : (subGroups.size() - 1) / groupsPerPage + 1;
             for (var s : Formats.nested.getChars('P')) {
                 menu.addItem(s, ChestMenuUtils.getPreviousButton(p, page, pages));
-                menu.addMenuClickHandler(s, (pl, slot, item, action) -> {
+                menu.addMenuClickHandler(s, (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.PreviousButtonClickEvent(pl, item, slot, action, menu, this)).ifSuccess(() -> {
                     int next = page - 1;
                     if (next > 0) {
                         this.openNestedItemGroup(p, profile, nested, next);
                     }
 
                     return false;
-                });
+                }));
             }
 
             for (var s : Formats.nested.getChars('N')) {
                 menu.addItem(s, ChestMenuUtils.getNextButton(p, page, pages));
-                menu.addMenuClickHandler(s, (pl, slot, item, action) -> {
+                menu.addMenuClickHandler(s, (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.NextButtonClickEvent(pl, item, slot, action, menu, this)).ifSuccess(() -> {
                     int next = page + 1;
                     if (next <= pages) {
                         this.openNestedItemGroup(p, profile, nested, next);
                     }
 
                     return false;
-                });
+                }));
             }
 
             menu.open(p);
@@ -619,13 +621,13 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                             "",
                             "&7需要 &b",
                             lore)));
-            menu.addMenuClickHandler(index, (pl, slot, item, action) -> {
+            menu.addMenuClickHandler(index, (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.ResearchItemEvent(pl, item, slot, action, menu, this)).ifSuccess(() -> {
                 research.unlockFromGuide(this, p, profile, sfitem, itemGroup, page);
                 return false;
-            });
+            }));
         } else {
             menu.addItem(index, ItemStackUtil.getCleanItem(sfitem.getItem()));
-            menu.addMenuClickHandler(index, (pl, slot, item, action) -> {
+            menu.addMenuClickHandler(index, (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.ItemButtonClickEvent(pl, item, slot, action, menu, this)).ifSuccess(() -> {
                 try {
                     if (isSurvivalMode()) {
                         displayItem(profile, sfitem, true);
@@ -654,7 +656,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                 }
 
                 return false;
-            });
+            }));
         }
     }
 
@@ -766,24 +768,24 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                 menu.addItem(
                         s,
                         ItemStackUtil.getCleanItem(ChestMenuUtils.getPreviousButton(p, index + 1, recipes.length)),
-                        (pl, slot, action, stack) -> {
+                        (pl, slot, stack, action) -> EventUtil.callEvent(new GuideEvents.PreviousButtonClickEvent(pl, stack, slot, action, menu, this)).ifSuccess(() -> {
                             if (index > 0) {
                                 showMinecraftRecipe0(recipes, index - 1, item, profile, p, true);
                             }
                             return false;
-                        });
+                        }));
             }
 
             for (var s : Formats.recipe_vanilla.getChars('N')) {
                 menu.addItem(
                         s,
                         ItemStackUtil.getCleanItem(ChestMenuUtils.getNextButton(p, index + 1, recipes.length)),
-                        (pl, slot, action, stack) -> {
+                        (pl, slot, stack, action) -> EventUtil.callEvent(new GuideEvents.NextButtonClickEvent(pl, stack, slot, action, menu, this)).ifSuccess(() -> {
                             if (index < recipes.length - 1) {
                                 showMinecraftRecipe0(recipes, index + 1, item, profile, p, true);
                             }
                             return false;
-                        });
+                        }));
             }
         }
 
@@ -855,11 +857,11 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                                         + "\u21E8 "
                                         + ChatColor.GREEN
                                         + Slimefun.getLocalization().getMessage(p, "guide.tooltips.open-itemgroup"))));
-                menu.addMenuClickHandler(s, (pl, slot, itemstack, action) -> {
+                menu.addMenuClickHandler(s, (pl, slot, itemstack, action) -> EventUtil.callEvent(new GuideEvents.WikiButtonClickEvent(pl, itemstack, slot, action, menu, this)).ifSuccess(() -> {
                     pl.closeInventory();
                     ChatUtils.sendURL(pl, wiki.get());
                     return false;
-                });
+                }));
             }
         }
 
@@ -882,14 +884,14 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
 
         if (maybeSpecial && SpecialMenuProvider.isSpecialItem(item)) {
             for (var s : format.getChars('E')) {
-                menu.addItem(s, Models.SPECIAL_MENU_ITEM, (pl, slot, itemstack, action) -> {
+                menu.addItem(s, Models.SPECIAL_MENU_ITEM, (pl, slot, itemstack, action) -> EventUtil.callEvent(new GuideEvents.BigRecipeButtonClickEvent(pl, itemstack, slot, action, menu, this)).ifSuccess(() -> {
                     try {
                         SpecialMenuProvider.open(profile.getPlayer(), profile, getMode(), item);
                     } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
                         Debug.trace(e);
                     }
                     return false;
-                });
+                }));
             }
         }
 
@@ -928,7 +930,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             addBackButton0(menu, s, p, profile);
         }
 
-        MenuClickHandler clickHandler = (pl, slot, itemstack, action) -> {
+        MenuClickHandler clickHandler = (pl, slot, itemstack, action) -> EventUtil.callEvent(new GuideEvents.ItemButtonClickEvent(pl, itemstack, slot, action, menu, this)).ifSuccess(() -> {
             try {
                 if (itemstack != null && itemstack.getType() != Material.BARRIER) {
                     displayItem(profile, itemstack, 0, true);
@@ -937,7 +939,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                 printErrorMessage0(pl, x);
             }
             return false;
-        };
+        });
 
         boolean isSlimefunRecipe = item instanceof SlimefunItem;
 
@@ -959,12 +961,12 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
         }
 
         for (var s : format.getChars('t')) {
-            menu.addItem(s, ItemStackUtil.getCleanItem(recipeType.getItem(p)), ChestMenuUtils.getEmptyClickHandler());
+            menu.addItem(s, ItemStackUtil.getCleanItem(recipeType.getItem(p)), (pl, slot, itemStack, action) -> EventUtil.callEvent(new GuideEvents.RecipeTypeButtonClickEvent(pl, itemStack, slot, action, menu, this)).ifSuccess(() -> false));
             BeginnerUtils.applyBeginnersGuide(this, menu, s);
             GroupLinker.applyGroupLinker(this, menu, s);
         }
         for (var s : format.getChars('i')) {
-            menu.addItem(s, ItemStackUtil.getCleanItem(output), ChestMenuUtils.getEmptyClickHandler());
+            menu.addItem(s, ItemStackUtil.getCleanItem(output), (pl, slot, itemStack, action) -> EventUtil.callEvent(new GuideEvents.ItemButtonClickEvent(pl, itemStack, slot, action, menu, this)).ifSuccess(() -> false));
             BeginnerUtils.applyBeginnersGuide(this, menu, s);
             GroupLinker.applyGroupLinker(this, menu, s);
         }
@@ -993,16 +995,16 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
         // Settings Panel
         for (var s : format.getChars('T')) {
             menu.addItem(s, ItemStackUtil.getCleanItem(ChestMenuUtils.getMenuButton(p)));
-            menu.addMenuClickHandler(s, (pl, slot, item, action) -> {
+            menu.addMenuClickHandler(s, (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.SettingsButtonClickEvent(pl, item, slot, action, menu, this)).ifSuccess(() -> {
                 SlimefunGuideSettings.openSettings(pl, pl.getInventory().getItemInMainHand());
                 return false;
-            });
+            }));
         }
 
         // Search feature!
         for (var s : format.getChars('S')) {
             menu.addItem(s, ItemStackUtil.getCleanItem(ChestMenuUtils.getSearchButton(p)));
-            menu.addMenuClickHandler(s, (pl, slot, item, action) -> {
+            menu.addMenuClickHandler(s, (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.SearchButtonClickEvent(pl, item, slot, action, menu, this)).ifSuccess(() -> {
                 pl.closeInventory();
 
                 Slimefun.getLocalization().sendMessage(pl, "guide.search.message");
@@ -1010,7 +1012,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                         JustEnoughGuide.getInstance(), pl, msg -> openSearch(profile, msg, isSurvivalMode()));
 
                 return false;
-            });
+            }));
         }
 
         GuideUtil.addRTSButton(menu, p, profile, format, getMode(), this);
@@ -1031,16 +1033,16 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
         // Settings Panel
         for (var s : Formats.main.getChars('T')) {
             menu.addItem(s, ItemStackUtil.getCleanItem(ChestMenuUtils.getMenuButton(p)));
-            menu.addMenuClickHandler(s, (pl, slot, item, action) -> {
+            menu.addMenuClickHandler(s, (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.SettingsButtonClickEvent(pl, item, slot, action, menu, this)).ifSuccess(() -> {
                 SlimefunGuideSettings.openSettings(pl, pl.getInventory().getItemInMainHand());
                 return false;
-            });
+            }));
         }
 
         // Search feature!
         for (var s : Formats.main.getChars('S')) {
             menu.addItem(s, ItemStackUtil.getCleanItem(ChestMenuUtils.getSearchButton(p)));
-            menu.addMenuClickHandler(s, (pl, slot, item, action) -> {
+            menu.addMenuClickHandler(s, (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.SearchButtonClickEvent(pl, item, slot, action, menu, this)).ifSuccess(() -> {
                 pl.closeInventory();
 
                 Slimefun.getLocalization().sendMessage(pl, "guide.search.message");
@@ -1048,7 +1050,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                         JustEnoughGuide.getInstance(), pl, msg -> openSearch(profile, msg, isSurvivalMode()));
 
                 return false;
-            });
+            }));
         }
 
         GuideUtil.addRTSButton(menu, p, profile, Formats.main, getMode(), this);
@@ -1066,24 +1068,24 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                     ItemStackUtil.getCleanItem(
                             ChestMenuUtils.getBackButton(p, "", "&f左键: &7返回上一页", "&fShift + 左键: &7返回主菜单")));
 
-            menu.addMenuClickHandler(slot, (pl, s, is, action) -> {
+            menu.addMenuClickHandler(slot, (pl, s, is, action) -> EventUtil.callEvent(new GuideEvents.BackButtonClickEvent(pl, is, s, action, menu, this)).ifSuccess(() -> {
                 if (action.isShiftClicked()) {
                     openMainMenu(profile, profile.getGuideHistory().getMainMenuPage());
                 } else {
                     history.goBack(this);
                 }
                 return false;
-            });
+            }));
 
         } else {
             menu.addItem(
                     slot,
                     ItemStackUtil.getCleanItem(ChestMenuUtils.getBackButton(
                             p, "", ChatColor.GRAY + Slimefun.getLocalization().getMessage(p, "guide.back.guide"))));
-            menu.addMenuClickHandler(slot, (pl, s, is, action) -> {
+            menu.addMenuClickHandler(slot, (pl, s, is, action) -> EventUtil.callEvent(new GuideEvents.BackButtonClickEvent(pl, is, s, action, menu, this)).ifSuccess(() -> {
                 openMainMenu(profile, profile.getGuideHistory().getMainMenuPage());
                 return false;
-            });
+            }));
         }
     }
 
@@ -1112,26 +1114,26 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             for (var s : Formats.recipe_display.getChars('P')) {
                 menu.replaceExistingItem(
                         s, ItemStackUtil.getCleanItem(ChestMenuUtils.getPreviousButton(p, page + 1, pages)));
-                menu.addMenuClickHandler(s, (pl, slot, itemstack, action) -> {
+                menu.addMenuClickHandler(s, (pl, slot, itemstack, action) -> EventUtil.callEvent(new GuideEvents.PreviousButtonClickEvent(pl, itemstack, slot, action, menu, this)).ifSuccess(() -> {
                     if (page > 0) {
                         displayRecipes0(pl, profile, menu, sfItem, page - 1);
                         Sounds.playFor(pl, Sounds.GUIDE_BUTTON_CLICK_SOUND);
                     }
 
                     return false;
-                });
+                }));
             }
 
             for (var s : Formats.recipe_display.getChars('N')) {
                 menu.replaceExistingItem(s, ItemStackUtil.getCleanItem(ChestMenuUtils.getNextButton(p, page + 1, pages)));
-                menu.addMenuClickHandler(s, (pl, slot, itemstack, action) -> {
+                menu.addMenuClickHandler(s, (pl, slot, itemstack, action) -> EventUtil.callEvent(new GuideEvents.NextButtonClickEvent(pl, itemstack, slot, action, menu, this)).ifSuccess(() -> {
                     if (recipes.size() > (l * (page + 1))) {
                         displayRecipes0(pl, profile, menu, sfItem, page + 1);
                         Sounds.playFor(pl, Sounds.GUIDE_BUTTON_CLICK_SOUND);
                     }
 
                     return false;
-                });
+                }));
             }
 
             var fds = RecipeDisplayFormat.fenceShuffle(ds);
@@ -1165,10 +1167,10 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             menu.replaceExistingItem(slot, ItemStackUtil.getCleanItem(displayItem));
 
             if (page == 0) {
-                menu.addMenuClickHandler(slot, (pl, s, itemstack, action) -> {
+                menu.addMenuClickHandler(slot, (pl, s, itemstack, action) -> EventUtil.callEvent(new GuideEvents.ItemButtonClickEvent(pl, itemstack, s, action, menu, this)).ifSuccess(() -> {
                     displayItem(profile, itemstack, 0, true);
                     return false;
-                });
+                }));
                 BeginnerUtils.applyBeginnersGuide(this, menu, slot);
                 GroupLinker.applyGroupLinker(this, menu, slot);
             }

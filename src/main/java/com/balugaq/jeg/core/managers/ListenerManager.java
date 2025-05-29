@@ -50,10 +50,9 @@ import java.util.List;
  */
 @Getter
 public class ListenerManager extends AbstractManager {
-    private final JavaPlugin plugin;
-
     @NotNull
     final List<Listener> listeners = new ArrayList<>();
+    private final JavaPlugin plugin;
 
     public ListenerManager(JavaPlugin plugin) {
         this.plugin = plugin;

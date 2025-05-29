@@ -28,8 +28,10 @@
 package com.balugaq.jeg.utils.clickhandler;
 
 import com.balugaq.jeg.api.objects.ExtendedClickHandler;
+import com.balugaq.jeg.api.objects.events.GuideEvents;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.implementation.option.BeginnersGuideOption;
+import com.balugaq.jeg.utils.EventUtil;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
@@ -55,8 +57,10 @@ public class BeginnerUtils {
 
         menu.addMenuClickHandler(slot, (BeginnerClickHandler) (player, clickedSlot, clickedItem, action) -> {
             if (isNew(player) && action.isShiftClicked() && action.isRightClicked() && clickedItem != null) {
-                PlayerProfile.get(player, profile -> guide.openSearch(profile, ChatColor.stripColor(ItemStackHelper.getDisplayName(clickedItem)), true));
-                return false;
+                return EventUtil.callEvent(new GuideEvents.BeginnerButtonClickEvent(player, clickedItem, clickedSlot, action, menu, guide)).ifSuccess(() -> {
+                    PlayerProfile.get(player, profile -> guide.openSearch(profile, ChatColor.stripColor(ItemStackHelper.getDisplayName(clickedItem)), true));
+                    return false;
+                });
             }
 
             // call origin handler

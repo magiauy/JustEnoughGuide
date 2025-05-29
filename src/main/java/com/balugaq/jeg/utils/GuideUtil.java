@@ -31,6 +31,7 @@ import com.balugaq.jeg.api.groups.RTSSearchGroup;
 import com.balugaq.jeg.api.groups.SearchGroup;
 import com.balugaq.jeg.api.interfaces.BookmarkRelocation;
 import com.balugaq.jeg.api.interfaces.JEGSlimefunGuideImplementation;
+import com.balugaq.jeg.api.objects.events.GuideEvents;
 import com.balugaq.jeg.api.objects.events.RTSEvents;
 import com.balugaq.jeg.core.listeners.RTSListener;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
@@ -155,10 +156,11 @@ public final class GuideUtil {
                         || clazz.getName().endsWith("SubGroup"));
     }
 
+    @SuppressWarnings("deprecation")
     public static void addRTSButton(ChestMenu menu, Player p, PlayerProfile profile, Format format, SlimefunGuideMode mode, SlimefunGuideImplementation implementation) {
         if (JustEnoughGuide.getConfigManager().isRTSSearch()) {
             for (var ss : format.getChars('R')) {
-                menu.addItem(ss, ItemStackUtil.getCleanItem(Models.RTS_ITEM), (pl, slot, itemstack, action) -> {
+                menu.addItem(ss, ItemStackUtil.getCleanItem(Models.RTS_ITEM), (pl, slot, itemstack, action) -> EventUtil.callEvent(new GuideEvents.RTSButtonClickEvent(pl, itemstack, slot, action, menu, implementation)).ifSuccess(() -> {
                     try {
                         RTSSearchGroup.newRTSInventoryFor(pl, mode, (s, stateSnapshot) -> {
                             if (s == AnvilGUI.Slot.INPUT_LEFT) {
@@ -204,7 +206,7 @@ public final class GuideUtil {
                         p.sendMessage(ChatColor.RED + "不兼容的版本! 无法使用实时搜索");
                     }
                     return false;
-                });
+                }));
             }
         } else {
             for (var ss : format.getChars('R')) {
@@ -213,6 +215,7 @@ public final class GuideUtil {
         }
     }
 
+    @SuppressWarnings("deprecation")
     public static void addBookMarkButton(ChestMenu menu, Player p, PlayerProfile profile, Format format, JEGSlimefunGuideImplementation implementation, ItemGroup itemGroup) {
         if (JustEnoughGuide.getConfigManager().isBookmark()) {
             BookmarkRelocation b = itemGroup instanceof BookmarkRelocation bookmarkRelocation ? bookmarkRelocation : null;
@@ -220,10 +223,10 @@ public final class GuideUtil {
                 menu.addItem(
                         s,
                         ItemStackUtil.getCleanItem(getBookMarkMenuButton()),
-                        (pl, slot, itemstack, action) -> {
+                        (pl, slot, itemstack, action) -> EventUtil.callEvent(new GuideEvents.BookMarkButtonClickEvent(pl, itemstack, slot, action, menu, implementation)).ifSuccess(() -> {
                             implementation.openBookMarkGroup(pl, profile);
                             return false;
-                        });
+                        }));
             }
         } else {
             for (var s : format.getChars('C')) {
@@ -236,6 +239,7 @@ public final class GuideUtil {
         }
     }
 
+    @SuppressWarnings("deprecation")
     public static void addItemMarkButton(ChestMenu menu, Player p, PlayerProfile profile, Format format, JEGSlimefunGuideImplementation implementation, ItemGroup itemGroup) {
         if (itemGroup != null && JustEnoughGuide.getConfigManager().isBookmark() && isTaggedGroupType(itemGroup)) {
             BookmarkRelocation b = itemGroup instanceof BookmarkRelocation relocation ? relocation : null;
@@ -243,10 +247,10 @@ public final class GuideUtil {
                 menu.addItem(
                         ss,
                         ItemStackUtil.getCleanItem(getItemMarkMenuButton()),
-                        (pl, slot, itemstack, action) -> {
+                        (pl, slot, itemstack, action) -> EventUtil.callEvent(new GuideEvents.ItemMarkButtonClickEvent(pl, itemstack, slot, action, menu, implementation)).ifSuccess(() -> {
                             implementation.openItemMarkGroup(itemGroup, pl, profile);
                             return false;
-                        });
+                        }));
             }
         } else {
             for (var ss : format.getChars('c')) {
