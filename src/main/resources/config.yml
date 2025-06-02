@@ -293,7 +293,7 @@ local-translate:
   Magic8Ball: "魔法8号球"
   InfinityExpansionAutomation: "无尽自动化"
   ZeroTech: "澪数工艺"
-  Ex-Limus: "新手工具"
+  Ex-Limus: "新手工具" # Same as ExLimus
   NotEnoughAddons: "多彩科技"
   SFWorldEdit: "粘液创世神[SW]" # Avoid conflict with SlimefunWorldedit
   RSCEditor: "RSC编辑器"
@@ -410,6 +410,7 @@ local-translate:
   SlimefunVoid: "虚无粘液" # Same as SlimeVoid
   betterfarming: "高级农场" # Same as BetterFarming
   New-Beginnings: "新生" # Same as NewBeginnings
+  ExLimus: "新手工具" # Same as Ex-Limus
 
 # Do not change this value unless you know what you are doing.
 config-version: 1.7

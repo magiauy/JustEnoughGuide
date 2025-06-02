@@ -61,8 +61,8 @@ public class GroupSetup {
         hiddenItemsGroup.register(JustEnoughGuide.getInstance());
         if (SpecialMenuProvider.ENABLED_Nexcavate) {
             nexcavateItemsGroup = new NexcavateItemsGroup(
-                    new NamespacedKey(JustEnoughGuide.getInstance(), "nexvacate_items_group"),
-                    Converter.getItem(Material.BLACKSTONE, "&6Nexvacate 物品"));
+                    new NamespacedKey(JustEnoughGuide.getInstance(), "nexcavate_items_group"),
+                    Converter.getItem(Material.BLACKSTONE, "&6Nexcavate 物品"));
             nexcavateItemsGroup.register(JustEnoughGuide.getInstance());
         }
     }

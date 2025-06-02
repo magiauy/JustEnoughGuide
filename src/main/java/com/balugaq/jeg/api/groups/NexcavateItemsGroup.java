@@ -117,9 +117,9 @@ public class NexcavateItemsGroup extends FlexItemGroup {
     }
 
     /**
-     * Constructor of nexvacateItemsGroup.
+     * Constructor of NexcavateItemsGroup.
      *
-     * @param nexcavateItemsGroup The nexvacateItemsGroup to copy.
+     * @param nexcavateItemsGroup The NexcavateItemsGroup to copy.
      * @param page                The page number to display.
      */
     protected NexcavateItemsGroup(@NotNull NexcavateItemsGroup nexcavateItemsGroup, int page) {
@@ -335,10 +335,10 @@ public class NexcavateItemsGroup extends FlexItemGroup {
     }
 
     /**
-     * Gets the nexvacateItemsGroup by page.
+     * Gets the NexcavateItemsGroup by page.
      *
      * @param page The page number.
-     * @return The nexvacateItemsGroup by page.
+     * @return The NexcavateItemsGroup by page.
      */
     @NotNull
     private NexcavateItemsGroup getByPage(int page) {
