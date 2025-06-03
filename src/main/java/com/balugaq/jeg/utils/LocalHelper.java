@@ -314,6 +314,7 @@ public class LocalHelper {
         addonLocals.put("SlimefunVoid", "虚无粘液"); // Same as SlimeVoid
         addonLocals.put("betterfarming", "高级农场"); // Same as BetterFarming
         addonLocals.put("New-Beginnings", "新生"); // Same as NewBeginnings
+        addonLocals.put("ExLimus", "新手工具"); // Same as Ex-Limus
     }
 
     @Nonnull
