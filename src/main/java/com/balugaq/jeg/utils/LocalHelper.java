@@ -315,6 +315,7 @@ public class LocalHelper {
         addonLocals.put("betterfarming", "高级农场"); // Same as BetterFarming
         addonLocals.put("New-Beginnings", "新生"); // Same as NewBeginnings
         addonLocals.put("ExLimus", "新手工具"); // Same as Ex-Limus
+        addonLocals.put("Aeterum", "众神之马");
     }
 
     @Nonnull

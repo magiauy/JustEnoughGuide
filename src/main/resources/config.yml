@@ -411,6 +411,7 @@ local-translate:
   betterfarming: "高级农场" # Same as BetterFarming
   New-Beginnings: "新生" # Same as NewBeginnings
   ExLimus: "新手工具" # Same as Ex-Limus
+  Aeterum: "众神之马"
 
 # Do not change this value unless you know what you are doing.
 config-version: 1.7
