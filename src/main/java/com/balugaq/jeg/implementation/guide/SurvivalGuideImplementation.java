@@ -887,12 +887,12 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         }
 
         for (var s : format.getChars('t')) {
-            menu.addItem(s, ItemStackUtil.getCleanItem(recipeType.getItem(p)), (pl, slot, itemStack, action) -> EventUtil.callEvent(new GuideEvents.RecipeTypeButtonClickEvent(pl, itemStack, slot, action, menu, this)).ifSuccess(() -> false));
+            menu.addItem(s, ItemStackUtil.getCleanItem(recipeType.getItem(p)), (pl, slot, itemStack, action) -> EventUtil.callEvent(new GuideEvents.RecipeTypeButtonClickEvent(pl, itemStack, slot, action, menu, this)).ifSuccess(false));
             BeginnerUtils.applyBeginnersGuide(this, menu, s);
             GroupLinker.applyGroupLinker(this, menu, s);
         }
         for (var s : format.getChars('i')) {
-            menu.addItem(s, ItemStackUtil.getCleanItem(output), (pl, slot, itemStack, action) -> EventUtil.callEvent(new GuideEvents.ItemButtonClickEvent(pl, itemStack, slot, action, menu, this)).ifSuccess(() -> false));
+            menu.addItem(s, ItemStackUtil.getCleanItem(output), (pl, slot, itemStack, action) -> EventUtil.callEvent(new GuideEvents.ItemButtonClickEvent(pl, itemStack, slot, action, menu, this)).ifSuccess(false));
             BeginnerUtils.applyBeginnersGuide(this, menu, s);
             GroupLinker.applyGroupLinker(this, menu, s);
         }

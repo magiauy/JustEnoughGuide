@@ -18,7 +18,7 @@ blacklist:
   - "快捷"
 
 # 禁止任何形式搜出名字包含以下任意词的物品
-banlist: []
+banlist: [ ]
 
 # 搜索时每组词间相通
 shared-chars:
@@ -412,6 +412,8 @@ local-translate:
   New-Beginnings: "新生" # Same as NewBeginnings
   ExLimus: "新手工具" # Same as Ex-Limus
   Aeterum: "众神之马"
+  PoseidonAddon: "海洋生存日记"
+  Aircraft: "粘液飞机"
 
 # Do not change this value unless you know what you are doing.
 config-version: 1.7

@@ -167,5 +167,29 @@ public class EventUtil {
                 return null;
             }
         }
+
+        public <R> R ifSuccess(R result) {
+            if (event instanceof Cancellable cancellable) {
+                if (cancellable.isCancelled()) {
+                    return null;
+                } else {
+                    return result;
+                }
+            } else {
+                return result;
+            }
+        }
+
+        public <R> R ifCancelled(R result) {
+            if (event instanceof Cancellable cancellable) {
+                if (cancellable.isCancelled()) {
+                    return result;
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        }
     }
 }

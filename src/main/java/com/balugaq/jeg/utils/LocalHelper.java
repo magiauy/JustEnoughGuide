@@ -316,6 +316,8 @@ public class LocalHelper {
         addonLocals.put("New-Beginnings", "新生"); // Same as NewBeginnings
         addonLocals.put("ExLimus", "新手工具"); // Same as Ex-Limus
         addonLocals.put("Aeterum", "众神之马");
+        addonLocals.put("PoseidonAddon", "海洋生存日记");
+        addonLocals.put("Aircraft", "粘液飞机");
     }
 
     @Nonnull
