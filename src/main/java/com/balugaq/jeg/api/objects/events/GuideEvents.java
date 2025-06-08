@@ -108,7 +108,7 @@ public class GuideEvents {
             return HANDLERS;
         }
 
-        public @NotNull HandlerList getHandlerList() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
     }
@@ -137,7 +137,7 @@ public class GuideEvents {
             return HANDLERS;
         }
 
-        public @NotNull HandlerList getHandlerList() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
     }
@@ -166,7 +166,7 @@ public class GuideEvents {
             return HANDLERS;
         }
 
-        public @NotNull HandlerList getHandlerList() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
     }
@@ -195,7 +195,7 @@ public class GuideEvents {
             return HANDLERS;
         }
 
-        public @NotNull HandlerList getHandlerList() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
     }
@@ -224,7 +224,7 @@ public class GuideEvents {
             return HANDLERS;
         }
 
-        public @NotNull HandlerList getHandlerList() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
     }
@@ -293,7 +293,7 @@ public class GuideEvents {
             return HANDLERS;
         }
 
-        public @NotNull HandlerList getHandlerList() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
     }
@@ -322,7 +322,7 @@ public class GuideEvents {
             return HANDLERS;
         }
 
-        public @NotNull HandlerList getHandlerList() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
     }
@@ -351,7 +351,7 @@ public class GuideEvents {
             return HANDLERS;
         }
 
-        public @NotNull HandlerList getHandlerList() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
     }
@@ -380,7 +380,7 @@ public class GuideEvents {
             return HANDLERS;
         }
 
-        public @NotNull HandlerList getHandlerList() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
     }
@@ -409,7 +409,7 @@ public class GuideEvents {
             return HANDLERS;
         }
 
-        public @NotNull HandlerList getHandlerList() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
     }
@@ -438,7 +438,7 @@ public class GuideEvents {
             return HANDLERS;
         }
 
-        public @NotNull HandlerList getHandlerList() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
     }
@@ -467,7 +467,7 @@ public class GuideEvents {
             return HANDLERS;
         }
 
-        public @NotNull HandlerList getHandlerList() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
     }
@@ -496,7 +496,7 @@ public class GuideEvents {
             return HANDLERS;
         }
 
-        public @NotNull HandlerList getHandlerList() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
     }
@@ -525,7 +525,7 @@ public class GuideEvents {
             return HANDLERS;
         }
 
-        public @NotNull HandlerList getHandlerList() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
     }
@@ -554,7 +554,7 @@ public class GuideEvents {
             return HANDLERS;
         }
 
-        public @NotNull HandlerList getHandlerList() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
     }
@@ -583,7 +583,7 @@ public class GuideEvents {
             return HANDLERS;
         }
 
-        public @NotNull HandlerList getHandlerList() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
     }
@@ -612,7 +612,7 @@ public class GuideEvents {
             return HANDLERS;
         }
 
-        public @NotNull HandlerList getHandlerList() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
     }
@@ -641,7 +641,7 @@ public class GuideEvents {
             return HANDLERS;
         }
 
-        public @NotNull HandlerList getHandlerList() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
     }
@@ -670,7 +670,7 @@ public class GuideEvents {
             return HANDLERS;
         }
 
-        public @NotNull HandlerList getHandlerList() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
     }
@@ -699,7 +699,7 @@ public class GuideEvents {
             return HANDLERS;
         }
 
-        public @NotNull HandlerList getHandlerList() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
     }

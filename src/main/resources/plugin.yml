@@ -8,8 +8,6 @@ api-version: 1.17
 depend:
   - Slimefun
   - GuizhanLibPlugin
-softdepend:
-  - LogiTech
 commands:
   justenoughguide:
     aliases:

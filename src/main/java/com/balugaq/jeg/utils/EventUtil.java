@@ -116,14 +116,14 @@ public class EventUtil {
             return true;
         }
 
-        public <R> R thenRun(Function<T, R> function) {
+        public boolean thenRun(Function<T, Boolean> function) {
             return function.apply(event);
         }
 
-        public <R> R ifSuccess(Function<T, R> function) {
+        public boolean ifSuccess(Function<T, Boolean> function) {
             if (event instanceof Cancellable cancellable) {
                 if (cancellable.isCancelled()) {
-                    return null;
+                    return false;
                 } else {
                     return function.apply(event);
                 }
@@ -132,22 +132,22 @@ public class EventUtil {
             }
         }
 
-        public <R> R ifCancelled(Function<T, R> function) {
+        public boolean ifCancelled(Function<T, Boolean> function) {
             if (event instanceof Cancellable cancellable) {
                 if (cancellable.isCancelled()) {
                     return function.apply(event);
                 } else {
-                    return null;
+                    return false;
                 }
             } else {
-                return null;
+                return false;
             }
         }
 
-        public <R> R ifSuccess(Supplier<R> callable) {
+        public boolean ifSuccess(Supplier<Boolean> callable) {
             if (event instanceof Cancellable cancellable) {
                 if (cancellable.isCancelled()) {
-                    return null;
+                    return false;
                 } else {
                     return callable.get();
                 }
@@ -156,22 +156,22 @@ public class EventUtil {
             }
         }
 
-        public <R> R ifCancelled(Supplier<R> callable) {
+        public boolean ifCancelled(Supplier<Boolean> callable) {
             if (event instanceof Cancellable cancellable) {
                 if (cancellable.isCancelled()) {
                     return callable.get();
                 } else {
-                    return null;
+                    return false;
                 }
             } else {
-                return null;
+                return false;
             }
         }
 
-        public <R> R ifSuccess(R result) {
+        public boolean ifSuccess(boolean result) {
             if (event instanceof Cancellable cancellable) {
                 if (cancellable.isCancelled()) {
-                    return null;
+                    return false;
                 } else {
                     return result;
                 }
@@ -180,15 +180,15 @@ public class EventUtil {
             }
         }
 
-        public <R> R ifCancelled(R result) {
+        public boolean ifCancelled(boolean result) {
             if (event instanceof Cancellable cancellable) {
                 if (cancellable.isCancelled()) {
                     return result;
                 } else {
-                    return null;
+                    return false;
                 }
             } else {
-                return null;
+                return false;
             }
         }
     }
