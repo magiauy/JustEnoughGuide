@@ -43,7 +43,7 @@ import java.util.Arrays;
 @SuppressWarnings({"unused"})
 public class Debug {
     private static final String debugPrefix = "[Debug] ";
-    private static JavaPlugin plugin;
+    private static JavaPlugin plugin = null;
 
     public static void debug(Object @NotNull ... objects) {
         StringBuilder sb = new StringBuilder();

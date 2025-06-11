@@ -62,11 +62,11 @@ import java.util.Map;
 public class SpecialMenuProvider {
     public static final String PLACEHOLDER_SEARCH_TERM = "undefined";
     public static final int COMMON_RECIPE_LENGTH = 9;
-    public static boolean ENABLED_FinalTECH;
-    public static boolean ENABLED_Nexcavate;
-    public static boolean ENABLED_LogiTech;
-    public static boolean ENABLED_InfinityExpansion;
-    public static boolean ENABLED_ObsidianExpansion;
+    public static boolean ENABLED_FinalTECH = false;
+    public static boolean ENABLED_Nexcavate = false;
+    public static boolean ENABLED_LogiTech = false;
+    public static boolean ENABLED_InfinityExpansion = false;
+    public static boolean ENABLED_ObsidianExpansion = false;
     // FinalTECH | FinalTECH-Changed
     public static @Nullable Method methodRecipeItemGroup_getBySlimefunItem = null;
     // Nexcavate

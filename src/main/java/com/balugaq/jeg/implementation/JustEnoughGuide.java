@@ -79,9 +79,9 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
     public static final int RECOMMENDED_JAVA_VERSION = 17;
     public static final MinecraftVersion RECOMMENDED_MC_VERSION = MinecraftVersion.MINECRAFT_1_16;
     @Getter
-    private static JustEnoughGuide instance;
+    private static JustEnoughGuide instance = null;
     @Getter
-    private static UUID serverUUID;
+    private static UUID serverUUID = null;
     @Getter
     private final @NotNull String username;
     @Getter
@@ -89,21 +89,21 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
     @Getter
     private final @NotNull String branch;
     @Getter
-    private BookmarkManager bookmarkManager;
+    private BookmarkManager bookmarkManager = null;
     @Getter
-    private CommandManager commandManager;
+    private CommandManager commandManager = null;
     @Getter
-    private ConfigManager configManager;
+    private ConfigManager configManager = null;
     @Getter
-    private IntegrationManager integrationManager;
+    private IntegrationManager integrationManager = null;
     @Getter
-    private ListenerManager listenerManager;
+    private ListenerManager listenerManager = null;
     @Getter
-    private RTSBackpackManager rtsBackpackManager;
+    private RTSBackpackManager rtsBackpackManager = null;
     @Getter
-    private MinecraftVersion minecraftVersion;
+    private MinecraftVersion minecraftVersion = null;
     @Getter
-    private int javaVersion;
+    private int javaVersion = 0;
 
     public JustEnoughGuide() {
         this.username = "balugaq";
