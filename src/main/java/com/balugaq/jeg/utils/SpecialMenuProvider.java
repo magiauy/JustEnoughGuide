@@ -28,6 +28,7 @@
 package com.balugaq.jeg.utils;
 
 import com.balugaq.jeg.api.interfaces.JEGSlimefunGuideImplementation;
+import com.balugaq.jeg.implementation.JustEnoughGuide;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.groups.FlexItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
@@ -61,11 +62,11 @@ import java.util.Map;
 public class SpecialMenuProvider {
     public static final String PLACEHOLDER_SEARCH_TERM = "undefined";
     public static final int COMMON_RECIPE_LENGTH = 9;
-    public static final boolean ENABLED_FinalTECH;
-    public static final boolean ENABLED_Nexcavate;
-    public static final boolean ENABLED_LogiTech;
-    public static final boolean ENABLED_InfinityExpansion;
-    public static final boolean ENABLED_ObsidianExpansion;
+    public static boolean ENABLED_FinalTECH;
+    public static boolean ENABLED_Nexcavate;
+    public static boolean ENABLED_LogiTech;
+    public static boolean ENABLED_InfinityExpansion;
+    public static boolean ENABLED_ObsidianExpansion;
     // FinalTECH | FinalTECH-Changed
     public static @Nullable Method methodRecipeItemGroup_getBySlimefunItem = null;
     // Nexcavate
@@ -91,6 +92,10 @@ public class SpecialMenuProvider {
     public static @Nullable Constructor<?> constructorObsidianExpansion_BackEntry = null;
 
     static {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(JustEnoughGuide.getInstance(), SpecialMenuProvider::loadConfiguration, 1L);
+    }
+    
+    void loadConfiguration() {
         ENABLED_FinalTECH = Bukkit.getPluginManager().isPluginEnabled("FinalTECH") || Bukkit.getPluginManager().isPluginEnabled("FinalTECH-Changed");
         ENABLED_Nexcavate = Bukkit.getPluginManager().isPluginEnabled("Nexcavate");
         ENABLED_LogiTech = Bukkit.getPluginManager().isPluginEnabled("LogiTech");
