@@ -1089,7 +1089,8 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
              * but we wanna make sure no stupid addon creator sneaked some nulls in here
              */
             if (displayItem != null) {
-                displayItem = displayItem.clone();
+                // JEG - Fix clone SlimefunItemStack
+                displayItem = Converter.getItem(ItemStackUtil.getCleanItem(displayItem)).clone();
             }
 
             menu.replaceExistingItem(slot, ItemStackUtil.getCleanItem(displayItem));
