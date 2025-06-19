@@ -85,6 +85,7 @@ import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -270,11 +271,19 @@ public class SearchGroup extends FlexItemGroup {
         }
 
         if (pinyin) {
-            final String pinyinFirstLetter = PinyinHelper.toPinyin(itemName, PinyinStyleEnum.FIRST_LETTER, "");
+            final String pinyinFirstLetter = getPinyin(itemName);
             return pinyinFirstLetter.contains(searchTerm);
         }
 
         return false;
+    }
+
+    public static String getPinyin(String string) {
+        return getPinyin(string, PinyinStyleEnum.FIRST_LETTER);
+    }
+
+    public static String getPinyin(String string, PinyinStyleEnum style) {
+        return PinyinHelper.toPinyin(string, style, "");
     }
 
     /**
@@ -1219,7 +1228,87 @@ public class SearchGroup extends FlexItemGroup {
             merge.addAll(items);
         }
 
-        return merge.stream().sorted((a, b) -> ENABLED_ITEMS.get(a) < ENABLED_ITEMS.get(b) ? -1 : 1).toList();
+        if (pinyin && onlyAscii(searchTerm)) {
+            return sortByPinyinContinuity(merge, actualSearchTerm);
+        } else {
+            return sortByNameFit(merge, actualSearchTerm);
+        }
+    }
+
+    public static boolean onlyAscii(String str) {
+        for (char c : str.toCharArray()) {
+            if (c > 127) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static int levenshteinDistance(String s1, String s2) {
+        if (s1.length() < s2.length()) {
+            return levenshteinDistance(s2, s1);
+        }
+
+        if (s2.isEmpty()) {
+            return s1.length();
+        }
+
+        int[] previousRow = new int[s2.length() + 1];
+        for (int i = 0; i <= s2.length(); i++) {
+            previousRow[i] = i;
+        }
+
+        for (int i = 0; i < s1.length(); i++) {
+            char c1 = s1.charAt(i);
+            int[] currentRow = new int[s2.length() + 1];
+            currentRow[0] = i + 1;
+
+            for (int j = 0; j < s2.length(); j++) {
+                char c2 = s2.charAt(j);
+                int insertions = previousRow[j + 1] + 1;
+                int deletions = currentRow[j] + 1;
+                int substitutions = previousRow[j] + (c1 == c2 ? 0 : 1);
+                currentRow[j + 1] = Math.min(Math.min(insertions, deletions), substitutions);
+            }
+
+            previousRow = currentRow;
+        }
+
+        return previousRow[s2.length()];
+    }
+
+    /**
+     * Calculates the name fit score between two strings.
+     * @param name The name to calculate the name fit score for.
+     * @param searchTerm The search term
+     * @return The name fit score. Non-negative integer.
+     */
+    public static int nameFit(String name, String searchTerm) {
+        int distance = levenshteinDistance(searchTerm.toLowerCase(Locale.ROOT), name.toLowerCase(Locale.ROOT));
+        int maxLen = Math.max(searchTerm.length(), name.length());
+
+        int matchScore;
+        if (maxLen == 0) {
+            matchScore = 100;
+        } else {
+            matchScore = (int) (100 * (1 - (double) distance / maxLen));
+        }
+
+        return matchScore;
+    }
+
+    public static List<SlimefunItem> sortByNameFit(Set<SlimefunItem> origin, String searchTerm) {
+        return origin.stream().sorted(Comparator.comparingInt(item ->
+            /* Intentionally negative */
+            -nameFit(ChatColor.stripColor(item.getItemName()), searchTerm)
+        )).toList();
+    }
+
+    public static List<SlimefunItem> sortByPinyinContinuity(Set<SlimefunItem> origin, String searchTerm) {
+        return origin.stream().sorted(Comparator.comparingInt(item ->
+            /* Intentionally negative */
+            -nameFit(getPinyin(ChatColor.stripColor(item.getItemName())), searchTerm)
+        )).toList();
     }
 
     /**
