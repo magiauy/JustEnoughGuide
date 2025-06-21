@@ -27,6 +27,7 @@
 
 package com.balugaq.jeg.implementation;
 
+import com.balugaq.jeg.api.groups.VanillaItemsGroup;
 import com.balugaq.jeg.core.managers.BookmarkManager;
 import com.balugaq.jeg.core.managers.CommandManager;
 import com.balugaq.jeg.core.managers.ConfigManager;
@@ -52,6 +53,7 @@ import io.github.thebusybiscuit.slimefun4.implementation.guide.SurvivalSlimefunG
 import io.github.thebusybiscuit.slimefun4.utils.NumberUtils;
 import lombok.Getter;
 import net.guizhanss.guizhanlibplugin.updater.GuizhanUpdater;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -395,5 +397,22 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
      */
     public boolean isDebug() {
         return getConfigManager().isDebug();
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////
+    ///                                                                           ///
+    /// JEG Recipe Complete Compatible                                            ///
+    ///                                                                           ///
+    /// Author balugaq                                                            ///
+    /// Since 1.7                                                                 ///
+    ///                                                                           ///
+    /////////////////////////////////////////////////////////////////////////////////
+
+    public void vanillaItemsGroupDisplayableFor(@NotNull Player player, boolean displayable) {
+        VanillaItemsGroup.displayableFor(player, displayable);
+    }
+
+    public boolean vanillaItemsGroupIsDisplayableFor(@NotNull Player player) {
+        return VanillaItemsGroup.isDisplayableFor(player);
     }
 }

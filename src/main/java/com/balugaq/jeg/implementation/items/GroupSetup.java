@@ -29,6 +29,7 @@ package com.balugaq.jeg.implementation.items;
 
 import com.balugaq.jeg.api.groups.HiddenItemsGroup;
 import com.balugaq.jeg.api.groups.NexcavateItemsGroup;
+import com.balugaq.jeg.api.groups.VanillaItemsGroup;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.SlimefunItemUtil;
 import com.balugaq.jeg.utils.SpecialMenuProvider;
@@ -46,6 +47,7 @@ public class GroupSetup {
     public static JEGGuideGroup guideGroup;
     public static HiddenItemsGroup hiddenItemsGroup;
     public static NexcavateItemsGroup nexcavateItemsGroup;
+    public static VanillaItemsGroup vanillaItemsGroup;
 
     /**
      * Registers all the JEG groups.
@@ -65,6 +67,10 @@ public class GroupSetup {
                     Converter.getItem(Material.BLACKSTONE, "&6Nexcavate 物品"));
             nexcavateItemsGroup.register(JustEnoughGuide.getInstance());
         }
+        vanillaItemsGroup = new VanillaItemsGroup(
+                new NamespacedKey(JustEnoughGuide.getInstance(), "vanilla_items_group"),
+                Converter.getItem(Material.BARRIER, "&7原版物品"));
+        vanillaItemsGroup.register(JustEnoughGuide.getInstance());
     }
 
     /**
@@ -76,5 +82,6 @@ public class GroupSetup {
         if (SpecialMenuProvider.ENABLED_Nexcavate) {
             SlimefunItemUtil.unregisterItemGroup(nexcavateItemsGroup);
         }
+        SlimefunItemUtil.unregisterItemGroup(vanillaItemsGroup);
     }
 }
