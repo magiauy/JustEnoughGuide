@@ -44,6 +44,7 @@ import com.balugaq.jeg.utils.ReflectionUtil;
 import com.balugaq.jeg.utils.SpecialMenuProvider;
 import com.balugaq.jeg.utils.clickhandler.BeginnerUtils;
 import com.balugaq.jeg.utils.clickhandler.GroupLinker;
+import com.balugaq.jeg.utils.clickhandler.NamePrinter;
 import com.balugaq.jeg.utils.compatibility.Converter;
 import com.balugaq.jeg.utils.compatibility.Sounds;
 import com.balugaq.jeg.utils.formatter.Formats;
@@ -867,6 +868,83 @@ public class SearchGroup extends FlexItemGroup {
         return false;
     }
 
+    public static boolean onlyAscii(String str) {
+        for (char c : str.toCharArray()) {
+            if (c > 127) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static int levenshteinDistance(String s1, String s2) {
+        if (s1.length() < s2.length()) {
+            return levenshteinDistance(s2, s1);
+        }
+
+        if (s2.isEmpty()) {
+            return s1.length();
+        }
+
+        int[] previousRow = new int[s2.length() + 1];
+        for (int i = 0; i <= s2.length(); i++) {
+            previousRow[i] = i;
+        }
+
+        for (int i = 0; i < s1.length(); i++) {
+            char c1 = s1.charAt(i);
+            int[] currentRow = new int[s2.length() + 1];
+            currentRow[0] = i + 1;
+
+            for (int j = 0; j < s2.length(); j++) {
+                char c2 = s2.charAt(j);
+                int insertions = previousRow[j + 1] + 1;
+                int deletions = currentRow[j] + 1;
+                int substitutions = previousRow[j] + (c1 == c2 ? 0 : 1);
+                currentRow[j + 1] = Math.min(Math.min(insertions, deletions), substitutions);
+            }
+
+            previousRow = currentRow;
+        }
+
+        return previousRow[s2.length()];
+    }
+
+    /**
+     * Calculates the name fit score between two strings.
+     *
+     * @param name       The name to calculate the name fit score for.
+     * @param searchTerm The search term
+     * @return The name fit score. Non-negative integer.
+     */
+    public static int nameFit(String name, String searchTerm) {
+        int distance = levenshteinDistance(searchTerm.toLowerCase(Locale.ROOT), name.toLowerCase(Locale.ROOT));
+        int maxLen = Math.max(searchTerm.length(), name.length());
+
+        int matchScore;
+        if (maxLen == 0) {
+            matchScore = 100;
+        } else {
+            matchScore = (int) (100 * (1 - (double) distance / maxLen));
+        }
+
+        return matchScore;
+    }
+
+    public static List<SlimefunItem> sortByNameFit(Set<SlimefunItem> origin, String searchTerm) {
+        return origin.stream().sorted(Comparator.comparingInt(item ->
+                /* Intentionally negative */
+                -nameFit(ChatColor.stripColor(item.getItemName()), searchTerm)
+        )).toList();
+    }
+
+    public static List<SlimefunItem> sortByPinyinContinuity(Set<SlimefunItem> origin, String searchTerm) {
+        return origin.stream().sorted(Comparator.comparingInt(item ->
+                /* Intentionally negative */
+                -nameFit(getPinyin(ChatColor.stripColor(item.getItemName())), searchTerm)
+        )).toList();
+    }
+
     /**
      * Always returns false.
      *
@@ -1035,8 +1113,9 @@ public class SearchGroup extends FlexItemGroup {
 
                     return false;
                 }));
-                BeginnerUtils.applyBeginnersGuide(implementation, chestMenu, contentSlots.get(i));
-                GroupLinker.applyGroupLinker(implementation, chestMenu, contentSlots.get(i));
+                BeginnerUtils.applyWith(implementation, chestMenu, contentSlots.get(i));
+                GroupLinker.applyWith(implementation, chestMenu, contentSlots.get(i));
+                NamePrinter.applyWith(implementation, chestMenu, contentSlots.get(i));
             }
         }
 
@@ -1233,82 +1312,6 @@ public class SearchGroup extends FlexItemGroup {
         } else {
             return sortByNameFit(merge, actualSearchTerm);
         }
-    }
-
-    public static boolean onlyAscii(String str) {
-        for (char c : str.toCharArray()) {
-            if (c > 127) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public static int levenshteinDistance(String s1, String s2) {
-        if (s1.length() < s2.length()) {
-            return levenshteinDistance(s2, s1);
-        }
-
-        if (s2.isEmpty()) {
-            return s1.length();
-        }
-
-        int[] previousRow = new int[s2.length() + 1];
-        for (int i = 0; i <= s2.length(); i++) {
-            previousRow[i] = i;
-        }
-
-        for (int i = 0; i < s1.length(); i++) {
-            char c1 = s1.charAt(i);
-            int[] currentRow = new int[s2.length() + 1];
-            currentRow[0] = i + 1;
-
-            for (int j = 0; j < s2.length(); j++) {
-                char c2 = s2.charAt(j);
-                int insertions = previousRow[j + 1] + 1;
-                int deletions = currentRow[j] + 1;
-                int substitutions = previousRow[j] + (c1 == c2 ? 0 : 1);
-                currentRow[j + 1] = Math.min(Math.min(insertions, deletions), substitutions);
-            }
-
-            previousRow = currentRow;
-        }
-
-        return previousRow[s2.length()];
-    }
-
-    /**
-     * Calculates the name fit score between two strings.
-     * @param name The name to calculate the name fit score for.
-     * @param searchTerm The search term
-     * @return The name fit score. Non-negative integer.
-     */
-    public static int nameFit(String name, String searchTerm) {
-        int distance = levenshteinDistance(searchTerm.toLowerCase(Locale.ROOT), name.toLowerCase(Locale.ROOT));
-        int maxLen = Math.max(searchTerm.length(), name.length());
-
-        int matchScore;
-        if (maxLen == 0) {
-            matchScore = 100;
-        } else {
-            matchScore = (int) (100 * (1 - (double) distance / maxLen));
-        }
-
-        return matchScore;
-    }
-
-    public static List<SlimefunItem> sortByNameFit(Set<SlimefunItem> origin, String searchTerm) {
-        return origin.stream().sorted(Comparator.comparingInt(item ->
-            /* Intentionally negative */
-            -nameFit(ChatColor.stripColor(item.getItemName()), searchTerm)
-        )).toList();
-    }
-
-    public static List<SlimefunItem> sortByPinyinContinuity(Set<SlimefunItem> origin, String searchTerm) {
-        return origin.stream().sorted(Comparator.comparingInt(item ->
-            /* Intentionally negative */
-            -nameFit(getPinyin(ChatColor.stripColor(item.getItemName())), searchTerm)
-        )).toList();
     }
 
     /**

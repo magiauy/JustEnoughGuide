@@ -69,7 +69,7 @@ public class GroupSetup {
         }
         vanillaItemsGroup = new VanillaItemsGroup(
                 new NamespacedKey(JustEnoughGuide.getInstance(), "vanilla_items_group"),
-                Converter.getItem(Material.BARRIER, "&7原版物品"));
+                Converter.getItem(Material.CRAFTING_TABLE, "&7原版物品"));
         vanillaItemsGroup.register(JustEnoughGuide.getInstance());
     }
 

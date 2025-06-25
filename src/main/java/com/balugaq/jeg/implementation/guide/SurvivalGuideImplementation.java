@@ -44,6 +44,7 @@ import com.balugaq.jeg.utils.ReflectionUtil;
 import com.balugaq.jeg.utils.SpecialMenuProvider;
 import com.balugaq.jeg.utils.clickhandler.BeginnerUtils;
 import com.balugaq.jeg.utils.clickhandler.GroupLinker;
+import com.balugaq.jeg.utils.clickhandler.NamePrinter;
 import com.balugaq.jeg.utils.compatibility.Converter;
 import com.balugaq.jeg.utils.compatibility.Sounds;
 import com.balugaq.jeg.utils.formatter.Format;
@@ -546,7 +547,8 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
 
                 return false;
             }));
-            BeginnerUtils.applyBeginnersGuide(this, menu, index);
+            BeginnerUtils.applyWith(this, menu, index);
+            NamePrinter.applyWith(this, menu, index);
         }
     }
 
@@ -873,8 +875,9 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         for (int i = 0; i < 9; i++) {
             ItemStack recipeItem = JEGSlimefunGuideImplementation.getDisplayItem(p, isSlimefunRecipe, recipe[i]);
             menu.addItem(recipeSlots.get(i), ItemStackUtil.getCleanItem(recipeItem), clickHandler);
-            BeginnerUtils.applyBeginnersGuide(this, menu, recipeSlots.get(i));
-            GroupLinker.applyGroupLinker(this, menu, recipeSlots.get(i));
+            BeginnerUtils.applyWith(this, menu, recipeSlots.get(i));
+            GroupLinker.applyWith(this, menu, recipeSlots.get(i));
+            NamePrinter.applyWith(this, menu, recipeSlots.get(i));
 
             if (recipeItem != null && item instanceof MultiBlockMachine) {
                 for (Tag<Material> tag : MultiBlock.getSupportedTags()) {
@@ -888,13 +891,15 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
 
         for (var s : format.getChars('t')) {
             menu.addItem(s, ItemStackUtil.getCleanItem(recipeType.getItem(p)), (pl, slot, itemStack, action) -> EventUtil.callEvent(new GuideEvents.RecipeTypeButtonClickEvent(pl, itemStack, slot, action, menu, this)).ifSuccess(false));
-            BeginnerUtils.applyBeginnersGuide(this, menu, s);
-            GroupLinker.applyGroupLinker(this, menu, s);
+            BeginnerUtils.applyWith(this, menu, s);
+            GroupLinker.applyWith(this, menu, s);
+            NamePrinter.applyWith(this, menu, s);
         }
         for (var s : format.getChars('i')) {
             menu.addItem(s, ItemStackUtil.getCleanItem(output), (pl, slot, itemStack, action) -> EventUtil.callEvent(new GuideEvents.ItemButtonClickEvent(pl, itemStack, slot, action, menu, this)).ifSuccess(false));
-            BeginnerUtils.applyBeginnersGuide(this, menu, s);
-            GroupLinker.applyGroupLinker(this, menu, s);
+            BeginnerUtils.applyWith(this, menu, s);
+            GroupLinker.applyWith(this, menu, s);
+            NamePrinter.applyWith(this, menu, s);
         }
     }
 
@@ -1100,8 +1105,9 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
                     displayItem(profile, itemstack, 0, true);
                     return false;
                 }));
-                BeginnerUtils.applyBeginnersGuide(this, menu, slot);
-                GroupLinker.applyGroupLinker(this, menu, slot);
+                BeginnerUtils.applyWith(this, menu, slot);
+                GroupLinker.applyWith(this, menu, slot);
+                NamePrinter.applyWith(this, menu, slot);
             }
         } else {
             menu.replaceExistingItem(slot, ItemStackUtil.getCleanItem(null));

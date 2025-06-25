@@ -29,19 +29,24 @@ package com.balugaq.jeg.utils.clickhandler;
 
 import com.balugaq.jeg.api.clickhandler.JEGClickHandler;
 import com.balugaq.jeg.api.clickhandler.Processor;
-import com.balugaq.jeg.api.objects.events.GuideEvents;
+import com.balugaq.jeg.api.groups.SearchGroup;
+import com.balugaq.jeg.api.objects.cooldown.FrequencyWatcher;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
-import com.balugaq.jeg.implementation.option.BeginnersGuideOption;
-import com.balugaq.jeg.utils.EventUtil;
-import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
+import com.balugaq.jeg.utils.ClipboardUtil;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation;
 import lombok.Getter;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
 import net.guizhanss.guizhanlib.minecraft.helper.inventory.ItemStackHelper;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.hover.content.Text;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -49,41 +54,81 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.text.MessageFormat;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author balugaq
- * @since 1.5
+ * @since 1.7
  */
 @SuppressWarnings("deprecation")
-public class BeginnerUtils implements Applier {
-    private static final BeginnerUtils instance = new BeginnerUtils();
+public class NamePrinter implements Applier {
+    public static final MessageFormat SHARED_ITEM_MESSAGE = new MessageFormat(ChatColor.translateAlternateColorCodes('&', "&a{0} &e分享了物品 &7[{1}&r&7]" + "&e <点击搜索>"));
+    public static final String CLICK_TO_SEARCH = ChatColor.translateAlternateColorCodes('&', "&e点击搜索物品");
+    private static final NamePrinter instance = new NamePrinter();
+    private static final FrequencyWatcher<UUID> watcher = new FrequencyWatcher<>(
+            1,
+            TimeUnit.MINUTES,
+            10,
+            5000
+    );
 
-    private BeginnerUtils() {
+    private NamePrinter() {
     }
 
     public static void applyWith(SlimefunGuideImplementation guide, ChestMenu menu, int slot) {
         instance.apply(guide, menu, slot);
     }
 
-    public static boolean isNew(Player player) {
-        return BeginnersGuideOption.isEnabled(player);
+    @ParametersAreNonnullByDefault
+    private static void shareSlimefunItem(Player player, String itemName) {
+        String playerName = player.getName();
+
+        String sharedMessage = SHARED_ITEM_MESSAGE.format(new Object[]{playerName, itemName});
+        TextComponent msg = new TextComponent(sharedMessage);
+        msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(CLICK_TO_SEARCH)));
+        String s = ChatColor.stripColor(itemName);
+        if (JustEnoughGuide.getConfigManager().isPinyinSearch()) {
+            s = SearchGroup.getPinyin(s);
+        }
+        msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/sf search " + s));
+
+        Bukkit.getOnlinePlayers().forEach(p -> {
+            if (p.hasPermission("slimefun.command.search")) {
+                ClipboardUtil.send(p, msg);
+            } else {
+                ClipboardUtil.send(p, ClipboardUtil.makeComponent(sharedMessage, CLICK_TO_SEARCH, itemName));
+            }
+        });
+    }
+
+    public static boolean checkCooldown(Player player) {
+        FrequencyWatcher.Result result = watcher.checkCooldown(player.getUniqueId());
+        if (result == FrequencyWatcher.Result.TOO_FREQUENT) {
+            player.sendMessage(ChatColor.RED + "你的使用频率过高，请稍后使用!");
+            return false;
+        }
+
+        if (result == FrequencyWatcher.Result.CANCEL) {
+            player.sendMessage(ChatColor.RED + "这个功能正在冷却中...");
+            return false;
+        }
+
+        return true;
     }
 
     @ParametersAreNonnullByDefault
     public void apply(SlimefunGuideImplementation guide, ChestMenu menu, int slot) {
-        if (!JustEnoughGuide.getConfigManager().isBeginnerOption()) {
-            return;
-        }
-
         menu.addMenuClickHandler(slot, JEGClickHandler.of(guide, menu, slot)
-                .addProcessor(BeginnerProcessor.getInstance()));
+                .addProcessor(NamePrinterProcessor.getInstance()));
     }
 
-    public static class BeginnerProcessor extends Processor {
+    public static class NamePrinterProcessor extends Processor {
         @Getter
-        private static final BeginnerProcessor instance = new BeginnerProcessor();
+        private static final NamePrinterProcessor instance = new NamePrinterProcessor();
 
-        public BeginnerProcessor() {
+        public NamePrinterProcessor() {
             super(Strategy.HEAD);
         }
 
@@ -111,11 +156,15 @@ public class BeginnerUtils implements Applier {
                 @Nullable ItemStack clickedItemStack,
                 @NotNull ClickAction clickAction,
                 @Nullable Boolean processedResult) {
-            if (isNew(player) && clickAction.isShiftClicked() && clickAction.isRightClicked() && clickedItemStack != null && clickedItemStack.getType() != Material.AIR) {
-                return EventUtil.callEvent(new GuideEvents.BeginnerButtonClickEvent(player, clickedItemStack, clickedSlot, clickAction, menu, guide)).ifSuccess(() -> {
-                    PlayerProfile.get(player, profile -> guide.openSearch(profile, ChatColor.stripColor(ItemStackHelper.getDisplayName(clickedItemStack)), true));
+            if (clickedItemStack != null && clickedItemStack.getType() != Material.AIR && (event.getClick() == ClickType.DROP || event.getClick() == ClickType.CONTROL_DROP)) {
+                if (!checkCooldown(player)) {
                     return false;
-                });
+                }
+
+                String name = ItemStackHelper.getDisplayName(clickedItemStack);
+                shareSlimefunItem(player, name);
+
+                return false;
             }
 
             return true;

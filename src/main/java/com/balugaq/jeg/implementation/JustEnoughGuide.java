@@ -399,14 +399,14 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
         return getConfigManager().isDebug();
     }
 
-    /////////////////////////////////////////////////////////////////////////////////
+    /// //////////////////////////////////////////////////////////////////////////////
     ///                                                                           ///
     /// JEG Recipe Complete Compatible                                            ///
     ///                                                                           ///
     /// Author balugaq                                                            ///
     /// Since 1.7                                                                 ///
     ///                                                                           ///
-    /////////////////////////////////////////////////////////////////////////////////
+    /// //////////////////////////////////////////////////////////////////////////////
 
     public void vanillaItemsGroupDisplayableFor(@NotNull Player player, boolean displayable) {
         VanillaItemsGroup.displayableFor(player, displayable);

@@ -25,14 +25,20 @@
  *
  */
 
-package com.balugaq.jeg.api.objects;
+package com.balugaq.jeg.utils.clickhandler;
 
+import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
+import org.jetbrains.annotations.Range;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * @author balugaq
- * @since 1.5
+ * @since 1.7
  */
 @SuppressWarnings("deprecation")
-public interface ExtendedClickHandler extends ChestMenu.MenuClickHandler {
+public interface Applier {
+    @ParametersAreNonnullByDefault
+    void apply(SlimefunGuideImplementation guide, ChestMenu menu, @Range(from = 0, to = 53) int slot);
 }

@@ -68,14 +68,49 @@ import java.util.logging.Level;
  * This class used to create groups to display all the vanilla items in the guide.
  * Display for JEG recipe complete in NetworksExpansion / SlimeAEPlugin
  *
- * @see JustEnoughGuide#vanillaItemsGroupDisplayableFor(Player, boolean) 
- * @see JustEnoughGuide#vanillaItemsGroupIsDisplayableFor(Player) 
  * @author balugaq
+ * @see JustEnoughGuide#vanillaItemsGroupDisplayableFor(Player, boolean)
+ * @see JustEnoughGuide#vanillaItemsGroupIsDisplayableFor(Player)
  * @since 1.7
  */
 @SuppressWarnings({"deprecation", "unused"})
 @NotDisplayInCheatMode
 public class VanillaItemsGroup extends FlexItemGroup {
+    // todo: load SlimefunItem instances during runtime and try disable the annoying error message
+    // todo: and avoid that player search them out.
+    public static final List<ItemStack> itemStacks = new ArrayList<>();
+    private static final @NotNull Set<Player> displayableFor = ConcurrentHashMap.newKeySet();
+    private static final JavaPlugin JAVA_PLUGIN = JustEnoughGuide.getInstance();
+
+    static {
+        for (Material material : Material.values()) {
+            if (!material.isAir() && material.isItem() && !material.isLegacy()) {
+                itemStacks.add(new ItemStack(material));
+            }
+        }
+    }
+
+    private final int page;
+    private Map<Integer, VanillaItemsGroup> pageMap = new LinkedHashMap<>();
+
+    @ParametersAreNonnullByDefault
+    public VanillaItemsGroup(NamespacedKey key, ItemStack icon) {
+        super(key, icon, Integer.MAX_VALUE);
+        this.page = 1;
+        this.pageMap.put(1, this);
+    }
+    /**
+     * Constructor of hiddenItemsGroup.
+     *
+     * @param hiddenItemsGroup The hiddenItemsGroup to copy.
+     * @param page             The page number to display.
+     */
+    protected VanillaItemsGroup(@NotNull VanillaItemsGroup hiddenItemsGroup, int page) {
+        super(hiddenItemsGroup.key, new ItemStack(Material.BARRIER));
+        this.page = page;
+        this.pageMap.put(page, this);
+    }
+
     /**
      * @see JustEnoughGuide#vanillaItemsGroupDisplayableFor(Player, boolean)
      */
@@ -92,38 +127,6 @@ public class VanillaItemsGroup extends FlexItemGroup {
      */
     public static boolean isDisplayableFor(@NotNull Player player) {
         return displayableFor.contains(player);
-    }
-
-    private static final @NotNull Set<Player> displayableFor = ConcurrentHashMap.newKeySet();
-    private static final JavaPlugin JAVA_PLUGIN = JustEnoughGuide.getInstance();
-    public static final List<ItemStack> itemStacks = new ArrayList<>();
-    static {
-        for (Material material : Material.values()) {
-            if (!material.isAir() && material.isItem()) {
-                itemStacks.add(new ItemStack(material));
-            }
-        }
-    }
-    private final int page;
-    private Map<Integer, VanillaItemsGroup> pageMap = new LinkedHashMap<>();
-
-    @ParametersAreNonnullByDefault
-    public VanillaItemsGroup(NamespacedKey key, ItemStack icon) {
-        super(key, icon, Integer.MAX_VALUE);
-        this.page = 1;
-        this.pageMap.put(1, this);
-    }
-
-    /**
-     * Constructor of hiddenItemsGroup.
-     *
-     * @param hiddenItemsGroup The hiddenItemsGroup to copy.
-     * @param page             The page number to display.
-     */
-    protected VanillaItemsGroup(@NotNull VanillaItemsGroup hiddenItemsGroup, int page) {
-        super(hiddenItemsGroup.key, new ItemStack(Material.BARRIER));
-        this.page = page;
-        this.pageMap.put(page, this);
     }
 
     /**
@@ -336,11 +339,6 @@ public class VanillaItemsGroup extends FlexItemGroup {
                 + " further info.");
         item.error(
                 "This item has caused an error message to be thrown while viewing it in the Slimefun" + " guide.", x);
-    }
-
-    @Override
-    public boolean isCrossAddonItemGroup() {
-        return true;
     }
 
     @Override

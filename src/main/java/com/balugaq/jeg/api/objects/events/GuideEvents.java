@@ -103,12 +103,12 @@ public class GuideEvents {
             super(who, clickedItem, clickedSlot, clickAction, menu, guide);
         }
 
-        @Override
-        public @NotNull HandlerList getHandlers() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
 
-        public static @NotNull HandlerList getHandlerList() {
+        @Override
+        public @NotNull HandlerList getHandlers() {
             return HANDLERS;
         }
     }
@@ -132,12 +132,12 @@ public class GuideEvents {
             super(who, clickedItem, clickedSlot, clickAction, menu, guide);
         }
 
-        @Override
-        public @NotNull HandlerList getHandlers() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
 
-        public static @NotNull HandlerList getHandlerList() {
+        @Override
+        public @NotNull HandlerList getHandlers() {
             return HANDLERS;
         }
     }
@@ -161,12 +161,12 @@ public class GuideEvents {
             super(who, clickedItem, clickedSlot, clickAction, menu, guide);
         }
 
-        @Override
-        public @NotNull HandlerList getHandlers() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
 
-        public static @NotNull HandlerList getHandlerList() {
+        @Override
+        public @NotNull HandlerList getHandlers() {
             return HANDLERS;
         }
     }
@@ -190,12 +190,12 @@ public class GuideEvents {
             super(who, clickedItem, clickedSlot, clickAction, menu, guide);
         }
 
-        @Override
-        public @NotNull HandlerList getHandlers() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
 
-        public static @NotNull HandlerList getHandlerList() {
+        @Override
+        public @NotNull HandlerList getHandlers() {
             return HANDLERS;
         }
     }
@@ -219,12 +219,12 @@ public class GuideEvents {
             super(who, clickedItem, clickedSlot, clickAction, menu, guide);
         }
 
-        @Override
-        public @NotNull HandlerList getHandlers() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
 
-        public static @NotNull HandlerList getHandlerList() {
+        @Override
+        public @NotNull HandlerList getHandlers() {
             return HANDLERS;
         }
     }
@@ -288,12 +288,12 @@ public class GuideEvents {
             super(who, clickedItem, clickedSlot, clickAction, menu, guide);
         }
 
-        @Override
-        public @NotNull HandlerList getHandlers() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
 
-        public static @NotNull HandlerList getHandlerList() {
+        @Override
+        public @NotNull HandlerList getHandlers() {
             return HANDLERS;
         }
     }
@@ -317,12 +317,12 @@ public class GuideEvents {
             super(who, clickedItem, clickedSlot, clickAction, menu, guide);
         }
 
-        @Override
-        public @NotNull HandlerList getHandlers() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
 
-        public static @NotNull HandlerList getHandlerList() {
+        @Override
+        public @NotNull HandlerList getHandlers() {
             return HANDLERS;
         }
     }
@@ -346,12 +346,12 @@ public class GuideEvents {
             super(who, clickedItem, clickedSlot, clickAction, menu, guide);
         }
 
-        @Override
-        public @NotNull HandlerList getHandlers() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
 
-        public static @NotNull HandlerList getHandlerList() {
+        @Override
+        public @NotNull HandlerList getHandlers() {
             return HANDLERS;
         }
     }
@@ -375,12 +375,12 @@ public class GuideEvents {
             super(who, clickedItem, clickedSlot, clickAction, menu, guide);
         }
 
-        @Override
-        public @NotNull HandlerList getHandlers() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
 
-        public static @NotNull HandlerList getHandlerList() {
+        @Override
+        public @NotNull HandlerList getHandlers() {
             return HANDLERS;
         }
     }
@@ -404,12 +404,12 @@ public class GuideEvents {
             super(who, clickedItem, clickedSlot, clickAction, menu, guide);
         }
 
-        @Override
-        public @NotNull HandlerList getHandlers() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
 
-        public static @NotNull HandlerList getHandlerList() {
+        @Override
+        public @NotNull HandlerList getHandlers() {
             return HANDLERS;
         }
     }
@@ -433,12 +433,12 @@ public class GuideEvents {
             super(who, clickedItem, clickedSlot, clickAction, menu, guide);
         }
 
-        @Override
-        public @NotNull HandlerList getHandlers() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
 
-        public static @NotNull HandlerList getHandlerList() {
+        @Override
+        public @NotNull HandlerList getHandlers() {
             return HANDLERS;
         }
     }
@@ -462,12 +462,12 @@ public class GuideEvents {
             super(who, clickedItem, clickedSlot, clickAction, menu, guide);
         }
 
-        @Override
-        public @NotNull HandlerList getHandlers() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
 
-        public static @NotNull HandlerList getHandlerList() {
+        @Override
+        public @NotNull HandlerList getHandlers() {
             return HANDLERS;
         }
     }
@@ -491,12 +491,12 @@ public class GuideEvents {
             super(who, clickedItem, clickedSlot, clickAction, menu, guide);
         }
 
-        @Override
-        public @NotNull HandlerList getHandlers() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
 
-        public static @NotNull HandlerList getHandlerList() {
+        @Override
+        public @NotNull HandlerList getHandlers() {
             return HANDLERS;
         }
     }
@@ -520,12 +520,12 @@ public class GuideEvents {
             super(who, clickedItem, clickedSlot, clickAction, menu, guide);
         }
 
-        @Override
-        public @NotNull HandlerList getHandlers() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
 
-        public static @NotNull HandlerList getHandlerList() {
+        @Override
+        public @NotNull HandlerList getHandlers() {
             return HANDLERS;
         }
     }
@@ -549,12 +549,12 @@ public class GuideEvents {
             super(who, clickedItem, clickedSlot, clickAction, menu, guide);
         }
 
-        @Override
-        public @NotNull HandlerList getHandlers() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
 
-        public static @NotNull HandlerList getHandlerList() {
+        @Override
+        public @NotNull HandlerList getHandlers() {
             return HANDLERS;
         }
     }
@@ -578,12 +578,12 @@ public class GuideEvents {
             super(who, clickedItem, clickedSlot, clickAction, menu, guide);
         }
 
-        @Override
-        public @NotNull HandlerList getHandlers() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
 
-        public static @NotNull HandlerList getHandlerList() {
+        @Override
+        public @NotNull HandlerList getHandlers() {
             return HANDLERS;
         }
     }
@@ -607,12 +607,12 @@ public class GuideEvents {
             super(who, clickedItem, clickedSlot, clickAction, menu, guide);
         }
 
-        @Override
-        public @NotNull HandlerList getHandlers() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
 
-        public static @NotNull HandlerList getHandlerList() {
+        @Override
+        public @NotNull HandlerList getHandlers() {
             return HANDLERS;
         }
     }
@@ -636,12 +636,12 @@ public class GuideEvents {
             super(who, clickedItem, clickedSlot, clickAction, menu, guide);
         }
 
-        @Override
-        public @NotNull HandlerList getHandlers() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
 
-        public static @NotNull HandlerList getHandlerList() {
+        @Override
+        public @NotNull HandlerList getHandlers() {
             return HANDLERS;
         }
     }
@@ -665,12 +665,12 @@ public class GuideEvents {
             super(who, clickedItem, clickedSlot, clickAction, menu, guide);
         }
 
-        @Override
-        public @NotNull HandlerList getHandlers() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
 
-        public static @NotNull HandlerList getHandlerList() {
+        @Override
+        public @NotNull HandlerList getHandlers() {
             return HANDLERS;
         }
     }
@@ -694,12 +694,12 @@ public class GuideEvents {
             super(who, clickedItem, clickedSlot, clickAction, menu, guide);
         }
 
-        @Override
-        public @NotNull HandlerList getHandlers() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
 
-        public static @NotNull HandlerList getHandlerList() {
+        @Override
+        public @NotNull HandlerList getHandlers() {
             return HANDLERS;
         }
     }

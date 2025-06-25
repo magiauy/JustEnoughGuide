@@ -94,7 +94,7 @@ public class SpecialMenuProvider {
     static {
         Bukkit.getScheduler().runTaskLaterAsynchronously(JustEnoughGuide.getInstance(), SpecialMenuProvider::loadConfiguration, 1L);
     }
-    
+
     void loadConfiguration() {
         ENABLED_FinalTECH = Bukkit.getPluginManager().isPluginEnabled("FinalTECH") || Bukkit.getPluginManager().isPluginEnabled("FinalTECH-Changed");
         ENABLED_Nexcavate = Bukkit.getPluginManager().isPluginEnabled("Nexcavate");
