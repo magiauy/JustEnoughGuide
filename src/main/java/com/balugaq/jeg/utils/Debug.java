@@ -28,13 +28,22 @@
 package com.balugaq.jeg.utils;
 
 import com.balugaq.jeg.implementation.JustEnoughGuide;
+import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.UUID;
+import java.util.logging.Level;
 
 /**
  * @author balugaq
@@ -42,8 +51,46 @@ import java.util.Arrays;
  */
 @SuppressWarnings({"unused"})
 public class Debug {
+    public static final File errorsFolder = new File(JustEnoughGuide.getInstance().getDataFolder(), "error-reports");
     private static final String debugPrefix = "[Debug] ";
     private static JavaPlugin plugin = null;
+
+    static {
+        if (!errorsFolder.exists()) {
+            errorsFolder.mkdirs();
+        }
+    }
+
+    public static void warn(Object @NotNull ... objects) {
+        StringBuilder sb = new StringBuilder();
+        for (Object obj : objects) {
+            if (obj == null) {
+                sb.append("null");
+            } else {
+                sb.append(obj);
+            }
+        }
+        warn(sb.toString());
+    }
+
+    public static void warn(@NotNull Throwable e) {
+        warn(e.getMessage());
+        trace(e);
+    }
+
+    public static void warn(@NotNull Object object) {
+        warn(object.toString());
+    }
+
+    public static void warn(String @NotNull ... messages) {
+        for (String message : messages) {
+            warn(message);
+        }
+    }
+
+    public static void warn(String message) {
+        log("&e[WARN] " + message);
+    }
 
     public static void debug(Object @NotNull ... objects) {
         StringBuilder sb = new StringBuilder();
@@ -181,6 +228,8 @@ public class Debug {
         }
 
         e.printStackTrace();
+
+        dumpToFile(e, code);
     }
 
     public static void traceExactly(@NotNull Throwable e, @Nullable String doing, @Nullable Integer code) {
@@ -205,5 +254,46 @@ public class Debug {
         plugin.getLogger().severe("cause: " + e.getCause());
         plugin.getLogger().severe("stackTrace: " + Arrays.toString(e.getStackTrace()));
         plugin.getLogger().severe("suppressed: " + Arrays.toString(e.getSuppressed()));
+
+        dumpToFile(e, code);
+    }
+
+    public static void dumpToFile(@NotNull Throwable e, @Nullable Integer code) {
+        // Format as: yyyy-MM-dd-HH-mm-ss-e.getClass().getSimpleName()-uuid
+        String fileName = "error-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss")) + "-" + e.getClass().getSimpleName() + "-" + UUID.randomUUID() + ".txt";
+
+        File file = new File(errorsFolder, fileName);
+        try {
+            file.createNewFile();
+            try (PrintStream stream = new PrintStream(file, StandardCharsets.UTF_8)) {
+                stream.println("====================AN FATAL OCCURRED====================");
+                stream.println("DO NOT REPORT THIS ERROR TO JustEnoughGuide DEVELOPERS!!! THIS IS NOT A JustEnoughGuide BUG!");
+                stream.println("If you are sure that this is a JustEnoughGuide bug, please report to " + JustEnoughGuide.getInstance().getBugTrackerURL());
+                stream.println("An unexpected error occurred.");
+                stream.println("JustEnoughGuide version: " + JustEnoughGuide.getInstance().getDescription().getVersion());
+                stream.println("Java version: " + System.getProperty("java.version"));
+                stream.println("OS: " + System.getProperty("os.name") + " " + System.getProperty("os.version") + " " + System.getProperty("os.arch"));
+                stream.println("Minecraft version: " + JustEnoughGuide.getMCVersion());
+                stream.println("Slimefun version: " + Slimefun.getVersion());
+                if (code != null) {
+                    stream.println("Error code: " + code);
+                }
+                stream.println("Error: " + e);
+                stream.println("Stack trace:");
+                e.printStackTrace(stream);
+
+                warn("");
+                warn("An Error occurred! It has been saved as: ");
+                warn("/plugins/JustEnoughGuide/error-reports/{0}", file.getName());
+                warn("Please put this file on https://pastebin.com/ and report this to the developer(s).");
+
+                warn("Please DO NOT send screenshots of these logs to the developer(s).");
+                warn("");
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        } catch (Throwable ex) {
+            ex.printStackTrace();
+        }
     }
 }

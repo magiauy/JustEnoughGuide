@@ -41,11 +41,12 @@ import com.balugaq.jeg.implementation.option.BeginnersGuideOption;
 import com.balugaq.jeg.utils.Debug;
 import com.balugaq.jeg.utils.MinecraftVersion;
 import com.balugaq.jeg.utils.ReflectionUtil;
+import com.balugaq.jeg.utils.SlimefunRegistryUtil;
 import com.balugaq.jeg.utils.UUIDUtils;
-import com.google.common.base.Preconditions;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
+import io.github.thebusybiscuit.slimefun4.core.guide.options.SlimefunGuideOption;
 import io.github.thebusybiscuit.slimefun4.core.guide.options.SlimefunGuideSettings;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.implementation.guide.CheatSheetSlimefunGuide;
@@ -64,7 +65,9 @@ import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -138,8 +141,29 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
     }
 
     public static @NotNull JustEnoughGuide getInstance() {
-        Preconditions.checkArgument(instance != null, "JustEnoughGuide 未被启用！");
         return JustEnoughGuide.instance;
+    }
+
+    /// //////////////////////////////////////////////////////////////////////////////
+    ///                                                                           ///
+    /// JEG Recipe Complete Compatible                                            ///
+    ///                                                                           ///
+    /// Related-addons:                                                           ///
+    /// - Networks(Expansion)                                                     ///
+    /// - SlimeAEPlugin                                                           ///
+    /// Author balugaq                                                            ///
+    /// Since 1.7                                                                 ///
+    ///                                                                           ///
+    /// //////////////////////////////////////////////////////////////////////////////
+
+    @Deprecated
+    public static void vanillaItemsGroupDisplayableFor(@NotNull Player player, boolean displayable) {
+        VanillaItemsGroup.displayableFor(player, displayable);
+    }
+
+    @Deprecated
+    public static boolean vanillaItemsGroupIsDisplayableFor(@NotNull Player player) {
+        return VanillaItemsGroup.isDisplayableFor(player);
     }
 
     /**
@@ -217,10 +241,13 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
 
             if (getConfigManager().isBeginnerOption()) {
                 getLogger().info("正在加载新手指南选项...");
-                SlimefunGuideSettings.addOption(new BeginnersGuideOption());
+                SlimefunGuideSettings.addOption(BeginnersGuideOption.instance());
                 getLogger().info("新手指南选项加载完毕！");
             }
         }
+
+        // Fix reload
+        List<?> list = ReflectionUtil.getValue(Slimefun.getRegistry(), "categories", List.class);
 
         this.rtsBackpackManager = new RTSBackpackManager(this);
         this.rtsBackpackManager.load();
@@ -267,6 +294,13 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
     public void onDisable() {
         GroupSetup.shutdown();
 
+        /**
+         * Unregister all {@link SlimefunItem}
+         *
+         * @see VanillaItemsGroup
+         */
+        SlimefunRegistryUtil.unregisterItems(JustEnoughGuide.getInstance());
+
         Field field = ReflectionUtil.getField(Slimefun.getRegistry().getClass(), "guides");
         if (field != null) {
             field.setAccessible(true);
@@ -277,8 +311,20 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
             try {
                 field.set(Slimefun.getRegistry(), newGuides);
             } catch (IllegalAccessException ignored) {
-
             }
+        }
+
+        try {
+            List<SlimefunGuideOption<?>> l = ReflectionUtil.getValue(SlimefunGuideSettings.class, "options", List.class);
+            if (l != null) {
+                List<SlimefunGuideOption<?>> copy = new ArrayList<>(l);
+                for (var option : copy) {
+                    if (option.getAddon().equals(JustEnoughGuide.getInstance())) {
+                        l.remove(option);
+                    }
+                }
+            }
+        } catch (Throwable ignored) {
         }
 
         // Managers
@@ -397,22 +443,5 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
      */
     public boolean isDebug() {
         return getConfigManager().isDebug();
-    }
-
-    /// //////////////////////////////////////////////////////////////////////////////
-    ///                                                                           ///
-    /// JEG Recipe Complete Compatible                                            ///
-    ///                                                                           ///
-    /// Author balugaq                                                            ///
-    /// Since 1.7                                                                 ///
-    ///                                                                           ///
-    /// //////////////////////////////////////////////////////////////////////////////
-
-    public void vanillaItemsGroupDisplayableFor(@NotNull Player player, boolean displayable) {
-        VanillaItemsGroup.displayableFor(player, displayable);
-    }
-
-    public boolean vanillaItemsGroupIsDisplayableFor(@NotNull Player player) {
-        return VanillaItemsGroup.isDisplayableFor(player);
     }
 }

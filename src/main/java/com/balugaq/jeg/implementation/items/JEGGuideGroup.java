@@ -45,13 +45,17 @@ import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
+import io.github.thebusybiscuit.slimefun4.libraries.paperlib.PaperLib;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.Getter;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -235,6 +239,11 @@ public class JEGGuideGroup extends ClassicGuideGroup {
                             return false;
                         }
 
+                        if (exampleItem.isDisabledIn(p.getWorld())) {
+                            p.sendMessage("§c该物品已被禁用，无法展示示例");
+                            return false;
+                        }
+
                         jegGuide.displayItem(profile, exampleItem, true);
                     } catch (Throwable e) {
                         p.sendMessage("§c无法执行操作，请检查 Slimefun 是否正确安装。");
@@ -281,6 +290,11 @@ public class JEGGuideGroup extends ClassicGuideGroup {
                             return false;
                         }
 
+                        if (exampleItem.isDisabledIn(p.getWorld())) {
+                            p.sendMessage("§c该物品已被禁用，无法展示示例");
+                            return false;
+                        }
+
                         jegGuide.displayItem(profile, exampleItem, true);
                     } catch (Throwable e) {
                         p.sendMessage("§c无法执行操作，请检查 Slimefun 是否正确安装。");
@@ -318,6 +332,11 @@ public class JEGGuideGroup extends ClassicGuideGroup {
                         SlimefunItem exampleItem = SlimefunItems.ELECTRIC_DUST_WASHER_3.getItem();
                         if (exampleItem == null) {
                             p.sendMessage("§c无法获取示例物品，请检查是否正确安装 Slimefun。");
+                            return false;
+                        }
+
+                        if (exampleItem.isDisabledIn(p.getWorld())) {
+                            p.sendMessage("§c该物品已被禁用，无法展示示例");
                             return false;
                         }
 
@@ -472,6 +491,57 @@ public class JEGGuideGroup extends ClassicGuideGroup {
                     }
                     return false;
                 });
+
+        addGuide(
+                GUIDE_SLOTS[index.getAndIncrement()],
+                Converter.getItem(
+                        Material.STONE_PICKAXE,
+                        "&b功能: 名称打印",
+                        "&b介绍: 你可以在任意物品上按 Q 键，以将此物品分享给其他玩家",
+                        "&b点击尝试功能"
+                ), (p, s, i, a) -> {
+                    try {
+                        if (Slimefun.instance() == null) {
+                            p.sendMessage("§c无法获取 Slimefun 实例，无法使用此功能。");
+                            return false;
+                        }
+
+                        SlimefunGuideImplementation guide = GuideUtil.getGuide(p, SlimefunGuideMode.SURVIVAL_MODE);
+                        if (!(guide instanceof JEGSlimefunGuideImplementation jegGuide)) {
+                            p.sendMessage("§c功能未启用，无法使用此功能。");
+                            return false;
+                        }
+
+                        PlayerProfile profile = PlayerProfile.find(p).orElse(null);
+                        if (profile == null) {
+                            p.sendMessage("§c无法获取玩家资料，请检查是否正确安装 Slimefun。");
+                            return false;
+                        }
+
+                        if (!BeginnersGuideOption.isEnabled(p)) {
+                            p.sendMessage("§c此功能需要您在设置中启用新手指引。");
+                            return false;
+                        }
+
+                        SlimefunItem exampleItem = SlimefunItems.ELECTRIC_DUST_WASHER_3.getItem();
+                        if (exampleItem == null) {
+                            p.sendMessage("§c无法获取示例物品，请检查是否正确安装 Slimefun。");
+                            return false;
+                        }
+
+                        if (exampleItem.isDisabledIn(p.getWorld())) {
+                            p.sendMessage("§c该物品已被禁用，无法展示示例");
+                            return false;
+                        }
+
+                        jegGuide.displayItem(profile, exampleItem, true);
+                    } catch (Throwable e) {
+                        p.sendMessage("§c无法执行操作，请检查 Slimefun 是否正确安装。");
+                        Debug.trace(e);
+                    }
+                    return false;
+                }
+        );
     }
 
     public static void doIf(boolean expression, @NotNull Runnable runnable) {

@@ -33,6 +33,7 @@ import com.balugaq.jeg.api.objects.events.RTSEvents;
 import com.balugaq.jeg.core.listeners.GuideListener;
 import com.balugaq.jeg.core.listeners.RTSListener;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
+import com.balugaq.jeg.utils.Debug;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.Models;
 import com.balugaq.jeg.utils.compatibility.Converter;
@@ -108,16 +109,21 @@ public class RTSSearchGroup extends FlexItemGroup {
                 Inventory openingInventory = view.getTopInventory();
                 if (openingInventory instanceof AnvilInventory anvilInventory && openingInventory.equals(inventory)) {
                     String oldSearchTerm = searchTermCopy.get(player);
-                    String newSearchTerm = anvilInventory.getRenameText();
-                    if (oldSearchTerm == null || newSearchTerm == null) {
-                        writes.put(player, newSearchTerm);
-                        return;
-                    }
+                    try {
+                        // `AnvilInventory.getRenameText()` have been deprecated since 1.21 in Paper
+                        String newSearchTerm = anvilInventory.getRenameText();
+                        if (oldSearchTerm == null || newSearchTerm == null) {
+                            writes.put(player, newSearchTerm);
+                            return;
+                        }
 
-                    if (!oldSearchTerm.equals(newSearchTerm)) {
-                        writes.put(player, newSearchTerm);
-                        RTSEvents.SearchTermChangeEvent event = new RTSEvents.SearchTermChangeEvent(player, view, anvilInventory, oldSearchTerm, newSearchTerm, GuideListener.guideModeMap.get(player));
-                        Bukkit.getPluginManager().callEvent(event);
+                        if (!oldSearchTerm.equals(newSearchTerm)) {
+                            writes.put(player, newSearchTerm);
+                            RTSEvents.SearchTermChangeEvent event = new RTSEvents.SearchTermChangeEvent(player, view, anvilInventory, oldSearchTerm, newSearchTerm, GuideListener.guideModeMap.get(player));
+                            Bukkit.getPluginManager().callEvent(event);
+                        }
+                    } catch (Throwable e) {
+                        Debug.trace(e);
                     }
                 }
             });

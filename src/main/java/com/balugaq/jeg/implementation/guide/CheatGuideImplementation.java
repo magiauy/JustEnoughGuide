@@ -30,9 +30,11 @@ package com.balugaq.jeg.implementation.guide;
 import city.norain.slimefun4.VaultIntegration;
 import com.balugaq.jeg.api.groups.SearchGroup;
 import com.balugaq.jeg.api.interfaces.BookmarkRelocation;
+import com.balugaq.jeg.api.interfaces.CustomIconDisplay;
 import com.balugaq.jeg.api.interfaces.DisplayInCheatMode;
 import com.balugaq.jeg.api.interfaces.JEGSlimefunGuideImplementation;
 import com.balugaq.jeg.api.interfaces.NotDisplayInCheatMode;
+import com.balugaq.jeg.api.interfaces.VanillaItemShade;
 import com.balugaq.jeg.api.objects.events.GuideEvents;
 import com.balugaq.jeg.core.listeners.GuideListener;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
@@ -273,6 +275,12 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                     }
                     if (flexItemGroup.isVisible(p, profile, SlimefunGuideMode.SURVIVAL_MODE)) {
                         groups.add(group);
+                    } else {
+                        if (flexItemGroup.getClass().getName().startsWith("com.balugaq.netex.api.groups")) {
+                            continue;
+                        } else {
+                            specialGroups.add(group);
+                        }
                     }
                 } else if (!group.isHidden(p)) {
                     groups.add(group);
@@ -289,6 +297,14 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                             .getName()
                             .equalsIgnoreCase("me.lucasgithuber.obsidianexpansion.infinitylib.groups.SubGroup")) {
                         if (group.getKey().getKey().equalsIgnoreCase("omc_forge_cheat")) {
+                            specialGroups.add(group);
+                        }
+                    } else if (group.getClass()
+                            .getName()
+                            .startsWith("io.github.sefiraat.networks.slimefun.NetworksItemGroups")) {
+                        // HiddenItemGroup
+
+                        if (group.getKey().getKey().equalsIgnoreCase("disabled_items")) {
                             specialGroups.add(group);
                         }
                     }
@@ -627,7 +643,11 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                 return false;
             }));
         } else {
-            menu.addItem(index, ItemStackUtil.getCleanItem(sfitem.getItem()));
+            if (sfitem instanceof CustomIconDisplay cid) {
+                menu.addItem(index, ItemStackUtil.getCleanItem(cid.getCustomIcon()));
+            } else {
+                menu.addItem(index, ItemStackUtil.getCleanItem(sfitem.getItem()));
+            }
             menu.addMenuClickHandler(index, (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.ItemButtonClickEvent(pl, item, slot, action, menu, this)).ifSuccess(() -> {
                 try {
                     if (isSurvivalMode()) {
@@ -693,12 +713,12 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
 
         SlimefunItem sfItem = SlimefunItem.getByItem(item);
 
-        if (sfItem != null) {
+        if (sfItem != null && !(sfItem instanceof VanillaItemShade)) {
             displayItem(profile, sfItem, addToHistory);
             return;
         }
 
-        // Not SlimefunItem
+        // Not SlimefunItem, or VanillaItemShade
         if (!Slimefun.getConfigManager().isShowVanillaRecipes()) {
             return;
         }
@@ -942,7 +962,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             return false;
         });
 
-        boolean isSlimefunRecipe = item instanceof SlimefunItem;
+        boolean isSlimefunRecipe = item instanceof SlimefunItem && !(item instanceof VanillaItemShade);
 
         var recipeSlots = format.getChars('r');
         for (int i = 0; i < 9; i++) {

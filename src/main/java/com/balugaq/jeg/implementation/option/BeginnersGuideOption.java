@@ -49,8 +49,13 @@ import java.util.Optional;
  * @since 1.5
  */
 public class BeginnersGuideOption implements SlimefunGuideOption<Boolean> {
+    public static @NotNull BeginnersGuideOption instance = new BeginnersGuideOption();
 
-    public static @NotNull NamespacedKey key() {
+    public static BeginnersGuideOption instance() {
+        return instance;
+    }
+
+    public static @NotNull NamespacedKey key0() {
         return new NamespacedKey(JustEnoughGuide.getInstance(), "beginners_guide");
     }
 
@@ -59,7 +64,7 @@ public class BeginnersGuideOption implements SlimefunGuideOption<Boolean> {
     }
 
     public static boolean getSelectedOption(Player p) {
-        return !PersistentDataAPI.hasByte(p, key()) || PersistentDataAPI.getByte(p, key()) == (byte) 1;
+        return !PersistentDataAPI.hasByte(p, key0()) || PersistentDataAPI.getByte(p, key0()) == (byte) 1;
     }
 
     @Override
@@ -69,7 +74,7 @@ public class BeginnersGuideOption implements SlimefunGuideOption<Boolean> {
 
     @Override
     public @NotNull NamespacedKey getKey() {
-        return key();
+        return key0();
     }
 
     @Override

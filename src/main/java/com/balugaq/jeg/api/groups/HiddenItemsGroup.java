@@ -211,7 +211,7 @@ public class HiddenItemsGroup extends FlexItemGroup {
                 if (action.isShiftClicked()) {
                     SlimefunGuide.openMainMenu(playerProfile, slimefunGuideMode, guideHistory.getMainMenuPage());
                 } else {
-                    guideHistory.goBack(Slimefun.getRegistry().getSlimefunGuide(SlimefunGuideMode.CHEAT_MODE));
+                    guideHistory.goBack(Slimefun.getRegistry().getSlimefunGuide(slimefunGuideMode));
                 }
                 return false;
             }));

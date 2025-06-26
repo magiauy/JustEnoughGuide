@@ -31,6 +31,7 @@ import com.balugaq.jeg.api.groups.SearchGroup;
 import com.balugaq.jeg.api.interfaces.JEGCommand;
 import com.balugaq.jeg.utils.Debug;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -97,12 +98,14 @@ public class ReloadCommand implements JEGCommand {
                 return;
             }
 
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                plugin.onEnable();
+                plugin.reloadConfig();
+                SearchGroup.LOADED = false;
+                SearchGroup.init();
+                sender.sendMessage(ChatColor.GREEN + "plugin has been reloaded.");
+            }, 20L);
             plugin.onDisable();
-            plugin.onEnable();
-            plugin.reloadConfig();
-            SearchGroup.LOADED = false;
-            SearchGroup.init();
-            sender.sendMessage(ChatColor.GREEN + "plugin has been reloaded.");
         } catch (Throwable e) {
             sender.sendMessage(ChatColor.RED + "Failed to reload plugin.");
             Debug.trace(e);

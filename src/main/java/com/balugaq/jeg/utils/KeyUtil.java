@@ -27,20 +27,28 @@
 
 package com.balugaq.jeg.utils;
 
+import com.balugaq.jeg.implementation.JustEnoughGuide;
+import lombok.experimental.UtilityClass;
+import org.bukkit.NamespacedKey;
+import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+
 /**
- * This package contains utility classes for JEG.
- *
  * @author balugaq
- * @see com.balugaq.jeg.utils.GuideUtil
- * @see com.balugaq.jeg.utils.ItemStackUtil
- * @see com.balugaq.jeg.utils.ReflectionUtil
- * @see com.balugaq.jeg.utils.MinecraftVersion
- * @see com.balugaq.jeg.utils.JEGVersionedItemFlag
- * @see com.balugaq.jeg.utils.LocalHelper
- * @see com.balugaq.jeg.utils.SlimefunRegistryUtil
- * @see com.balugaq.jeg.utils.SpecialMenuProvider
- * @see com.balugaq.jeg.utils.UUIDUtils
- * @see com.balugaq.jeg.utils.Debug
- * @see com.balugaq.jeg.utils.Models
- * @since 1.0
+ * @since 1.7
  */
+@UtilityClass
+public class KeyUtil {
+    @NotNull
+    public static NamespacedKey newKey(@NotNull String key) {
+        return new NamespacedKey(JustEnoughGuide.getInstance(), key);
+    }
+
+    @SuppressWarnings("deprecation")
+    @ParametersAreNonnullByDefault
+    @NotNull
+    public static NamespacedKey customKey(String namespace, String key) {
+        return new NamespacedKey(namespace, key);
+    }
+}

@@ -29,9 +29,11 @@ package com.balugaq.jeg.implementation.guide;
 
 import city.norain.slimefun4.VaultIntegration;
 import com.balugaq.jeg.api.groups.SearchGroup;
+import com.balugaq.jeg.api.interfaces.CustomIconDisplay;
 import com.balugaq.jeg.api.interfaces.DisplayInSurvivalMode;
 import com.balugaq.jeg.api.interfaces.JEGSlimefunGuideImplementation;
 import com.balugaq.jeg.api.interfaces.NotDisplayInSurvivalMode;
+import com.balugaq.jeg.api.interfaces.VanillaItemShade;
 import com.balugaq.jeg.api.objects.events.GuideEvents;
 import com.balugaq.jeg.core.listeners.GuideListener;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
@@ -516,7 +518,11 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
                 return false;
             }));
         } else {
-            menu.addItem(index, ItemStackUtil.getCleanItem(sfitem.getItem()));
+            if (sfitem instanceof CustomIconDisplay cid) {
+                menu.addItem(index, ItemStackUtil.getCleanItem(cid.getCustomIcon()));
+            } else {
+                menu.addItem(index, ItemStackUtil.getCleanItem(sfitem.getItem()));
+            }
             menu.addMenuClickHandler(index, (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.ItemButtonClickEvent(pl, item, slot, action, menu, this)).ifSuccess(() -> {
                 try {
                     if (isSurvivalMode()) {
@@ -584,12 +590,12 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
 
         SlimefunItem sfItem = SlimefunItem.getByItem(item);
 
-        if (sfItem != null) {
+        if (sfItem != null && !(sfItem instanceof VanillaItemShade)) {
             displayItem(profile, sfItem, addToHistory);
             return;
         }
 
-        // Not SlimefunItem
+        // Not SlimefunItem, or VanillaItemShade
         if (!Slimefun.getConfigManager().isShowVanillaRecipes()) {
             return;
         }
@@ -734,6 +740,11 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
             return;
         }
 
+        if (item instanceof VanillaItemShade vis) {
+            displayItem(profile, vis.getCustomIcon(), 0, true);
+            return;
+        }
+
         ChestMenu menu = create0(p);
         Optional<String> wiki = item.getWikipage();
 
@@ -869,7 +880,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
             return false;
         });
 
-        boolean isSlimefunRecipe = item instanceof SlimefunItem;
+        boolean isSlimefunRecipe = item instanceof SlimefunItem && !(item instanceof VanillaItemShade);
 
         var recipeSlots = format.getChars('r');
         for (int i = 0; i < 9; i++) {

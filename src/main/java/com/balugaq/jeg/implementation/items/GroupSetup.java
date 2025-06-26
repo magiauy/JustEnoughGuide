@@ -31,11 +31,11 @@ import com.balugaq.jeg.api.groups.HiddenItemsGroup;
 import com.balugaq.jeg.api.groups.NexcavateItemsGroup;
 import com.balugaq.jeg.api.groups.VanillaItemsGroup;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
-import com.balugaq.jeg.utils.SlimefunItemUtil;
+import com.balugaq.jeg.utils.KeyUtil;
+import com.balugaq.jeg.utils.SlimefunRegistryUtil;
 import com.balugaq.jeg.utils.SpecialMenuProvider;
 import com.balugaq.jeg.utils.compatibility.Converter;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 
 /**
  * This class is responsible for registering all the JEG groups.
@@ -54,21 +54,21 @@ public class GroupSetup {
      */
     public static void setup() {
         guideGroup = new JEGGuideGroup(
-                new NamespacedKey(JustEnoughGuide.getInstance(), "jeg_guide_group"),
+                KeyUtil.newKey("jeg_guide_group"),
                 Converter.getItem(Material.KNOWLEDGE_BOOK, "&bJEG 使用指南"));
         guideGroup.register(JustEnoughGuide.getInstance());
         hiddenItemsGroup = new HiddenItemsGroup(
-                new NamespacedKey(JustEnoughGuide.getInstance(), "hidden_items_group"),
+                KeyUtil.newKey("hidden_items_group"),
                 Converter.getItem(Material.BARRIER, "&c隐藏物品"));
         hiddenItemsGroup.register(JustEnoughGuide.getInstance());
         if (SpecialMenuProvider.ENABLED_Nexcavate) {
             nexcavateItemsGroup = new NexcavateItemsGroup(
-                    new NamespacedKey(JustEnoughGuide.getInstance(), "nexcavate_items_group"),
+                    KeyUtil.newKey("nexcavate_items_group"),
                     Converter.getItem(Material.BLACKSTONE, "&6Nexcavate 物品"));
             nexcavateItemsGroup.register(JustEnoughGuide.getInstance());
         }
         vanillaItemsGroup = new VanillaItemsGroup(
-                new NamespacedKey(JustEnoughGuide.getInstance(), "vanilla_items_group"),
+                KeyUtil.newKey("vanilla_items_group"),
                 Converter.getItem(Material.CRAFTING_TABLE, "&7原版物品"));
         vanillaItemsGroup.register(JustEnoughGuide.getInstance());
     }
@@ -77,11 +77,6 @@ public class GroupSetup {
      * Unregisters all the JEG groups.
      */
     public static void shutdown() {
-        SlimefunItemUtil.unregisterItemGroup(guideGroup);
-        SlimefunItemUtil.unregisterItemGroup(hiddenItemsGroup);
-        if (SpecialMenuProvider.ENABLED_Nexcavate) {
-            SlimefunItemUtil.unregisterItemGroup(nexcavateItemsGroup);
-        }
-        SlimefunItemUtil.unregisterItemGroup(vanillaItemsGroup);
+        SlimefunRegistryUtil.unregisterItemGroups(JustEnoughGuide.getInstance());
     }
 }
