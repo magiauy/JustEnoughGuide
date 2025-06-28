@@ -414,6 +414,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                         pl.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a已选择物品组: &e" + group.getDisplayName(pl)));
                     } else {
                         GroupResorter.swap(selected, group);
+                        GroupResorter.setSelectedGroup(pl, null);
                         pl.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a已交换物品组排序: &e" + selected.getDisplayName(pl) + " &7<-> &e" + group.getDisplayName(pl)));
                         openMainMenu(profile, page);
                     }
@@ -584,6 +585,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                                 pl.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a已选择物品组: &e" + subGroup.getDisplayName(pl)));
                             } else {
                                 GroupResorter.swap(selected, subGroup);
+                                GroupResorter.setSelectedGroup(pl, null);
                                 pl.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a已交换物品组排序: &e" + selected.getDisplayName(pl) + " &7<-> &e" + subGroup.getDisplayName(pl)));
                                 openMainMenu(profile, page);
                             }

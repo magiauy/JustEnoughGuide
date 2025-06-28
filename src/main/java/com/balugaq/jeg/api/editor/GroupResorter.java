@@ -99,7 +99,7 @@ public class GroupResorter {
         return selectedGroup.get(player);
     }
 
-    public static void setSelectedGroup(@NotNull Player player, @NotNull ItemGroup itemGroup) {
+    public static void setSelectedGroup(@NotNull Player player, @Nullable ItemGroup itemGroup) {
         selectedGroup.put(player, itemGroup);
     }
 

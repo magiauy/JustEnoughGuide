@@ -28,6 +28,7 @@
 package com.balugaq.jeg.utils.compatibility;
 
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
+import lombok.SneakyThrows;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -214,6 +215,7 @@ public class Converter {
      *
      * @return the created ItemGetter
      */
+    @SneakyThrows
     private static ItemGetter createItemGetter() {
         try {
             MethodHandles.Lookup lookup = MethodHandles.lookup();
