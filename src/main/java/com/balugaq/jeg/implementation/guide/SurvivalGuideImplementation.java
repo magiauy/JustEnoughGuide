@@ -67,11 +67,13 @@ import io.github.thebusybiscuit.slimefun4.api.researches.Research;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.core.guide.GuideHistory;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuide;
+import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
 import io.github.thebusybiscuit.slimefun4.core.guide.options.SlimefunGuideSettings;
 import io.github.thebusybiscuit.slimefun4.core.multiblocks.MultiBlock;
 import io.github.thebusybiscuit.slimefun4.core.multiblocks.MultiBlockMachine;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
+import io.github.thebusybiscuit.slimefun4.implementation.guide.CheatSheetSlimefunGuide;
 import io.github.thebusybiscuit.slimefun4.implementation.guide.SurvivalSlimefunGuide;
 import io.github.thebusybiscuit.slimefun4.implementation.tasks.AsyncRecipeChoiceTask;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.chat.ChatInput;
@@ -114,7 +116,14 @@ import java.util.logging.Level;
  * to provide a common interface for both
  * {@link SurvivalGuideImplementation} and {@link CheatGuideImplementation}.
  *
+ * @author TheBusyBiscuit
  * @author balugaq
+ * @see SlimefunGuide
+ * @see SlimefunGuideImplementation
+ * @see SurvivalSlimefunGuide
+ * @see CheatSheetSlimefunGuide
+ * @see JEGSlimefunGuideImplementation
+ * @see CheatGuideImplementation
  * @since 1.0
  */
 @SuppressWarnings({"deprecation", "unused", "UnnecessaryUnicodeEscape"})
@@ -941,7 +950,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         for (var s : format.getChars('T')) {
             menu.addItem(s, ItemStackUtil.getCleanItem(ChestMenuUtils.getMenuButton(p)));
             menu.addMenuClickHandler(s, (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.SettingsButtonClickEvent(pl, item, slot, action, menu, this)).ifSuccess(() -> {
-                SlimefunGuideSettings.openSettings(pl, pl.getInventory().getItemInMainHand());
+                JEGGuideSettings.openSettings(pl, pl.getInventory().getItemInMainHand());
                 return false;
             }));
         }
@@ -981,7 +990,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         for (var s : Formats.main.getChars('T')) {
             menu.addItem(s, ItemStackUtil.getCleanItem(ChestMenuUtils.getMenuButton(p)));
             menu.addMenuClickHandler(s, (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.SettingsButtonClickEvent(pl, item, slot, action, menu, this)).ifSuccess(() -> {
-                SlimefunGuideSettings.openSettings(pl, pl.getInventory().getItemInMainHand());
+                JEGGuideSettings.openSettings(pl, pl.getInventory().getItemInMainHand());
                 return false;
             }));
         }

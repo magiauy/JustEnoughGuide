@@ -27,30 +27,15 @@
 
 package com.balugaq.jeg.utils.formatter;
 
+import com.balugaq.jeg.implementation.JustEnoughGuide;
+
 /**
  * @author balugaq
- * @since 1.6
+ * @since 1.8
  */
-public class Formats {
-    public static final MainFormat main = new MainFormat();
-    public static final NestedGroupFormat nested = new NestedGroupFormat();
-    public static final SubGroupFormat sub = new SubGroupFormat();
-    public static final RecipeFormat recipe = new RecipeFormat();
-    public static final HelperFormat helper = new HelperFormat();
-    public static final RecipeVanillaFormat recipe_vanilla = new RecipeVanillaFormat();
-    public static final RecipeDisplayFormat recipe_display = new RecipeDisplayFormat();
-    public static final SettingsFormat settings = new SettingsFormat();
-    public static final ContributorsFormat contributors = new ContributorsFormat();
-
-    static {
-        main.loadMapping();
-        nested.loadMapping();
-        sub.loadMapping();
-        recipe.loadMapping();
-        helper.loadMapping();
-        recipe_vanilla.loadMapping();
-        recipe_display.loadMapping();
-        settings.loadMapping();
-        contributors.loadMapping();
+public class ContributorsFormat extends Format {
+    @Override
+    public void loadMapping() {
+        loadMapping(JustEnoughGuide.getConfigManager().getContributorsFormat());
     }
 }

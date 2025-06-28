@@ -44,8 +44,8 @@ import javax.annotation.Nonnull;
  */
 @SuppressWarnings("deprecation")
 public class Sounds {
-    public static final Sound GUIDE_BUTTON_CLICK_SOUND = byKeyOr("item.book.page_turn", byName("ITEM_BOOK_PAGE_TURN"));
-    public static final Sound COLLECTED_ITEM = byKeyOr("entity.player.levelup", byName("ENTITY_PLAYER_LEVELUP"));
+    public static final Sound GUIDE_BUTTON_CLICK_SOUND = byKeyOrDefault("item.book.page_turn", byName("ITEM_BOOK_PAGE_TURN"));
+    public static final Sound COLLECTED_ITEM = byKeyOrDefault("entity.player.levelup", byName("ENTITY_PLAYER_LEVELUP"));
 
     public static Sound byName(String name) {
         return ReflectionUtil.getStaticValue(Sound.class, name, Sound.class);
@@ -60,7 +60,13 @@ public class Sounds {
         return registry.get(NamespacedKey.minecraft(key));
     }
 
+    @SuppressWarnings("unused")
+    @Deprecated
     public static Sound byKeyOr(String key, Sound def) {
+        return byKeyOrDefault(key, def);
+    }
+
+    public static Sound byKeyOrDefault(String key, Sound def) {
         var sound = byKey(key);
         return sound == null ? def : sound;
     }

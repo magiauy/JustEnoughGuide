@@ -192,7 +192,7 @@ public class Debug {
 
     public static void log(@NotNull String message) {
         init();
-        plugin.getServer().getConsoleSender().sendMessage("[" + JustEnoughGuide.getInstance().getName() + "] " + ChatColor.translateAlternateColorCodes('&', message));
+        plugin.getServer().getConsoleSender().sendMessage("[" + JustEnoughGuide.getInstance().getName() + "] " + ChatColors.color(message));
     }
 
     public static void log(@NotNull Throwable e) {

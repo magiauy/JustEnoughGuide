@@ -37,6 +37,7 @@ import com.balugaq.jeg.api.interfaces.JEGSlimefunGuideImplementation;
 import com.balugaq.jeg.api.interfaces.NotDisplayInCheatMode;
 import com.balugaq.jeg.api.interfaces.VanillaItemShade;
 import com.balugaq.jeg.api.objects.events.GuideEvents;
+import com.balugaq.jeg.api.patch.JEGGuideSettings;
 import com.balugaq.jeg.core.listeners.GuideListener;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.Debug;
@@ -69,14 +70,17 @@ import io.github.thebusybiscuit.slimefun4.api.researches.Research;
 import io.github.thebusybiscuit.slimefun4.core.attributes.RecipeDisplayItem;
 import io.github.thebusybiscuit.slimefun4.core.guide.GuideHistory;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuide;
+import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
 import io.github.thebusybiscuit.slimefun4.core.guide.options.SlimefunGuideSettings;
 import io.github.thebusybiscuit.slimefun4.core.multiblocks.MultiBlock;
 import io.github.thebusybiscuit.slimefun4.core.multiblocks.MultiBlockMachine;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.implementation.guide.CheatSheetSlimefunGuide;
+import io.github.thebusybiscuit.slimefun4.implementation.guide.SurvivalSlimefunGuide;
 import io.github.thebusybiscuit.slimefun4.implementation.tasks.AsyncRecipeChoiceTask;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.chat.ChatInput;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.common.ChatColors;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.ItemUtils;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.recipes.MinecraftRecipe;
 import io.github.thebusybiscuit.slimefun4.utils.ChatUtils;
@@ -113,7 +117,14 @@ import java.util.logging.Level;
  * to provide a common interface for both
  * {@link SurvivalGuideImplementation} and {@link CheatGuideImplementation}.
  *
+ * @author TheBusyBiscuit
  * @author balugaq
+ * @see SlimefunGuide
+ * @see SlimefunGuideImplementation
+ * @see SurvivalSlimefunGuide
+ * @see CheatSheetSlimefunGuide
+ * @see JEGSlimefunGuideImplementation
+ * @see SurvivalGuideImplementation
  * @since 1.0
  */
 @SuppressWarnings({"deprecation", "unused", "UnnecessaryUnicodeEscape", "ConstantValue"})
@@ -411,11 +422,11 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                     ItemGroup selected = GroupResorter.getSelectedGroup(pl);
                     if (selected == null) {
                         GroupResorter.setSelectedGroup(pl, group);
-                        pl.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a已选择物品组: &e" + group.getDisplayName(pl)));
+                        pl.sendMessage(ChatColors.color("&a已选择物品组: &e" + group.getDisplayName(pl)));
                     } else {
                         GroupResorter.swap(selected, group);
                         GroupResorter.setSelectedGroup(pl, null);
-                        pl.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a已交换物品组排序: &e" + selected.getDisplayName(pl) + " &7<-> &e" + group.getDisplayName(pl)));
+                        pl.sendMessage(ChatColors.color("&a已交换物品组排序: &e" + selected.getDisplayName(pl) + " &7<-> &e" + group.getDisplayName(pl)));
                         openMainMenu(profile, page);
                     }
                     return false;
@@ -582,11 +593,11 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                             ItemGroup selected = GroupResorter.getSelectedGroup(pl);
                             if (selected == null) {
                                 GroupResorter.setSelectedGroup(pl, subGroup);
-                                pl.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a已选择物品组: &e" + subGroup.getDisplayName(pl)));
+                                pl.sendMessage(ChatColors.color("&a已选择物品组: &e" + subGroup.getDisplayName(pl)));
                             } else {
                                 GroupResorter.swap(selected, subGroup);
                                 GroupResorter.setSelectedGroup(pl, null);
-                                pl.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a已交换物品组排序: &e" + selected.getDisplayName(pl) + " &7<-> &e" + subGroup.getDisplayName(pl)));
+                                pl.sendMessage(ChatColors.color("&a已交换物品组排序: &e" + selected.getDisplayName(pl) + " &7<-> &e" + subGroup.getDisplayName(pl)));
                                 openMainMenu(profile, page);
                             }
                             return false;
@@ -1052,7 +1063,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
         for (var s : format.getChars('T')) {
             menu.addItem(s, ItemStackUtil.getCleanItem(ChestMenuUtils.getMenuButton(p)));
             menu.addMenuClickHandler(s, (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.SettingsButtonClickEvent(pl, item, slot, action, menu, this)).ifSuccess(() -> {
-                SlimefunGuideSettings.openSettings(pl, pl.getInventory().getItemInMainHand());
+                JEGGuideSettings.openSettings(pl, pl.getInventory().getItemInMainHand());
                 return false;
             }));
         }
@@ -1090,7 +1101,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
         for (var s : Formats.main.getChars('T')) {
             menu.addItem(s, ItemStackUtil.getCleanItem(ChestMenuUtils.getMenuButton(p)));
             menu.addMenuClickHandler(s, (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.SettingsButtonClickEvent(pl, item, slot, action, menu, this)).ifSuccess(() -> {
-                SlimefunGuideSettings.openSettings(pl, pl.getInventory().getItemInMainHand());
+                JEGGuideSettings.openSettings(pl, pl.getInventory().getItemInMainHand());
                 return false;
             }));
         }

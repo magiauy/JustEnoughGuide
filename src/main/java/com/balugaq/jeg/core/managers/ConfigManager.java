@@ -80,6 +80,8 @@ public class ConfigManager extends AbstractManager {
     private final @NotNull List<String> HELPER_FORMAT;
     private final @NotNull List<String> RECIPE_VANILLA_FORMAT;
     private final @NotNull List<String> RECIPE_DISPLAY_FORMAT;
+    private final @NotNull List<String> SETTINGS_FORMAT;
+    private final @NotNull List<String> CONTRIBUTORS_FORMAT;
     private final @NotNull Map<String, String> LOCAL_TRANSLATE;
     private final @NotNull List<String> BANLIST;
     private final @NotNull JavaPlugin plugin;
@@ -203,6 +205,32 @@ public class ConfigManager extends AbstractManager {
             this.RECIPE_DISPLAY_FORMAT.add("ddddddddd");
         } else {
             this.RECIPE_DISPLAY_FORMAT = rawRecipeDisplayFormat;
+        }
+
+        var rawSettingsFormat = plugin.getConfig().getStringList("custom-format.settings");
+        if (rawSettingsFormat == null || rawSettingsFormat.isEmpty()) {
+            this.SETTINGS_FORMAT = new ArrayList<>();
+            this.SETTINGS_FORMAT.add("bBsBvBuBW");
+            this.SETTINGS_FORMAT.add("BBBBBBBBB");
+            this.SETTINGS_FORMAT.add("BoooooooB");
+            this.SETTINGS_FORMAT.add("BoooooooB");
+            this.SETTINGS_FORMAT.add("BPBBBBBNB");
+            this.SETTINGS_FORMAT.add("BBlBBBUBB");
+        } else {
+            this.SETTINGS_FORMAT = rawSettingsFormat;
+        }
+
+        var rawContributorsFormat = plugin.getConfig().getStringList("custom-format.contributors");
+        if (rawContributorsFormat == null || rawContributorsFormat.isEmpty()) {
+            this.CONTRIBUTORS_FORMAT = new ArrayList<>();
+            this.CONTRIBUTORS_FORMAT.add("BbBBBBBBB");
+            this.CONTRIBUTORS_FORMAT.add("ppppppppp");
+            this.CONTRIBUTORS_FORMAT.add("ppppppppp");
+            this.CONTRIBUTORS_FORMAT.add("ppppppppp");
+            this.CONTRIBUTORS_FORMAT.add("ppppppppp");
+            this.CONTRIBUTORS_FORMAT.add("BPBBBBBNB");
+        } else {
+            this.CONTRIBUTORS_FORMAT = rawContributorsFormat;
         }
 
         this.LOCAL_TRANSLATE = new HashMap<>();

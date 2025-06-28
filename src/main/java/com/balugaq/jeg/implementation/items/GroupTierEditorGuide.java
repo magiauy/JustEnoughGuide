@@ -38,6 +38,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * @author balugaq
+ * @since 1.8
+ */
 @SuppressWarnings("SameReturnValue")
 public class GroupTierEditorGuide extends SlimefunGuideItem {
     public static final NamespacedKey KEY = KeyUtil.newKey("group_tier_editor");

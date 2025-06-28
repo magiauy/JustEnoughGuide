@@ -62,7 +62,7 @@ public class LocalHelper {
     static {
         loadDefault();
         for (var entry : JustEnoughGuide.getConfigManager().getLocalTranslate().entrySet()) {
-            addonLocals.put(entry.getKey(), ChatColor.translateAlternateColorCodes('&', entry.getValue()));
+            addonLocals.put(entry.getKey(), ChatColors.color(entry.getValue()));
         }
     }
 
@@ -386,7 +386,7 @@ public class LocalHelper {
             return getRSCLocalName(itemId);
         }
         String localName = addonLocals.get(addonName);
-        return ChatColor.translateAlternateColorCodes('&', localName == null ? callback : localName);
+        return ChatColors.color(localName == null ? callback : localName);
     }
 
     public static void addRSCLocal(String rscAddonName, String itemId) {

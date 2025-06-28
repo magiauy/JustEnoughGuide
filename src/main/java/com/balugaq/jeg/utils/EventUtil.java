@@ -36,6 +36,10 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+/**
+ * @author balugaq
+ * @since 1.6
+ */
 public class EventUtil {
     public static <T extends Event> EventBuilder<T> callEvent(T event) {
         return new EventBuilder<>(event);

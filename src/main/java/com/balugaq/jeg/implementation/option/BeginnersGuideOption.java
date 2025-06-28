@@ -96,7 +96,7 @@ public class BeginnersGuideOption implements SlimefunGuideOption<Boolean> {
     @Override
     public void onClick(Player p, ItemStack guide) {
         setSelectedOption(p, guide, !getSelectedOption(p, guide).orElse(true));
-        SlimefunGuideSettings.openSettings(p, guide);
+        JEGGuideSettings.openSettings(p, guide);
     }
 
     @Override

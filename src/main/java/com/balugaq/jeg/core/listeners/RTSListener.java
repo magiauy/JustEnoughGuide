@@ -428,7 +428,7 @@ public class RTSListener implements Listener {
                                 int originalAmount = meta.getPersistentDataContainer().getOrDefault(CHEAT_AMOUNT_KEY, PersistentDataType.INTEGER, 0);
                                 int totalAmount = originalAmount + addAmount;
                                 meta.getPersistentDataContainer().set(CHEAT_AMOUNT_KEY, PersistentDataType.INTEGER, totalAmount);
-                                meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', ItemStackHelper.getDisplayName(clonedItem) + " &c已拿取物品 x" + totalAmount));
+                                meta.setDisplayName(ChatColors.color(ItemStackHelper.getDisplayName(clonedItem) + " &c已拿取物品 x" + totalAmount));
                                 itemStack.setItemMeta(meta);
                             }
                         } else {

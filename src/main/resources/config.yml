@@ -159,6 +159,20 @@ custom-format:
     - "BhhhhhhhB"
     - "BhhhhhhhB"
     - "BPBBCBBNB"
+  settings:
+    - "bBsBvBuBW"
+    - "BBBBBBBBB"
+    - "BoooooooB"
+    - "BoooooooB"
+    - "BPBBBBBNB"
+    - "BBlBPBUBB"
+  contributors:
+    - "BbBBBBBBB"
+    - "ppppppppp"
+    - "ppppppppp"
+    - "ppppppppp"
+    - "ppppppppp"
+    - "BPBBBBBNB"
 
 # 支持颜色符号: &a粘液科技
 local-translate:

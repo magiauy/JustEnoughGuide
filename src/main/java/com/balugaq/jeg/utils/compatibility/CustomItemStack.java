@@ -216,7 +216,7 @@ public class CustomItemStack implements Cloneable {
      * @return the translated string
      */
     public static @NotNull String color(@NotNull String raw) {
-        return ChatColor.translateAlternateColorCodes('&', Preconditions.checkNotNull(raw, "raw cannot be null"));
+        return ChatColors.color(Preconditions.checkNotNull(raw, "raw cannot be null"));
     }
 
     /**
