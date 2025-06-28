@@ -79,7 +79,7 @@ import java.util.logging.Level;
  * @author balugaq
  * @since 1.1
  */
-@SuppressWarnings({"deprecation", "unused"})
+@SuppressWarnings({"deprecation", "unused", "UnnecessaryUnicodeEscape"})
 @NotDisplayInSurvivalMode
 @NotDisplayInCheatMode
 public class ItemMarkGroup extends FlexItemGroup {
@@ -87,17 +87,24 @@ public class ItemMarkGroup extends FlexItemGroup {
             Converter.getItem(Material.GREEN_STAINED_GLASS_PANE, "&a&l添加收藏物", "", "&7左键物品添加到收藏中");
     private static final JavaPlugin JAVA_PLUGIN = JustEnoughGuide.getInstance();
     @Deprecated
-    private final int BACK_SLOT;
+    private final int BACK_SLOT = 1;
     @Deprecated
-    private final int SEARCH_SLOT;
+    private final int SEARCH_SLOT = 7;
     @Deprecated
-    private final int PREVIOUS_SLOT;
+    private final int PREVIOUS_SLOT = 46;
     @Deprecated
-    private final int NEXT_SLOT;
+    private final int NEXT_SLOT = 52;
     @Deprecated
-    private final int[] BORDER;
+    private final int[] BORDER = new int[]{0, 2, 3, 4, 5, 6, 8, 45, 47, 48, 49, 50, 51, 53};
     @Deprecated
-    private final int[] MAIN_CONTENT;
+    private final int[] MAIN_CONTENT = new int[]{
+            9, 10, 11, 12, 13, 14, 15, 16, 17,
+            18, 19, 20, 21, 22, 23, 24, 25, 26,
+            27, 28, 29, 30, 31, 32, 33, 34, 35,
+            36, 37, 38, 39, 40, 41, 42, 43, 44
+    };
+
+
     private final JEGSlimefunGuideImplementation implementation;
     private final Player player;
     private final @NotNull ItemGroup itemGroup;
@@ -135,18 +142,6 @@ public class ItemMarkGroup extends FlexItemGroup {
         this.slimefunItemList = itemGroup.getItems();
         this.implementation = implementation;
         this.pageMap.put(page, this);
-
-        BACK_SLOT = 1;
-        SEARCH_SLOT = 7;
-        PREVIOUS_SLOT = 46;
-        NEXT_SLOT = 52;
-        BORDER = new int[]{0, 2, 3, 4, 5, 6, 8, 45, 47, 48, 49, 50, 51, 53};
-        MAIN_CONTENT = new int[]{
-                9, 10, 11, 12, 13, 14, 15, 16, 17,
-                18, 19, 20, 21, 22, 23, 24, 25, 26,
-                27, 28, 29, 30, 31, 32, 33, 34, 35,
-                36, 37, 38, 39, 40, 41, 42, 43, 44
-        };
     }
 
     /**

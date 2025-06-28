@@ -37,7 +37,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
  * @author balugaq
  * @since 1.7
  */
-@SuppressWarnings("deprecation")
+@SuppressWarnings({"deprecation", "unused"})
 public interface Applier {
     @ParametersAreNonnullByDefault
     void apply(SlimefunGuideImplementation guide, ChestMenu menu, @Range(from = 0, to = 53) int slot);

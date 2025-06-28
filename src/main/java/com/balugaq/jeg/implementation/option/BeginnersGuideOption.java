@@ -48,8 +48,9 @@ import java.util.Optional;
  * @author balugaq
  * @since 1.5
  */
+@SuppressWarnings({"UnnecessaryUnicodeEscape", "SameReturnValue"})
 public class BeginnersGuideOption implements SlimefunGuideOption<Boolean> {
-    public static @NotNull BeginnersGuideOption instance = new BeginnersGuideOption();
+    public static final @NotNull BeginnersGuideOption instance = new BeginnersGuideOption();
 
     public static BeginnersGuideOption instance() {
         return instance;

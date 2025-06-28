@@ -95,7 +95,7 @@ import java.util.Map;
  * @author balugaq
  * @since 1.4
  */
-@SuppressWarnings("deprecation")
+@SuppressWarnings({"deprecation", "UnnecessaryUnicodeEscape"})
 @Getter
 public class RTSListener implements Listener {
     public static final NamespacedKey FAKE_ITEM_KEY = new NamespacedKey(JustEnoughGuide.getInstance(), "fake_item");
@@ -123,9 +123,7 @@ public class RTSListener implements Listener {
      */
     public static boolean isFakeItem(@Nullable ItemStack itemStack) {
         if (itemStack != null && itemStack.getType() != Material.AIR) {
-            if (itemStack.getItemMeta().getPersistentDataContainer().get(FAKE_ITEM_KEY, PersistentDataType.STRING) != null) {
-                return true;
-            }
+            return itemStack.getItemMeta().getPersistentDataContainer().get(FAKE_ITEM_KEY, PersistentDataType.STRING) != null;
         }
         return false;
     }
@@ -173,6 +171,7 @@ public class RTSListener implements Listener {
      * @param item the ItemStack to generate a hash for
      * @return the hash of the player head, or null if the item is not a player head
      */
+    @SuppressWarnings("DataFlowIssue")
     public static String getHash(ItemStack item) {
         if (item != null && (item.getType() == Material.PLAYER_HEAD || item.getType() == Material.PLAYER_WALL_HEAD)) {
             ItemMeta meta = item.getItemMeta();
@@ -385,6 +384,7 @@ public class RTSListener implements Listener {
      *
      * @param event the InventoryClickEvent to handle
      */
+    @SuppressWarnings("DataFlowIssue")
     @EventHandler
     public void onLookup(@NotNull InventoryClickEvent event) {
         Player player = (Player) event.getView().getPlayer();
@@ -534,7 +534,6 @@ public class RTSListener implements Listener {
         Player player = event.getPlayer();
         if (isRTSPlayer(player)) {
             event.setCancelled(true);
-            return;
         }
     }
 
@@ -548,7 +547,6 @@ public class RTSListener implements Listener {
         Player player = event.getPlayer();
         if (isRTSPlayer(player)) {
             event.setCancelled(true);
-            return;
         }
     }
 
@@ -562,7 +560,6 @@ public class RTSListener implements Listener {
         Player player = event.getPlayer();
         if (isRTSPlayer(player)) {
             event.setCancelled(true);
-            return;
         }
     }
 
@@ -576,7 +573,6 @@ public class RTSListener implements Listener {
         Player player = event.getPlayer();
         if (isRTSPlayer(player)) {
             event.setCancelled(true);
-            return;
         }
     }
 
@@ -638,12 +634,10 @@ public class RTSListener implements Listener {
         Player player = event.getPlayer();
         if (isRTSPlayer(player)) {
             event.cancel();
-            return;
         } else {
             ItemStack itemStack = event.getItem();
             if (isFakeItem(itemStack)) {
                 event.cancel();
-                return;
             }
         }
     }
@@ -658,12 +652,10 @@ public class RTSListener implements Listener {
         Player player = event.getPlayer();
         if (isRTSPlayer(player)) {
             event.setCancelled(true);
-            return;
         } else {
             ItemStack itemStack = player.getInventory().getItem(event.getHand());
             if (isFakeItem(itemStack)) {
                 event.setCancelled(true);
-                return;
             }
         }
     }

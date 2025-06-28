@@ -52,6 +52,7 @@ import java.util.UUID;
  * @author balugaq
  * @since 1.3
  */
+@SuppressWarnings({"ConstantValue", "DataFlowIssue"})
 @Getter
 public class RTSBackpackManager extends AbstractManager {
     private static final int IDENTIFIER_SLOT = 53;
@@ -239,6 +240,7 @@ public class RTSBackpackManager extends AbstractManager {
      * @param player the player
      * @return true if the item is a valid identifier, false otherwise
      */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isIdentifier(@Nullable ItemStack item, @NotNull Player player) {
         if (item == null || item.getType() == Material.AIR) {
             return false;
@@ -258,11 +260,7 @@ public class RTSBackpackManager extends AbstractManager {
             return false;
         }
 
-        if (!serverUUID.equals(JustEnoughGuide.getServerUUID().toString())) {
-            return false;
-        }
-
-        return true;
+        return serverUUID.equals(JustEnoughGuide.getServerUUID().toString());
     }
 
     /**
@@ -281,10 +279,6 @@ public class RTSBackpackManager extends AbstractManager {
             return false;
         }
 
-        if (status.equals(OPEN_STATUS)) {
-            return true;
-        }
-
-        return false;
+        return status.equals(OPEN_STATUS);
     }
 }

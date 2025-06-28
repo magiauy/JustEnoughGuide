@@ -46,6 +46,7 @@ import java.lang.reflect.Method;
 @UtilityClass
 public class ReflectionUtil {
 
+    @SuppressWarnings("UnusedReturnValue")
     public static boolean setValue(@NotNull Object object, @NotNull String field, Object value) {
         try {
             Field declaredField = object.getClass().getDeclaredField(field);

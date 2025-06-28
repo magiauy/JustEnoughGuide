@@ -31,7 +31,6 @@ import com.balugaq.jeg.api.groups.SearchGroup;
 import com.balugaq.jeg.api.interfaces.JEGCommand;
 import com.balugaq.jeg.utils.Debug;
 import lombok.Getter;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -49,10 +48,10 @@ import java.util.List;
  */
 @SuppressWarnings({"ClassCanBeRecord", "deprecation", "SwitchStatementWithTooFewBranches"})
 @Getter
-public class ReloadCommand implements JEGCommand {
+public class DisableCommand implements JEGCommand {
     private final Plugin plugin;
 
-    public ReloadCommand(Plugin plugin) {
+    public DisableCommand(Plugin plugin) {
         this.plugin = plugin;
     }
 
@@ -60,7 +59,7 @@ public class ReloadCommand implements JEGCommand {
     public @NotNull List<String> onTabCompleteRaw(@NotNull CommandSender sender, @NotNull String @NotNull [] args) {
         switch (args.length) {
             case 1 -> {
-                return List.of("reload");
+                return List.of("disable");
             }
 
             default -> {
@@ -77,7 +76,7 @@ public class ReloadCommand implements JEGCommand {
             @NotNull String @NotNull [] args) {
         if (sender.isOp()) {
             if (args.length == 1) {
-                return "reload".equalsIgnoreCase(args[0]);
+                return "disable".equalsIgnoreCase(args[0]);
             }
         }
         return false;
@@ -90,24 +89,18 @@ public class ReloadCommand implements JEGCommand {
     }
 
     private void onReload(@NotNull CommandSender sender) {
-        sender.sendMessage(ChatColor.GREEN + "Reloading plugin...");
+        sender.sendMessage(ChatColor.GREEN + "Disabling plugin...");
         try {
             if (plugin == null) {
-                sender.sendMessage(ChatColor.RED + "Failed to reload plugin.");
+                sender.sendMessage(ChatColor.RED + "Failed to disable plugin.");
                 return;
             }
 
             plugin.onDisable();
-            plugin.onEnable();
-            plugin.reloadConfig();
             SearchGroup.LOADED = false;
-            SearchGroup.init();
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                plugin.reloadConfig();
-                sender.sendMessage(ChatColor.GREEN + "plugin has been reloaded.");
-            }, 20L);
+            sender.sendMessage(ChatColor.GREEN + "plugin has been disabled.");
         } catch (Throwable e) {
-            sender.sendMessage(ChatColor.RED + "Failed to reload plugin.");
+            sender.sendMessage(ChatColor.RED + "Failed to disable plugin.");
             Debug.trace(e);
         }
     }

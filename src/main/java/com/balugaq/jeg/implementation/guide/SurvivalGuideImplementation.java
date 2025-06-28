@@ -28,6 +28,7 @@
 package com.balugaq.jeg.implementation.guide;
 
 import city.norain.slimefun4.VaultIntegration;
+import com.balugaq.jeg.api.editor.GroupResorter;
 import com.balugaq.jeg.api.groups.SearchGroup;
 import com.balugaq.jeg.api.interfaces.CustomIconDisplay;
 import com.balugaq.jeg.api.interfaces.DisplayInSurvivalMode;
@@ -116,7 +117,7 @@ import java.util.logging.Level;
  * @author balugaq
  * @since 1.0
  */
-@SuppressWarnings({"deprecation", "unused"})
+@SuppressWarnings({"deprecation", "unused", "UnnecessaryUnicodeEscape"})
 public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implements JEGSlimefunGuideImplementation {
     @Deprecated
     public static final int RTS_SLOT = 6;
@@ -202,6 +203,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
                 }
             }
         }
+        GroupResorter.sort(groups);
 
         return groups;
     }

@@ -25,17 +25,4 @@
  *
  */
 
-package com.balugaq.jeg.utils.formatter;
-
-import com.balugaq.jeg.implementation.JustEnoughGuide;
-
-/**
- * @author balugaq
- * @since 1.6
- */
-public class MainFormat extends Format {
-    @Override
-    public void loadMapping() {
-        loadMapping(JustEnoughGuide.getConfigManager().getMainFormat());
-    }
-}
+package com.balugaq.jeg.api.editor;

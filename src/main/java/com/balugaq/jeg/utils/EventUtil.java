@@ -41,6 +41,7 @@ public class EventUtil {
         return new EventBuilder<>(event);
     }
 
+    @SuppressWarnings({"ClassCanBeRecord", "SameReturnValue", "unused"})
     @Getter
     public static class EventBuilder<T extends Event> {
         private final T event;

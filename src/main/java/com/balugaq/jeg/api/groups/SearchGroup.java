@@ -108,7 +108,7 @@ import java.util.stream.Collectors;
  * @author balugaq
  * @since 1.0
  */
-@SuppressWarnings({"deprecation", "unused"})
+@SuppressWarnings({"deprecation", "unused", "UnnecessaryUnicodeEscape", "ConstantValue"})
 @NotDisplayInSurvivalMode
 @NotDisplayInCheatMode
 public class SearchGroup extends FlexItemGroup {
@@ -831,6 +831,7 @@ public class SearchGroup extends FlexItemGroup {
      * @param classSimpleName The simple name of the class to check against.
      * @return True if the item is an instance of the specified class, false otherwise.
      */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean isInstance(@NotNull SlimefunItem item, String classSimpleName) {
         Class<?> clazz = item.getClass();
         while (clazz != SlimefunItem.class) {
@@ -842,6 +843,7 @@ public class SearchGroup extends FlexItemGroup {
         return false;
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean inBanlist(SlimefunItem slimefunItem) {
         return inBanlist(slimefunItem.getItemName());
     }
@@ -855,6 +857,7 @@ public class SearchGroup extends FlexItemGroup {
         return false;
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean inBlacklist(SlimefunItem slimefunItem) {
         return inBlacklist(slimefunItem.getItemName());
     }

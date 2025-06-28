@@ -34,7 +34,6 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -44,6 +43,7 @@ import java.util.function.Consumer;
  * @author balugaq
  * @since 1.7
  */
+@SuppressWarnings({"deprecation", "unused"})
 @UtilityClass
 public class ClipboardUtil {
     @ParametersAreNonnullByDefault

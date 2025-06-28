@@ -42,6 +42,7 @@ import java.util.List;
  * @author balugaq
  * @since 1.1
  */
+@SuppressWarnings("unused")
 public interface JEGCommand {
     /**
      * This method is used to define a tab complete for a command.

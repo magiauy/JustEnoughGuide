@@ -45,17 +45,13 @@ import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
-import io.github.thebusybiscuit.slimefun4.libraries.paperlib.PaperLib;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.Getter;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -91,7 +87,7 @@ public class JEGGuideGroup extends ClassicGuideGroup {
 
         if (!loaded) {
             // Well... the user removed my author information
-            throw new ArgumentMissingException("You're not supposed to remove symbol 'A'... Which means Author Information.");
+            throw new ArgumentMissingException("You're not supposed to remove symbol 'A'... Which means Author Information. " + "format=" + Formats.helper);
         }
 
         final AtomicInteger index = new AtomicInteger(0);

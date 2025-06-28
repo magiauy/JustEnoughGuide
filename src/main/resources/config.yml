@@ -416,7 +416,7 @@ local-translate:
   Aircraft: "粘液飞机"
 
 # Do not change this value unless you know what you are doing.
-config-version: 1.7
+config-version: 1.8
 
 # Do not change this value unless you know what you are doing.
 debug: false

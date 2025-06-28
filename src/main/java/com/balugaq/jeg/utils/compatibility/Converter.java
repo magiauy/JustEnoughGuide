@@ -50,6 +50,7 @@ import java.util.function.Supplier;
  * @author balugaq
  * @since 1.4
  */
+@SuppressWarnings("unused")
 @ApiStatus.Experimental
 public class Converter {
     public static final ItemStack AIR = new ItemStack(Material.AIR);
@@ -217,7 +218,7 @@ public class Converter {
         try {
             MethodHandles.Lookup lookup = MethodHandles.lookup();
             MethodType mt = MethodType.methodType(ItemStack.class);
-            MethodHandle handle = lookup.findVirtual(SlimefunItemStack.class, "item", mt);
+            @SuppressWarnings("JavaLangInvokeHandleSignature") MethodHandle handle = lookup.findVirtual(SlimefunItemStack.class, "item", mt);
             return (ItemGetter) LambdaMetafactory.metafactory(
                     lookup, "getItem", MethodType.methodType(ItemGetter.class),
                     handle.type().generic(), handle, handle.type()
@@ -233,6 +234,7 @@ public class Converter {
      * @param item the SlimefunItemStack to convert
      * @return the converted Bukkit ItemStack
      */
+    @SuppressWarnings({"RedundantClassCall", "ConstantValue"})
     @NotNull
     public static ItemStack asBukkit(@Nullable SlimefunItemStack item) {
         if (item == null) {
@@ -268,6 +270,7 @@ public class Converter {
         ItemStack getItem(SlimefunItemStack item);
     }
 
+    @SuppressWarnings("unused")
     public static class Builder {
         public final List<ItemStack> itemStacks = new ArrayList<>();
         public boolean ifValue = true;
@@ -392,9 +395,7 @@ public class Converter {
         }
 
         public ItemStack findFirst() {
-            return itemStacks.stream().filter(itemStack -> {
-                return itemStack != null && itemStack.getType() != Material.AIR;
-            }).findFirst().orElse(AIR.clone());
+            return itemStacks.stream().filter(itemStack -> itemStack != null && itemStack.getType() != Material.AIR).findFirst().orElse(AIR.clone());
         }
     }
 }

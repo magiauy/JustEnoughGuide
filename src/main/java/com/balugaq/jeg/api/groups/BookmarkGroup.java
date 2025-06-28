@@ -79,7 +79,7 @@ import java.util.logging.Level;
  * @author balugaq
  * @since 1.1
  */
-@SuppressWarnings({"deprecation", "unused"})
+@SuppressWarnings({"deprecation", "unused", "UnnecessaryUnicodeEscape"})
 @NotDisplayInSurvivalMode
 @NotDisplayInCheatMode
 public class BookmarkGroup extends FlexItemGroup {

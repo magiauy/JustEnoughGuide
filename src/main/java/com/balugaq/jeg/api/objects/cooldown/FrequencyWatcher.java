@@ -76,6 +76,6 @@ public class FrequencyWatcher<Key> {
     public enum Result {
         TOO_FREQUENT,
         CANCEL,
-        SUCCESS;
+        SUCCESS
     }
 }

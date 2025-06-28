@@ -59,6 +59,7 @@ import java.util.Map;
  * @author balugaq
  * @since 1.0
  */
+@SuppressWarnings("ConstantValue")
 public class ConfigManager extends AbstractManager {
     private final boolean AUTO_UPDATE;
     private final boolean DEBUG;

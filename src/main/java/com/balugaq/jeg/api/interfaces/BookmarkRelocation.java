@@ -40,6 +40,7 @@ import java.util.List;
  * @see com.balugaq.jeg.implementation.guide.CheatGuideImplementation
  * @since 1.1
  */
+@SuppressWarnings("SameReturnValue")
 public interface BookmarkRelocation {
     /**
      * Gets the slot number for the back button in the guide.

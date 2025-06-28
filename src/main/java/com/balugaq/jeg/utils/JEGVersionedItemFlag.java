@@ -31,7 +31,6 @@ import com.balugaq.jeg.implementation.JustEnoughGuide;
 import lombok.experimental.UtilityClass;
 import org.bukkit.inventory.ItemFlag;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 
@@ -44,7 +43,7 @@ import java.lang.reflect.Field;
  */
 @UtilityClass
 public class JEGVersionedItemFlag {
-    public static final @Nullable ItemFlag HIDE_ADDITIONAL_TOOLTIP;
+    public static final @NotNull ItemFlag HIDE_ADDITIONAL_TOOLTIP;
 
     static {
         MinecraftVersion version = JustEnoughGuide.getMCVersion();
@@ -53,7 +52,8 @@ public class JEGVersionedItemFlag {
                 : getKey("HIDE_POTION_EFFECTS");
     }
 
-    @Nullable
+    @SuppressWarnings("DataFlowIssue")
+    @NotNull
     private static ItemFlag getKey(@NotNull String key) {
         try {
             Field field = ItemFlag.class.getDeclaredField(key);

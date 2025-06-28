@@ -63,7 +63,7 @@ import java.util.function.Function;
  * @author balugaq
  * @since 1.1
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "deprecation"})
 @Getter
 public class BookmarkManager extends AbstractManager {
     private static final int DATA_ITEM_SLOT = 0;
@@ -284,6 +284,7 @@ public class BookmarkManager extends AbstractManager {
                         player.getUniqueId().toString())));
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isBookmarksItem(@NotNull ItemStack itemStack, @NotNull Player player) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta == null) {
@@ -291,11 +292,7 @@ public class BookmarkManager extends AbstractManager {
         }
 
         String uuid = itemMeta.getPersistentDataContainer().get(BOOKMARKS_KEY, PersistentDataType.STRING);
-        if (uuid != null && uuid.equals(player.getUniqueId().toString())) {
-            return true;
-        }
-
-        return false;
+        return uuid != null && uuid.equals(player.getUniqueId().toString());
     }
 
     public void unmarkBookmarksItem(@NotNull ItemStack itemStack) {

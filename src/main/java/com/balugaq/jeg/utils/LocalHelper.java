@@ -49,6 +49,7 @@ import java.util.Set;
  * @author balugaq
  * @since 1.2
  */
+@SuppressWarnings({"deprecation", "ExtractMethodRecommender", "unused", "ConstantValue"})
 public class LocalHelper {
     public static final String def = "未知附属";
     public static final Map<String, Map<String, SlimefunItemStack>> rscItems = new HashMap<>();
@@ -436,10 +437,12 @@ public class LocalHelper {
                             Object preloadItems = ReflectionUtil.getValue(addon, "preloadItems");
                             @SuppressWarnings("unchecked") Map<Object, Object> items = (Map<Object, Object>) preloadItems;
                             Map<String, SlimefunItemStack> read = new HashMap<>();
-                            for (Map.Entry<Object, Object> itemEntry : items.entrySet()) {
-                                String id = (String) itemEntry.getKey();
-                                SlimefunItemStack item = (SlimefunItemStack) itemEntry.getValue();
-                                read.put(id, item);
+                            if (items != null) {
+                                for (Map.Entry<Object, Object> itemEntry : items.entrySet()) {
+                                    String id = (String) itemEntry.getKey();
+                                    SlimefunItemStack item = (SlimefunItemStack) itemEntry.getValue();
+                                    read.put(id, item);
+                                }
                             }
                             rscItems.put(name, read);
                         }

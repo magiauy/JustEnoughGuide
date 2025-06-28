@@ -27,6 +27,7 @@
 
 package com.balugaq.jeg.implementation;
 
+import com.balugaq.jeg.api.editor.GroupResorter;
 import com.balugaq.jeg.api.groups.VanillaItemsGroup;
 import com.balugaq.jeg.core.managers.BookmarkManager;
 import com.balugaq.jeg.core.managers.CommandManager;
@@ -78,7 +79,7 @@ import java.util.UUID;
  * @author balugaq
  * @since 1.0
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "Lombok", "deprecation", "ResultOfMethodCallIgnored"})
 @Getter
 public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
     public static final int RECOMMENDED_JAVA_VERSION = 17;
@@ -169,6 +170,7 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
     /**
      * Initializes the plugin and sets up all necessary components.
      */
+    @SuppressWarnings("DuplicateExpressions")
     @Override
     public void onEnable() {
         instance = this;
@@ -292,6 +294,7 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
      */
     @Override
     public void onDisable() {
+        GroupResorter.rollback();
         GroupSetup.shutdown();
 
         /**
@@ -301,21 +304,17 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
          */
         SlimefunRegistryUtil.unregisterItems(JustEnoughGuide.getInstance());
 
-        Field field = ReflectionUtil.getField(Slimefun.getRegistry().getClass(), "guides");
-        if (field != null) {
-            field.setAccessible(true);
-
+        try {
             Map<SlimefunGuideMode, SlimefunGuideImplementation> newGuides = new EnumMap<>(SlimefunGuideMode.class);
             newGuides.put(SlimefunGuideMode.SURVIVAL_MODE, new SurvivalSlimefunGuide());
             newGuides.put(SlimefunGuideMode.CHEAT_MODE, new CheatSheetSlimefunGuide());
-            try {
-                field.set(Slimefun.getRegistry(), newGuides);
-            } catch (IllegalAccessException ignored) {
-            }
+            ReflectionUtil.setValue(Slimefun.getRegistry(), "guides", newGuides);
+        } catch (Throwable e) {
+            Debug.trace(e);
         }
 
         try {
-            List<SlimefunGuideOption<?>> l = ReflectionUtil.getValue(SlimefunGuideSettings.class, "options", List.class);
+            @SuppressWarnings("unchecked") List<SlimefunGuideOption<?>> l = (List<SlimefunGuideOption<?>>) ReflectionUtil.getStaticValue(SlimefunGuideSettings.class, "options");
             if (l != null) {
                 List<SlimefunGuideOption<?>> copy = new ArrayList<>(l);
                 for (var option : copy) {

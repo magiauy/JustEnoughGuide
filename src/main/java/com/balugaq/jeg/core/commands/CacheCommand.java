@@ -51,6 +51,7 @@ import java.util.Set;
  * @author balugaq
  * @since 1.5
  */
+@SuppressWarnings({"ClassCanBeRecord", "deprecation", "ConstantValue"})
 @Getter
 public class CacheCommand implements JEGCommand {
     private @Nonnull
@@ -108,9 +109,7 @@ public class CacheCommand implements JEGCommand {
             @NotNull String @NotNull [] args) {
         if (sender.isOp()) {
             if (args.length >= 1) {
-                if ("cache".equalsIgnoreCase(args[0])) {
-                    return true;
-                }
+                return "cache".equalsIgnoreCase(args[0]);
             }
         }
         return false;
@@ -169,7 +168,6 @@ public class CacheCommand implements JEGCommand {
                 }
             } else {
                 sender.sendMessage(ChatColor.RED + "Cache for " + key + " is invalid.");
-                return;
             }
         } else {
             sender.sendMessage(ChatColor.RED + "Invalid section number. Please choose 1 or 2.");

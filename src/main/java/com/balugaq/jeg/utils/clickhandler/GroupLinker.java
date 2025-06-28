@@ -70,6 +70,7 @@ public class GroupLinker implements Applier {
                 .addProcessor(GroupLinkProcessor.getInstance()));
     }
 
+    @SuppressWarnings("ConstantValue")
     public static class GroupLinkProcessor extends Processor {
         @Getter
         private static final GroupLinkProcessor instance = new GroupLinkProcessor();

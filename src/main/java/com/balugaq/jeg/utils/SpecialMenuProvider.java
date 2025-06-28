@@ -28,6 +28,7 @@
 package com.balugaq.jeg.utils;
 
 import com.balugaq.jeg.api.interfaces.JEGSlimefunGuideImplementation;
+import com.balugaq.jeg.core.listeners.SpecialMenuFixListener;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.groups.FlexItemGroup;
@@ -57,7 +58,7 @@ import java.util.Map;
  * @author balugaq
  * @since 1.3
  */
-@SuppressWarnings({"unchecked", "unused", "deprecation"})
+@SuppressWarnings({"unchecked", "unused", "deprecation", "UnusedReturnValue", "ConstantValue"})
 @UtilityClass
 public class SpecialMenuProvider {
     public static final String PLACEHOLDER_SEARCH_TERM = "undefined";
@@ -380,9 +381,7 @@ public class SpecialMenuProvider {
 
         String addonName = slimefunItem.getAddon().getName();
         if ("FinalTECH".equals(addonName) || "FinalTECH-Changed".equals(addonName)) {
-            if (slimefunItem.getRecipe().length > COMMON_RECIPE_LENGTH) {
-                return true;
-            }
+            return slimefunItem.getRecipe().length > COMMON_RECIPE_LENGTH;
         }
         return false;
     }
@@ -515,9 +514,7 @@ public class SpecialMenuProvider {
 
         String addonName = slimefunItem.getAddon().getName();
         if ("LogiTech".equals(addonName)) {
-            if (slimefunItem.getRecipe().length > COMMON_RECIPE_LENGTH) {
-                return true;
-            }
+            return slimefunItem.getRecipe().length > COMMON_RECIPE_LENGTH;
         }
         return false;
     }
@@ -536,7 +533,7 @@ public class SpecialMenuProvider {
                 methodInfinityGroup_openInfinityRecipe.invoke(null, player, slimefunItem.getId(), backEntry);
                 /**
                  * Intentionally insert useless history twice to fix Back Button of InfinityGroup
-                 * fixed in {@link com.balugaq.jeg.core.listeners.SpecialMenuFixListener}
+                 * fixed in {@link SpecialMenuFixListener}
                  * @author balugaq
                  * @since 1.3
                  */
@@ -574,9 +571,7 @@ public class SpecialMenuProvider {
 
         String addonName = slimefunItem.getAddon().getName();
         if ("InfinityExpansion".equals(addonName)) {
-            if (slimefunItem.getRecipe().length > COMMON_RECIPE_LENGTH) {
-                return true;
-            }
+            return slimefunItem.getRecipe().length > COMMON_RECIPE_LENGTH;
         }
         return false;
     }
@@ -602,9 +597,7 @@ public class SpecialMenuProvider {
 
         String addonName = slimefunItem.getAddon().getName();
         if ("ObsidianExpansion".equals(addonName)) {
-            if (slimefunItem.getRecipe().length > COMMON_RECIPE_LENGTH) {
-                return true;
-            }
+            return slimefunItem.getRecipe().length > COMMON_RECIPE_LENGTH;
         }
         return false;
     }

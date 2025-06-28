@@ -171,7 +171,6 @@ public final class GuideUtil {
                                 } else {
                                     history.goBack(implementation);
                                 }
-                                return;
                             } else if (s == AnvilGUI.Slot.INPUT_RIGHT) {
                                 // previous page button clicked
                                 SearchGroup rts = RTSSearchGroup.RTS_SEARCH_GROUPS.get(pl);

@@ -28,6 +28,7 @@
 package com.balugaq.jeg.implementation.guide;
 
 import city.norain.slimefun4.VaultIntegration;
+import com.balugaq.jeg.api.editor.GroupResorter;
 import com.balugaq.jeg.api.groups.SearchGroup;
 import com.balugaq.jeg.api.interfaces.BookmarkRelocation;
 import com.balugaq.jeg.api.interfaces.CustomIconDisplay;
@@ -115,7 +116,7 @@ import java.util.logging.Level;
  * @author balugaq
  * @since 1.0
  */
-@SuppressWarnings({"deprecation", "unused"})
+@SuppressWarnings({"deprecation", "unused", "UnnecessaryUnicodeEscape", "ConstantValue"})
 public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements JEGSlimefunGuideImplementation {
     @Deprecated
     public static final int MAX_ITEM_GROUPS = SurvivalGuideImplementation.MAX_ITEM_GROUPS;
@@ -276,9 +277,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                     if (flexItemGroup.isVisible(p, profile, SlimefunGuideMode.SURVIVAL_MODE)) {
                         groups.add(group);
                     } else {
-                        if (flexItemGroup.getClass().getName().startsWith("com.balugaq.netex.api.groups")) {
-                            continue;
-                        } else {
+                        if (!flexItemGroup.getClass().getName().startsWith("com.balugaq.netex.api.groups")) {
                             specialGroups.add(group);
                         }
                     }
@@ -302,7 +301,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                     } else if (group.getClass()
                             .getName()
                             .startsWith("io.github.sefiraat.networks.slimefun.NetworksItemGroups")) {
-                        // HiddenItemGroup
+                        // io.github.sefiraat.networks.slimefun.NetworksItemGroups.HiddenItemGroup
 
                         if (group.getKey().getKey().equalsIgnoreCase("disabled_items")) {
                             specialGroups.add(group);
@@ -322,6 +321,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             }
         }
 
+        GroupResorter.sort(groups);
         groups.addAll(specialGroups);
 
         return groups;
@@ -360,7 +360,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             target++;
 
             ItemGroup group = itemGroups.get(target);
-            showItemGroup0(menu, p, profile, group, indexes.get(index));
+            showItemGroup0(menu, p, profile, group, indexes.get(index), page);
 
             index++;
         }
@@ -399,10 +399,28 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
     @Override
     public void showItemGroup0(
             @NotNull ChestMenu menu, @NotNull Player p, @NotNull PlayerProfile profile, ItemGroup group, int index) {
+        showItemGroup0(menu, p, profile, group, index, 1);
+    }
+
+    public void showItemGroup0(
+            @NotNull ChestMenu menu, @NotNull Player p, @NotNull PlayerProfile profile, ItemGroup group, int index, int page) {
         if (!(group instanceof LockedItemGroup) || !isSurvivalMode() || ((LockedItemGroup) group).hasUnlocked(p, profile)) {
             menu.addItem(index, ItemStackUtil.getCleanItem(group.getItem(p)));
             menu.addMenuClickHandler(index, (pl, slot, item, action) -> {
-                openItemGroup(profile, group, 1);
+                if (action.isRightClicked() && GroupResorter.isSelecting(pl)) {
+                    ItemGroup selected = GroupResorter.getSelectedGroup(pl);
+                    if (selected == null) {
+                        GroupResorter.setSelectedGroup(pl, group);
+                        pl.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a已选择物品组: &e" + group.getDisplayName(pl)));
+                    } else {
+                        GroupResorter.swap(selected, group);
+                        pl.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a已交换物品组排序: &e" + selected.getDisplayName(pl) + " &7<-> &e" + group.getDisplayName(pl)));
+                        openMainMenu(profile, page);
+                    }
+                    return false;
+                } else {
+                    openItemGroup(profile, group, 1);
+                }
                 return false;
             });
         } else {
@@ -559,6 +577,18 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                 if (subGroup.isVisibleInNested(p)) {
                     menu.addItem(ss.get(t), subGroup.getItem(p));
                     menu.addMenuClickHandler(ss.get(t), (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.ItemGroupButtonClickEvent(pl, item, slot, action, menu, this)).ifSuccess(() -> {
+                        if (GroupResorter.isSelecting(pl)) {
+                            ItemGroup selected = GroupResorter.getSelectedGroup(pl);
+                            if (selected == null) {
+                                GroupResorter.setSelectedGroup(pl, subGroup);
+                                pl.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a已选择物品组: &e" + subGroup.getDisplayName(pl)));
+                            } else {
+                                GroupResorter.swap(selected, subGroup);
+                                pl.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a已交换物品组排序: &e" + selected.getDisplayName(pl) + " &7<-> &e" + subGroup.getDisplayName(pl)));
+                                openMainMenu(profile, page);
+                            }
+                            return false;
+                        }
                         SlimefunGuide.openItemGroup(profile, subGroup, getMode(), 1);
                         return false;
                     }));

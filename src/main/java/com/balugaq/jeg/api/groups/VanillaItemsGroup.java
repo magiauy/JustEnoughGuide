@@ -81,13 +81,13 @@ import java.util.logging.Level;
  * @see JustEnoughGuide#vanillaItemsGroupIsDisplayableFor(Player)
  * @since 1.7
  */
-@SuppressWarnings({"deprecation", "unused"})
+@SuppressWarnings({"deprecation", "unused", "ConstantValue"})
 @NotDisplayInCheatMode
 public class VanillaItemsGroup extends FlexItemGroup {
+    public static final List<SlimefunItem> slimefunItems = new ArrayList<>();
     @Deprecated
     private static final @NotNull Set<Player> displayableFor = ConcurrentHashMap.newKeySet();
     private static final JavaPlugin JAVA_PLUGIN = JustEnoughGuide.getInstance();
-    public static List<SlimefunItem> slimefunItems = new ArrayList<>();
 
     static {
         Bukkit.getScheduler().runTaskLater(JAVA_PLUGIN, () -> {
@@ -115,6 +115,7 @@ public class VanillaItemsGroup extends FlexItemGroup {
         this.page = 1;
         this.pageMap.put(1, this);
     }
+
     /**
      * Constructor of hiddenItemsGroup.
      *

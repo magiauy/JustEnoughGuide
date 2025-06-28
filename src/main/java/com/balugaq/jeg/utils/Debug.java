@@ -43,13 +43,12 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.UUID;
-import java.util.logging.Level;
 
 /**
  * @author balugaq
  * @since 1.0
  */
-@SuppressWarnings({"unused"})
+@SuppressWarnings({"unused", "deprecation", "CallToPrintStackTrace", "ResultOfMethodCallIgnored"})
 public class Debug {
     public static final File errorsFolder = new File(JustEnoughGuide.getInstance().getDataFolder(), "error-reports");
     private static final String debugPrefix = "[Debug] ";
@@ -69,6 +68,7 @@ public class Debug {
             } else {
                 sb.append(obj);
             }
+            sb.append(" ");
         }
         warn(sb.toString());
     }
@@ -78,8 +78,8 @@ public class Debug {
         trace(e);
     }
 
-    public static void warn(@NotNull Object object) {
-        warn(object.toString());
+    public static void warn(@Nullable Object object) {
+        warn(object == null ? "null" : object.toString());
     }
 
     public static void warn(String @NotNull ... messages) {
@@ -100,6 +100,7 @@ public class Debug {
             } else {
                 sb.append(obj);
             }
+            sb.append(" ");
         }
         debug(sb.toString());
     }
@@ -109,8 +110,8 @@ public class Debug {
         trace(e);
     }
 
-    public static void debug(@NotNull Object object) {
-        debug(object.toString());
+    public static void debug(@Nullable Object object) {
+        debug(object == null ? "null" : object.toString());
     }
 
     public static void debug(String @NotNull ... messages) {
@@ -133,6 +134,7 @@ public class Debug {
             } else {
                 sb.append(obj);
             }
+            sb.append(" ");
         }
         sendMessage(player, sb.toString());
     }
@@ -172,13 +174,14 @@ public class Debug {
             } else {
                 sb.append(obj);
             }
+            sb.append(" ");
         }
 
         log(sb.toString());
     }
 
-    public static void log(@NotNull Object object) {
-        log(object.toString());
+    public static void log(@Nullable Object object) {
+        log(object == null ? "null" : object.toString());
     }
 
     public static void log(String @NotNull ... messages) {

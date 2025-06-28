@@ -44,7 +44,7 @@ import java.util.Objects;
  * @author balugaq
  * @since 1.1
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "ConstantValue"})
 @UtilityClass
 public class SlimefunRegistryUtil {
     public static @NotNull SlimefunItem registerItem(@NotNull SlimefunItem item, @NotNull SlimefunAddon addon) {

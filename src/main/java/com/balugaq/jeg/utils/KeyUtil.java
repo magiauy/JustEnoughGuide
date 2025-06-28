@@ -38,6 +38,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
  * @author balugaq
  * @since 1.7
  */
+@SuppressWarnings("unused")
 @UtilityClass
 public class KeyUtil {
     @NotNull
@@ -45,7 +46,6 @@ public class KeyUtil {
         return new NamespacedKey(JustEnoughGuide.getInstance(), key);
     }
 
-    @SuppressWarnings("deprecation")
     @ParametersAreNonnullByDefault
     @NotNull
     public static NamespacedKey customKey(String namespace, String key) {

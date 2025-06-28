@@ -27,32 +27,33 @@
 
 package com.balugaq.jeg.core.commands;
 
-import com.balugaq.jeg.api.groups.SearchGroup;
 import com.balugaq.jeg.api.interfaces.JEGCommand;
-import com.balugaq.jeg.utils.Debug;
+import com.balugaq.jeg.implementation.items.GroupTierEditorGuide;
+import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import lombok.Getter;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 /**
- * This is the implementation of the "/jeg reload" command.
- * It reloads the JEG plugin configuration.
+ * This is the implementation of the "/jeg help" command.
+ * It shows the list of available commands and their usage.
+ * <p>
+ * This command is also the default command when no other command is specified.
  *
  * @author balugaq
- * @since 1.1
+ * @since 1.8
  */
-@SuppressWarnings({"ClassCanBeRecord", "deprecation", "SwitchStatementWithTooFewBranches"})
+@SuppressWarnings({"ClassCanBeRecord", "SwitchStatementWithTooFewBranches"})
 @Getter
-public class ReloadCommand implements JEGCommand {
+public class GTEGCommand implements JEGCommand {
     private final Plugin plugin;
 
-    public ReloadCommand(Plugin plugin) {
+    public GTEGCommand(Plugin plugin) {
         this.plugin = plugin;
     }
 
@@ -60,7 +61,7 @@ public class ReloadCommand implements JEGCommand {
     public @NotNull List<String> onTabCompleteRaw(@NotNull CommandSender sender, @NotNull String @NotNull [] args) {
         switch (args.length) {
             case 1 -> {
-                return List.of("reload");
+                return List.of("gteg");
             }
 
             default -> {
@@ -77,7 +78,7 @@ public class ReloadCommand implements JEGCommand {
             @NotNull String @NotNull [] args) {
         if (sender.isOp()) {
             if (args.length == 1) {
-                return "reload".equalsIgnoreCase(args[0]);
+                return "gteg".equalsIgnoreCase(args[0]);
             }
         }
         return false;
@@ -86,29 +87,14 @@ public class ReloadCommand implements JEGCommand {
     @Override
     public void onCommand(
             @NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        onReload(sender);
+        if (sender instanceof Player player) {
+            giveGuide(player);
+        } else {
+            sender.sendMessage(Slimefun.getLocalization().getMessage("messages.only-players"));
+        }
     }
 
-    private void onReload(@NotNull CommandSender sender) {
-        sender.sendMessage(ChatColor.GREEN + "Reloading plugin...");
-        try {
-            if (plugin == null) {
-                sender.sendMessage(ChatColor.RED + "Failed to reload plugin.");
-                return;
-            }
-
-            plugin.onDisable();
-            plugin.onEnable();
-            plugin.reloadConfig();
-            SearchGroup.LOADED = false;
-            SearchGroup.init();
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                plugin.reloadConfig();
-                sender.sendMessage(ChatColor.GREEN + "plugin has been reloaded.");
-            }, 20L);
-        } catch (Throwable e) {
-            sender.sendMessage(ChatColor.RED + "Failed to reload plugin.");
-            Debug.trace(e);
-        }
+    private void giveGuide(@NotNull Player player) {
+        player.getInventory().addItem(GroupTierEditorGuide.instance().clone());
     }
 }

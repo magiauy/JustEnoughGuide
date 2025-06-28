@@ -29,6 +29,8 @@ package com.balugaq.jeg.core.managers;
 
 import com.balugaq.jeg.api.managers.AbstractManager;
 import com.balugaq.jeg.core.commands.CacheCommand;
+import com.balugaq.jeg.core.commands.DisableCommand;
+import com.balugaq.jeg.core.commands.GTEGCommand;
 import com.balugaq.jeg.core.commands.HelpCommand;
 import com.balugaq.jeg.core.commands.JEGCommands;
 import com.balugaq.jeg.core.commands.ReloadCommand;
@@ -57,6 +59,8 @@ public class CommandManager extends AbstractManager {
         this.commands.addCommand(new HelpCommand(plugin));
         this.commands.addCommand(new ReloadCommand(plugin));
         this.commands.addCommand(new CacheCommand(plugin));
+        this.commands.addCommand(new GTEGCommand(plugin));
+        this.commands.addCommand(new DisableCommand(plugin));
     }
 
     public boolean registerCommands() {

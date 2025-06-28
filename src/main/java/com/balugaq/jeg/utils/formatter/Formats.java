@@ -39,4 +39,14 @@ public class Formats {
     public static final HelperFormat helper = new HelperFormat();
     public static final RecipeVanillaFormat recipe_vanilla = new RecipeVanillaFormat();
     public static final RecipeDisplayFormat recipe_display = new RecipeDisplayFormat();
+
+    static {
+        main.loadMapping();
+        nested.loadMapping();
+        sub.loadMapping();
+        recipe.loadMapping();
+        helper.loadMapping();
+        recipe_vanilla.loadMapping();
+        recipe_display.loadMapping();
+    }
 }

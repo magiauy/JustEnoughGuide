@@ -37,6 +37,7 @@ import javax.annotation.Nonnull;
  * @author balugaq
  * @since 1.2
  */
+@SuppressWarnings("unused")
 public class Timer {
     public static long start;
     public @Nonnull

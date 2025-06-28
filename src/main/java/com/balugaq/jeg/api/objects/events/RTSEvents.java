@@ -51,6 +51,7 @@ public class RTSEvents {
      * @author balugaq
      * @since 1.3
      */
+    @SuppressWarnings("unused")
     @Getter
     public static class CloseRTSEvent extends Event {
         private static final HandlerList HANDLERS = new HandlerList();
@@ -99,6 +100,7 @@ public class RTSEvents {
      * @author balugaq
      * @since 1.3
      */
+    @SuppressWarnings("unused")
     @Getter
     public static class OpenRTSEvent extends Event {
         private static final HandlerList HANDLERS = new HandlerList();
@@ -162,6 +164,7 @@ public class RTSEvents {
      * @author balugaq
      * @since 1.3
      */
+    @SuppressWarnings("unused")
     @Getter
     public static class SearchTermChangeEvent extends Event {
         private static final HandlerList HANDLERS = new HandlerList();
@@ -219,6 +222,7 @@ public class RTSEvents {
      * @author balugaq
      * @since 1.3
      */
+    @SuppressWarnings("unused")
     @Getter
     public static class ClickAnvilItemEvent extends Event implements Cancellable {
         private static final HandlerList HANDLERS = new HandlerList();
@@ -291,6 +295,7 @@ public class RTSEvents {
      * @author balugaq
      * @since 1.3
      */
+    @SuppressWarnings("unused")
     @Getter
     public static class PageChangeEvent extends Event implements Cancellable {
         private static final HandlerList HANDLERS = new HandlerList();

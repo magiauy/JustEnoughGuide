@@ -76,7 +76,7 @@ import java.util.logging.Level;
  * @author balugaq
  * @since 1.1
  */
-@SuppressWarnings({"deprecation", "unused"})
+@SuppressWarnings({"deprecation", "unused", "UnnecessaryUnicodeEscape"})
 @NotDisplayInSurvivalMode
 public class HiddenItemsGroup extends FlexItemGroup {
     private static final List<SlimefunItem> ALL_SLIMEFUN_ITEMS = Slimefun.getRegistry().getAllSlimefunItems();
@@ -114,6 +114,7 @@ public class HiddenItemsGroup extends FlexItemGroup {
             }
             try {
                 // Intentionally provide a null value
+                //noinspection DataFlowIssue
                 if (!item.getItemGroup().isAccessible(null)) {
                     slimefunItemList.add(item);
                 }

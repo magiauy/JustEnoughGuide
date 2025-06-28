@@ -43,10 +43,10 @@ import org.jetbrains.annotations.Range;
  * @author balugaq
  * @since 1.7
  */
-@SuppressWarnings("deprecation")
+@Getter
+@SuppressWarnings({"deprecation", "unused"})
 @Data
 public abstract class Processor {
-    @Getter
     private final Strategy strategy;
 
     /**

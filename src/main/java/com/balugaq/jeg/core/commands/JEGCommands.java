@@ -47,7 +47,7 @@ import java.util.List;
  * @author balugaq
  * @since 1.1
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "deprecation", "ConstantValue"})
 @Getter
 public class JEGCommands implements TabExecutor {
     private final JavaPlugin plugin;

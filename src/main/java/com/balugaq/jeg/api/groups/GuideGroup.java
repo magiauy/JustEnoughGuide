@@ -68,7 +68,7 @@ import java.util.Set;
  * @author balugaq
  * @since 1.3
  */
-@SuppressWarnings({"deprecation", "unused"})
+@SuppressWarnings({"deprecation", "unused", "UnusedReturnValue", "ConstantValue"})
 @Getter
 @NotDisplayInCheatMode
 public abstract class GuideGroup extends FlexItemGroup {

@@ -49,6 +49,7 @@ import java.util.function.Consumer;
  * @author balugaq
  * @since 1.4
  */
+@SuppressWarnings({"deprecation", "unused"})
 @ApiStatus.Experimental
 public class CustomItemStack implements Cloneable {
     private final ItemStack delegate;
@@ -357,6 +358,7 @@ public class CustomItemStack implements Cloneable {
      *
      * @return the cloned CustomItemStack
      */
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
     public @NotNull CustomItemStack clone() {
         return new CustomItemStack(getDelegate());
     }

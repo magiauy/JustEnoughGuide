@@ -42,6 +42,7 @@ import javax.annotation.Nonnull;
  * @author balugaq
  * @since 1.6
  */
+@SuppressWarnings("deprecation")
 public class Sounds {
     public static final Sound GUIDE_BUTTON_CLICK_SOUND = byKeyOr("item.book.page_turn", byName("ITEM_BOOK_PAGE_TURN"));
     public static final Sound COLLECTED_ITEM = byKeyOr("entity.player.levelup", byName("ENTITY_PLAYER_LEVELUP"));
