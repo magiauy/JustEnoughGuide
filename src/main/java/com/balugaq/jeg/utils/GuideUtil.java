@@ -201,7 +201,7 @@ public final class GuideUtil {
                                 }
                             }
                         }, new int[]{AnvilGUI.Slot.INPUT_LEFT, AnvilGUI.Slot.INPUT_RIGHT, AnvilGUI.Slot.OUTPUT}, null);
-                    } catch (Throwable ignored) {
+                    } catch (Exception ignored) {
                         p.sendMessage(ChatColor.RED + "不兼容的版本! 无法使用实时搜索");
                     }
                     return false;

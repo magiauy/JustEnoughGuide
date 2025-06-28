@@ -118,7 +118,7 @@ public class HiddenItemsGroup extends FlexItemGroup {
                 if (!item.getItemGroup().isAccessible(null)) {
                     slimefunItemList.add(item);
                 }
-            } catch (Throwable ignored) {
+            } catch (Exception ignored) {
             }
         }
         this.slimefunItemList = slimefunItemList;

@@ -221,7 +221,7 @@ public class ReflectionUtil {
             Field field = clazz.getDeclaredField(fieldName);
             field.setAccessible(true);
             return new Pair<>(field, clazz);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             clazz = clazz.getSuperclass();
             if (clazz == null) {
                 return null;

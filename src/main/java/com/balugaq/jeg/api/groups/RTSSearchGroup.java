@@ -122,7 +122,7 @@ public class RTSSearchGroup extends FlexItemGroup {
                             RTSEvents.SearchTermChangeEvent event = new RTSEvents.SearchTermChangeEvent(player, view, anvilInventory, oldSearchTerm, newSearchTerm, GuideListener.guideModeMap.get(player));
                             Bukkit.getPluginManager().callEvent(event);
                         }
-                    } catch (Throwable e) {
+                    } catch (Exception e) {
                         Debug.trace(e);
                     }
                 }

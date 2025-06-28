@@ -99,14 +99,12 @@ public class ReloadCommand implements JEGCommand {
 
             plugin.onDisable();
             plugin.onEnable();
-            plugin.reloadConfig();
+            plugin.reloadConfig(); // 1st reload
             SearchGroup.LOADED = false;
             SearchGroup.init();
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                plugin.reloadConfig();
-                sender.sendMessage(ChatColor.GREEN + "plugin has been reloaded.");
-            }, 20L);
-        } catch (Throwable e) {
+            plugin.reloadConfig(); // 2nd reload
+            sender.sendMessage(ChatColor.GREEN + "plugin has been reloaded.");
+        } catch (Exception e) {
             sender.sendMessage(ChatColor.RED + "Failed to reload plugin.");
             Debug.trace(e);
         }

@@ -550,7 +550,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
         menu.addMenuOpeningHandler(p2 -> {
             try {
                 Sounds.playFor(p2, Sounds.GUIDE_BUTTON_CLICK_SOUND);
-            } catch (Throwable ignored) {
+            } catch (Exception ignored) {
             }
         });
 
@@ -622,7 +622,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             }
 
             menu.open(p);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             Debug.trace(e);
         }
     }

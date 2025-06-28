@@ -409,7 +409,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         menu.addMenuOpeningHandler(p2 -> {
             try {
                 Sounds.playFor(p2, Sounds.GUIDE_BUTTON_CLICK_SOUND);
-            } catch (Throwable ignored) {
+            } catch (Exception ignored) {
             }
         });
 
@@ -469,7 +469,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
             }
 
             menu.open(p);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             Debug.trace(e);
         }
     }

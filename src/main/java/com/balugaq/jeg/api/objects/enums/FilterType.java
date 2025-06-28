@@ -82,7 +82,7 @@ public enum FilterType {
             // Fix: Fix NullPointerException occurred when searching items from SlimeFood
             try {
                 display = mb.getDisplayRecipes();
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 Debug.trace(e, "searching");
                 return false;
             }
@@ -91,7 +91,7 @@ public enum FilterType {
                 if (SpecialMenuProvider.ENABLED_LogiTech && SpecialMenuProvider.classLogiTech_CustomSlimefunItem != null && SpecialMenuProvider.classLogiTech_CustomSlimefunItem.isInstance(item) && item instanceof RecipeDisplayItem rdi) {
                     display = rdi.getDisplayRecipes();
                 }
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 Debug.trace(e, "searching");
                 return false;
             }
@@ -103,7 +103,7 @@ public enum FilterType {
                         return true;
                     }
                 }
-            } catch (Throwable ignored) {
+            } catch (Exception ignored) {
                 return false;
             }
         }

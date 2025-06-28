@@ -55,6 +55,7 @@ import io.github.thebusybiscuit.slimefun4.implementation.guide.SurvivalSlimefunG
 import io.github.thebusybiscuit.slimefun4.utils.NumberUtils;
 import lombok.Getter;
 import net.guizhanss.guizhanlibplugin.updater.GuizhanUpdater;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -213,22 +214,18 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
         if (survivalOverride || cheatOverride) {
             getLogger().info("已开启指南替换！");
             getLogger().info("正在替换指南...");
-            Field field = ReflectionUtil.getField(Slimefun.getRegistry().getClass(), "guides");
-            if (field != null) {
-                field.setAccessible(true);
+            Map<SlimefunGuideMode, SlimefunGuideImplementation> newGuides = new EnumMap<>(SlimefunGuideMode.class);
+            newGuides.put(
+                    SlimefunGuideMode.SURVIVAL_MODE,
+                    survivalOverride ? new SurvivalGuideImplementation() : new SurvivalSlimefunGuide());
+            newGuides.put(
+                    SlimefunGuideMode.CHEAT_MODE,
+                    cheatOverride ? new CheatGuideImplementation() : new CheatSheetSlimefunGuide());
 
-                Map<SlimefunGuideMode, SlimefunGuideImplementation> newGuides = new EnumMap<>(SlimefunGuideMode.class);
-                newGuides.put(
-                        SlimefunGuideMode.SURVIVAL_MODE,
-                        survivalOverride ? new SurvivalGuideImplementation() : new SurvivalSlimefunGuide());
-                newGuides.put(
-                        SlimefunGuideMode.CHEAT_MODE,
-                        cheatOverride ? new CheatGuideImplementation() : new CheatSheetSlimefunGuide());
-                try {
-                    field.set(Slimefun.getRegistry(), newGuides);
-                } catch (IllegalAccessException ignored) {
-
-                }
+            try {
+                ReflectionUtil.setValue(Slimefun.getRegistry(), "guides", newGuides);
+            } catch (Exception e) {
+                Debug.trace(e);
             }
             getLogger().info(survivalOverride ? "已开启替换生存指南" : "未开启替换生存指南");
             getLogger().info(cheatOverride ? "已开启替换作弊指南" : "未开启替换作弊指南");
@@ -309,7 +306,7 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
             newGuides.put(SlimefunGuideMode.SURVIVAL_MODE, new SurvivalSlimefunGuide());
             newGuides.put(SlimefunGuideMode.CHEAT_MODE, new CheatSheetSlimefunGuide());
             ReflectionUtil.setValue(Slimefun.getRegistry(), "guides", newGuides);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             Debug.trace(e);
         }
 
@@ -323,7 +320,7 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
                     }
                 }
             }
-        } catch (Throwable ignored) {
+        } catch (Exception ignored) {
         }
 
         // Managers
@@ -442,5 +439,13 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
      */
     public boolean isDebug() {
         return getConfigManager().isDebug();
+    }
+
+    public static void postServerStartup(Runnable runnable) {
+        Bukkit.getScheduler().runTask(getInstance(), runnable);
+    }
+
+    public static void postServerStartupAsynchronously(Runnable runnable) {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(getInstance(), runnable, 1L);
     }
 }

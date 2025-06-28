@@ -380,7 +380,7 @@ public class SearchGroup extends FlexItemGroup {
                                                                             try {
                                                                                 method.setAccessible(true);
                                                                                 _Orecipes = method.invoke(template);
-                                                                            } catch (Throwable ignored) {
+                                                                            } catch (Exception ignored) {
                                                                             }
                                                                         }
                                                                     }
@@ -555,9 +555,9 @@ public class SearchGroup extends FlexItemGroup {
                                     SPECIAL_CACHE.put(id, new SoftReference<>(cache));
                                 }
                             }
-                        } catch (Throwable ignored) {
+                        } catch (Exception ignored) {
                         }
-                    } catch (Throwable ignored) {
+                    } catch (Exception ignored) {
                     }
                 }
 
@@ -622,7 +622,7 @@ public class SearchGroup extends FlexItemGroup {
                             }
                             SPECIAL_CACHE.put(((SlimefunItem) card).getId(), new SoftReference<>(cache2));
                         });
-                    } catch (Throwable ignored) {
+                    } catch (Exception ignored) {
                     }
                 }
 
@@ -671,13 +671,13 @@ public class SearchGroup extends FlexItemGroup {
                         } else if (slimefunItem instanceof MultiBlockMachine mb) {
                             try {
                                 displayRecipes = mb.getDisplayRecipes();
-                            } catch (Throwable e) {
+                            } catch (Exception e) {
                                 Debug.trace(e, "init searching");
                             }
                         } else if (SpecialMenuProvider.ENABLED_LogiTech && SpecialMenuProvider.classLogiTech_CustomSlimefunItem != null && SpecialMenuProvider.classLogiTech_CustomSlimefunItem.isInstance(slimefunItem) && slimefunItem instanceof RecipeDisplayItem rdi) {
                             try {
                                 displayRecipes = rdi.getDisplayRecipes();
-                            } catch (Throwable e) {
+                            } catch (Exception e) {
                                 Debug.trace(e, "init searching");
                             }
                         }
@@ -728,7 +728,7 @@ public class SearchGroup extends FlexItemGroup {
                                 }
                             }
                         }
-                    } catch (Throwable ignored) {
+                    } catch (Exception ignored) {
                     }
                 }
 

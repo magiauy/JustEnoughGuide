@@ -161,7 +161,7 @@ public class Debug {
     public static void stackTraceManually() {
         try {
             throw new Error();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             trace(e);
         }
     }
@@ -295,7 +295,7 @@ public class Debug {
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-        } catch (Throwable ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }

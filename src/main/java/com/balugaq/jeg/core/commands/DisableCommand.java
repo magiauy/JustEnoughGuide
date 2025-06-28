@@ -99,7 +99,7 @@ public class DisableCommand implements JEGCommand {
             plugin.onDisable();
             SearchGroup.LOADED = false;
             sender.sendMessage(ChatColor.GREEN + "plugin has been disabled.");
-        } catch (Throwable e) {
+        } catch (Exception e) {
             sender.sendMessage(ChatColor.RED + "Failed to disable plugin.");
             Debug.trace(e);
         }

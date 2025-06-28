@@ -223,7 +223,7 @@ public class Converter {
                     lookup, "getItem", MethodType.methodType(ItemGetter.class),
                     handle.type().generic(), handle, handle.type()
             ).getTarget().invokeExact();
-        } catch (Throwable t) {
+        } catch (Exception t) {
             return null;
         }
     }
@@ -248,7 +248,7 @@ public class Converter {
             if (methodHandleSlimefunItemStack_item != null) {
                 try {
                     itemStack = ItemStack.class.cast(methodHandleSlimefunItemStack_item.getItem(item));
-                } catch (Throwable e) {
+                } catch (Exception e) {
                     return AIR.clone();
                 }
             } else {

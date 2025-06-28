@@ -448,7 +448,7 @@ public class LocalHelper {
                         }
                     }
                 }
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 Debug.trace(e);
             }
         }

@@ -98,7 +98,7 @@ public class VanillaItemsGroup extends FlexItemGroup {
                         slimefunItems.add(createSlimefunItem(material));
                     }
                 }
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 Debug.trace(e);
             } finally {
                 setAutomaticallyLoadItems(before);

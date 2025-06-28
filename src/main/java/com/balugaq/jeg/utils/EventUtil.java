@@ -50,7 +50,7 @@ public class EventUtil {
             this.event = event;
             try {
                 Bukkit.getPluginManager().callEvent(event);
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 Debug.trace(e);
             }
         }
