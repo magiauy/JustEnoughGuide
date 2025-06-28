@@ -25,7 +25,7 @@
  *
  */
 
-package com.balugaq.jeg.api.patch;
+package com.balugaq.jeg.api.patches;
 
 import com.balugaq.jeg.utils.ReflectionUtil;
 import com.balugaq.jeg.utils.formatter.Formats;

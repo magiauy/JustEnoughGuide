@@ -25,4 +25,4 @@
  *
  */
 
-package com.balugaq.jeg.api.patch;
+package com.balugaq.jeg.api.patches;
