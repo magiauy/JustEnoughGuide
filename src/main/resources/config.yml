@@ -159,13 +159,32 @@ custom-format:
     - "BhhhhhhhB"
     - "BhhhhhhhB"
     - "BPBBCBBNB"
+  # 设置
+  # B = 背景板
+  # b = 返回
+  # s = 贡献者
+  # v = 版本
+  # u = 源代码
+  # W = 维基
+  # o = 指南选项
+  # P = 上一页
+  # l = 附属插件
+  # z = 非官方版提示（官方版则为背景板显示）
+  # U = 该功能暂未推出
+  # N = 下一页
   settings:
     - "bBsBvBuBW"
     - "BBBBBBBBB"
     - "BoooooooB"
     - "BoooooooB"
-    - "BPBBBBBNB"
-    - "BBlBPBUBB"
+    - "BBBBBBBBB"
+    - "BPlBzBUNB"
+  # 贡献者
+  # B = 背景板
+  # b = 返回
+  # p = 贡献者
+  # P = 上一页
+  # N = 下一页
   contributors:
     - "BbBBBBBBB"
     - "ppppppppp"

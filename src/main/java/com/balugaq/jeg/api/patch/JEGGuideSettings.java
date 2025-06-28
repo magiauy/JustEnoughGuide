@@ -28,7 +28,6 @@
 package com.balugaq.jeg.api.patch;
 
 import com.balugaq.jeg.utils.ReflectionUtil;
-import com.balugaq.jeg.utils.formatter.Format;
 import com.balugaq.jeg.utils.formatter.Formats;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuide;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
@@ -61,7 +60,7 @@ import java.util.Optional;
  * @see SlimefunGuide
  * @since 1.8
  */
-@SuppressWarnings("deprecation")
+@SuppressWarnings({"deprecation", "UnnecessaryUnicodeEscape"})
 public class JEGGuideSettings {
     @ParametersAreNonnullByDefault
     public static void openSettings(Player p, ItemStack guide) {
@@ -137,7 +136,7 @@ public class JEGGuideSettings {
                 "&7&o" + locale.getMessage(p, "guide.tooltips.versions-notice"),
                 "",
                 "&f汉化 By StarWishsama",
-                "&c请不要将此版本信息截图到 Discord/Github 反馈 Bug",
+                "&c请不要将此版本信息截图到 Discord/GitHub 反馈 Bug",
                 "&c而是优先到汉化页面反馈",
                 "",
                 "&cTHIS BUILD IS UNOFFICIAL BUILD, DO NOT REPORT TO SLIMEFUN DEV",
@@ -214,7 +213,7 @@ public class JEGGuideSettings {
         }
         // @formatter:on
 
-        for (int ss : Formats.settings.getChars('P')) {
+        for (int ss : Formats.settings.getChars('z')) {
             if (Slimefun.getUpdater().getBranch().isOfficial()) {
                 // @formatter:off
                 menu.addItem(
@@ -258,10 +257,7 @@ public class JEGGuideSettings {
         List<Integer> slots = Formats.settings.getChars('o');
         List<SlimefunGuideOption<?>> options = getOptions();
         int maxPage = (int) Math.ceil(options.size() / (double) slots.size());
-        if (page > maxPage) {
-            page = maxPage;
-        }
-        List<SlimefunGuideOption<?>> split = options.stream().skip((long) page * slots.size()).limit(slots.size()).toList();
+        List<SlimefunGuideOption<?>> split = options.stream().skip((long) (page - 1) * slots.size()).limit(slots.size()).toList();
         for (int i = 0; i < split.size(); i++) {
             SlimefunGuideOption<?> option = split.get(i);
             int slot = slots.get(i);
@@ -274,6 +270,28 @@ public class JEGGuideSettings {
                     return false;
                 });
             }
+        }
+
+        for (int ss : Formats.settings.getChars('P')) {
+            menu.addItem(ss, ChestMenuUtils.getPreviousButton(p, page, maxPage));
+            menu.addMenuClickHandler(ss, (pl, slot, item, action) -> {
+                if (page > 1) {
+                    openSettings(pl, guide, page - 1);
+                }
+
+                return false;
+            });
+        }
+
+        for (int ss : Formats.settings.getChars('N')) {
+            menu.addItem(ss, ChestMenuUtils.getNextButton(p, page, maxPage));
+            menu.addMenuClickHandler(ss, (pl, slot, item, action) -> {
+                if (page + 1 < maxPage) {
+                    openSettings(pl, guide, page + 1);
+                }
+
+                return false;
+            });
         }
     }
 

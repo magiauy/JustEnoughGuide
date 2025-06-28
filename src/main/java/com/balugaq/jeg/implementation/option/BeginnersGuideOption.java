@@ -27,6 +27,7 @@
 
 package com.balugaq.jeg.implementation.option;
 
+import com.balugaq.jeg.api.patch.JEGGuideSettings;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.compatibility.Converter;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;

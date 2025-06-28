@@ -28,6 +28,7 @@
 package com.balugaq.jeg.utils.compatibility;
 
 import com.google.common.base.Preconditions;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.common.ChatColors;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;

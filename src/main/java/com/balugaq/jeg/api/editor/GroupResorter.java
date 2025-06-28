@@ -100,7 +100,11 @@ public class GroupResorter {
     }
 
     public static void setSelectedGroup(@NotNull Player player, @Nullable ItemGroup itemGroup) {
-        selectedGroup.put(player, itemGroup);
+        if (itemGroup == null) {
+            selectedGroup.remove(player);
+        } else {
+            selectedGroup.put(player, itemGroup);
+        }
     }
 
     public static void exitSelecting(@NotNull Player player) {

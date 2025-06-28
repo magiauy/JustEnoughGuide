@@ -357,6 +357,14 @@ public class ConfigManager extends AbstractManager {
         return RECIPE_DISPLAY_FORMAT;
     }
 
+    public @NotNull List<String> getSettingsFormat() {
+        return SETTINGS_FORMAT;
+    }
+
+    public @NotNull List<String> getContributorsFormat() {
+        return CONTRIBUTORS_FORMAT;
+    }
+
     public @NotNull Map<String, String> getLocalTranslate() {
         return LOCAL_TRANSLATE;
     }

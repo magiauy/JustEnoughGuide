@@ -27,6 +27,7 @@
 
 package com.balugaq.jeg.api.patch;
 
+import com.balugaq.jeg.utils.formatter.Formats;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuide;
 import io.github.thebusybiscuit.slimefun4.core.services.github.Contributor;
 import io.github.thebusybiscuit.slimefun4.core.services.sounds.SoundEffect;
@@ -53,7 +54,7 @@ import org.bukkit.inventory.meta.SkullMeta;
  * @see SlimefunGuide
  * @since 1.8
  */
-@SuppressWarnings("deprecation")
+@SuppressWarnings({"deprecation", "UnnecessaryUnicodeEscape"})
 final class JEGContributorsMenu {
 
     private JEGContributorsMenu() {}
@@ -64,27 +65,32 @@ final class JEGContributorsMenu {
         menu.setEmptySlotsClickable(false);
         menu.addMenuOpeningHandler(SoundEffect.GUIDE_CONTRIBUTORS_OPEN_SOUND::playFor);
 
-        ChestMenuUtils.drawBackground(menu, 0, 2, 3, 4, 5, 6, 7, 8, 45, 47, 48, 49, 50, 51, 53);
+        ChestMenuUtils.drawBackground(menu, Formats.contributors.getChars('B').stream().mapToInt(i -> i).toArray());
 
-        menu.addItem(
-                1,
-                new CustomItemStack(ChestMenuUtils.getBackButton(
-                        p, "", "&7" + Slimefun.getLocalization().getMessage(p, "guide.back.settings"))));
-        menu.addMenuClickHandler(1, (pl, slot, item, action) -> {
-            JEGGuideSettings.openSettings(pl, p.getInventory().getItemInMainHand());
-            return false;
-        });
+        for (int ss : Formats.contributors.getChars('b')) {
+            menu.addItem(
+                    ss,
+                    new CustomItemStack(ChestMenuUtils.getBackButton(
+                            p, "", "&7" + Slimefun.getLocalization().getMessage(p, "guide.back.settings"))));
+            menu.addMenuClickHandler(ss, (pl, slot, item, action) -> {
+                JEGGuideSettings.openSettings(pl, p.getInventory().getItemInMainHand());
+                return false;
+            });
+        }
 
         List<Contributor> contributors =
                 new ArrayList<>(Slimefun.getGitHubService().getContributors().values());
         contributors.sort(Comparator.comparingInt(Contributor::getPosition));
 
-        for (int i = page * 36; i < contributors.size() && i < (page + 1) * 36; i++) {
+        List<Integer> slots = Formats.contributors.getChars('p');
+        int sizePerPage = slots.size();
+        for (int i = page * sizePerPage; i < contributors.size() && i < (page + 1) * sizePerPage; i++) {
             Contributor contributor = contributors.get(i);
             ItemStack skull = getContributorHead(p, contributor);
+            int ss = slots.get(i - page * sizePerPage);
 
-            menu.addItem(i - page * 36 + 9, skull);
-            menu.addMenuClickHandler(i - page * 36 + 9, (pl, slot, item, action) -> {
+            menu.addItem(ss, skull);
+            menu.addMenuClickHandler(ss, (pl, slot, item, action) -> {
                 if (contributor.getProfile() != null) {
                     pl.closeInventory();
                     ChatUtils.sendURL(pl, contributor.getProfile());
@@ -93,25 +99,29 @@ final class JEGContributorsMenu {
             });
         }
 
-        int pages = (contributors.size() - 1) / 36 + 1;
+        int pages = (contributors.size() - 1) / sizePerPage + 1;
 
-        menu.addItem(46, ChestMenuUtils.getPreviousButton(p, page + 1, pages));
-        menu.addMenuClickHandler(46, (pl, slot, item, action) -> {
-            if (page > 0) {
-                open(pl, page - 1);
-            }
+        for (int ss : Formats.contributors.getChars('P')) {
+            menu.addItem(ss, ChestMenuUtils.getPreviousButton(p, page + 1, pages));
+            menu.addMenuClickHandler(ss, (pl, slot, item, action) -> {
+                if (page > 0) {
+                    open(pl, page - 1);
+                }
 
-            return false;
-        });
+                return false;
+            });
+        }
 
-        menu.addItem(52, ChestMenuUtils.getNextButton(p, page + 1, pages));
-        menu.addMenuClickHandler(52, (pl, slot, item, action) -> {
-            if (page + 1 < pages) {
-                open(pl, page + 1);
-            }
+        for (int ss : Formats.contributors.getChars('N')) {
+            menu.addItem(ss, ChestMenuUtils.getNextButton(p, page + 1, pages));
+            menu.addMenuClickHandler(ss, (pl, slot, item, action) -> {
+                if (page + 1 < pages) {
+                    open(pl, page + 1);
+                }
 
-            return false;
-        });
+                return false;
+            });
+        }
 
         menu.open(p);
     }
