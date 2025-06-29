@@ -57,6 +57,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Range;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
@@ -129,7 +130,8 @@ public interface JEGSlimefunGuideImplementation extends SlimefunGuideImplementat
         return Slimefun.getPermissionsService().hasPermission(p, item);
     }
 
-    void showItemGroup0(@NotNull ChestMenu menu, @NotNull Player p, @NotNull PlayerProfile profile, ItemGroup group, int index);
+    @ParametersAreNonnullByDefault
+    void showItemGroup0(ChestMenu menu, Player p, PlayerProfile profile, ItemGroup group, int index);
 
     @NotNull
     default ChestMenu create0(@NotNull Player p) {
@@ -146,7 +148,8 @@ public interface JEGSlimefunGuideImplementation extends SlimefunGuideImplementat
      * @param player  The player.
      * @param profile The player profile.
      */
-    default void openBookMarkGroup(@NotNull Player player, @NotNull PlayerProfile profile) {
+    @ParametersAreNonnullByDefault
+    default void openBookMarkGroup(Player player, PlayerProfile profile) {
         List<SlimefunItem> items = JustEnoughGuide.getBookmarkManager().getBookmarkedItems(player);
         if (items == null || items.isEmpty()) {
             player.sendMessage(ChatColor.RED + "你还没有收藏任何物品!");
@@ -162,19 +165,22 @@ public interface JEGSlimefunGuideImplementation extends SlimefunGuideImplementat
      * @param player    The player.
      * @param profile   The player profile.
      */
+    @ParametersAreNonnullByDefault
     default void openItemMarkGroup(
-            @NotNull ItemGroup itemGroup, @NotNull Player player, @NotNull PlayerProfile profile) {
+            ItemGroup itemGroup, Player player, PlayerProfile profile) {
         new ItemMarkGroup(this, itemGroup, player).open(player, profile, getMode());
     }
 
-    void openNestedItemGroup(@NotNull Player p, @NotNull PlayerProfile profile, @NotNull NestedItemGroup nested, int page);
+    @ParametersAreNonnullByDefault
+    void openNestedItemGroup(Player p, PlayerProfile profile, NestedItemGroup nested, int page);
 
+    @ParametersAreNonnullByDefault
     void displaySlimefunItem0(
-            @NotNull ChestMenu menu,
-            @NotNull ItemGroup itemGroup,
-            @NotNull Player p,
-            @NotNull PlayerProfile profile,
-            @NotNull SlimefunItem sfitem,
+            ChestMenu menu,
+            ItemGroup itemGroup,
+            Player p,
+            PlayerProfile profile,
+            SlimefunItem sfitem,
             int page,
             int index);
 
@@ -227,17 +233,19 @@ public interface JEGSlimefunGuideImplementation extends SlimefunGuideImplementat
     @ParametersAreNonnullByDefault
     void createHeader(Player p, PlayerProfile profile, ChestMenu menu, ItemGroup itemGroup);
 
-    void addBackButton0(@NotNull ChestMenu menu, int slot, @NotNull Player p, @NotNull PlayerProfile profile);
+    @ParametersAreNonnullByDefault
+    void addBackButton0(ChestMenu menu, @Range(from = 0, to = 53) int slot, Player p, PlayerProfile profile);
 
     @ParametersAreNonnullByDefault
     void displayRecipes0(Player p, PlayerProfile profile, ChestMenu menu, RecipeDisplayItem sfItem, int page);
 
+    @ParametersAreNonnullByDefault
     void addDisplayRecipe0(
-            @NotNull ChestMenu menu,
-            @NotNull PlayerProfile profile,
-            @NotNull List<ItemStack> recipes,
-            int slot,
-            int i,
+            ChestMenu menu,
+            PlayerProfile profile,
+            List<ItemStack> recipes,
+            @Range(from = 0, to = 53) int slot,
+            int index,
             int page);
 
     @ParametersAreNonnullByDefault

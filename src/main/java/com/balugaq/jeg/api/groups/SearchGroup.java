@@ -515,37 +515,56 @@ public class SearchGroup extends FlexItemGroup {
                                 }
                                 // InfinityExpansion MachineBlock
                                 else if (Orecipes instanceof List<?> recipes) {
-                                    if (!isInstance(item, "MachineBlock")) {
-                                        continue;
-                                    }
-                                    for (Object recipe : recipes) {
-                                        String[] strings = (String[]) ReflectionUtil.getValue(recipe, "strings");
-                                        if (strings == null) {
-                                            continue;
-                                        }
-                                        for (String string : strings) {
-                                            SlimefunItem slimefunItem = SlimefunItem.getById(string);
-                                            if (slimefunItem != null) {
-                                                var s = slimefunItem.getItemName();
+                                    if (isInstance(item, "MachineBlock")) {
+                                        // InfinityLib - MachineBlock
+                                        for (Object recipe : recipes) {
+                                            String[] strings = (String[]) ReflectionUtil.getValue(recipe, "strings");
+                                            if (strings == null) {
+                                                continue;
+                                            }
+                                            for (String string : strings) {
+                                                SlimefunItem slimefunItem = SlimefunItem.getById(string);
+                                                if (slimefunItem != null) {
+                                                    var s = slimefunItem.getItemName();
+                                                    if (!inBanlist(s)) {
+                                                        cache.add(s);
+                                                    }
+                                                } else {
+                                                    Material material = Material.getMaterial(string);
+                                                    if (material != null) {
+                                                        var s = ItemStackHelper.getDisplayName(new ItemStack(material));
+                                                        if (!inBanlist(s)) {
+                                                            cache.add(s);
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                            ItemStack output = (ItemStack) ReflectionUtil.getValue(recipe, "output");
+                                            if (output != null) {
+                                                var s = ItemStackHelper.getDisplayName(output);
                                                 if (!inBanlist(s)) {
                                                     cache.add(s);
                                                 }
-                                            } else {
-                                                Material material = Material.getMaterial(string);
-                                                if (material != null) {
-                                                    var s = ItemStackHelper.getDisplayName(new ItemStack(material));
+                                            }
+                                        }
+                                    } else if (isInstance(item, "AbstractElectricMachine")) {
+                                        // DynaTech - AbstractElectricMachine
+                                        // recipes -> List<MachineRecipe>
+                                        for (Object recipe : recipes) {
+                                            if (recipe instanceof MachineRecipe machineRecipe) {
+                                                for (ItemStack input : machineRecipe.getInput()) {
+                                                    var s = ItemStackHelper.getDisplayName(input);
                                                     if (!inBanlist(s)) {
                                                         cache.add(s);
                                                     }
                                                 }
-                                            }
-                                        }
-
-                                        ItemStack output = (ItemStack) ReflectionUtil.getValue(recipe, "output");
-                                        if (output != null) {
-                                            var s = ItemStackHelper.getDisplayName(output);
-                                            if (!inBanlist(s)) {
-                                                cache.add(s);
+                                                for (ItemStack output : machineRecipe.getOutput()) {
+                                                    var s = ItemStackHelper.getDisplayName(output);
+                                                    if (!inBanlist(s)) {
+                                                        cache.add(s);
+                                                    }
+                                                }
                                             }
                                         }
                                     }

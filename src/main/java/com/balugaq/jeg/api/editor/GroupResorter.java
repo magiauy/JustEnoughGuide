@@ -49,13 +49,17 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * @author balugaq
+ * @since 1.8
+ */
 public class GroupResorter {
     public static final Map<ItemGroup, Integer> oldTiers = new ConcurrentHashMap<>();
     public static final Set<Player> selectingPlayers = ConcurrentHashMap.newKeySet();
     public static final Map<Player, ItemGroup> selectedGroup = new ConcurrentHashMap<>();
     public static final Map<ItemGroup, Integer> jegGroupTier = new ConcurrentHashMap<>();
     public static final File tiersFile = new File(JustEnoughGuide.getInstance().getDataFolder(), "tiers.yml");
-    public static @Nullable FileConfiguration config = null;
+    public static FileConfiguration config = null;
 
     static {
         Bukkit.getScheduler().runTaskLater(JustEnoughGuide.getInstance(), () -> {

@@ -48,7 +48,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
@@ -296,7 +295,7 @@ public class JEGGuideSettings {
     }
 
     @SuppressWarnings("unchecked")
-    public static @Nullable List<SlimefunGuideOption<?>> getOptions() {
+    public static List<SlimefunGuideOption<?>> getOptions() {
         return (List<SlimefunGuideOption<?>>) ReflectionUtil.getStaticValue(SlimefunGuideSettings.class, "options", List.class);
     }
 }

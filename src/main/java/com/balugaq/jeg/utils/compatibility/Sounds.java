@@ -36,8 +36,6 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-
 /**
  * @author balugaq
  * @since 1.6
@@ -75,7 +73,7 @@ public class Sounds {
         playFor(player, sound, 1.0F, 1.0F);
     }
 
-    public static void playFor(@Nonnull Player player, @Nullable Sound sound, float volume, float pitch) {
+    public static void playFor(@NotNull Player player, @Nullable Sound sound, float volume, float pitch) {
         if (sound == null) {
             return;
         }

@@ -41,7 +41,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.lang.ref.Reference;
 import java.util.List;
 import java.util.Set;
@@ -133,9 +132,9 @@ public enum FilterType {
     BY_ITEM_NAME("!", (player, item, lowerFilterValue, pinyin) -> SearchGroup.isSearchFilterApplicable(item, lowerFilterValue, pinyin)),
     BY_MATERIAL_NAME("~", (player, item, lowerFilterValue, pinyin) -> item.getItem().getType().name().toLowerCase().contains(lowerFilterValue));
 
-    private @Nonnull
+    private @NotNull
     final String symbol;
-    private @Nonnull
+    private @NotNull
     final DiFunction<Player, SlimefunItem, String, Boolean, Boolean> filter;
 
     /**
@@ -144,7 +143,7 @@ public enum FilterType {
      * @param symbol The string symbol of the filter type.
      * @param filter The filter function to determine whether an item matches the filter.
      */
-    FilterType(@Nonnull String symbol, @Nonnull DiFunction<Player, SlimefunItem, String, Boolean, Boolean> filter) {
+    FilterType(@NotNull String symbol, @NotNull DiFunction<Player, SlimefunItem, String, Boolean, Boolean> filter) {
         this.symbol = symbol;
         this.filter = filter;
     }

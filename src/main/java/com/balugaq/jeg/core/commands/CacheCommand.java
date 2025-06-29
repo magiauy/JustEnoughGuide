@@ -37,7 +37,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.lang.ref.Reference;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +53,7 @@ import java.util.Set;
 @SuppressWarnings({"ClassCanBeRecord", "deprecation", "ConstantValue"})
 @Getter
 public class CacheCommand implements JEGCommand {
-    private @Nonnull
+    private @NotNull
     final Plugin plugin;
 
     /**
@@ -62,7 +61,7 @@ public class CacheCommand implements JEGCommand {
      *
      * @param plugin The plugin instance.
      */
-    public CacheCommand(@Nonnull Plugin plugin) {
+    public CacheCommand(@NotNull Plugin plugin) {
         this.plugin = plugin;
     }
 

@@ -282,7 +282,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
 
     @Override
     public void showItemGroup0(
-            @NotNull ChestMenu menu, @NotNull Player p, @NotNull PlayerProfile profile, ItemGroup group, int index) {
+            @NotNull ChestMenu menu, @NotNull Player p, @NotNull PlayerProfile profile, @NotNull ItemGroup group, int index) {
         if (!(group instanceof LockedItemGroup)
                 || !isSurvivalMode()
                 || ((LockedItemGroup) group).hasUnlocked(p, profile)) {
@@ -1105,11 +1105,11 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
             @NotNull PlayerProfile profile,
             @NotNull List<ItemStack> recipes,
             int slot,
-            int i,
+            int index,
             int page) {
         var l = Formats.recipe_display.getChars('d').size();
-        if ((i + (page * l)) < recipes.size()) {
-            ItemStack displayItem = recipes.get(i + (page * l));
+        if ((index + (page * l)) < recipes.size()) {
+            ItemStack displayItem = recipes.get(index + (page * l));
 
             /*
              * We want to clone this item to avoid corrupting the original
