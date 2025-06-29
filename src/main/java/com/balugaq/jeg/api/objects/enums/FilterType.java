@@ -39,6 +39,7 @@ import lombok.Getter;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.AContainer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.lang.ref.Reference;
@@ -149,7 +150,7 @@ public enum FilterType {
     }
 
     @Deprecated
-    public String getFlag() {
+    public @NotNull String getFlag() {
         return symbol;
     }
 

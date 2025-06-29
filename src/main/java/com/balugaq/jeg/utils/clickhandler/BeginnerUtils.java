@@ -61,7 +61,7 @@ public class BeginnerUtils implements Applier {
     private BeginnerUtils() {
     }
 
-    public static void applyWith(SlimefunGuideImplementation guide, ChestMenu menu, int slot) {
+    public static void applyWith(@NotNull SlimefunGuideImplementation guide, @NotNull ChestMenu menu, int slot) {
         instance.apply(guide, menu, slot);
     }
 

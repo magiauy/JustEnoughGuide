@@ -47,7 +47,7 @@ import org.jetbrains.annotations.Range;
 @SuppressWarnings({"deprecation", "unused"})
 @Data
 public abstract class Processor {
-    private final Strategy strategy;
+    private final @NotNull Strategy strategy;
 
     /**
      * A simple Mixin processor

@@ -666,7 +666,7 @@ public class SpecialMenuProvider {
      *
      * @param playerProfile The player profile to insert useless history
      * @author balugaq
-     * @see com.balugaq.jeg.core.listeners.SpecialMenuFixListener
+     * @see SpecialMenuFixListener
      * @since 1.3
      */
     public static void insertUselessHistory(@NotNull PlayerProfile playerProfile) {

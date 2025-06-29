@@ -30,6 +30,7 @@ package com.balugaq.jeg.utils;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.common.ChatColors;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -52,12 +53,20 @@ import java.util.UUID;
 public class Debug {
     public static final File errorsFolder = new File(JustEnoughGuide.getInstance().getDataFolder(), "error-reports");
     private static final String debugPrefix = "[Debug] ";
-    private static JavaPlugin plugin = null;
+    private static @Nullable JavaPlugin plugin = null;
 
     static {
         if (!errorsFolder.exists()) {
             errorsFolder.mkdirs();
         }
+    }
+
+    @NotNull
+    public static JavaPlugin getPlugin() {
+        if (plugin == null) {
+            plugin = JustEnoughGuide.getInstance();
+        }
+        return plugin;
     }
 
     public static void warn(Object @NotNull ... objects) {
@@ -154,8 +163,7 @@ public class Debug {
     }
 
     public static void sendMessage(@NotNull Player player, String message) {
-        init();
-        player.sendMessage("[" + plugin.getLogger().getName() + "]" + message);
+        player.sendMessage("[" + getPlugin().getName() + "]" + message);
     }
 
     public static void stackTraceManually() {
@@ -191,8 +199,7 @@ public class Debug {
     }
 
     public static void log(@NotNull String message) {
-        init();
-        plugin.getServer().getConsoleSender().sendMessage("[" + JustEnoughGuide.getInstance().getName() + "] " + ChatColors.color(message));
+        Bukkit.getServer().getConsoleSender().sendMessage("[" + JustEnoughGuide.getInstance().getName() + "] " + ChatColors.color(message));
     }
 
     public static void log(@NotNull Throwable e) {
@@ -201,12 +208,6 @@ public class Debug {
 
     public static void log() {
         log("");
-    }
-
-    public static void init() {
-        if (plugin == null) {
-            plugin = JustEnoughGuide.getInstance();
-        }
     }
 
     public static void trace(@NotNull Throwable e) {
@@ -218,47 +219,53 @@ public class Debug {
     }
 
     public static void trace(@NotNull Throwable e, @Nullable String doing, @Nullable Integer code) {
-        init();
-        plugin.getLogger().severe("DO NOT REPORT THIS ERROR TO JustEnoughGuide DEVELOPERS!!! THIS IS NOT A JustEnoughGuide BUG!");
-        if (code != null) {
-            plugin.getLogger().severe("Error code: " + code);
-        }
-        plugin.getLogger().severe("If you are sure that this is a JustEnoughGuide bug, please report to " + JustEnoughGuide.getInstance().getBugTrackerURL());
-        if (doing != null) {
-            plugin.getLogger().severe("An unexpected error occurred while " + doing);
-        } else {
-            plugin.getLogger().severe("An unexpected error occurred.");
-        }
+        try {
+            getPlugin().getLogger().severe("DO NOT REPORT THIS ERROR TO JustEnoughGuide DEVELOPERS!!! THIS IS NOT A JustEnoughGuide BUG!");
+            if (code != null) {
+                getPlugin().getLogger().severe("Error code: " + code);
+            }
+            getPlugin().getLogger().severe("If you are sure that this is a JustEnoughGuide bug, please report to " + JustEnoughGuide.getInstance().getBugTrackerURL());
+            if (doing != null) {
+                getPlugin().getLogger().severe("An unexpected error occurred while " + doing);
+            } else {
+                getPlugin().getLogger().severe("An unexpected error occurred.");
+            }
 
-        e.printStackTrace();
+            e.printStackTrace();
 
-        dumpToFile(e, code);
+            dumpToFile(e, code);
+        } catch (Throwable e2) {
+            throw new RuntimeException(e2);
+        }
     }
 
     public static void traceExactly(@NotNull Throwable e, @Nullable String doing, @Nullable Integer code) {
-        init();
-        plugin.getLogger().severe("====================AN FATAL OCCURRED" + (doing != null ? (" WHEN " + doing.toUpperCase()) : "") + "====================");
-        plugin.getLogger().severe("DO NOT REPORT THIS ERROR TO JustEnoughGuide DEVELOPERS!!! THIS IS NOT A JustEnoughGuide BUG!");
-        if (code != null) {
-            plugin.getLogger().severe("Error code: " + code);
+        try {
+            getPlugin().getLogger().severe("====================AN FATAL OCCURRED" + (doing != null ? (" WHEN " + doing.toUpperCase()) : "") + "====================");
+            getPlugin().getLogger().severe("DO NOT REPORT THIS ERROR TO JustEnoughGuide DEVELOPERS!!! THIS IS NOT A JustEnoughGuide BUG!");
+            if (code != null) {
+                getPlugin().getLogger().severe("Error code: " + code);
+            }
+            getPlugin().getLogger().severe("If you are sure that this is a JustEnoughGuide bug, please report to " + JustEnoughGuide.getInstance().getBugTrackerURL());
+            if (doing != null) {
+                getPlugin().getLogger().severe("An unexpected error occurred while " + doing);
+            } else {
+                getPlugin().getLogger().severe("An unexpected error occurred.");
+            }
+
+            e.printStackTrace();
+
+            getPlugin().getLogger().severe("ALL EXCEPTION INFORMATION IS BELOW:");
+            getPlugin().getLogger().severe("message: " + e.getMessage());
+            getPlugin().getLogger().severe("localizedMessage: " + e.getLocalizedMessage());
+            getPlugin().getLogger().severe("cause: " + e.getCause());
+            getPlugin().getLogger().severe("stackTrace: " + Arrays.toString(e.getStackTrace()));
+            getPlugin().getLogger().severe("suppressed: " + Arrays.toString(e.getSuppressed()));
+
+            dumpToFile(e, code);
+        } catch (Throwable e2) {
+            throw new RuntimeException(e2);
         }
-        plugin.getLogger().severe("If you are sure that this is a JustEnoughGuide bug, please report to " + JustEnoughGuide.getInstance().getBugTrackerURL());
-        if (doing != null) {
-            plugin.getLogger().severe("An unexpected error occurred while " + doing);
-        } else {
-            plugin.getLogger().severe("An unexpected error occurred.");
-        }
-
-        e.printStackTrace();
-
-        plugin.getLogger().severe("ALL EXCEPTION INFORMATION IS BELOW:");
-        plugin.getLogger().severe("message: " + e.getMessage());
-        plugin.getLogger().severe("localizedMessage: " + e.getLocalizedMessage());
-        plugin.getLogger().severe("cause: " + e.getCause());
-        plugin.getLogger().severe("stackTrace: " + Arrays.toString(e.getStackTrace()));
-        plugin.getLogger().severe("suppressed: " + Arrays.toString(e.getSuppressed()));
-
-        dumpToFile(e, code);
     }
 
     public static void dumpToFile(@NotNull Throwable e, @Nullable Integer code) {

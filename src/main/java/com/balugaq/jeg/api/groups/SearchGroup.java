@@ -844,7 +844,7 @@ public class SearchGroup extends FlexItemGroup {
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public static boolean inBanlist(SlimefunItem slimefunItem) {
+    public static boolean inBanlist(@NotNull SlimefunItem slimefunItem) {
         return inBanlist(slimefunItem.getItemName());
     }
 
@@ -858,7 +858,7 @@ public class SearchGroup extends FlexItemGroup {
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public static boolean inBlacklist(SlimefunItem slimefunItem) {
+    public static boolean inBlacklist(@NotNull SlimefunItem slimefunItem) {
         return inBlacklist(slimefunItem.getItemName());
     }
 
@@ -871,7 +871,7 @@ public class SearchGroup extends FlexItemGroup {
         return false;
     }
 
-    public static boolean onlyAscii(String str) {
+    public static boolean onlyAscii(@NotNull String str) {
         for (char c : str.toCharArray()) {
             if (c > 127) {
                 return false;
@@ -880,7 +880,7 @@ public class SearchGroup extends FlexItemGroup {
         return true;
     }
 
-    public static int levenshteinDistance(String s1, String s2) {
+    public static int levenshteinDistance(@NotNull String s1, @NotNull String s2) {
         if (s1.length() < s2.length()) {
             return levenshteinDistance(s2, s1);
         }
@@ -920,7 +920,7 @@ public class SearchGroup extends FlexItemGroup {
      * @param searchTerm The search term
      * @return The name fit score. Non-negative integer.
      */
-    public static int nameFit(String name, String searchTerm) {
+    public static int nameFit(@NotNull String name, @NotNull String searchTerm) {
         int distance = levenshteinDistance(searchTerm.toLowerCase(Locale.ROOT), name.toLowerCase(Locale.ROOT));
         int maxLen = Math.max(searchTerm.length(), name.length());
 
@@ -934,14 +934,14 @@ public class SearchGroup extends FlexItemGroup {
         return matchScore;
     }
 
-    public static List<SlimefunItem> sortByNameFit(Set<SlimefunItem> origin, String searchTerm) {
+    public static @NotNull List<SlimefunItem> sortByNameFit(@NotNull Set<SlimefunItem> origin, @NotNull String searchTerm) {
         return origin.stream().sorted(Comparator.comparingInt(item ->
                 /* Intentionally negative */
                 -nameFit(ChatColor.stripColor(item.getItemName()), searchTerm)
         )).toList();
     }
 
-    public static List<SlimefunItem> sortByPinyinContinuity(Set<SlimefunItem> origin, String searchTerm) {
+    public static @NotNull List<SlimefunItem> sortByPinyinContinuity(@NotNull Set<SlimefunItem> origin, @NotNull String searchTerm) {
         return origin.stream().sorted(Comparator.comparingInt(item ->
                 /* Intentionally negative */
                 -nameFit(getPinyin(ChatColor.stripColor(item.getItemName())), searchTerm)

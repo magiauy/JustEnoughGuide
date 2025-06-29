@@ -27,6 +27,8 @@
 
 package com.balugaq.jeg.api.interfaces;
 
+import com.balugaq.jeg.implementation.guide.CheatGuideImplementation;
+import com.balugaq.jeg.implementation.guide.SurvivalGuideImplementation;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -36,8 +38,8 @@ import java.util.List;
  * Used for relocating the buttons of the guide to a different location.
  *
  * @author balugaq
- * @see com.balugaq.jeg.implementation.guide.SurvivalGuideImplementation
- * @see com.balugaq.jeg.implementation.guide.CheatGuideImplementation
+ * @see SurvivalGuideImplementation
+ * @see CheatGuideImplementation
  * @since 1.1
  */
 @SuppressWarnings("SameReturnValue")

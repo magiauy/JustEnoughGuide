@@ -110,7 +110,7 @@ public interface JEGClickHandler extends ChestMenu.AdvancedMenuClickHandler {
 
     // Our implement
     @Override
-    default boolean onClick(InventoryClickEvent event, Player player, int clickedSlot, ItemStack cursor, ClickAction clickAction) {
+    default boolean onClick(@NotNull InventoryClickEvent event, @NotNull Player player, int clickedSlot, ItemStack cursor, @NotNull ClickAction clickAction) {
         ItemStack itemStack = getMenu().getItemInSlot(clickedSlot);
         for (Processor processor : getProcessor(Processor.Strategy.HEAD)) {
             if (!processor.process(getGuide(), getMenu(), event, player, clickedSlot, itemStack, clickAction, null)) {

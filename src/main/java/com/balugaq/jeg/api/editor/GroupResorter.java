@@ -55,7 +55,7 @@ public class GroupResorter {
     public static final Map<Player, ItemGroup> selectedGroup = new ConcurrentHashMap<>();
     public static final Map<ItemGroup, Integer> jegGroupTier = new ConcurrentHashMap<>();
     public static final File tiersFile = new File(JustEnoughGuide.getInstance().getDataFolder(), "tiers.yml");
-    public static FileConfiguration config = null;
+    public static @Nullable FileConfiguration config = null;
 
     static {
         Bukkit.getScheduler().runTaskLater(JustEnoughGuide.getInstance(), () -> {
@@ -116,11 +116,11 @@ public class GroupResorter {
         selectingPlayers.add(player);
     }
 
-    public static String getDisplayName(@NotNull ItemGroup itemGroup) {
+    public static @NotNull String getDisplayName(@NotNull ItemGroup itemGroup) {
         return itemGroup.getUnlocalizedName();
     }
 
-    public static int getTier(ItemGroup itemGroup) {
+    public static int getTier(@NotNull ItemGroup itemGroup) {
         return jegGroupTier.getOrDefault(itemGroup, itemGroup.getTier());
     }
 
@@ -138,7 +138,7 @@ public class GroupResorter {
         Slimefun.getRegistry().getAllItemGroups().sort(Comparator.comparingInt(ItemGroup::getTier));
     }
 
-    public static void swap(ItemGroup itemGroup1, ItemGroup itemGroup2) {
+    public static void swap(@NotNull ItemGroup itemGroup1, @NotNull ItemGroup itemGroup2) {
         int tier1 = getTier(itemGroup1);
         int tier2 = getTier(itemGroup2);
         itemGroup1.setTier(tier2);
@@ -147,7 +147,7 @@ public class GroupResorter {
         resort();
     }
 
-    public static FileConfiguration getOrCreateConfig() {
+    public static @NotNull FileConfiguration getOrCreateConfig() {
         if (config != null) {
             return config;
         }
@@ -169,7 +169,7 @@ public class GroupResorter {
         saveCfg();
     }
 
-    public static Integer getTierCfg(String key) {
+    public static @Nullable Integer getTierCfg(String key) {
         return getOrCreateConfig().getObject(key + ".tier", Integer.class, null);
     }
 
@@ -178,11 +178,11 @@ public class GroupResorter {
     }
 
     @SuppressWarnings("unused")
-    public static String getNameCfg(String key) {
+    public static @Nullable String getNameCfg(String key) {
         return getOrCreateConfig().getString(key + ".name");
     }
 
-    public static String getKey(ItemGroup itemGroup) {
+    public static @NotNull String getKey(ItemGroup itemGroup) {
         if (itemGroup instanceof NestedItemGroup n) {
             return n.getKey().getNamespace() + "-" + n.getKey().getKey() + ".nested";
         } else if (itemGroup instanceof SubItemGroup s) {
@@ -210,7 +210,7 @@ public class GroupResorter {
         }
     }
 
-    public static void sort(List<ItemGroup> list) {
+    public static void sort(@NotNull List<ItemGroup> list) {
         list.sort(Comparator.comparingInt(GroupResorter::getTier));
     }
 }

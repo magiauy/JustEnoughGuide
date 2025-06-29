@@ -159,7 +159,7 @@ public class VanillaItemsGroup extends FlexItemGroup {
     }
 
     @ParametersAreNonnullByDefault
-    private static VanillaItem createSlimefunItem(Material material) {
+    private static @NotNull VanillaItem createSlimefunItem(Material material) {
         Preconditions.checkArgument(material != null, "The material cannot be null.");
         Preconditions.checkArgument(!material.isAir(), "The material cannot be air.");
         Preconditions.checkArgument(material.isItem(), "The material must be an item.");
@@ -409,9 +409,9 @@ public class VanillaItemsGroup extends FlexItemGroup {
 
     @Getter
     public static class VanillaItem extends SlimefunItem implements VanillaItemShade {
-        private final ItemStack customIcon;
+        private final @NotNull ItemStack customIcon;
 
-        public VanillaItem(SlimefunItemStack item, ItemStack customIcon) {
+        public VanillaItem(@NotNull SlimefunItemStack item, @NotNull ItemStack customIcon) {
             super(GroupSetup.vanillaItemsGroup, item, RecipeType.NULL, new ItemStack[0], customIcon);
             this.customIcon = customIcon.clone();
         }

@@ -78,7 +78,7 @@ public class NamePrinter implements Applier {
     private NamePrinter() {
     }
 
-    public static void applyWith(SlimefunGuideImplementation guide, ChestMenu menu, int slot) {
+    public static void applyWith(@NotNull SlimefunGuideImplementation guide, @NotNull ChestMenu menu, int slot) {
         instance.apply(guide, menu, slot);
     }
 
@@ -104,7 +104,7 @@ public class NamePrinter implements Applier {
         });
     }
 
-    public static boolean checkCooldown(Player player) {
+    public static boolean checkCooldown(@NotNull Player player) {
         FrequencyWatcher.Result result = watcher.checkCooldown(player.getUniqueId());
         if (result == FrequencyWatcher.Result.TOO_FREQUENT) {
             player.sendMessage(ChatColor.RED + "你的使用频率过高，请稍后使用!");

@@ -249,7 +249,7 @@ public class GuideEvents {
             this.searchTerm = searchTerm;
         }
 
-        public static HandlerList getHandlerList() {
+        public static @NotNull HandlerList getHandlerList() {
             return HANDLERS;
         }
 

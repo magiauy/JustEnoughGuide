@@ -55,7 +55,7 @@ import java.util.function.Supplier;
 @ApiStatus.Experimental
 public class Converter {
     public static final ItemStack AIR = new ItemStack(Material.AIR);
-    public static final ItemGetter methodHandleSlimefunItemStack_item = createItemGetter();
+    public static final @Nullable ItemGetter methodHandleSlimefunItemStack_item = createItemGetter();
 
     public static @NotNull Builder builder() {
         return new Builder();
@@ -216,7 +216,7 @@ public class Converter {
      * @return the created ItemGetter
      */
     @SneakyThrows
-    private static ItemGetter createItemGetter() {
+    private static @Nullable ItemGetter createItemGetter() {
         try {
             MethodHandles.Lookup lookup = MethodHandles.lookup();
             MethodType mt = MethodType.methodType(ItemStack.class);
@@ -278,92 +278,92 @@ public class Converter {
         public boolean ifValue = true;
         public int index = 0;
 
-        public Builder if_(boolean expression) {
+        public @NotNull Builder if_(boolean expression) {
             this.ifValue = expression;
             return this;
         }
 
-        public Builder thenTryFirst() {
+        public @NotNull Builder thenTryFirst() {
             this.index = 0;
             return this;
         }
 
-        public Builder thenTrySecond() {
+        public @NotNull Builder thenTrySecond() {
             this.index = 1;
             return this;
         }
 
-        public Builder thenTry(int index) {
+        public @NotNull Builder thenTry(int index) {
             this.index = index;
             return this;
         }
 
-        public Builder add(@NotNull SlimefunItemStack slimefunItemStack) {
+        public @NotNull Builder add(@NotNull SlimefunItemStack slimefunItemStack) {
             itemStacks.add(getItem(slimefunItemStack));
             return this;
         }
 
-        public Builder add(@NotNull ItemStack itemStack) {
+        public @NotNull Builder add(@NotNull ItemStack itemStack) {
             itemStacks.add(getItem(itemStack));
             return this;
         }
 
-        public Builder add(@NotNull Material material) {
+        public @NotNull Builder add(@NotNull Material material) {
             itemStacks.add(getItem(material));
             return this;
         }
 
-        public Builder add(@NotNull ItemStack itemStack, @NotNull Consumer<ItemMeta> itemMetaConsumer) {
+        public @NotNull Builder add(@NotNull ItemStack itemStack, @NotNull Consumer<ItemMeta> itemMetaConsumer) {
             itemStacks.add(getItem(itemStack, itemMetaConsumer));
             return this;
         }
 
-        public Builder add(@NotNull Material material, @NotNull Consumer<ItemMeta> itemMetaConsumer) {
+        public @NotNull Builder add(@NotNull Material material, @NotNull Consumer<ItemMeta> itemMetaConsumer) {
             itemStacks.add(getItem(material, itemMetaConsumer));
             return this;
         }
 
-        public Builder add(@NotNull ItemStack itemStack, @Nullable String name, @NotNull String @NotNull ... lore) {
+        public @NotNull Builder add(@NotNull ItemStack itemStack, @Nullable String name, @NotNull String @NotNull ... lore) {
             itemStacks.add(getItem(itemStack, name, lore));
             return this;
         }
 
-        public Builder add(@NotNull ItemStack itemStack, Color color, @Nullable String name, String @NotNull ... lore) {
+        public @NotNull Builder add(@NotNull ItemStack itemStack, Color color, @Nullable String name, String @NotNull ... lore) {
             itemStacks.add(getItem(itemStack, color, name, lore));
             return this;
         }
 
-        public Builder add(@NotNull Material material, String name, String... lore) {
+        public @NotNull Builder add(@NotNull Material material, String name, String... lore) {
             itemStacks.add(getItem(material, name, lore));
             return this;
         }
 
-        public Builder add(@NotNull Material material, String name, @NotNull List<String> lore) {
+        public @NotNull Builder add(@NotNull Material material, String name, @NotNull List<String> lore) {
             itemStacks.add(getItem(material, name, lore));
             return this;
         }
 
-        public Builder add(@NotNull ItemStack itemStack, @NotNull List<String> list) {
+        public @NotNull Builder add(@NotNull ItemStack itemStack, @NotNull List<String> list) {
             itemStacks.add(getItem(itemStack, list));
             return this;
         }
 
-        public Builder add(@NotNull Material material, @NotNull List<String> list) {
+        public @NotNull Builder add(@NotNull Material material, @NotNull List<String> list) {
             itemStacks.add(getItem(material, list));
             return this;
         }
 
-        public Builder add(@NotNull ItemStack itemStack, @Range(from = 1, to = Integer.MAX_VALUE) int amount) {
+        public @NotNull Builder add(@NotNull ItemStack itemStack, @Range(from = 1, to = Integer.MAX_VALUE) int amount) {
             itemStacks.add(getItem(itemStack, amount));
             return this;
         }
 
-        public Builder add(@NotNull ItemStack itemStack, @NotNull Material material) {
+        public @NotNull Builder add(@NotNull ItemStack itemStack, @NotNull Material material) {
             itemStacks.add(getItem(itemStack, material));
             return this;
         }
 
-        public Builder add(@NotNull Material material, @NotNull String name, @NotNull Consumer<ItemMeta> consumer) {
+        public @NotNull Builder add(@NotNull Material material, @NotNull String name, @NotNull Consumer<ItemMeta> consumer) {
             itemStacks.add(getItem(material, name, consumer));
             return this;
         }
@@ -392,11 +392,11 @@ public class Converter {
             return ifValue ? itemStacks.get(this.index) : itemStack;
         }
 
-        public ItemStack orElseGet(Supplier<ItemStack> supplier) {
+        public ItemStack orElseGet(@NotNull Supplier<ItemStack> supplier) {
             return ifValue ? itemStacks.get(this.index) : supplier.get();
         }
 
-        public ItemStack findFirst() {
+        public @NotNull ItemStack findFirst() {
             return itemStacks.stream().filter(itemStack -> itemStack != null && itemStack.getType() != Material.AIR).findFirst().orElse(AIR.clone());
         }
     }

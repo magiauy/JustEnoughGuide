@@ -27,6 +27,7 @@
 
 package com.balugaq.jeg.api.patches;
 
+import com.balugaq.jeg.utils.compatibility.Converter;
 import com.balugaq.jeg.utils.formatter.Formats;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuide;
 import io.github.thebusybiscuit.slimefun4.core.services.github.Contributor;
@@ -34,19 +35,21 @@ import io.github.thebusybiscuit.slimefun4.core.services.sounds.SoundEffect;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.common.ChatColors;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.common.CommonPatterns;
-import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import io.github.thebusybiscuit.slimefun4.utils.ChatUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author TheBusyBiscuit
@@ -57,9 +60,10 @@ import org.bukkit.inventory.meta.SkullMeta;
 @SuppressWarnings({"deprecation", "UnnecessaryUnicodeEscape"})
 final class JEGContributorsMenu {
 
-    private JEGContributorsMenu() {}
+    private JEGContributorsMenu() {
+    }
 
-    public static void open(Player p, int page) {
+    public static void open(@NotNull Player p, int page) {
         ChestMenu menu = new ChestMenu(Slimefun.getLocalization().getMessage(p, "guide.title.credits"));
 
         menu.setEmptySlotsClickable(false);
@@ -70,7 +74,7 @@ final class JEGContributorsMenu {
         for (int ss : Formats.contributors.getChars('b')) {
             menu.addItem(
                     ss,
-                    new CustomItemStack(ChestMenuUtils.getBackButton(
+                    Converter.getItem(ChestMenuUtils.getBackButton(
                             p, "", "&7" + Slimefun.getLocalization().getMessage(p, "guide.back.settings"))));
             menu.addMenuClickHandler(ss, (pl, slot, item, action) -> {
                 JEGGuideSettings.openSettings(pl, p.getInventory().getItemInMainHand());
@@ -126,7 +130,7 @@ final class JEGContributorsMenu {
         menu.open(p);
     }
 
-    private static ItemStack getContributorHead(Player p, Contributor contributor) {
+    private static @NotNull ItemStack getContributorHead(@NotNull Player p, @NotNull Contributor contributor) {
         ItemStack skull = SlimefunUtils.getCustomHead(contributor.getTexture());
 
         SkullMeta meta = (SkullMeta) skull.getItemMeta();

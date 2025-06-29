@@ -167,6 +167,14 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
         return VanillaItemsGroup.isDisplayableFor(player);
     }
 
+    public static void postServerStartup(Runnable runnable) {
+        Bukkit.getScheduler().runTask(getInstance(), runnable);
+    }
+
+    public static void postServerStartupAsynchronously(Runnable runnable) {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(getInstance(), runnable, 1L);
+    }
+
     /**
      * Initializes the plugin and sets up all necessary components.
      */
@@ -438,13 +446,5 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
      */
     public boolean isDebug() {
         return getConfigManager().isDebug();
-    }
-
-    public static void postServerStartup(Runnable runnable) {
-        Bukkit.getScheduler().runTask(getInstance(), runnable);
-    }
-
-    public static void postServerStartupAsynchronously(Runnable runnable) {
-        Bukkit.getScheduler().runTaskLaterAsynchronously(getInstance(), runnable, 1L);
     }
 }

@@ -54,14 +54,14 @@ public class MenuMatrix {
         return this;
     }
 
-    public @NotNull MenuMatrix addLine(String... labels) {
+    public @NotNull MenuMatrix addLine(String @NotNull ... labels) {
         for (String label : labels) {
             addLine(label);
         }
         return this;
     }
 
-    public @NotNull MenuMatrix addLine(List<String> labels) {
+    public @NotNull MenuMatrix addLine(@NotNull List<String> labels) {
         for (String label : labels) {
             addLine(label);
         }

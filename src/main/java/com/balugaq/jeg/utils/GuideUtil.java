@@ -57,6 +57,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.InvocationTargetException;
@@ -157,7 +158,7 @@ public final class GuideUtil {
     }
 
     @SuppressWarnings("deprecation")
-    public static void addRTSButton(ChestMenu menu, Player p, PlayerProfile profile, Format format, SlimefunGuideMode mode, SlimefunGuideImplementation implementation) {
+    public static void addRTSButton(@NotNull ChestMenu menu, @NotNull Player p, @NotNull PlayerProfile profile, @NotNull Format format, SlimefunGuideMode mode, @NotNull SlimefunGuideImplementation implementation) {
         if (JustEnoughGuide.getConfigManager().isRTSSearch()) {
             for (var ss : format.getChars('R')) {
                 menu.addItem(ss, ItemStackUtil.getCleanItem(Models.RTS_ITEM), (pl, slot, itemstack, action) -> EventUtil.callEvent(new GuideEvents.RTSButtonClickEvent(pl, itemstack, slot, action, menu, implementation)).ifSuccess(() -> {
@@ -215,7 +216,7 @@ public final class GuideUtil {
     }
 
     @SuppressWarnings("deprecation")
-    public static void addBookMarkButton(ChestMenu menu, Player p, PlayerProfile profile, Format format, JEGSlimefunGuideImplementation implementation, ItemGroup itemGroup) {
+    public static void addBookMarkButton(@NotNull ChestMenu menu, Player p, @NotNull PlayerProfile profile, @NotNull Format format, @NotNull JEGSlimefunGuideImplementation implementation, ItemGroup itemGroup) {
         if (JustEnoughGuide.getConfigManager().isBookmark()) {
             BookmarkRelocation b = itemGroup instanceof BookmarkRelocation bookmarkRelocation ? bookmarkRelocation : null;
             for (var s : b != null ? b.getBookMark(implementation, p) : format.getChars('C')) {
@@ -239,7 +240,7 @@ public final class GuideUtil {
     }
 
     @SuppressWarnings("deprecation")
-    public static void addItemMarkButton(ChestMenu menu, Player p, PlayerProfile profile, Format format, JEGSlimefunGuideImplementation implementation, ItemGroup itemGroup) {
+    public static void addItemMarkButton(@NotNull ChestMenu menu, Player p, @NotNull PlayerProfile profile, @NotNull Format format, @NotNull JEGSlimefunGuideImplementation implementation, @Nullable ItemGroup itemGroup) {
         if (itemGroup != null && JustEnoughGuide.getConfigManager().isBookmark() && isTaggedGroupType(itemGroup)) {
             BookmarkRelocation b = itemGroup instanceof BookmarkRelocation relocation ? relocation : null;
             for (var ss : b != null ? b.getItemMark(implementation, p) : format.getChars('c')) {

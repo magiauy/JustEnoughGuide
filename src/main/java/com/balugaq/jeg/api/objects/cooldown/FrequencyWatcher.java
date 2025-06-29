@@ -28,6 +28,7 @@
 package com.balugaq.jeg.api.objects.cooldown;
 
 import lombok.Data;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -39,7 +40,7 @@ public class FrequencyWatcher<Key> {
     private final long maxFrequencyPerPeriod;
     private final Map<Key, Long> frequencyMap = new ConcurrentHashMap<>();
     private final Map<Key, Long> lastUpdateTime = new ConcurrentHashMap<>();
-    private final CooldownPool<Key> pool;
+    private final @NotNull CooldownPool<Key> pool;
     private int periods;
 
     public FrequencyWatcher(int periods, TimeUnit periodUnit, long maxFrequencyPerPeriod, long cooldownMillis) {
@@ -49,7 +50,7 @@ public class FrequencyWatcher<Key> {
         this.pool = new CooldownPool<>(cooldownMillis);
     }
 
-    public Result checkCooldown(Key key) {
+    public @NotNull Result checkCooldown(Key key) {
         updateFrequency(key);
 
         long currentFrequency = frequencyMap.getOrDefault(key, 0L);

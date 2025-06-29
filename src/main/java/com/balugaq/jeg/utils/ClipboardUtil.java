@@ -34,6 +34,7 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -57,12 +58,12 @@ public class ClipboardUtil {
     }
 
     @ParametersAreNonnullByDefault
-    public static TextComponent makeComponent(String display, String hover, String text) {
+    public static @NotNull TextComponent makeComponent(String display, String hover, String text) {
         return makeComponent(display, hover, text, null);
     }
 
     @ParametersAreNonnullByDefault
-    public static TextComponent makeComponent(String display, String hover, String text, @Nullable Consumer<TextComponent> consumer) {
+    public static @NotNull TextComponent makeComponent(String display, String hover, String text, @Nullable Consumer<TextComponent> consumer) {
         TextComponent msg = new TextComponent(ChatColors.color(display));
         msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(ChatColors.color(hover))));
         msg.setClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, ChatColors.color(text)));

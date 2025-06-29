@@ -28,6 +28,7 @@
 package com.balugaq.jeg.api.patches;
 
 import com.balugaq.jeg.utils.ReflectionUtil;
+import com.balugaq.jeg.utils.compatibility.Converter;
 import com.balugaq.jeg.utils.formatter.Formats;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuide;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
@@ -37,7 +38,6 @@ import io.github.thebusybiscuit.slimefun4.core.services.LocalizationService;
 import io.github.thebusybiscuit.slimefun4.core.services.github.GitHubService;
 import io.github.thebusybiscuit.slimefun4.core.services.sounds.SoundEffect;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
-import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import io.github.thebusybiscuit.slimefun4.utils.ChatUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import io.github.thebusybiscuit.slimefun4.utils.NumberUtils;
@@ -48,6 +48,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
@@ -87,7 +88,7 @@ public class JEGGuideSettings {
         LocalizationService locale = Slimefun.getLocalization();
 
         // @formatter:off
-        ItemStack b = new CustomItemStack(
+        ItemStack b = Converter.getItem(
                 SlimefunGuide.getItem(SlimefunGuideMode.SURVIVAL_MODE),
                 "&e\u21E6 " + locale.getMessage(p, "guide.back.title"),
                 "",
@@ -115,7 +116,7 @@ public class JEGGuideSettings {
         contributorsLore.add("&7\u21E8 &e" + locale.getMessage(p, "guide.credits.open"));
 
         // @formatter:off
-        ItemStack s = new CustomItemStack(
+        ItemStack s = Converter.getItem(
                 SlimefunUtils.getCustomHead("e952d2b3f351a6b0487cc59db31bf5f2641133e5ba0006b18576e996a0293e52"),
                 "&c" + locale.getMessage(p, "guide.title.credits"),
                 contributorsLore.toArray(new String[0]));
@@ -128,9 +129,8 @@ public class JEGGuideSettings {
         // @formatter:on
 
 
-
         // @formatter:off
-        ItemStack v = new CustomItemStack(
+        ItemStack v = Converter.getItem(
                 Material.WRITABLE_BOOK,
                 ChatColor.GREEN + locale.getMessage(p, "guide.title.versions"),
                 "&7&o" + locale.getMessage(p, "guide.tooltips.versions-notice"),
@@ -149,7 +149,7 @@ public class JEGGuideSettings {
         // @formatter:on
 
         // @formatter:off
-        ItemStack u = new CustomItemStack(
+        ItemStack u = Converter.getItem(
                 Material.COMPARATOR,
                 "&e" + locale.getMessage(p, "guide.title.source"),
                 "",
@@ -173,7 +173,7 @@ public class JEGGuideSettings {
         // @formatter:on
 
         // @formatter:off
-        ItemStack W = new CustomItemStack(
+        ItemStack W = Converter.getItem(
                 Material.KNOWLEDGE_BOOK,
                 "&3" + locale.getMessage(p, "guide.title.wiki"),
                 "",
@@ -193,7 +193,7 @@ public class JEGGuideSettings {
         // @formatter:on
 
         // @formatter:off
-        ItemStack l = new CustomItemStack(
+        ItemStack l = Converter.getItem(
                 Material.BOOKSHELF,
                 "&3" + locale.getMessage(p, "guide.title.addons"),
                 "",
@@ -218,7 +218,7 @@ public class JEGGuideSettings {
                 // @formatter:off
                 menu.addItem(
                         ss,
-                        new CustomItemStack(
+                        Converter.getItem(
                                 Material.REDSTONE_TORCH,
                                 "&4" + locale.getMessage(p, "guide.title.bugs"),
                                 "",
@@ -243,7 +243,7 @@ public class JEGGuideSettings {
         for (int ss : Formats.settings.getChars('U')) {
             menu.addItem(
                     ss,
-                    new CustomItemStack(
+                    Converter.getItem(
                             Material.TOTEM_OF_UNDYING, ChatColor.RED + locale.getMessage(p, "guide.work-in-progress")),
                     (pl, slot, item, action) -> {
                         // Add something here
@@ -296,7 +296,7 @@ public class JEGGuideSettings {
     }
 
     @SuppressWarnings("unchecked")
-    public static List<SlimefunGuideOption<?>> getOptions() {
+    public static @Nullable List<SlimefunGuideOption<?>> getOptions() {
         return (List<SlimefunGuideOption<?>>) ReflectionUtil.getStaticValue(SlimefunGuideSettings.class, "options", List.class);
     }
 }

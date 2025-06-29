@@ -31,6 +31,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,7 +57,7 @@ public abstract class Format {
     public abstract void loadMapping();
 
     @ApiStatus.Obsolete
-    public void loadMapping(List<String> format) {
+    public void loadMapping(@NotNull List<String> format) {
         int index = -1;
         for (var string : format) {
             for (var c : string.toCharArray()) {
@@ -69,7 +70,7 @@ public abstract class Format {
     }
 
     @ApiStatus.Obsolete
-    public List<Integer> getChars(String s) {
+    public List<Integer> getChars(@NotNull String s) {
         return getChars(s.toCharArray()[0]);
     }
 
