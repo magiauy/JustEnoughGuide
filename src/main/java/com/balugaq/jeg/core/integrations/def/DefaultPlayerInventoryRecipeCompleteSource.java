@@ -30,9 +30,9 @@ package com.balugaq.jeg.core.integrations.def;
 import com.balugaq.jeg.api.objects.events.GuideEvents;
 import com.balugaq.jeg.api.recipe_complete.source.base.SlimefunSource;
 import com.balugaq.jeg.core.integrations.networksexpansion.NetworksExpansionIntegrationMain;
-import com.balugaq.netex.core.listeners.JEGCompatibleListener;
-import com.balugaq.netex.utils.BlockMenuUtil;
-import com.balugaq.netex.utils.GuideUtil;
+import com.balugaq.jeg.core.listeners.RecipeCompleteListener;
+import com.balugaq.jeg.utils.BlockMenuUtil;
+import com.balugaq.jeg.utils.GuideUtil;
 import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
@@ -62,7 +62,7 @@ public class DefaultPlayerInventoryRecipeCompleteSource implements SlimefunSourc
     @SuppressWarnings("deprecation")
     @Override
     public boolean openGuide(@NotNull BlockMenu blockMenu, @NotNull Player player, @NotNull ClickAction clickAction, int @NotNull [] ingredientSlots, boolean unordered, @Nullable Runnable callback) {
-        GuideEvents.ItemButtonClickEvent lastEvent = JEGCompatibleListener.getLastEvent(player.getUniqueId());
+        GuideEvents.ItemButtonClickEvent lastEvent = RecipeCompleteListener.getLastEvent(player.getUniqueId());
         if (clickAction.isRightClicked() && lastEvent != null) {
             int times = 1;
             if (clickAction.isShiftClicked()) {
@@ -94,7 +94,7 @@ public class DefaultPlayerInventoryRecipeCompleteSource implements SlimefunSourc
         }
 
         GuideUtil.openMainMenuAsync(player, SlimefunGuideMode.SURVIVAL_MODE, 1);
-        JEGCompatibleListener.addCallback(player.getUniqueId(), ((event, profile) -> {
+        RecipeCompleteListener.addCallback(player.getUniqueId(), ((event, profile) -> {
             BlockMenu actualMenu = StorageCacheUtils.getMenu(blockMenu.getLocation());
             if (actualMenu == null) {
                 if (callback != null) {
@@ -126,7 +126,7 @@ public class DefaultPlayerInventoryRecipeCompleteSource implements SlimefunSourc
                 callback.run();
             }
         }));
-        JEGCompatibleListener.tagGuideOpen(player);
+        RecipeCompleteListener.tagGuideOpen(player);
         return true;
     }
 

@@ -28,7 +28,10 @@
 package com.balugaq.jeg.core.managers;
 
 import com.balugaq.jeg.api.managers.AbstractManager;
+import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.Debug;
+import com.balugaq.jeg.utils.MinecraftVersion;
+import io.github.thebusybiscuit.slimefun4.libraries.paperlib.PaperLib;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -68,7 +71,7 @@ public class ConfigManager extends AbstractManager {
     private final boolean RECIPE_COMPLETE;
     private final boolean PINYIN_SEARCH;
     private final boolean BOOKMARK;
-    private final boolean RTS_SEARCH;
+    private boolean RTS_SEARCH;
     private final boolean BEGINNER_OPTION;
     private final @NotNull String SURVIVAL_GUIDE_TITLE;
     private final @NotNull String CHEAT_GUIDE_TITLE;
@@ -100,6 +103,16 @@ public class ConfigManager extends AbstractManager {
         this.SURVIVAL_GUIDE_TITLE = plugin.getConfig().getString("guide.survival-guide-title", "&2&lSlimefun 指南 (生存模式)         &e&l爱来自 JustEnoughGuide");
         this.CHEAT_GUIDE_TITLE = plugin.getConfig().getString("guide.cheat-guide-title", "&c&lSlimefun 指南 (作弊模式)         &e&l爱来自 JustEnoughGuide");
         this.RTS_SEARCH = plugin.getConfig().getBoolean("improvements.rts-search", true);
+        if (JustEnoughGuide.getMCVersion().isAtLeast(MinecraftVersion.MINECRAFT_1_21_2)) {
+            if (PaperLib.isPaper()) {
+                this.RTS_SEARCH = false;
+            }
+
+            if (JustEnoughGuide.getMCVersion().isAtLeast(MinecraftVersion.MINECRAFT_1_21_3)) {
+                this.RTS_SEARCH = false;
+            }
+        }
+
         this.BEGINNER_OPTION = plugin.getConfig().getBoolean("improvements.beginner-option", true);
         var rawBlacklist = plugin.getConfig().getStringList("blacklist");
         if (rawBlacklist == null || rawBlacklist.isEmpty()) {

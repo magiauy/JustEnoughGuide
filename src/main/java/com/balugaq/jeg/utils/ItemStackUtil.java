@@ -61,4 +61,14 @@ public final class ItemStackUtil {
 
         return cleanItem;
     }
+
+    public static @NotNull ItemStack getAsQuantity(@Nullable ItemStack itemStack, int amount) {
+        if (itemStack == null) {
+            return new ItemStack(Material.AIR);
+        } else {
+            ItemStack clone = itemStack.clone();
+            clone.setAmount(amount);
+            return clone;
+        }
+    }
 }

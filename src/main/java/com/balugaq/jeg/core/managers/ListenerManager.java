@@ -32,6 +32,7 @@ import com.balugaq.jeg.core.listeners.GroupTierEditorListener;
 import com.balugaq.jeg.core.listeners.GuideListener;
 import com.balugaq.jeg.core.listeners.RTSListener;
 import com.balugaq.jeg.core.listeners.RecipeCompletableListener;
+import com.balugaq.jeg.core.listeners.RecipeCompleteListener;
 import com.balugaq.jeg.core.listeners.SearchGroupInitListener;
 import com.balugaq.jeg.core.listeners.SpecialMenuFixListener;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
@@ -65,6 +66,7 @@ public class ListenerManager extends AbstractManager {
         listeners.add(new RTSListener());
         listeners.add(new GroupTierEditorListener());
         if (JustEnoughGuide.getConfigManager().isRecipeComplete()) {
+            listeners.add(new RecipeCompleteListener());
             listeners.add(new RecipeCompletableListener());
         }
     }

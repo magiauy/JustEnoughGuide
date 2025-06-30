@@ -25,51 +25,39 @@
  *
  */
 
-package com.balugaq.jeg.core.integrations.slimetinker;
+package com.balugaq.jeg.api.objects;
 
-import com.balugaq.jeg.core.integrations.Integration;
-import com.balugaq.jeg.api.recipe_complete.RecipeCompletableRegistry;
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
-import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.ArrayList;
 import java.util.List;
+
+import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author balugaq
  * @since 1.9
  */
-public class SlimeTinkerIntegrationMain implements Integration {
-    public static final int[] TINKERS_WORKBENCH_INPUT_SLOTS = new int[]{10, 11, 12, 19, 20, 21, 28, 29, 30};
-    public static final List<SlimefunItem> handledSlimefunItems = new ArrayList<>();
+public class SimpleRecipeChoice extends RecipeChoice.ExactChoice implements RecipeChoice {
+    public SimpleRecipeChoice(@NotNull ItemStack choice) {
+        super(choice);
+    }
 
-    public static void rrc(String id, int[] slots, boolean unordered) {
-        SlimefunItem slimefunItem = SlimefunItem.getById(id);
-        if (slimefunItem != null) {
-            rrc(slimefunItem, slots, unordered);
+    public SimpleRecipeChoice(@NotNull ItemStack @NotNull ... choices) {
+        super(choices);
+    }
+
+    public SimpleRecipeChoice(@NotNull List<ItemStack> choices) {
+        super(choices);
+    }
+
+    public boolean test(@NotNull ItemStack other) {
+        for(ItemStack choice : this.getChoices()) {
+            if (SlimefunUtils.isItemSimilar(choice, other, true, false)) {
+                return true;
+            }
         }
-    }
 
-
-    public static void rrc(SlimefunItem slimefunItem, int[] slots, boolean unordered) {
-        handledSlimefunItems.add(slimefunItem);
-        RecipeCompletableRegistry.registerRecipeCompletable(slimefunItem, slots, unordered);
-    }
-
-    @Override
-    public String getHookPlugin() {
-        return "SlimeTinker";
-    }
-
-    @Override
-    public void onEnable() {
-        rrc("TINKERS_WORKBENCH", TINKERS_WORKBENCH_INPUT_SLOTS, false);
-    }
-
-    @Override
-    public void onDisable() {
-        for (SlimefunItem slimefunItem : handledSlimefunItems) {
-            RecipeCompletableRegistry.unregisterRecipeCompletable(slimefunItem);
-        }
+        return false;
     }
 }

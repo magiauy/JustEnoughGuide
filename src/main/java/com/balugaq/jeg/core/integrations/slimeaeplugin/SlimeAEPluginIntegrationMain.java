@@ -29,7 +29,6 @@ package com.balugaq.jeg.core.integrations.slimeaeplugin;
 
 import com.balugaq.jeg.core.integrations.Integration;
 import com.balugaq.jeg.api.recipe_complete.RecipeCompletableRegistry;
-import io.github.sefiraat.networks.Networks;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -49,15 +48,6 @@ public class SlimeAEPluginIntegrationMain implements Integration {
             18, 19, 20, 21, 22, 23, 24, 25, 26
     };
     public static final List<SlimefunItem> handledSlimefunItems = new ArrayList<>();
-    public static JavaPlugin plugin = null;
-
-    public static JavaPlugin getPlugin() {
-        if (plugin == null) {
-            plugin = Networks.getInstance();
-        }
-
-        return plugin;
-    }
 
     public static void rrc(String id, int[] slots, boolean unordered) {
         SlimefunItem slimefunItem = SlimefunItem.getById(id);

@@ -29,9 +29,9 @@ package com.balugaq.jeg.core.integrations.networksexpansion;
 
 import com.balugaq.jeg.api.objects.events.GuideEvents;
 import com.balugaq.jeg.api.recipe_complete.source.base.SlimefunSource;
-import com.balugaq.netex.core.listeners.JEGCompatibleListener;
-import com.balugaq.netex.utils.BlockMenuUtil;
-import com.balugaq.netex.utils.GuideUtil;
+import com.balugaq.jeg.core.listeners.RecipeCompleteListener;
+import com.balugaq.jeg.utils.BlockMenuUtil;
+import com.balugaq.jeg.utils.GuideUtil;
 import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
 import io.github.sefiraat.networks.NetworkStorage;
 import io.github.sefiraat.networks.network.NetworkRoot;
@@ -91,7 +91,7 @@ public class NetworksExpansionRecipeCompleteSource implements SlimefunSource {
     @SuppressWarnings("deprecation")
     @Override
     public boolean openGuide(@NotNull BlockMenu blockMenu, @NotNull Player player, @NotNull ClickAction clickAction, int @NotNull [] ingredientSlots, boolean unordered, @Nullable Runnable callback) {
-        GuideEvents.ItemButtonClickEvent lastEvent = JEGCompatibleListener.getLastEvent(player.getUniqueId());
+        GuideEvents.ItemButtonClickEvent lastEvent = RecipeCompleteListener.getLastEvent(player.getUniqueId());
         if (clickAction.isRightClicked() && lastEvent != null) {
             int times = 1;
             if (clickAction.isShiftClicked()) {
@@ -124,7 +124,7 @@ public class NetworksExpansionRecipeCompleteSource implements SlimefunSource {
         }
 
         GuideUtil.openMainMenuAsync(player, SlimefunGuideMode.SURVIVAL_MODE, 1);
-        JEGCompatibleListener.addCallback(player.getUniqueId(), ((event, profile) -> {
+        RecipeCompleteListener.addCallback(player.getUniqueId(), ((event, profile) -> {
             BlockMenu actualMenu = StorageCacheUtils.getMenu(blockMenu.getLocation());
             if (actualMenu == null) {
                 if (callback != null) {
@@ -155,7 +155,7 @@ public class NetworksExpansionRecipeCompleteSource implements SlimefunSource {
                 callback.run();
             }
         }));
-        JEGCompatibleListener.tagGuideOpen(player);
+        RecipeCompleteListener.tagGuideOpen(player);
         return true;
     }
 

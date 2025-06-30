@@ -29,7 +29,6 @@ package com.balugaq.jeg.core.integrations.infinityexpansion;
 
 import com.balugaq.jeg.core.integrations.Integration;
 import com.balugaq.jeg.api.recipe_complete.RecipeCompletableRegistry;
-import io.github.sefiraat.networks.Networks;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -51,15 +50,6 @@ public class InfinityExpansionIntegrationMain implements Integration {
             45, 46, 47, 48, 49, 50
     };
     public static final List<SlimefunItem> handledSlimefunItems = new ArrayList<>();
-    public static JavaPlugin plugin = null;
-
-    public static JavaPlugin getPlugin() {
-        if (plugin == null) {
-            plugin = Networks.getInstance();
-        }
-
-        return plugin;
-    }
 
     public static void rrc(String id, int[] slots, boolean unordered) {
         SlimefunItem slimefunItem = SlimefunItem.getById(id);
