@@ -25,12 +25,13 @@
  *
  */
 
-package com.balugaq.jeg.core.integrations.networks;
+package com.balugaq.jeg.core.integrations.slimetinker;
 
 import com.balugaq.jeg.core.integrations.Integration;
 import com.balugaq.jeg.core.listeners.RecipeCompletableListener;
-import io.github.sefiraat.networks.slimefun.NetworkSlimefunItems;
+import io.github.sefiraat.networks.Networks;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,10 +40,26 @@ import java.util.List;
  * @author balugaq
  * @since 1.9
  */
-public class NetworksIntegrationMain implements Integration {
-    public static final int[] ENCODER_RECIPE_SLOTS = new int[]{12, 13, 14, 21, 22, 23, 30, 31, 32};
-    public static final int[] CRAFTING_GRID_RECIPE_SLOTS = new int[]{6, 7, 8, 15, 16, 17, 24, 25, 26};
+public class SlimeTinkerIntegrationMain implements Integration {
+    public static final int[] TINKERS_WORKBENCH_INPUT_SLOTS = new int[]{10, 11, 12, 19, 20, 21, 28, 29, 30};
     public static final List<SlimefunItem> handledSlimefunItems = new ArrayList<>();
+    public static JavaPlugin plugin = null;
+
+    public static JavaPlugin getPlugin() {
+        if (plugin == null) {
+            plugin = Networks.getInstance();
+        }
+
+        return plugin;
+    }
+
+    public static void rrc(String id, int[] slots, boolean unordered) {
+        SlimefunItem slimefunItem = SlimefunItem.getById(id);
+        if (slimefunItem != null) {
+            rrc(slimefunItem, slots, unordered);
+        }
+    }
+
 
     public static void rrc(SlimefunItem slimefunItem, int[] slots, boolean unordered) {
         handledSlimefunItems.add(slimefunItem);
@@ -51,13 +68,12 @@ public class NetworksIntegrationMain implements Integration {
 
     @Override
     public String getHookPlugin() {
-        return "Networks";
+        return "SlimeTinker";
     }
 
     @Override
     public void onEnable() {
-        rrc(NetworkSlimefunItems.NETWORK_RECIPE_ENCODER, ENCODER_RECIPE_SLOTS, false);
-        rrc(NetworkSlimefunItems.NETWORK_CRAFTING_GRID, CRAFTING_GRID_RECIPE_SLOTS, false);
+        rrc("TINKERS_WORKBENCH", TINKERS_WORKBENCH_INPUT_SLOTS, false);
     }
 
     @Override

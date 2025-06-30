@@ -27,6 +27,7 @@
 
 package com.balugaq.jeg.api.recipe_complete.source.base;
 
+import com.balugaq.jeg.utils.Debug;
 import com.balugaq.netex.api.data.SimpleRecipeChoice;
 import io.github.sefiraat.networks.utils.StackUtils;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
@@ -110,22 +111,40 @@ public interface Source {
 
     @ParametersAreNonnullByDefault
     default @Nullable ItemStack getItemStackFromPlayerInventory(Player player, ItemStack itemStack) {
+        return getItemStackFromPlayerInventory(player, itemStack, 1);
+    }
+
+    @ParametersAreNonnullByDefault
+    default @Nullable ItemStack getItemStackFromPlayerInventory(Player player, ItemStack itemStack, int amount) {
+        int total = amount;
+
         // get from player inventory
-        for (ItemStack itemStack1 : player.getInventory().getContents()) {
-            if (itemStack1 != null && itemStack1.getType() != Material.AIR) {
-                if (StackUtils.itemsMatch(itemStack1, itemStack, true, false)) {
-                    ItemStack clone = StackUtils.getAsQuantity(itemStack1, 1);
-                    int newAmount = itemStack1.getAmount() - 1;
+        for (int i = 0; i < player.getInventory().getSize(); i++) {
+            ItemStack itemStack1 = player.getInventory().getItem(i);
 
-                    itemStack1.setAmount(newAmount);
-                    if (newAmount == 0) {
-                        itemStack1.setType(Material.AIR);
-                    }
+            if (itemStack1 != null && itemStack1.getType() != Material.AIR &&
+                    StackUtils.itemsMatch(itemStack1, itemStack, true, false)) {
 
+                int existing = itemStack1.getAmount();
+
+                if (existing <= amount) {
+                    amount -= existing;
+                    player.getInventory().clear(i);
+                } else {
+                    itemStack1.setAmount(existing - amount);
+                    player.getInventory().setItem(i, itemStack1);
+                    amount = 0;
+                }
+
+                if (amount <= 0) {
+                    ItemStack clone = itemStack.clone();
+                    clone.setAmount(total);
                     return clone;
                 }
             }
         }
+
         return null;
     }
+
 }

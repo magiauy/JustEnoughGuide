@@ -28,7 +28,6 @@
 package com.balugaq.jeg.utils;
 
 import com.balugaq.jeg.utils.compatibility.Converter;
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -61,8 +60,25 @@ public class Models {
             Material.KNOWLEDGE_BOOK,
             "&b配方补全书",
             "",
-            "&f点击进行配方补全",
-            "&f支持以下机器",
-            "&7- &f逻辑工艺 - 快捷机器"
+            "&f点击进行配方补全"
+    ));
+    public static final SlimefunItemStack SUPPORTED_ADDONS_INFO = new SlimefunItemStack("JEG_RECIPE_COMPLETE_SUPPORTED_ADDONS_INFO", Converter.getItem(
+            Material.PAPER,
+            "&f对以下附属的部分机器适配配方补全",
+            "&7如需适配更多可在 JEG GitHub 提 issue",
+            "&7- 快捷机器",
+            "&7- 乱序技艺 2.0-Preview",
+            "&7- 乱序技艺 2.0",
+            "&7- 乱序技艺 2.0 改版",
+            "&7- 无尽贪婪",
+            "&7- 逻辑工艺",
+            "&7- 网络",
+            "&7- 网络拓展",
+            "&7- 黑曜石科技",
+            "&7- 粘液AE",
+            "&7- 蓬松机器",
+            "&7- 粘液匠魂",
+            "&7- 星系",
+            "&7- 美食家"
     ));
 }

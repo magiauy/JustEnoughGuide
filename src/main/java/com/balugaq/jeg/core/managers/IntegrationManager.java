@@ -28,10 +28,23 @@
 package com.balugaq.jeg.core.managers;
 
 import com.balugaq.jeg.api.managers.AbstractManager;
+import com.balugaq.jeg.api.recipe_complete.source.base.RecipeCompleteProvider;
 import com.balugaq.jeg.core.integrations.Integration;
+import com.balugaq.jeg.core.integrations.def.DefaultPlayerInventoryRecipeCompleteSource;
+import com.balugaq.jeg.core.integrations.fastmachines.FastMachinesIntegrationMain;
+import com.balugaq.jeg.core.integrations.finalTECHChangedv3.FinalTECHChangedIntegrationMain;
+import com.balugaq.jeg.core.integrations.finalTECHv2.FinalTECHIntegrationMain;
+import com.balugaq.jeg.core.integrations.finaltechv1.FinalTechIntegrationMain;
+import com.balugaq.jeg.core.integrations.fluffymachines.FluffyMachinesIntegrationMain;
+import com.balugaq.jeg.core.integrations.galacitfun.GalactifunIntegrationMain;
+import com.balugaq.jeg.core.integrations.gastronomicon.GastronomiconIntegrationMain;
+import com.balugaq.jeg.core.integrations.infinityexpansion.InfinityExpansionIntegrationMain;
 import com.balugaq.jeg.core.integrations.logitech.LogitechIntegrationMain;
 import com.balugaq.jeg.core.integrations.networks.NetworksIntegrationMain;
 import com.balugaq.jeg.core.integrations.networksexpansion.NetworksExpansionIntegrationMain;
+import com.balugaq.jeg.core.integrations.obsidianexpansion.ObsidianExpansionIntegrationMain;
+import com.balugaq.jeg.core.integrations.slimeaeplugin.SlimeAEPluginIntegrationMain;
+import com.balugaq.jeg.core.integrations.slimetinker.SlimeTinkerIntegrationMain;
 import com.balugaq.jeg.utils.Debug;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -55,13 +68,22 @@ public class IntegrationManager extends AbstractManager {
     private boolean enabledNetworksExpansion;
     private boolean hasRecipeCompletableWithGuide;
     private boolean enabledOreWorkshop;
+    private boolean enabledFinalTech;
     private boolean enabledFinalTECH;
     private boolean enabledFinalTECH_Changed;
     private boolean enabledNexcavate;
     private boolean enabledLogiTech;
     private boolean enabledInfinityExpansion;
+    private boolean enabledInfinityExpansion2;
     private boolean enabledInfinityExpansion_Changed;
     private boolean enabledObsidianExpansion;
+    private boolean enabledSlimeFrame;
+    private boolean enabledFastMachines;
+    private boolean enabledSlimeAEPlugin;
+    private boolean enabledFluffyMachines;
+    private boolean enabledGalactifun;
+    private boolean enabledGastronomicon;
+    private boolean enabledSlimeTinker;
 
     public IntegrationManager(@NotNull JavaPlugin plugin) {
         this.plugin = plugin;
@@ -95,14 +117,52 @@ public class IntegrationManager extends AbstractManager {
             // Check if OreWorkshop is enabled
             this.enabledOreWorkshop = plugin.getServer().getPluginManager().isPluginEnabled("OreWorkshop");
 
+            this.enabledFinalTech = Bukkit.getPluginManager().isPluginEnabled("FinalTech");
             this.enabledFinalTECH_Changed = Bukkit.getPluginManager().isPluginEnabled("FinalTECH-Changed");
             this.enabledFinalTECH = enabledFinalTECH_Changed || Bukkit.getPluginManager().isPluginEnabled("FinalTECH");
             this.enabledNexcavate = Bukkit.getPluginManager().isPluginEnabled("Nexcavate");
             this.enabledLogiTech = Bukkit.getPluginManager().isPluginEnabled("LogiTech");
+            this.enabledInfinityExpansion2 = Bukkit.getPluginManager().isPluginEnabled("InfinityExpansion2");
             this.enabledInfinityExpansion_Changed = Bukkit.getPluginManager().isPluginEnabled("InfinityExpansion-Changed");
             this.enabledInfinityExpansion = enabledInfinityExpansion_Changed || Bukkit.getPluginManager().isPluginEnabled("InfinityExpansion");
             this.enabledObsidianExpansion = Bukkit.getPluginManager().isPluginEnabled("ObsidianExpansion");
+            this.enabledSlimeFrame = Bukkit.getPluginManager().isPluginEnabled("SlimeFrame");
+            this.enabledFastMachines = Bukkit.getPluginManager().isPluginEnabled("FastMachines");
+            this.enabledSlimeAEPlugin = Bukkit.getPluginManager().isPluginEnabled("SlimeAEPlugin");
+            this.enabledFluffyMachines = Bukkit.getPluginManager().isPluginEnabled("FluffyMachines");
+            this.enabledGalactifun = Bukkit.getPluginManager().isPluginEnabled("Galactifun");
+            this.enabledGastronomicon = Bukkit.getPluginManager().isPluginEnabled("Gastronomicon");
+            this.enabledSlimeTinker = Bukkit.getPluginManager().isPluginEnabled("SlimeTinker");
 
+            if (enabledFastMachines) {
+                integrations.add(new FastMachinesIntegrationMain());
+            }
+            if (enabledFinalTech) {
+                integrations.add(new FinalTechIntegrationMain());
+            }
+
+            if (enabledFinalTECH_Changed) {
+                integrations.add(new FinalTECHIntegrationMain());
+            }
+            // intentionally "else"
+            else {
+                if (enabledFinalTECH) {
+                    integrations.add(new FinalTECHChangedIntegrationMain());
+                }
+            }
+
+            if (enabledFluffyMachines) {
+                integrations.add(new FluffyMachinesIntegrationMain());
+            }
+            if (enabledGalactifun) {
+                integrations.add(new GalactifunIntegrationMain());
+            }
+            if (enabledGastronomicon) {
+                integrations.add(new GastronomiconIntegrationMain());
+            }
+            if (enabledInfinityExpansion) {
+                integrations.add(new InfinityExpansionIntegrationMain());
+            }
             if (enabledLogiTech) {
                 integrations.add(new LogitechIntegrationMain());
             }
@@ -112,8 +172,19 @@ public class IntegrationManager extends AbstractManager {
             if (enabledNetworksExpansion) {
                 integrations.add(new NetworksExpansionIntegrationMain());
             }
+            if (enabledObsidianExpansion) {
+                integrations.add(new ObsidianExpansionIntegrationMain());
+            }
+            if (enabledSlimeAEPlugin) {
+                integrations.add(new SlimeAEPluginIntegrationMain());
+            }
+            if (enabledSlimeTinker) {
+                integrations.add(new SlimeTinkerIntegrationMain());
+            }
 
             startupIntegrations();
+
+            RecipeCompleteProvider.addSource(new DefaultPlayerInventoryRecipeCompleteSource());
         }, 1L);
     }
 
@@ -123,9 +194,10 @@ public class IntegrationManager extends AbstractManager {
 
     private void startupIntegrations() {
         for (Integration integration : integrations) {
-            plugin.getLogger().info("Hooked " + integration.getHookPlugin());
+            plugin.getLogger().info("Hooking " + integration.getHookPlugin());
             try {
                 integration.onEnable();
+                plugin.getLogger().info("Hooked " + integration.getHookPlugin());
             } catch (Throwable e) {
                 Debug.trace(e);
             }
@@ -134,11 +206,25 @@ public class IntegrationManager extends AbstractManager {
 
     public void shutdownIntegrations() {
         for (Integration integration : integrations) {
+            plugin.getLogger().info("Unhooking " + integration.getHookPlugin());
             try {
                 integration.onDisable();
+                plugin.getLogger().info("Unhooked " + integration.getHookPlugin());
             } catch (Throwable e) {
                 Debug.trace(e);
             }
         }
+    }
+
+    public boolean isEnabledFinalTech() {
+        return enabledFinalTech;
+    }
+
+    public boolean isEnabledFinalTECH() {
+        return enabledFinalTECH;
+    }
+
+    public boolean isEnabledFinalTECH_Changed() {
+        return enabledFinalTECH_Changed;
     }
 }

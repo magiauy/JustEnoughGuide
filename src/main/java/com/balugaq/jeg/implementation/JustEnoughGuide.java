@@ -454,5 +454,3 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
         return getConfigManager().isDebug();
     }
 }
-
-使编译失败，先保存，晚上再回来

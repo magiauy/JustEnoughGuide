@@ -25,27 +25,4 @@
  *
  */
 
-package com.balugaq.jeg.api.objects.collection;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import org.jetbrains.annotations.NotNull;
-
-@AllArgsConstructor
-@Data
-public class Pair<F, S> {
-    public @NotNull
-    final F first;
-    public @NotNull
-    final S second;
-
-    @NotNull
-    public F first() {
-        return first;
-    }
-
-    @NotNull
-    public S second() {
-        return second;
-    }
-}
+package com.balugaq.jeg.core.integrations.finalTECHChangedv3;

@@ -33,6 +33,8 @@ import org.bukkit.block.Dispenser;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Range;
 
 /**
  * Target block has {@link Inventory}
@@ -43,6 +45,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface VanillaSource extends Source {
     @SuppressWarnings("deprecation")
-    boolean openGuide(@NotNull Inventory inventory, @NotNull Player player, @NotNull ClickAction clickAction, int[] ingredientSlots, boolean unordered);
-    boolean completeRecipeWithGuide(@NotNull Inventory inventory, GuideEvents.@NotNull ItemButtonClickEvent event, int[] ingredientSlots, boolean unordered);
+    boolean openGuide(@NotNull Inventory inventory, @NotNull Player player, @NotNull ClickAction clickAction, @Range(from = 0, to = 53) int @NotNull [] ingredientSlots, boolean unordered, @Nullable Runnable callback);
+
+    boolean completeRecipeWithGuide(@NotNull Inventory inventory, GuideEvents.@NotNull ItemButtonClickEvent event, @Range(from = 0, to = 53) int @NotNull [] ingredientSlots, boolean unordered);
 }

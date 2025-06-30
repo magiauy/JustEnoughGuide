@@ -29,6 +29,7 @@ package com.balugaq.jeg.core.listeners;
 
 import com.balugaq.jeg.api.objects.collection.Pair;
 import com.balugaq.jeg.api.recipe_complete.source.base.RecipeCompleteProvider;
+import com.balugaq.jeg.api.recipe_complete.source.base.SlimefunSource;
 import com.balugaq.jeg.implementation.items.ItemsSetup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
@@ -45,9 +46,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class RecipeCompletableListener implements Listener {
+    private static final Set<UUID> listening = ConcurrentHashMap.newKeySet();
     private static final Map<SlimefunItem, Pair<int[], Boolean>> INGREDIENT_SLOTS = new ConcurrentHashMap<>();
     private static final List<SlimefunItem> NOT_APPLICABLE_ITEMS = new ArrayList<>();
 
@@ -79,17 +83,6 @@ public class RecipeCompletableListener implements Listener {
         INGREDIENT_SLOTS.remove(slimefunItem);
     }
 
-    @EventHandler
-    public void prepare(InventoryOpenEvent event) {
-        if (event.getInventory().getHolder() instanceof BlockMenu blockMenu) {
-            tryAddClickHandler(blockMenu);
-        }
-
-        if (event.getInventory().getHolder() instanceof Dispenser dispenser) {
-            // todo
-        }
-    }
-
     @SuppressWarnings("deprecation")
     private static void tryAddClickHandler(BlockMenu blockMenu) {
         SlimefunItem sf = blockMenu.getPreset().getSlimefunItem();
@@ -102,25 +95,40 @@ public class RecipeCompletableListener implements Listener {
         }
 
         ChestMenu.MenuClickHandler old = blockMenu.getPlayerInventoryClickHandler();
+        if (old instanceof TaggedRecipeCompletable) {
+            return;
+        }
 
         blockMenu.addPlayerInventoryClickHandler((RecipeCompletableClickHandler) (player, slot, itemStack, clickAction) -> {
+            // mixin start
             if (SlimefunUtils.isItemSimilar(itemStack, getRecipeCompletableBookItem(), false, false, true, false) && blockMenu.isPlayerInventoryClickable()) {
-                // mixin start
+                if (listening.contains(player.getUniqueId())) {
+                    return false;
+                }
+
+                listening.add(player.getUniqueId());
                 int[] slots = getIngredientSlots(sf);
                 boolean unordered = isUnordered(sf);
-                RecipeCompleteProvider.getSlimefunSources().forEach(source -> {
+                for (SlimefunSource source : RecipeCompleteProvider.getSlimefunSources()) {
+                    // Strategy mode
+                    // Default strategy see {@link DefaultPlayerInventoryRecipeCompleteSource}
                     if (source.handleable(blockMenu, player, clickAction, slots, unordered)) {
-                        source.openGuide(blockMenu, player, clickAction, slots, unordered);
+                        source.openGuide(blockMenu, player, clickAction, slots, unordered, () -> {
+                            listening.remove(player.getUniqueId());
+                        });
+                        break;
                     }
-                });
-                // mixin end
+                }
+
+                return false;
             }
+            // mixin end
 
             if (old != null) {
-                old.onClick(player, slot, itemStack, clickAction);
+                return old.onClick(player, slot, itemStack, clickAction);
             }
 
-            return false;
+            return true;
         });
     }
 
@@ -151,6 +159,17 @@ public class RecipeCompletableListener implements Listener {
 
     public static ItemStack getRecipeCompletableBookItem() {
         return ItemsSetup.RECIPE_COMPLETE_GUIDE.getItem();
+    }
+
+    @EventHandler
+    public void prepare(InventoryOpenEvent event) {
+        if (event.getInventory().getHolder() instanceof BlockMenu blockMenu) {
+            tryAddClickHandler(blockMenu);
+        }
+
+        if (event.getInventory().getHolder() instanceof Dispenser dispenser) {
+            // todo
+        }
     }
 
     /**

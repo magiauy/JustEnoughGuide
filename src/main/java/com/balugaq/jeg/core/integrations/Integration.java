@@ -27,8 +27,14 @@
 
 package com.balugaq.jeg.core.integrations;
 
+/**
+ * @author balugaq
+ * @since 1.9
+ */
 public interface Integration {
     String getHookPlugin();
+
     void onEnable();
+
     void onDisable();
 }

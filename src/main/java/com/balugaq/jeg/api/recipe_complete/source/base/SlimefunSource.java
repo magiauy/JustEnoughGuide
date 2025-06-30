@@ -28,10 +28,13 @@
 package com.balugaq.jeg.api.recipe_complete.source.base;
 
 import com.balugaq.jeg.api.objects.events.GuideEvents;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Range;
 
 /**
  * Target block has {@link BlockMenu}
@@ -41,8 +44,17 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface SlimefunSource extends Source {
     @SuppressWarnings("deprecation")
-    boolean handleable(@NotNull BlockMenu blockMenu, @NotNull Player player, @NotNull ClickAction clickAction, int[] ingredientSlots, boolean unordered);
+    boolean handleable(@NotNull BlockMenu blockMenu, @NotNull Player player, @NotNull ClickAction clickAction, @Range(from = 0, to = 53) int @NotNull [] ingredientSlots, boolean unordered);
+
+    @CanIgnoreReturnValue
     @SuppressWarnings("deprecation")
-    boolean openGuide(@NotNull BlockMenu blockMenu, @NotNull Player player, @NotNull ClickAction clickAction, int[] ingredientSlots, boolean unordered);
-    boolean completeRecipeWithGuide(@NotNull BlockMenu blockMenu, GuideEvents.@NotNull ItemButtonClickEvent event, int[] ingredientSlots, boolean unordered);
+    default boolean openGuide(@NotNull BlockMenu blockMenu, @NotNull Player player, @NotNull ClickAction clickAction, @Range(from = 0, to = 53) int @NotNull [] ingredientSlots, boolean unordered) {
+        return openGuide(blockMenu, player, clickAction, ingredientSlots, unordered, null);
+    }
+
+    @SuppressWarnings("deprecation")
+    boolean openGuide(@NotNull BlockMenu blockMenu, @NotNull Player player, @NotNull ClickAction clickAction, @Range(from = 0, to = 53) int @NotNull [] ingredientSlots, boolean unordered, @Nullable Runnable callback);
+
+    @CanIgnoreReturnValue
+    boolean completeRecipeWithGuide(@NotNull BlockMenu blockMenu, GuideEvents.@NotNull ItemButtonClickEvent event, @Range(from = 0, to = 53) int @NotNull [] ingredientSlots, boolean unordered);
 }

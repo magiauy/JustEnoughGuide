@@ -25,12 +25,13 @@
  *
  */
 
-package com.balugaq.jeg.core.integrations.networks;
+package com.balugaq.jeg.core.integrations.gastronomicon;
 
 import com.balugaq.jeg.core.integrations.Integration;
 import com.balugaq.jeg.core.listeners.RecipeCompletableListener;
-import io.github.sefiraat.networks.slimefun.NetworkSlimefunItems;
+import io.github.sefiraat.networks.Networks;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,10 +40,27 @@ import java.util.List;
  * @author balugaq
  * @since 1.9
  */
-public class NetworksIntegrationMain implements Integration {
-    public static final int[] ENCODER_RECIPE_SLOTS = new int[]{12, 13, 14, 21, 22, 23, 30, 31, 32};
-    public static final int[] CRAFTING_GRID_RECIPE_SLOTS = new int[]{6, 7, 8, 15, 16, 17, 24, 25, 26};
+public class GastronomiconIntegrationMain implements Integration {
+    public static final int[] BASIC_MACHINE_INPUT_SLOTS = new int[]{10, 11, 12, 19, 20, 21, 28, 29, 30};
+    public static final int[] ELECTRIC_KITCHEN_INPUT_SLOTS = new int[]{10, 11, 12, 19, 20, 21, 28, 29, 30, 37, 38, 39};
     public static final List<SlimefunItem> handledSlimefunItems = new ArrayList<>();
+    public static JavaPlugin plugin = null;
+
+    public static JavaPlugin getPlugin() {
+        if (plugin == null) {
+            plugin = Networks.getInstance();
+        }
+
+        return plugin;
+    }
+
+    public static void rrc(String id, int[] slots, boolean unordered) {
+        SlimefunItem slimefunItem = SlimefunItem.getById(id);
+        if (slimefunItem != null) {
+            rrc(slimefunItem, slots, unordered);
+        }
+    }
+
 
     public static void rrc(SlimefunItem slimefunItem, int[] slots, boolean unordered) {
         handledSlimefunItems.add(slimefunItem);
@@ -51,13 +69,20 @@ public class NetworksIntegrationMain implements Integration {
 
     @Override
     public String getHookPlugin() {
-        return "Networks";
+        return "Gastronomicon";
     }
 
     @Override
     public void onEnable() {
-        rrc(NetworkSlimefunItems.NETWORK_RECIPE_ENCODER, ENCODER_RECIPE_SLOTS, false);
-        rrc(NetworkSlimefunItems.NETWORK_CRAFTING_GRID, CRAFTING_GRID_RECIPE_SLOTS, false);
+        rrc("GN_CULINARY_WORKBENCH", BASIC_MACHINE_INPUT_SLOTS, false);
+        rrc("GN_MULTI_STOVE", BASIC_MACHINE_INPUT_SLOTS, false);
+        rrc("GN_REFRIDGERATOR", BASIC_MACHINE_INPUT_SLOTS, false);
+        rrc("GN_MILL", BASIC_MACHINE_INPUT_SLOTS, false);
+        rrc("GN_FERMENTER", BASIC_MACHINE_INPUT_SLOTS, false);
+        rrc("GN_LARGE_FERMENTER", BASIC_MACHINE_INPUT_SLOTS, false);
+        rrc("GN_ELECTRIC_KITCHEN_I", ELECTRIC_KITCHEN_INPUT_SLOTS, false);
+        rrc("GN_ELECTRIC_KITCHEN_II", ELECTRIC_KITCHEN_INPUT_SLOTS, false);
+        rrc("GN_ELECTRIC_KITCHEN_III", ELECTRIC_KITCHEN_INPUT_SLOTS, false);
     }
 
     @Override

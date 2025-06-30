@@ -25,11 +25,11 @@
  *
  */
 
-package com.balugaq.jeg.core.integrations.networks;
+package com.balugaq.jeg.core.integrations.fastmachines;
 
 import com.balugaq.jeg.core.integrations.Integration;
 import com.balugaq.jeg.core.listeners.RecipeCompletableListener;
-import io.github.sefiraat.networks.slimefun.NetworkSlimefunItems;
+import com.balugaq.jeg.implementation.JustEnoughGuide;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 
 import java.util.ArrayList;
@@ -39,25 +39,61 @@ import java.util.List;
  * @author balugaq
  * @since 1.9
  */
-public class NetworksIntegrationMain implements Integration {
-    public static final int[] ENCODER_RECIPE_SLOTS = new int[]{12, 13, 14, 21, 22, 23, 30, 31, 32};
-    public static final int[] CRAFTING_GRID_RECIPE_SLOTS = new int[]{6, 7, 8, 15, 16, 17, 24, 25, 26};
+public class FastMachinesIntegrationMain implements Integration {
+    public static final int[] MANUAL_CRAFTER_INPUT_SLOTS = new int[]{
+            0, 1, 2, 3, 4, 5, 6, 7, 8,
+            9, 10, 11, 12, 13, 14, 15, 16, 17,
+            18, 19, 20, 21, 22, 23, 24, 25, 26,
+            27, 28, 29, 30, 31, 32, 33, 34, 35,
+    };
     public static final List<SlimefunItem> handledSlimefunItems = new ArrayList<>();
 
-    public static void rrc(SlimefunItem slimefunItem, int[] slots, boolean unordered) {
+    public static void rrc(String id) {
+        SlimefunItem slimefunItem = SlimefunItem.getById(id);
+        if (slimefunItem != null) {
+            rrc(slimefunItem, MANUAL_CRAFTER_INPUT_SLOTS);
+        }
+    }
+
+    public static void rrc(SlimefunItem slimefunItem, int[] slots) {
         handledSlimefunItems.add(slimefunItem);
-        RecipeCompletableListener.registerRecipeCompletable(slimefunItem, slots, unordered);
+        RecipeCompletableListener.registerRecipeCompletable(slimefunItem, slots, true);
     }
 
     @Override
     public String getHookPlugin() {
-        return "Networks";
+        return "FastMachines";
     }
 
     @Override
     public void onEnable() {
-        rrc(NetworkSlimefunItems.NETWORK_RECIPE_ENCODER, ENCODER_RECIPE_SLOTS, false);
-        rrc(NetworkSlimefunItems.NETWORK_CRAFTING_GRID, CRAFTING_GRID_RECIPE_SLOTS, false);
+        rrc("FM_FAST_CRAFTING_TABLE");
+        rrc("FM_FAST_FURNACE");
+        rrc("FM_FAST_ENHANCED_CRAFTING_TABLE");
+        rrc("FM_FAST_GRIND_STONE");
+        rrc("FM_FAST_ARMOR_FORGE");
+        rrc("FM_FAST_ORE_CRUSHER");
+        rrc("FM_FAST_COMPRESSOR");
+        rrc("FM_FAST_SMELTERY");
+        rrc("FM_FAST_PRESSURE_CHAMBER");
+        rrc("FM_FAST_MAGIC_WORKBENCH");
+        rrc("FM_FAST_ORE_WASHER");
+        rrc("FM_FAST_TABLE_SAW");
+        rrc("FM_FAST_COMPOSTER");
+        rrc("FM_FAST_PANNING_MACHINE");
+        rrc("FM_FAST_JUICER");
+        rrc("FM_FAST_ANCIENT_ALTAR");
+        if (JustEnoughGuide.getIntegrationManager().isEnabledInfinityExpansion()) {
+            rrc("FM_FAST_INFINITY_WORKBENCH");
+            rrc("FM_FAST_MOB_DATA_INFUSER");
+        }
+        if (JustEnoughGuide.getIntegrationManager().isEnabledSlimeFrame()) {
+            rrc("FM_FAST_SLIMEFRAME_FOUNDRY");
+        }
+        if (JustEnoughGuide.getIntegrationManager().isEnabledInfinityExpansion2()) {
+            rrc("FM_FAST_INFINITY_WORKBENCH_2");
+            rrc("FM_FAST_MOB_DATA_INFUSER_2");
+        }
     }
 
     @Override
