@@ -42,8 +42,8 @@ import java.util.List;
 public class LogitechIntegrationMain implements Integration {
     public static final int[] MANUAL_CRAFTER_INPUT_SLOTS = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 33, 34, 35, 36, 37, 38, 42, 43, 44, 45, 46, 47, 51, 52, 53};
     public static final int[] BUG_CRAFTER_INPUT_SLOTS = new int[]{
-            0,  1,  2,  3,  4,  5,
-            9,  10, 11, 12, 13, 14,
+            0, 1, 2, 3, 4, 5,
+            9, 10, 11, 12, 13, 14,
             18, 19, 20, 21, 22, 23,
             27, 28, 29, 30, 31, 32,
             36, 37, 38, 39, 40, 41,
@@ -54,6 +54,18 @@ public class LogitechIntegrationMain implements Integration {
     public static void rrc(SlimefunItem slimefunItem, int[] slots) {
         handledSlimefunItems.add(slimefunItem);
         RecipeCompletableListener.registerRecipeCompletable(slimefunItem, slots, true);
+    }
+
+    public static void rrc(String id, int[] slots, boolean unordered) {
+        SlimefunItem slimefunItem = SlimefunItem.getById(id);
+        if (slimefunItem != null) {
+            rrc(slimefunItem, slots, unordered);
+        }
+    }
+
+    public static void rrc(SlimefunItem slimefunItem, int[] slots, boolean unordered) {
+        handledSlimefunItems.add(slimefunItem);
+        RecipeCompletableListener.registerRecipeCompletable(slimefunItem, slots, unordered);
     }
 
     @Override
@@ -146,18 +158,5 @@ public class LogitechIntegrationMain implements Integration {
         for (SlimefunItem slimefunItem : handledSlimefunItems) {
             RecipeCompletableListener.unregisterRecipeCompletable(slimefunItem);
         }
-    }
-
-    public static void rrc(String id, int[] slots, boolean unordered) {
-        SlimefunItem slimefunItem = SlimefunItem.getById(id);
-        if (slimefunItem != null) {
-            rrc(slimefunItem, slots, unordered);
-        }
-    }
-
-
-    public static void rrc(SlimefunItem slimefunItem, int[] slots, boolean unordered) {
-        handledSlimefunItems.add(slimefunItem);
-        RecipeCompletableListener.registerRecipeCompletable(slimefunItem, slots, unordered);
     }
 }

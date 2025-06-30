@@ -27,7 +27,6 @@
 
 package com.balugaq.jeg.api.recipe_complete.source.base;
 
-import com.balugaq.jeg.utils.Debug;
 import com.balugaq.netex.api.data.SimpleRecipeChoice;
 import io.github.sefiraat.networks.utils.StackUtils;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;

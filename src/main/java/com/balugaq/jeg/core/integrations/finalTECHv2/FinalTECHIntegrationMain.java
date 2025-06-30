@@ -40,8 +40,8 @@ import java.util.List;
  */
 public class FinalTECHIntegrationMain implements Integration {
     public static final int[] MATRIX_CRAFTING_TABLE_INPUT_SLOTS = new int[]{
-            0,  1,  2,  3,  4,  5,
-            9,  10, 11, 12, 13, 14,
+            0, 1, 2, 3, 4, 5,
+            9, 10, 11, 12, 13, 14,
             18, 19, 20, 21, 22, 23,
             27, 28, 29, 30, 31, 32,
             36, 37, 38, 39, 40, 41,
@@ -60,6 +60,18 @@ public class FinalTECHIntegrationMain implements Integration {
     public static void rrc(SlimefunItem slimefunItem, int[] slots) {
         handledSlimefunItems.add(slimefunItem);
         RecipeCompletableListener.registerRecipeCompletable(slimefunItem, slots, true);
+    }
+
+    public static void rrc(String id, int[] slots, boolean unordered) {
+        SlimefunItem slimefunItem = SlimefunItem.getById(id);
+        if (slimefunItem != null) {
+            rrc(slimefunItem, slots, unordered);
+        }
+    }
+
+    public static void rrc(SlimefunItem slimefunItem, int[] slots, boolean unordered) {
+        handledSlimefunItems.add(slimefunItem);
+        RecipeCompletableListener.registerRecipeCompletable(slimefunItem, slots, unordered);
     }
 
     @Override
@@ -94,18 +106,5 @@ public class FinalTECHIntegrationMain implements Integration {
         for (SlimefunItem slimefunItem : handledSlimefunItems) {
             RecipeCompletableListener.unregisterRecipeCompletable(slimefunItem);
         }
-    }
-
-    public static void rrc(String id, int[] slots, boolean unordered) {
-        SlimefunItem slimefunItem = SlimefunItem.getById(id);
-        if (slimefunItem != null) {
-            rrc(slimefunItem, slots, unordered);
-        }
-    }
-
-
-    public static void rrc(SlimefunItem slimefunItem, int[] slots, boolean unordered) {
-        handledSlimefunItems.add(slimefunItem);
-        RecipeCompletableListener.registerRecipeCompletable(slimefunItem, slots, unordered);
     }
 }
