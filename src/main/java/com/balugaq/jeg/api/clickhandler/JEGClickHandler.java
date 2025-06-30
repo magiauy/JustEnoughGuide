@@ -48,7 +48,7 @@ import java.util.Optional;
  * @since 1.5
  */
 @SuppressWarnings("deprecation")
-public interface JEGClickHandler extends ChestMenu.AdvancedMenuClickHandler {
+public interface JEGClickHandler extends ChestMenu.AdvancedMenuClickHandler, GuideClickHandler {
 
     @ParametersAreNonnullByDefault
     @NotNull
@@ -138,4 +138,5 @@ public interface JEGClickHandler extends ChestMenu.AdvancedMenuClickHandler {
     default boolean onClick(Player player, int clickedSlot, ItemStack itemStack, ClickAction clickAction) {
         return getOrigin().onClick(player, clickedSlot, itemStack, clickAction);
     }
+
 }

@@ -25,58 +25,41 @@
  *
  */
 
-package com.balugaq.jeg.api.objects.cooldown;
+package com.balugaq.jeg.api.objects.collection.cooldown;
 
 import lombok.Data;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
 @Data
-public class FrequencyWatcher<Key> {
-    private final TimeUnit periodUnit;
-    private final long maxFrequencyPerPeriod;
-    private final Map<Key, Long> frequencyMap = new ConcurrentHashMap<>();
-    private final Map<Key, Long> lastUpdateTime = new ConcurrentHashMap<>();
-    private final @NotNull CooldownPool<Key> pool;
-    private int periods;
+public class CooldownPool<Key> {
+    private final Map<Key, Long> pool = new ConcurrentHashMap<>();
+    private final long cooldownMillis;
 
-    public FrequencyWatcher(int periods, TimeUnit periodUnit, long maxFrequencyPerPeriod, long cooldownMillis) {
-        this.periods = periods;
-        this.periodUnit = periodUnit;
-        this.maxFrequencyPerPeriod = maxFrequencyPerPeriod;
-        this.pool = new CooldownPool<>(cooldownMillis);
+    public CooldownPool(long cooldownMillis) {
+        this.cooldownMillis = cooldownMillis;
     }
 
-    public @NotNull Result checkCooldown(Key key) {
-        updateFrequency(key);
-
-        long currentFrequency = frequencyMap.getOrDefault(key, 0L);
-        if (currentFrequency >= maxFrequencyPerPeriod) {
-            return Result.TOO_FREQUENT;
+    /**
+     * Check cooldown
+     *
+     * @param key key
+     * @return true if cooldown is over, false otherwise
+     */
+    public boolean checkCooldown(Key key) {
+        Long lastTime = pool.get(key);
+        if (lastTime == null) {
+            pool.put(key, System.currentTimeMillis());
+            return true;
         }
 
-        frequencyMap.put(key, currentFrequency + 1);
-        if (!pool.checkCooldown(key)) {
-            return Result.CANCEL;
-        }
-
-        return Result.SUCCESS;
-    }
-
-    public void updateFrequency(Key key) {
         long now = System.currentTimeMillis();
-        if (now - lastUpdateTime.getOrDefault(key, 0L) > periodUnit.toMillis(1)) {
-            frequencyMap.clear();
-            lastUpdateTime.put(key, now);
+        if (now - lastTime >= cooldownMillis) {
+            pool.put(key, now);
+            return true;
         }
-    }
 
-    public enum Result {
-        TOO_FREQUENT,
-        CANCEL,
-        SUCCESS
+        return false;
     }
 }

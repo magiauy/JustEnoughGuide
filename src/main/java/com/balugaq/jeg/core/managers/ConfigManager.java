@@ -65,6 +65,7 @@ public class ConfigManager extends AbstractManager {
     private final boolean DEBUG;
     private final boolean SURVIVAL_IMPROVEMENTS;
     private final boolean CHEAT_IMPROVEMENTS;
+    private final boolean RECIPE_COMPLETE;
     private final boolean PINYIN_SEARCH;
     private final boolean BOOKMARK;
     private final boolean RTS_SEARCH;
@@ -93,6 +94,7 @@ public class ConfigManager extends AbstractManager {
         this.DEBUG = plugin.getConfig().getBoolean("debug", false);
         this.SURVIVAL_IMPROVEMENTS = plugin.getConfig().getBoolean("guide.survival-improvements", true);
         this.CHEAT_IMPROVEMENTS = plugin.getConfig().getBoolean("guide.cheat-improvements", true);
+        this.RECIPE_COMPLETE = plugin.getConfig().getBoolean("guide.recipe-complete", true);
         this.PINYIN_SEARCH = plugin.getConfig().getBoolean("improvements.pinyin-search", true);
         this.BOOKMARK = plugin.getConfig().getBoolean("improvements.bookmark", true);
         this.SURVIVAL_GUIDE_TITLE = plugin.getConfig().getString("guide.survival-guide-title", "&2&lSlimefun 指南 (生存模式)         &e&l爱来自 JustEnoughGuide");
@@ -371,5 +373,9 @@ public class ConfigManager extends AbstractManager {
 
     public @NotNull List<String> getBanlist() {
         return BANLIST;
+    }
+
+    public boolean isRecipeComplete() {
+        return RECIPE_COMPLETE;
     }
 }

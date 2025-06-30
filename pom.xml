@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.balugaq.jeg</groupId>
     <artifactId>JustEnoughGuide</artifactId>
-    <version>Insider-101</version>
+    <version>Insider-102</version>
 
     <pluginRepositories>
         <pluginRepository>
@@ -234,6 +234,15 @@
             <version>1.0.4</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/original-LogiTech v1.0.4.jar</systemPath>
+        </dependency>
+
+        <!-- Recipe Completable compatible -->
+        <dependency>
+            <groupId>com.ytdd9527.networksexpansion</groupId>
+            <artifactId>NetworksExpansion</artifactId>
+            <version>Special-Version-40</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/original-NetworksExpansion vS40.jar</systemPath>
         </dependency>
 
         <!-- AnvilGUI 1.16- Paper 1.21.2 / Spigot 1.21.3 -->

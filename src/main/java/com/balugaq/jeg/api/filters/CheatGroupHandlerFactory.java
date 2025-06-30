@@ -124,7 +124,9 @@ public class CheatGroupHandlerFactory {
     public static class DefaultGroupHandler implements GroupHandler {
         @Override
         public void handle(@NotNull ItemGroup group, @NotNull Player p, @NotNull PlayerProfile profile, @NotNull List<ItemGroup> groups, @NotNull List<ItemGroup> specialGroups) {
-            if (!group.isVisible(p)) {
+            if (group.getClass() == ItemGroup.class) {
+                groups.add(group);
+            } else if (group.isVisible(p)) {
                 groups.add(group);
             } else if (group instanceof SeasonalItemGroup || group instanceof LockedItemGroup) {
                 specialGroups.add(group);

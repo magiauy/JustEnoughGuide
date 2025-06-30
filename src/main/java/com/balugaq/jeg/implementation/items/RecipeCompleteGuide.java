@@ -25,44 +25,16 @@
  *
  */
 
-package com.balugaq.jeg.utils;
+package com.balugaq.jeg.implementation.items;
 
-import com.balugaq.jeg.utils.compatibility.Converter;
+import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
-import org.bukkit.Material;
+import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import org.bukkit.inventory.ItemStack;
 
-/**
- * @author balugaq
- * @since 1.3
- */
-public class Models {
-    public static final ItemStack RTS_ITEM = Converter.getItem(new SlimefunItemStack("_UI_RTS_ICON", Converter.getItem(
-            Material.ANVIL,
-            "&b实时搜索",
-            ""
-    )));
-    public static final ItemStack SPECIAL_MENU_ITEM = Converter.getItem(new SlimefunItemStack("_UI_SPECIAL_MENU_ICON", Converter.getItem(
-            Material.COMPASS,
-            "&b超大配方",
-            "",
-            "&a点击打开超大配方(若有)"
-    )));
-    public static final ItemStack INPUT_TEXT_ICON = Converter.getItem(new SlimefunItemStack("_UI_RTS_INPUT_TEXT_ICON", Converter.getItem(
-            Material.PAPER,
-            "&f搜索: &7在上方输入搜索词",
-            "&fNote:",
-            "&7 - &e左侧物品为返回键",
-            "&7 - &e中间物品为按键上一页",
-            "&7 - &e右侧物品为按键下一页"
-    )));
-    public static final SlimefunItemStack RECIPE_COMPLETE_GUIDE = new SlimefunItemStack("JEG_RECIPE_COMPLETE_BOOK", Converter.getItem(
-            Material.KNOWLEDGE_BOOK,
-            "&b配方补全书",
-            "",
-            "&f点击进行配方补全",
-            "&f支持以下机器",
-            "&7- &f逻辑工艺 - 快捷机器"
-    ));
+public class RecipeCompleteGuide extends SlimefunItem {
+    public RecipeCompleteGuide(ItemGroup itemGroup, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
+        super(itemGroup, item, recipeType, recipe);
+    }
 }

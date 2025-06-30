@@ -35,6 +35,7 @@ import com.balugaq.jeg.utils.KeyUtil;
 import com.balugaq.jeg.utils.SlimefunRegistryUtil;
 import com.balugaq.jeg.utils.SpecialMenuProvider;
 import com.balugaq.jeg.utils.compatibility.Converter;
+import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import org.bukkit.Material;
 
 /**
@@ -48,6 +49,7 @@ public class GroupSetup {
     public static HiddenItemsGroup hiddenItemsGroup;
     public static NexcavateItemsGroup nexcavateItemsGroup;
     public static VanillaItemsGroup vanillaItemsGroup;
+    public static ItemGroup jegItemsGroup;
 
     /**
      * Registers all the JEG groups.
@@ -71,6 +73,11 @@ public class GroupSetup {
                 KeyUtil.newKey("vanilla_items_group"),
                 Converter.getItem(Material.CRAFTING_TABLE, "&7原版物品"));
         vanillaItemsGroup.register(JustEnoughGuide.getInstance());
+        jegItemsGroup = new ItemGroup(
+                KeyUtil.newKey("jeg_items_group"),
+                Converter.getItem(Material.BOOK, "&bJEG 物品")
+        );
+        jegItemsGroup.setTier(Integer.MAX_VALUE);
     }
 
     /**

@@ -29,7 +29,7 @@ package com.balugaq.jeg.utils.clickhandler;
 
 import com.balugaq.jeg.api.clickhandler.JEGClickHandler;
 import com.balugaq.jeg.api.clickhandler.Processor;
-import com.balugaq.jeg.api.objects.cooldown.FrequencyWatcher;
+import com.balugaq.jeg.api.objects.collection.cooldown.FrequencyWatcher;
 import com.balugaq.jeg.utils.ClipboardUtil;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.common.ChatColors;

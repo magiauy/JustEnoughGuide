@@ -25,69 +25,68 @@
  *
  */
 
-package com.balugaq.jeg.core.managers;
+package com.balugaq.jeg.api.recipe_complete.source.base;
 
-import com.balugaq.jeg.api.managers.AbstractManager;
-import com.balugaq.jeg.core.listeners.GroupTierEditorListener;
-import com.balugaq.jeg.core.listeners.GuideListener;
-import com.balugaq.jeg.core.listeners.RTSListener;
-import com.balugaq.jeg.core.listeners.RecipeCompletableListener;
-import com.balugaq.jeg.core.listeners.SearchGroupInitListener;
-import com.balugaq.jeg.core.listeners.SpecialMenuFixListener;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import lombok.Getter;
-import org.bukkit.Bukkit;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * This class is responsible for managing the listeners of the plugin.
- *
- * @author balugaq
- * @since 1.0
- */
 @Getter
-public class ListenerManager extends AbstractManager {
-    @NotNull
-    final List<Listener> listeners = new ArrayList<>();
-    private final JavaPlugin plugin;
+public class RecipeCompleteProvider {
+    @Getter
+    private static final List<SlimefunSource> slimefunSources = new ArrayList<>();
+    @Getter
+    private static final List<VanillaSource> vanillaSources = new ArrayList<>();
 
-    public ListenerManager(JavaPlugin plugin) {
-        this.plugin = plugin;
-        listeners.add(new GuideListener());
-        listeners.add(new SearchGroupInitListener());
-        listeners.add(new SpecialMenuFixListener());
-        listeners.add(new RTSListener());
-        listeners.add(new GroupTierEditorListener());
+    public static void addSource(@NotNull SlimefunSource source) {
         if (JustEnoughGuide.getConfigManager().isRecipeComplete()) {
-            listeners.add(new RecipeCompletableListener());
+            slimefunSources.add(source);
         }
     }
 
-    private void registerListeners() {
-        for (Listener listener : listeners) {
-            Bukkit.getServer().getPluginManager().registerEvents(listener, plugin);
+    public static void addSource(@NotNull VanillaSource source) {
+        if (JustEnoughGuide.getConfigManager().isRecipeComplete()) {
+            vanillaSources.add(source);
         }
     }
 
-    private void unregisterListeners() {
-        for (Listener listener : listeners) {
-            HandlerList.unregisterAll(listener);
+    @Nullable
+    public static SlimefunSource removeSlimefunSource(@NotNull SlimefunSource source) {
+        return slimefunSources.remove(source) ? source : null;
+    }
+
+    @Nullable
+    public static SlimefunSource removeSlimefunSource(@NotNull JavaPlugin plugin) {
+        for (SlimefunSource source : slimefunSources) {
+            if (source.plugin().equals(plugin)) {
+                return slimefunSources.remove(source) ? source : null;
+            }
         }
+        return null;
     }
 
-    @Override
-    public void load() {
-        registerListeners();
+    @Nullable
+    public static VanillaSource removeVanillaSource(@NotNull VanillaSource source) {
+        return vanillaSources.remove(source) ? source : null;
     }
 
-    @Override
-    public void unload() {
-        unregisterListeners();
+    @Nullable
+    public static VanillaSource removeVanillaSource(@NotNull JavaPlugin plugin) {
+        for (VanillaSource source : vanillaSources) {
+            if (source.plugin().equals(plugin)) {
+                return vanillaSources.remove(source) ? source : null;
+            }
+        }
+        return null;
+    }
+
+    public static void shutdown() {
+        slimefunSources.clear();
+        vanillaSources.clear();
     }
 }

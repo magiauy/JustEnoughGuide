@@ -29,6 +29,7 @@ package com.balugaq.jeg.utils;
 
 import com.balugaq.jeg.api.interfaces.JEGSlimefunGuideImplementation;
 import com.balugaq.jeg.core.listeners.SpecialMenuFixListener;
+import com.balugaq.jeg.core.managers.IntegrationManager;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.implementation.guide.CheatGuideImplementation;
 import com.balugaq.jeg.implementation.guide.SurvivalGuideImplementation;
@@ -99,15 +100,18 @@ public class SpecialMenuProvider {
     public static @Nullable Constructor<?> constructorObsidianExpansion_BackEntry = null;
 
     static {
-        Bukkit.getScheduler().runTaskLaterAsynchronously(JustEnoughGuide.getInstance(), SpecialMenuProvider::loadConfiguration, 1L);
+        /**
+         * Delay 10L for {@link IntegrationManager}
+         */
+        Bukkit.getScheduler().runTaskLaterAsynchronously(JustEnoughGuide.getInstance(), SpecialMenuProvider::loadConfiguration, 10L);
     }
 
     public static void loadConfiguration() {
-        ENABLED_FinalTECH = Bukkit.getPluginManager().isPluginEnabled("FinalTECH") || Bukkit.getPluginManager().isPluginEnabled("FinalTECH-Changed");
-        ENABLED_Nexcavate = Bukkit.getPluginManager().isPluginEnabled("Nexcavate");
-        ENABLED_LogiTech = Bukkit.getPluginManager().isPluginEnabled("LogiTech");
-        ENABLED_InfinityExpansion = Bukkit.getPluginManager().isPluginEnabled("InfinityExpansion");
-        ENABLED_ObsidianExpansion = Bukkit.getPluginManager().isPluginEnabled("ObsidianExpansion");
+        ENABLED_FinalTECH = JustEnoughGuide.getIntegrationManager().isEnabledFinalTECH();
+        ENABLED_Nexcavate = JustEnoughGuide.getIntegrationManager().isEnabledNexcavate();
+        ENABLED_LogiTech = JustEnoughGuide.getIntegrationManager().isEnabledLogiTech();
+        ENABLED_InfinityExpansion = JustEnoughGuide.getIntegrationManager().isEnabledInfinityExpansion();
+        ENABLED_ObsidianExpansion = JustEnoughGuide.getIntegrationManager().isEnabledObsidianExpansion();
         // FinalTECH | FinalTECH-Changed
         try {
             Method method = ReflectionUtil.getMethod(Class.forName("io.taraxacum.finaltech.core.group.RecipeItemGroup"), "getBySlimefunItem", Player.class, PlayerProfile.class, SlimefunGuideMode.class, SlimefunItem.class, int.class);

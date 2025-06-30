@@ -30,6 +30,9 @@ shared-chars:
   - "拆反"
   - "解向"
 
+# 是否注册配方补全书
+recipe-complete: true
+
 custom-format:
   # 粘液书主界面
   # B = 背景板

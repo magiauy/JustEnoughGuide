@@ -1,0 +1,224 @@
+/*
+ * Copyright (c) 2024-2025 balugaq
+ *
+ * This file is part of JustEnoughGuide, available under MIT license.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * - The above copyright notice and this permission notice shall be included in
+ *   all copies or substantial portions of the Software.
+ * - The author's name (balugaq or 大香蕉) and project name (JustEnoughGuide or JEG) shall not be
+ *   removed or altered from any source distribution or documentation.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ */
+
+package com.balugaq.jeg.core.integrations.networks;
+
+import com.balugaq.jeg.api.objects.events.GuideEvents;
+import com.balugaq.jeg.api.recipe_complete.source.base.SlimefunSource;
+import com.balugaq.netex.core.listeners.JEGCompatibleListener;
+import com.balugaq.netex.utils.BlockMenuUtil;
+import com.balugaq.netex.utils.GuideUtil;
+import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
+import io.github.sefiraat.networks.NetworkStorage;
+import io.github.sefiraat.networks.network.NetworkRoot;
+import io.github.sefiraat.networks.network.NodeDefinition;
+import io.github.sefiraat.networks.network.stackcaches.ItemRequest;
+import io.github.sefiraat.networks.slimefun.network.NetworkDirectional;
+import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
+
+import java.util.List;
+
+import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
+import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+/**
+ * @author balugaq
+ * @since 1.9
+ */
+public class NetworksExpansionRecipeCompleteSource implements SlimefunSource {
+    @SuppressWarnings("deprecation")
+    @Override
+    public boolean handleable(@NotNull BlockMenu blockMenu, @NotNull Player player, @NotNull ClickAction clickAction, int[] ingredientSlots, boolean unordered) {
+        return findNearbyNetworkRoot(blockMenu.getLocation()) != null;
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public boolean openGuide(@NotNull BlockMenu blockMenu, @NotNull Player player, @NotNull ClickAction clickAction, int[] ingredientSlots, boolean unordered) {
+        GuideEvents.ItemButtonClickEvent lastEvent = JEGCompatibleListener.getLastEvent(player.getUniqueId());
+        if (clickAction.isRightClicked() && lastEvent != null) {
+            int times = 1;
+            if (clickAction.isShiftClicked()) {
+                times = 64;
+            }
+
+            BlockMenu actualMenu = StorageCacheUtils.getMenu(blockMenu.getLocation());
+            if (actualMenu == null) {
+                return false;
+            }
+
+            if (!actualMenu.getPreset().getID().equals(blockMenu.getPreset().getID())) {
+                return false;
+            }
+
+            for (int i = 0; i < times; i++) {
+                completeRecipeWithGuide(actualMenu, lastEvent, ingredientSlots, unordered);
+            }
+            return true;
+        }
+
+        GuideUtil.openMainMenuAsync(player, SlimefunGuideMode.SURVIVAL_MODE, 1);
+        JEGCompatibleListener.addCallback(player.getUniqueId(), ((event, profile) -> {
+            BlockMenu actualMenu = StorageCacheUtils.getMenu(blockMenu.getLocation());
+            if (actualMenu == null) {
+                return;
+            }
+
+            if (!actualMenu.getPreset().getID().equals(blockMenu.getPreset().getID())) {
+                return;
+            }
+
+            int times = 1;
+            if (event.getClickAction().isRightClicked()) {
+                times = 64;
+            }
+
+            for (int i = 0; i < times; i++) {
+                completeRecipeWithGuide(actualMenu, event, ingredientSlots, unordered);
+            }
+
+            player.updateInventory();
+            actualMenu.open(player);
+        }));
+        JEGCompatibleListener.tagGuideOpen(player);
+        return true;
+    }
+
+    @Override
+    public boolean completeRecipeWithGuide(@NotNull BlockMenu blockMenu, GuideEvents.@NotNull ItemButtonClickEvent event, int[] ingredientSlots, boolean unordered) {
+        NetworkRoot root = findNearbyNetworkRoot(blockMenu.getLocation());
+        Player player = event.getPlayer();
+
+        ItemStack clickedItem = event.getClickedItem();
+        if (clickedItem == null) {
+            return false;
+        }
+
+        // choices.size() must be 9
+        List<RecipeChoice> choices = getRecipe(clickedItem);
+        if (choices == null) {
+            return false;
+        }
+
+        for (int i = 0; i < 9; i++) {
+            if (i >= choices.size()) {
+                break;
+            }
+
+            if (i >= ingredientSlots.length) {
+                break;
+            }
+
+            RecipeChoice choice = choices.get(i);
+            if (choice == null) {
+                continue;
+            }
+
+            ItemStack existing = blockMenu.getItemInSlot(ingredientSlots[i]);
+            if (existing != null && existing.getType() != Material.AIR) {
+                if (existing.getAmount() >= existing.getMaxStackSize()) {
+                    continue;
+                }
+
+                if (!choice.test(existing)) {
+                    continue;
+                }
+            }
+
+            if (choice instanceof RecipeChoice.MaterialChoice materialChoice) {
+                List<ItemStack> itemStacks =
+                        materialChoice.getChoices().stream().map(ItemStack::new).toList();
+                for (ItemStack itemStack : itemStacks) {
+                    ItemStack received = getItemStack(root, player, itemStack);
+                    if (received != null && received.getType() != Material.AIR) {
+                        if (unordered) {
+                            BlockMenuUtil.pushItem(blockMenu, received, ingredientSlots);
+                        } else {
+                            BlockMenuUtil.pushItem(blockMenu, received, ingredientSlots[i]);
+                        }
+                    }
+                }
+            } else if (choice instanceof RecipeChoice.ExactChoice exactChoice) {
+                for (ItemStack itemStack : exactChoice.getChoices()) {
+                    ItemStack received = getItemStack(root, player, itemStack);
+                    if (received != null && received.getType() != Material.AIR) {
+                        if (unordered) {
+                            BlockMenuUtil.pushItem(blockMenu, received, ingredientSlots);
+                        } else {
+                            BlockMenuUtil.pushItem(blockMenu, received, ingredientSlots[i]);
+                        }
+                    }
+                }
+            }
+        }
+
+        event.setCancelled(true);
+        return true;
+    }
+
+    @Nullable private ItemStack getItemStack(@NotNull NetworkRoot root, @NotNull Player player, @NotNull ItemStack itemStack) {
+        ItemStack i1 = getItemStackFromPlayerInventory(player, itemStack);
+        if (i1 != null) {
+            return i1;
+        }
+
+        // get from root
+        return root.getItemStack0(player.getLocation(), new ItemRequest(itemStack, 1));
+    }
+
+    @Nullable
+    public static NetworkRoot findNearbyNetworkRoot(@NotNull Location location) {
+        NetworkRoot root = null;
+
+        for (BlockFace blockFace : NetworkDirectional.VALID_FACES) {
+            Location clone = location.clone();
+            switch (blockFace) {
+                case NORTH -> clone.set(clone.getBlockX(), clone.getBlockY(), clone.getBlockZ() - 1);
+                case EAST -> clone.set(clone.getBlockX() + 1, clone.getBlockY(), clone.getBlockZ());
+                case SOUTH -> clone.set(clone.getBlockX(), clone.getBlockY(), clone.getBlockZ() + 1);
+                case WEST -> clone.set(clone.getBlockX() - 1, clone.getBlockY(), clone.getBlockZ());
+                case UP -> clone.set(clone.getBlockX(), clone.getBlockY() + 1, clone.getBlockZ());
+                case DOWN -> clone.set(clone.getBlockX(), clone.getBlockY() - 1, clone.getBlockZ());
+            }
+            NodeDefinition def2 = NetworkStorage.getNode(clone);
+            if (def2 != null && def2.getNode() != null) {
+                root = def2.getNode().getRoot();
+                break;
+            }
+        }
+
+        return root;
+    }
+}

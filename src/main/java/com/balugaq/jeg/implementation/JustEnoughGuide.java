@@ -29,6 +29,7 @@ package com.balugaq.jeg.implementation;
 
 import com.balugaq.jeg.api.editor.GroupResorter;
 import com.balugaq.jeg.api.groups.VanillaItemsGroup;
+import com.balugaq.jeg.api.recipe_complete.source.base.RecipeCompleteProvider;
 import com.balugaq.jeg.core.managers.BookmarkManager;
 import com.balugaq.jeg.core.managers.CommandManager;
 import com.balugaq.jeg.core.managers.ConfigManager;
@@ -38,6 +39,7 @@ import com.balugaq.jeg.core.managers.RTSBackpackManager;
 import com.balugaq.jeg.implementation.guide.CheatGuideImplementation;
 import com.balugaq.jeg.implementation.guide.SurvivalGuideImplementation;
 import com.balugaq.jeg.implementation.items.GroupSetup;
+import com.balugaq.jeg.implementation.items.ItemsSetup;
 import com.balugaq.jeg.implementation.option.BeginnersGuideOption;
 import com.balugaq.jeg.utils.Debug;
 import com.balugaq.jeg.utils.MinecraftVersion;
@@ -241,9 +243,9 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
             this.bookmarkManager = new BookmarkManager(this);
             this.bookmarkManager.load();
 
-            getLogger().info("正在加载教学物品组...");
+            getLogger().info("正在加载物品组...");
             GroupSetup.setup();
-            getLogger().info("教学物品组加载完毕！");
+            getLogger().info("物品组加载完毕！");
 
             if (getConfigManager().isBeginnerOption()) {
                 getLogger().info("正在加载新手指南选项...");
@@ -252,8 +254,7 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
             }
         }
 
-        // Fix reload
-        List<?> list = ReflectionUtil.getValue(Slimefun.getRegistry(), "categories", List.class);
+        ItemsSetup.setup();
 
         this.rtsBackpackManager = new RTSBackpackManager(this);
         this.rtsBackpackManager.load();
@@ -299,12 +300,17 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
     @Override
     public void onDisable() {
         GroupResorter.rollback();
+
+        getIntegrationManager().shutdownIntegrations();
+
         GroupSetup.shutdown();
+        RecipeCompleteProvider.shutdown();
 
         /**
          * Unregister all {@link SlimefunItem}
          *
          * @see VanillaItemsGroup
+         * @see ItemsSetup#RECIPE_COMPLETE_GUIDE
          */
         SlimefunRegistryUtil.unregisterItems(JustEnoughGuide.getInstance());
 
@@ -448,3 +454,5 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
         return getConfigManager().isDebug();
     }
 }
+
+使编译失败，先保存，晚上再回来

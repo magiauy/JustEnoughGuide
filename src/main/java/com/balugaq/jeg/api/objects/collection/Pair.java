@@ -25,41 +25,25 @@
  *
  */
 
-package com.balugaq.jeg.api.objects.cooldown;
+package com.balugaq.jeg.api.objects.collection;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
+@AllArgsConstructor
 @Data
-public class CooldownPool<Key> {
-    private final Map<Key, Long> pool = new ConcurrentHashMap<>();
-    private final long cooldownMillis;
+public class Pair<F, S> {
+    public @NotNull final F first;
+    public @NotNull final S second;
 
-    public CooldownPool(long cooldownMillis) {
-        this.cooldownMillis = cooldownMillis;
+    @NotNull
+    public F first() {
+        return first;
     }
 
-    /**
-     * Check cooldown
-     *
-     * @param key key
-     * @return true if cooldown is over, false otherwise
-     */
-    public boolean checkCooldown(Key key) {
-        Long lastTime = pool.get(key);
-        if (lastTime == null) {
-            pool.put(key, System.currentTimeMillis());
-            return true;
-        }
-
-        long now = System.currentTimeMillis();
-        if (now - lastTime >= cooldownMillis) {
-            pool.put(key, now);
-            return true;
-        }
-
-        return false;
+    @NotNull
+    public S second() {
+        return second;
     }
 }
