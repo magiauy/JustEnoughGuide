@@ -29,7 +29,7 @@ package com.balugaq.jeg.core.integrations.networksexpansion;
 
 import com.balugaq.jeg.api.recipe_complete.source.base.RecipeCompleteProvider;
 import com.balugaq.jeg.core.integrations.Integration;
-import com.balugaq.jeg.core.listeners.RecipeCompletableListener;
+import com.balugaq.jeg.api.recipe_complete.RecipeCompletableRegistry;
 import com.ytdd9527.networksexpansion.implementation.ExpansionItems;
 import io.github.sefiraat.networks.Networks;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
@@ -58,7 +58,7 @@ public class NetworksExpansionIntegrationMain implements Integration {
 
     public static void rrc(SlimefunItem slimefunItem, int[] slots, boolean unordered) {
         handledSlimefunItems.add(slimefunItem);
-        RecipeCompletableListener.registerRecipeCompletable(slimefunItem, slots, unordered);
+        RecipeCompletableRegistry.registerRecipeCompletable(slimefunItem, slots, unordered);
     }
 
     @Override
@@ -87,7 +87,7 @@ public class NetworksExpansionIntegrationMain implements Integration {
     @Override
     public void onDisable() {
         for (SlimefunItem slimefunItem : handledSlimefunItems) {
-            RecipeCompletableListener.unregisterRecipeCompletable(slimefunItem);
+            RecipeCompletableRegistry.unregisterRecipeCompletable(slimefunItem);
         }
     }
 }

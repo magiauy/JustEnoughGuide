@@ -28,7 +28,7 @@
 package com.balugaq.jeg.core.integrations.fastmachines;
 
 import com.balugaq.jeg.core.integrations.Integration;
-import com.balugaq.jeg.core.listeners.RecipeCompletableListener;
+import com.balugaq.jeg.api.recipe_complete.RecipeCompletableRegistry;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 
@@ -57,7 +57,7 @@ public class FastMachinesIntegrationMain implements Integration {
 
     public static void rrc(SlimefunItem slimefunItem, int[] slots) {
         handledSlimefunItems.add(slimefunItem);
-        RecipeCompletableListener.registerRecipeCompletable(slimefunItem, slots, true);
+        RecipeCompletableRegistry.registerRecipeCompletable(slimefunItem, slots, true);
     }
 
     @Override
@@ -99,7 +99,7 @@ public class FastMachinesIntegrationMain implements Integration {
     @Override
     public void onDisable() {
         for (SlimefunItem slimefunItem : handledSlimefunItems) {
-            RecipeCompletableListener.unregisterRecipeCompletable(slimefunItem);
+            RecipeCompletableRegistry.unregisterRecipeCompletable(slimefunItem);
         }
     }
 }

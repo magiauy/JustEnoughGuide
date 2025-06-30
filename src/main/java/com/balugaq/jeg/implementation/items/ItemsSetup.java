@@ -29,12 +29,17 @@ package com.balugaq.jeg.implementation.items;
 
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.Models;
+import com.ytdd9527.networksexpansion.core.items.unusable.UnusableSlimefunItem;
+import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 public class ItemsSetup {
     public static final RecipeCompleteGuide RECIPE_COMPLETE_GUIDE;
+    public static final UnusableSlimefunItem USAGE_INFO;
+    public static final UnusableSlimefunItem MECHANISM;
+    public static final UnusableSlimefunItem SUPPORTED_ADDONS_INFO;
 
     static {
         ItemStack craftingTable = new ItemStack(Material.CRAFTING_TABLE);
@@ -52,9 +57,45 @@ public class ItemsSetup {
                 }
                 //@formatter:on
         );
+
+        USAGE_INFO = new UnusableSlimefunItem(
+                GroupSetup.jegItemsGroup,
+                Models.USAGE_INFO,
+                RecipeType.NULL,
+                new ItemStack[] {
+                        null, null, null,
+                        null, null, null,
+                        null, null, null
+                }
+        );
+
+        MECHANISM = new UnusableSlimefunItem(
+                GroupSetup.jegItemsGroup,
+                Models.MECHANISM,
+                RecipeType.NULL,
+                new ItemStack[] {
+                        null, null, null,
+                        null, null, null,
+                        null, null, null
+                }
+        );
+
+        SUPPORTED_ADDONS_INFO = new UnusableSlimefunItem(
+                GroupSetup.jegItemsGroup,
+                Models.SUPPORTED_ADDONS_INFO,
+                RecipeType.NULL,
+                new ItemStack[] {
+                        null, null, null,
+                        null, null, null,
+                        null, null, null
+                }
+        );
     }
 
-    public static void setup() {
-        RECIPE_COMPLETE_GUIDE.register(JustEnoughGuide.getInstance());
+    public static void setup(SlimefunAddon addon) {
+        RECIPE_COMPLETE_GUIDE.register(addon);
+        USAGE_INFO.register(addon);
+        MECHANISM.register(addon);
+        SUPPORTED_ADDONS_INFO.register(addon);
     }
 }

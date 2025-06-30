@@ -28,7 +28,7 @@
 package com.balugaq.jeg.core.integrations.slimeaeplugin;
 
 import com.balugaq.jeg.core.integrations.Integration;
-import com.balugaq.jeg.core.listeners.RecipeCompletableListener;
+import com.balugaq.jeg.api.recipe_complete.RecipeCompletableRegistry;
 import io.github.sefiraat.networks.Networks;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -69,7 +69,7 @@ public class SlimeAEPluginIntegrationMain implements Integration {
 
     public static void rrc(SlimefunItem slimefunItem, int[] slots, boolean unordered) {
         handledSlimefunItems.add(slimefunItem);
-        RecipeCompletableListener.registerRecipeCompletable(slimefunItem, slots, unordered);
+        RecipeCompletableRegistry.registerRecipeCompletable(slimefunItem, slots, unordered);
     }
 
     @Override
@@ -87,7 +87,7 @@ public class SlimeAEPluginIntegrationMain implements Integration {
     @Override
     public void onDisable() {
         for (SlimefunItem slimefunItem : handledSlimefunItems) {
-            RecipeCompletableListener.unregisterRecipeCompletable(slimefunItem);
+            RecipeCompletableRegistry.unregisterRecipeCompletable(slimefunItem);
         }
     }
 }

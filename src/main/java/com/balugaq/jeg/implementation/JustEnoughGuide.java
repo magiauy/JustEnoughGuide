@@ -254,7 +254,7 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
             }
         }
 
-        ItemsSetup.setup();
+        ItemsSetup.setup(this);
 
         this.rtsBackpackManager = new RTSBackpackManager(this);
         this.rtsBackpackManager.load();

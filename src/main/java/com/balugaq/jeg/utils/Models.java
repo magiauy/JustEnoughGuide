@@ -62,23 +62,43 @@ public class Models {
             "",
             "&f点击进行配方补全"
     ));
+    public static final SlimefunItemStack USAGE_INFO = new SlimefunItemStack("JEG_RECIPE_COMPLETE_USAGE_INFO", Converter.getItem(
+            Material.PAPER,
+            "&a使用方法",
+            "",
+            "&f1. &e将配方补全书放到物品栏里",
+            "&f2. &e打开任意一个适配配方补全的机器（如快捷机器）",
+            "&f3. &e左键点击配方补全书"
+    ));
+    public static final SlimefunItemStack MECHANISM = new SlimefunItemStack("JEG_RECIPE_COMPLETE_MECHANISM", Converter.getItem(
+            Material.PAPER,
+            "&a机制",
+            "",
+            "&f优先使用玩家背包中的物品进行补全配方",
+            "&f如果连接了网络，会尝试在网络中获取配方材料（仅网络拓展有效）",
+            "",
+            "&a左键&e点击打开配方书 &7| &a左键&e点击物品补全1次",
+            "&a右键&e点击可再次补全 &7| &a右键&e点击物品补全64次",
+            "&e补全后再次&aShift+右键&e点击配方书补全64次"
+    ));
     public static final SlimefunItemStack SUPPORTED_ADDONS_INFO = new SlimefunItemStack("JEG_RECIPE_COMPLETE_SUPPORTED_ADDONS_INFO", Converter.getItem(
             Material.PAPER,
-            "&f对以下附属的部分机器适配配方补全",
+            "&a对以下附属的部分机器适配了配方补全",
             "&7如需适配更多可在 JEG GitHub 提 issue",
-            "&7- 快捷机器",
-            "&7- 乱序技艺 2.0-Preview",
-            "&7- 乱序技艺 2.0",
-            "&7- 乱序技艺 2.0 改版",
-            "&7- 无尽贪婪",
-            "&7- 逻辑工艺",
-            "&7- 网络",
-            "&7- 网络拓展",
-            "&7- 黑曜石科技",
-            "&7- 粘液AE",
-            "&7- 蓬松机器",
-            "&7- 粘液匠魂",
-            "&7- 星系",
-            "&7- 美食家"
+            "",
+            "&7- &a快捷机器",
+            "&7- &a乱序技艺 2.0-Preview",
+            "&7- &a乱序技艺 2.0",
+            "&7- &a乱序技艺 2.0 改版",
+            "&7- &a无尽贪婪",
+            "&7- &A逻辑工艺",
+            "&7- &a网络",
+            "&7- &a网络拓展",
+            "&7- &a黑曜石科技",
+            "&7- &a粘液AE",
+            "&7- &a蓬松机器",
+            "&7- &a粘液匠魂",
+            "&7- &a星系",
+            "&7- &a美食家"
     ));
 }
