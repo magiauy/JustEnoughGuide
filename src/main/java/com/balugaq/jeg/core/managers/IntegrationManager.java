@@ -199,7 +199,6 @@ public class IntegrationManager extends AbstractManager {
             plugin.getLogger().info("Hooking " + integration.getHookPlugin());
             try {
                 integration.onEnable();
-                plugin.getLogger().info("Hooked " + integration.getHookPlugin());
             } catch (Throwable e) {
                 Debug.trace(e);
             }
@@ -211,7 +210,6 @@ public class IntegrationManager extends AbstractManager {
             plugin.getLogger().info("Unhooking " + integration.getHookPlugin());
             try {
                 integration.onDisable();
-                plugin.getLogger().info("Unhooked " + integration.getHookPlugin());
             } catch (Throwable e) {
                 Debug.trace(e);
             }

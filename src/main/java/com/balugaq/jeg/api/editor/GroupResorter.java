@@ -64,19 +64,21 @@ public class GroupResorter {
     static {
         Bukkit.getScheduler().runTaskLater(JustEnoughGuide.getInstance(), () -> {
             if (hasCfg()) {
+                int offset = 0;
                 ItemGroup lastItemGroup = null;
                 for (ItemGroup itemGroup : Slimefun.getRegistry().getAllItemGroups()) {
                     oldTiers.put(itemGroup, itemGroup.getTier());
 
                     Integer cfg = getTierCfg(getKey(itemGroup));
                     if (cfg != null) {
-                        setTier(itemGroup, cfg);
+                        setTier(itemGroup, cfg + offset);
                     } else {
                         if (lastItemGroup != null) {
                             // New ItemGroup
                             // Sort by related order.
                             setTier(itemGroup, getTier(lastItemGroup) + 1);
                             setNameCfg(getKey(itemGroup), getDisplayName(itemGroup));
+                            offset += 1;
                         } else {
                             // By default
                             setTier(itemGroup, itemGroup.getTier());

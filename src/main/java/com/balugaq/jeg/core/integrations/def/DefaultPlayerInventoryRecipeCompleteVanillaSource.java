@@ -30,9 +30,9 @@ package com.balugaq.jeg.core.integrations.def;
 import com.balugaq.jeg.api.objects.events.GuideEvents;
 import com.balugaq.jeg.api.recipe_complete.source.base.VanillaSource;
 import com.balugaq.jeg.core.integrations.networksexpansion.NetworksExpansionIntegrationMain;
-import com.balugaq.jeg.core.listeners.RecipeCompleteListener;
-import com.balugaq.jeg.utils.InventoryUtil;
+import com.balugaq.jeg.core.listeners.RecipeCompletableListener;
 import com.balugaq.jeg.utils.GuideUtil;
+import com.balugaq.jeg.utils.InventoryUtil;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
 import org.bukkit.Material;
@@ -62,13 +62,13 @@ public class DefaultPlayerInventoryRecipeCompleteVanillaSource implements Vanill
     @SuppressWarnings("deprecation")
     @Override
     public boolean openGuide(@NotNull Block block, @NotNull Inventory inventory, @NotNull Player player, @NotNull ClickAction clickAction, int @NotNull [] ingredientSlots, boolean unordered, @Nullable Runnable callback) {
-        GuideEvents.ItemButtonClickEvent lastEvent = RecipeCompleteListener.getLastEvent(player.getUniqueId());
+        GuideEvents.ItemButtonClickEvent lastEvent = RecipeCompletableListener.getLastEvent(player.getUniqueId());
         if (clickAction.isRightClicked() && lastEvent != null) {
             int times = 1;
             if (clickAction.isShiftClicked()) {
                 times = 64;
             }
-            
+
 
             for (int i = 0; i < times; i++) {
                 completeRecipeWithGuide(block, inventory, lastEvent, ingredientSlots, unordered);
@@ -80,7 +80,7 @@ public class DefaultPlayerInventoryRecipeCompleteVanillaSource implements Vanill
         }
 
         GuideUtil.openMainMenuAsync(player, SlimefunGuideMode.SURVIVAL_MODE, 1);
-        RecipeCompleteListener.addCallback(player.getUniqueId(), ((event, profile) -> {
+        RecipeCompletableListener.addCallback(player.getUniqueId(), ((event, profile) -> {
             int times = 1;
             if (event.getClickAction().isRightClicked()) {
                 times = 64;
@@ -97,7 +97,7 @@ public class DefaultPlayerInventoryRecipeCompleteVanillaSource implements Vanill
                 callback.run();
             }
         }));
-        RecipeCompleteListener.tagGuideOpen(player);
+        RecipeCompletableListener.tagGuideOpen(player);
         return true;
     }
 

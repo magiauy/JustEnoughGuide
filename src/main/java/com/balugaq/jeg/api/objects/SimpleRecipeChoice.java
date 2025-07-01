@@ -27,12 +27,12 @@
 
 package com.balugaq.jeg.api.objects;
 
-import java.util.List;
-
 import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 /**
  * @author balugaq
@@ -52,7 +52,7 @@ public class SimpleRecipeChoice extends RecipeChoice.ExactChoice implements Reci
     }
 
     public boolean test(@NotNull ItemStack other) {
-        for(ItemStack choice : this.getChoices()) {
+        for (ItemStack choice : this.getChoices()) {
             if (SlimefunUtils.isItemSimilar(choice, other, true, false)) {
                 return true;
             }

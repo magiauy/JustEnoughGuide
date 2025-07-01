@@ -29,7 +29,7 @@ package com.balugaq.jeg.core.integrations.networksexpansion;
 
 import com.balugaq.jeg.api.objects.events.GuideEvents;
 import com.balugaq.jeg.api.recipe_complete.source.base.SlimefunSource;
-import com.balugaq.jeg.core.listeners.RecipeCompleteListener;
+import com.balugaq.jeg.core.listeners.RecipeCompletableListener;
 import com.balugaq.jeg.utils.BlockMenuUtil;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
@@ -91,7 +91,7 @@ public class NetworksExpansionRecipeCompleteSlimefunSource implements SlimefunSo
     @SuppressWarnings("deprecation")
     @Override
     public boolean openGuide(@NotNull BlockMenu blockMenu, @NotNull Player player, @NotNull ClickAction clickAction, int @NotNull [] ingredientSlots, boolean unordered, @Nullable Runnable callback) {
-        GuideEvents.ItemButtonClickEvent lastEvent = RecipeCompleteListener.getLastEvent(player.getUniqueId());
+        GuideEvents.ItemButtonClickEvent lastEvent = RecipeCompletableListener.getLastEvent(player.getUniqueId());
         if (clickAction.isRightClicked() && lastEvent != null) {
             int times = 1;
             if (clickAction.isShiftClicked()) {
@@ -124,7 +124,7 @@ public class NetworksExpansionRecipeCompleteSlimefunSource implements SlimefunSo
         }
 
         GuideUtil.openMainMenuAsync(player, SlimefunGuideMode.SURVIVAL_MODE, 1);
-        RecipeCompleteListener.addCallback(player.getUniqueId(), ((event, profile) -> {
+        RecipeCompletableListener.addCallback(player.getUniqueId(), ((event, profile) -> {
             BlockMenu actualMenu = StorageCacheUtils.getMenu(blockMenu.getLocation());
             if (actualMenu == null) {
                 if (callback != null) {
@@ -155,7 +155,7 @@ public class NetworksExpansionRecipeCompleteSlimefunSource implements SlimefunSo
                 callback.run();
             }
         }));
-        RecipeCompleteListener.tagGuideOpen(player);
+        RecipeCompletableListener.tagGuideOpen(player);
         return true;
     }
 

@@ -28,11 +28,6 @@
 package com.balugaq.jeg.utils;
 
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Material;
@@ -42,13 +37,19 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author balugaq
  * @since 1.9
  */
 @UtilityClass
 public class InventoryUtil {
-    @Nullable public static ItemStack pushItem(
+    @Nullable
+    public static ItemStack pushItem(
             @NotNull final Inventory inventory,
             @Nullable final ItemStack item,
             @Range(from = 0, to = 53) final int @NotNull ... slots) {
@@ -95,7 +96,8 @@ public class InventoryUtil {
         }
     }
 
-    @NotNull public static Map<ItemStack, Integer> pushItem(
+    @NotNull
+    public static Map<ItemStack, Integer> pushItem(
             @NotNull final Inventory inventory,
             @Nullable final ItemStack @NotNull [] items,
             @Range(from = 0, to = 53) final int @NotNull ... slots) {
@@ -114,7 +116,8 @@ public class InventoryUtil {
         return pushItem(inventory, listItems, slots);
     }
 
-    @NotNull public static Map<ItemStack, Integer> pushItem(
+    @NotNull
+    public static Map<ItemStack, Integer> pushItem(
             @NotNull final Inventory inventory,
             @Nullable final List<ItemStack> items,
             @Range(from = 0, to = 53) final int @NotNull ... slots) {

@@ -41,5 +41,5 @@ import java.util.List;
 @FunctionalInterface
 public interface GroupHandler {
     @ParametersAreNonnullByDefault
-    void handle(ItemGroup group, Player p, PlayerProfile profile, List<ItemGroup> groups, List<ItemGroup> specialGroups);
+    void handle(ItemGroup group, Player p, PlayerProfile profile, List<ItemGroup> groups, List<ItemGroup> specialGroups, boolean guideTierMode);
 }

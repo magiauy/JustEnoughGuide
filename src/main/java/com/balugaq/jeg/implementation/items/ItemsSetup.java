@@ -27,7 +27,6 @@
 
 package com.balugaq.jeg.implementation.items;
 
-import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.Models;
 import com.ytdd9527.networksexpansion.core.items.unusable.UnusableSlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
@@ -62,7 +61,7 @@ public class ItemsSetup {
                 GroupSetup.jegItemsGroup,
                 Models.USAGE_INFO,
                 RecipeType.NULL,
-                new ItemStack[] {
+                new ItemStack[]{
                         null, null, null,
                         null, null, null,
                         null, null, null
@@ -73,7 +72,7 @@ public class ItemsSetup {
                 GroupSetup.jegItemsGroup,
                 Models.MECHANISM,
                 RecipeType.NULL,
-                new ItemStack[] {
+                new ItemStack[]{
                         null, null, null,
                         null, null, null,
                         null, null, null
@@ -84,7 +83,7 @@ public class ItemsSetup {
                 GroupSetup.jegItemsGroup,
                 Models.SUPPORTED_ADDONS_INFO,
                 RecipeType.NULL,
-                new ItemStack[] {
+                new ItemStack[]{
                         null, null, null,
                         null, null, null,
                         null, null, null

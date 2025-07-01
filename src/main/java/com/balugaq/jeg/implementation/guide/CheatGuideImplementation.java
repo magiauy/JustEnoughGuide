@@ -238,13 +238,25 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
      */
     @Override
     public @NotNull List<ItemGroup> getVisibleItemGroups(@NotNull Player p, @NotNull PlayerProfile profile) {
+        return getVisibleItemGroups(p, profile, false);
+    }
+
+    /**
+     * Returns a {@link List} of visible {@link ItemGroup} instances that the {@link SlimefunGuide} would display.
+     *
+     * @param p             The {@link Player} who opened his {@link SlimefunGuide}
+     * @param profile       The {@link PlayerProfile} of the {@link Player}
+     * @param guideTierMode Whether the guide is in tier mode
+     * @return a {@link List} of visible {@link ItemGroup} instances
+     */
+    public @NotNull List<ItemGroup> getVisibleItemGroups(@NotNull Player p, @NotNull PlayerProfile profile, boolean guideTierMode) {
         List<ItemGroup> groups = new LinkedList<>();
         List<ItemGroup> specialGroups = new LinkedList<>();
 
         for (ItemGroup group : Slimefun.getRegistry().getAllItemGroups()) {
             try {
                 GroupHandler handler = CheatGroupHandlerFactory.getHandler(group);
-                handler.handle(group, p, profile, groups, specialGroups);
+                handler.handle(group, p, profile, groups, specialGroups, guideTierMode);
             } catch (Exception | LinkageError x) {
                 SlimefunAddon addon = group.getAddon();
                 Logger logger = addon != null ? addon.getLogger() : JustEnoughGuide.getInstance().getLogger();
@@ -277,7 +289,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
         history.setMainMenuPage(page);
 
         ChestMenu menu = create0(p);
-        List<ItemGroup> itemGroups = getVisibleItemGroups(p, profile);
+        List<ItemGroup> itemGroups = getVisibleItemGroups(p, profile, GroupResorter.isSelecting(p));
 
         createHeader(p, profile, menu, Formats.main);
 

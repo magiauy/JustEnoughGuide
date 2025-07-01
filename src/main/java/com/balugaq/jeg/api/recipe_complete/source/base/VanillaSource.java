@@ -29,7 +29,6 @@ package com.balugaq.jeg.api.recipe_complete.source.base;
 
 import com.balugaq.jeg.api.objects.events.GuideEvents;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
-import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import org.bukkit.block.Block;
 import org.bukkit.block.Dispenser;
 import org.bukkit.entity.Player;

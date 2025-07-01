@@ -71,7 +71,6 @@ public class ConfigManager extends AbstractManager {
     private final boolean RECIPE_COMPLETE;
     private final boolean PINYIN_SEARCH;
     private final boolean BOOKMARK;
-    private boolean RTS_SEARCH;
     private final boolean BEGINNER_OPTION;
     private final @NotNull String SURVIVAL_GUIDE_TITLE;
     private final @NotNull String CHEAT_GUIDE_TITLE;
@@ -89,6 +88,7 @@ public class ConfigManager extends AbstractManager {
     private final @NotNull Map<String, String> LOCAL_TRANSLATE;
     private final @NotNull List<String> BANLIST;
     private final @NotNull JavaPlugin plugin;
+    private boolean RTS_SEARCH;
 
     public ConfigManager(@NotNull JavaPlugin plugin) {
         this.plugin = plugin;

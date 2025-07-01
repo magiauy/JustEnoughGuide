@@ -57,7 +57,7 @@ public class Models {
             "&7 - &e右侧物品为按键下一页"
     )));
     public static final SlimefunItemStack RECIPE_COMPLETE_GUIDE = new SlimefunItemStack("JEG_RECIPE_COMPLETE_BOOK", Converter.getItem(
-            Material.KNOWLEDGE_BOOK,
+            Material.SLIME_BALL,
             "&b配方补全书",
             "",
             "&f点击进行配方补全"

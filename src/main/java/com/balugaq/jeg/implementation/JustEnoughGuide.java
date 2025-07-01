@@ -185,11 +185,6 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
     public void onEnable() {
         instance = this;
 
-        getLogger().info("正在加载配置文件...");
-        saveDefaultConfig();
-        this.configManager = new ConfigManager(this);
-        this.configManager.load();
-
         // Checking environment compatibility
         boolean isCompatible = environmentCheck();
 
@@ -198,6 +193,11 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
             onDisable();
             return;
         }
+
+        getLogger().info("正在加载配置文件...");
+        saveDefaultConfig();
+        this.configManager = new ConfigManager(this);
+        this.configManager.load();
 
         getLogger().info("正在适配其他插件...");
         this.integrationManager = new IntegrationManager(this);

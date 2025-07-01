@@ -27,8 +27,8 @@
 
 package com.balugaq.jeg.core.integrations.networks;
 
-import com.balugaq.jeg.core.integrations.Integration;
 import com.balugaq.jeg.api.recipe_complete.RecipeCompletableRegistry;
+import com.balugaq.jeg.core.integrations.Integration;
 import io.github.sefiraat.networks.slimefun.NetworkSlimefunItems;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 
