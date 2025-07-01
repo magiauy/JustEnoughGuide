@@ -41,26 +41,26 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
 /**
- * SearchButtonClickEvent
- * RTSButtonClickEvent
- * ItemGroupButtonClickEvent
- * ItemButtonClickEvent
- * PreviousButtonClickEvent
- * NextButtonClickEvent
- * BookMarkButtonClickEvent
- * ItemMarkButtonClickEvent
- * BackButtonClickEvent
- * WikiButtonClickEvent
- * RecipeTypeButtonClickEvent
- * BigRecipeButtonClickEvent
- * AuthorInformationButtonClickEvent
- * FeatureButtonClickEvent
- * SearchItemEvent
- * ResearchItemEvent
- * CollectItemEvent
- * SettingsButtonClickEvent
- * BeginnerButtonClickEvent
- * GroupLinkButtonClickEvent
+ * {@link SearchButtonClickEvent}
+ * {@link RTSButtonClickEvent}
+ * {@link ItemGroupButtonClickEvent}
+ * {@link ItemButtonClickEvent}
+ * {@link PreviousButtonClickEvent}
+ * {@link NextButtonClickEvent}
+ * {@link BookMarkButtonClickEvent}
+ * {@link ItemMarkButtonClickEvent}
+ * {@link BackButtonClickEvent}
+ * {@link WikiButtonClickEvent}
+ * {@link RecipeTypeButtonClickEvent}
+ * {@link BigRecipeButtonClickEvent}
+ * {@link AuthorInformationButtonClickEvent}
+ * {@link FeatureButtonClickEvent}
+ * {@link SearchItemEvent}
+ * {@link ResearchItemEvent}
+ * {@link CollectItemEvent}
+ * {@link SettingsButtonClickEvent}
+ * {@link BeginnerButtonClickEvent}
+ * {@link GroupLinkButtonClickEvent}
  *
  * @author balugaq
  * @since 1.7

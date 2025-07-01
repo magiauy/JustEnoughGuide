@@ -34,6 +34,10 @@ import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * @author balugaq
+ * @since 1.9
+ */
 public class ItemsSetup {
     public static final RecipeCompleteGuide RECIPE_COMPLETE_GUIDE;
     public static final UnusableSlimefunItem USAGE_INFO;

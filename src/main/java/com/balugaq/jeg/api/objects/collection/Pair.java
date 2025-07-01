@@ -31,6 +31,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * @author balugaq
+ * @since 1.9
+ */
 @AllArgsConstructor
 @Data
 public class Pair<F, S> {

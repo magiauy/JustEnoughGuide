@@ -29,12 +29,12 @@ package com.balugaq.jeg.implementation.guide;
 
 import city.norain.slimefun4.VaultIntegration;
 import com.balugaq.jeg.api.editor.GroupResorter;
-import com.balugaq.jeg.api.filters.CheatGroupHandlerFactory;
-import com.balugaq.jeg.api.filters.GroupHandler;
 import com.balugaq.jeg.api.groups.SearchGroup;
 import com.balugaq.jeg.api.interfaces.BookmarkRelocation;
 import com.balugaq.jeg.api.interfaces.CustomIconDisplay;
+import com.balugaq.jeg.api.interfaces.DisplayInCheatMode;
 import com.balugaq.jeg.api.interfaces.JEGSlimefunGuideImplementation;
+import com.balugaq.jeg.api.interfaces.NotDisplayInCheatMode;
 import com.balugaq.jeg.api.interfaces.VanillaItemShade;
 import com.balugaq.jeg.api.objects.events.GuideEvents;
 import com.balugaq.jeg.api.patches.JEGGuideSettings;
@@ -91,6 +91,7 @@ import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu.MenuClickHandler;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -252,11 +253,98 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
     public @NotNull List<ItemGroup> getVisibleItemGroups(@NotNull Player p, @NotNull PlayerProfile profile, boolean guideTierMode) {
         List<ItemGroup> groups = new LinkedList<>();
         List<ItemGroup> specialGroups = new LinkedList<>();
-
         for (ItemGroup group : Slimefun.getRegistry().getAllItemGroups()) {
             try {
-                GroupHandler handler = CheatGroupHandlerFactory.getHandler(group);
-                handler.handle(group, p, profile, groups, specialGroups, guideTierMode);
+                if (group.getClass().isAnnotationPresent(NotDisplayInCheatMode.class)) {
+                    continue;
+                }
+                if (group.getClass().isAnnotationPresent(DisplayInCheatMode.class)) {
+                    groups.add(group);
+                    continue;
+                }
+                if (group instanceof FlexItemGroup flexItemGroup) {
+                    NamespacedKey key = group.getKey();
+                    String namespace = key.getNamespace();
+                    if (namespace.equalsIgnoreCase("logitech")) {
+                        if (key.getKey().equals("tools") || key.getKey().equals("info")) {
+                            continue;
+                        }
+                    }
+                    if (group.getClass().getName().equals("io.github.mooy1.infinityexpansion.categories.InfinityGroup")) {
+                        continue;
+                    }
+                    if (group.getClass().getName().equals("me.lucasgithuber.obsidianexpansion.utils.ObsidianForgeGroup")) {
+                        continue;
+                    }
+                    if (namespace.equalsIgnoreCase("networks") || namespace.equalsIgnoreCase("networks-changed")) {
+                        if (group.getClass().getName()
+                                .equalsIgnoreCase("com.balugaq.netex.api.groups.MainItemGroup")) {
+                            continue;
+                        }
+                        if (group instanceof NestedItemGroup) {
+                            groups.add(group);
+                            continue;
+                        }
+                    }
+                    if (namespace.equalsIgnoreCase("finaltech") || namespace.equalsIgnoreCase("finaltech-changed")) {
+                        if (group.getClass().getName()
+                                .equalsIgnoreCase("io.taraxacum.finaltech.core.group.MainItemGroup")) {
+                            continue;
+                        }
+                        if (group instanceof NestedItemGroup) {
+                            groups.add(group);
+                            continue;
+                        }
+                    }
+                    if (namespace.equalsIgnoreCase("mobengineering")) {
+                        if (group.getClass().getName()
+                                .equalsIgnoreCase("io.github.ytdd9527.mobengineering.implementation.slimefun.groups.MainItemGroup")) {
+                            continue;
+                        }
+                        if (group instanceof NestedItemGroup) {
+                            groups.add(group);
+                            continue;
+                        }
+                    }
+                    if (namespace.equalsIgnoreCase("nexcavate")) {
+                        if (group.getClass().getName()
+                                .equalsIgnoreCase("me.char321.nexcavate.slimefun.NEItemGroup")) {
+                            continue;
+                        }
+                    }
+                    if (flexItemGroup.isVisible(p, profile, SlimefunGuideMode.SURVIVAL_MODE)) {
+                        groups.add(group);
+                    } else {
+                        if (!flexItemGroup.getClass().getName().startsWith("com.balugaq.netex.api.groups")) {
+                            specialGroups.add(group);
+                        }
+                    }
+                } else if (!group.isHidden(p)) {
+                    groups.add(group);
+                } else if (group instanceof SeasonalItemGroup || group instanceof LockedItemGroup) {
+                    specialGroups.add(group);
+                } else {
+                    if (group.getClass()
+                            .getName()
+                            .equalsIgnoreCase("io.github.mooy1.infinityexpansion.infinitylib.groups.SubGroup")) {
+                        if (group.getKey().getKey().equalsIgnoreCase("infinity_cheat")) {
+                            specialGroups.add(group);
+                        }
+                    } else if (group.getClass()
+                            .getName()
+                            .equalsIgnoreCase("me.lucasgithuber.obsidianexpansion.infinitylib.groups.SubGroup")) {
+                        if (group.getKey().getKey().equalsIgnoreCase("omc_forge_cheat")) {
+                            specialGroups.add(group);
+                        }
+                    } else if (group.getClass()
+                            .getName()
+                            .startsWith("io.github.sefiraat.networks.slimefun.NetworksItemGroups")) {
+                        // io.github.sefiraat.networks.slimefun.NetworksItemGroups.HiddenItemGroup
+                        if (group.getKey().getKey().equalsIgnoreCase("disabled_items")) {
+                            specialGroups.add(group);
+                        }
+                    }
+                }
             } catch (Exception | LinkageError x) {
                 SlimefunAddon addon = group.getAddon();
                 Logger logger = addon != null ? addon.getLogger() : JustEnoughGuide.getInstance().getLogger();

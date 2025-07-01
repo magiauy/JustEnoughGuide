@@ -34,6 +34,10 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author balugaq
+ * @since 1.7
+ */
 @Data
 public class FrequencyWatcher<Key> {
     private final TimeUnit periodUnit;

@@ -42,6 +42,10 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * @author balugaq
+ * @since 1.7
+ */
 public class GroupTierEditorListener implements Listener {
     @EventHandler
     public void onExit(PlayerItemHeldEvent event) {

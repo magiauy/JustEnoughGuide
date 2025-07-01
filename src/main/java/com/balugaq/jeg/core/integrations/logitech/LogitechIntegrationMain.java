@@ -39,6 +39,10 @@ import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author balugaq
+ * @since 1.9
+ */
 public class LogitechIntegrationMain implements Integration {
     public static final int[] MANUAL_CRAFTER_INPUT_SLOTS = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 33, 34, 35, 36, 37, 38, 42, 43, 44, 45, 46, 47, 51, 52, 53};
     public static final int[] BUG_CRAFTER_INPUT_SLOTS = new int[]{

@@ -152,7 +152,7 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
     /// JEG Recipe Complete Compatible                                            ///
     ///                                                                           ///
     /// Related-addons:                                                           ///
-    /// - Networks(Expansion)                                                     ///
+    /// - NetworksExpansion                                                       ///
     /// - SlimeAEPlugin                                                           ///
     /// Author balugaq                                                            ///
     /// Since 1.7                                                                 ///

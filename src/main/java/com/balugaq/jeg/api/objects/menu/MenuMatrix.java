@@ -38,6 +38,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author balugaq
+ * @since 1.8
+ */
 @SuppressWarnings({"deprecation", "unused"})
 @Getter
 public class MenuMatrix {

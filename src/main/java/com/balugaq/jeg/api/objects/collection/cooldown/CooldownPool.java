@@ -32,6 +32,10 @@ import lombok.Data;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * @author balugaq
+ * @since 1.7
+ */
 @Data
 public class CooldownPool<Key> {
     private final Map<Key, Long> pool = new ConcurrentHashMap<>();
