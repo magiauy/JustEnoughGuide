@@ -41,6 +41,7 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author balugaq
@@ -48,22 +49,22 @@ import org.bukkit.inventory.ItemStack;
  */
 public class GroupTierEditorListener implements Listener {
     @EventHandler
-    public void onExit(PlayerItemHeldEvent event) {
+    public void onExit(@NotNull PlayerItemHeldEvent event) {
         GroupResorter.exitSelecting(event.getPlayer());
     }
 
     @EventHandler
-    public void onExit(PlayerJoinEvent event) {
+    public void onExit(@NotNull PlayerJoinEvent event) {
         GroupResorter.exitSelecting(event.getPlayer());
     }
 
     @EventHandler
-    public void onExit(PlayerQuitEvent event) {
+    public void onExit(@NotNull PlayerQuitEvent event) {
         GroupResorter.exitSelecting(event.getPlayer());
     }
 
     @EventHandler
-    public void onOpenGuide(PlayerInteractEvent event) {
+    public void onOpenGuide(@NotNull PlayerInteractEvent event) {
         if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             Player player = event.getPlayer();
             if (player.isOp()) {
@@ -76,7 +77,7 @@ public class GroupTierEditorListener implements Listener {
     }
 
     @EventHandler
-    public void onUseGroupTierEditorGuide(SlimefunGuideOpenEvent event) {
+    public void onUseGroupTierEditorGuide(@NotNull SlimefunGuideOpenEvent event) {
         Player player = event.getPlayer();
         if (!player.isOp()) {
             return;

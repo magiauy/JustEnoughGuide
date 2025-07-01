@@ -34,6 +34,8 @@ import com.ytdd9527.networksexpansion.implementation.ExpansionItems;
 import io.github.sefiraat.networks.Networks;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +48,7 @@ public class NetworksExpansionIntegrationMain implements Integration {
     public static final int[] ENCODER_RECIPE_SLOTS = new int[]{12, 13, 14, 21, 22, 23, 30, 31, 32};
     public static final int[] CRAFTING_GRID_RECIPE_SLOTS = new int[]{6, 7, 8, 15, 16, 17, 24, 25, 26};
     public static final List<SlimefunItem> handledSlimefunItems = new ArrayList<>();
-    public static JavaPlugin plugin = null;
+    public static @Nullable JavaPlugin plugin = null;
 
     public static JavaPlugin getPlugin() {
         if (plugin == null) {
@@ -56,13 +58,13 @@ public class NetworksExpansionIntegrationMain implements Integration {
         return plugin;
     }
 
-    public static void rrc(SlimefunItem slimefunItem, int[] slots, boolean unordered) {
+    public static void rrc(@NotNull SlimefunItem slimefunItem, int @NotNull [] slots, boolean unordered) {
         handledSlimefunItems.add(slimefunItem);
         RecipeCompletableRegistry.registerRecipeCompletable(slimefunItem, slots, unordered);
     }
 
     @Override
-    public String getHookPlugin() {
+    public @NotNull String getHookPlugin() {
         return "NetworksExpansion";
     }
 

@@ -99,11 +99,11 @@ public class RecipeCompletableListener implements Listener {
         NOT_APPLICABLE_ITEMS.remove(slimefunItem);
     }
 
-    public static void registerRecipeCompletable(SlimefunItem slimefunItem, int[] slots) {
+    public static void registerRecipeCompletable(SlimefunItem slimefunItem, int @NotNull [] slots) {
         registerRecipeCompletable(slimefunItem, slots, false);
     }
 
-    public static void registerRecipeCompletable(SlimefunItem slimefunItem, int[] slots, boolean unordered) {
+    public static void registerRecipeCompletable(SlimefunItem slimefunItem, int @NotNull [] slots, boolean unordered) {
         INGREDIENT_SLOTS.put(slimefunItem, new Pair<>(slots, unordered));
     }
 
@@ -112,7 +112,7 @@ public class RecipeCompletableListener implements Listener {
     }
 
     @SuppressWarnings("deprecation")
-    private static void tryAddClickHandler(BlockMenu blockMenu) {
+    private static void tryAddClickHandler(@NotNull BlockMenu blockMenu) {
         SlimefunItem sf = blockMenu.getPreset().getSlimefunItem();
         if (!isApplicable(sf)) {
             return;
@@ -186,7 +186,7 @@ public class RecipeCompletableListener implements Listener {
         return true;
     }
 
-    public static ItemStack getRecipeCompletableBookItem() {
+    public static @NotNull ItemStack getRecipeCompletableBookItem() {
         return ItemsSetup.RECIPE_COMPLETE_GUIDE.getItem();
     }
 
@@ -268,7 +268,7 @@ public class RecipeCompletableListener implements Listener {
     }
 
     @EventHandler
-    public void prepare(InventoryOpenEvent event) {
+    public void prepare(@NotNull InventoryOpenEvent event) {
         if (event.getInventory().getHolder() instanceof BlockMenu blockMenu) {
             tryAddClickHandler(blockMenu);
         }
@@ -280,7 +280,7 @@ public class RecipeCompletableListener implements Listener {
 
     @SuppressWarnings("deprecation")
     @EventHandler
-    public void clickVanilla(InventoryClickEvent event) {
+    public void clickVanilla(@NotNull InventoryClickEvent event) {
         Inventory inventory = event.getInventory();
         if (event.getRawSlot() < inventory.getSize()) {
             return;
@@ -314,7 +314,7 @@ public class RecipeCompletableListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOW)
-    public void exitVanilla(InventoryOpenEvent event) {
+    public void exitVanilla(@NotNull InventoryOpenEvent event) {
         removeDispenserListening(event.getPlayer().getUniqueId());
     }
 

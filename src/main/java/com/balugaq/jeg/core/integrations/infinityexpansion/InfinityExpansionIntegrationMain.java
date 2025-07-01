@@ -30,6 +30,7 @@ package com.balugaq.jeg.core.integrations.infinityexpansion;
 import com.balugaq.jeg.api.recipe_complete.RecipeCompletableRegistry;
 import com.balugaq.jeg.core.integrations.Integration;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +51,7 @@ public class InfinityExpansionIntegrationMain implements Integration {
     };
     public static final List<SlimefunItem> handledSlimefunItems = new ArrayList<>();
 
-    public static void rrc(String id, int[] slots, boolean unordered) {
+    public static void rrc(@NotNull String id, int @NotNull [] slots, boolean unordered) {
         SlimefunItem slimefunItem = SlimefunItem.getById(id);
         if (slimefunItem != null) {
             rrc(slimefunItem, slots, unordered);
@@ -58,13 +59,13 @@ public class InfinityExpansionIntegrationMain implements Integration {
     }
 
 
-    public static void rrc(SlimefunItem slimefunItem, int[] slots, boolean unordered) {
+    public static void rrc(@NotNull SlimefunItem slimefunItem, int @NotNull [] slots, boolean unordered) {
         handledSlimefunItems.add(slimefunItem);
         RecipeCompletableRegistry.registerRecipeCompletable(slimefunItem, slots, unordered);
     }
 
     @Override
-    public String getHookPlugin() {
+    public @NotNull String getHookPlugin() {
         return "InfinityExpansion";
     }
 

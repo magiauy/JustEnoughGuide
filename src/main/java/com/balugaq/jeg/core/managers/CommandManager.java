@@ -53,7 +53,7 @@ public class CommandManager extends AbstractManager {
     private final JustEnoughGuide plugin;
     private final @NotNull JEGCommands commands;
 
-    public CommandManager(JustEnoughGuide plugin) {
+    public CommandManager(@NotNull JustEnoughGuide plugin) {
         this.plugin = plugin;
         this.commands = new JEGCommands(plugin);
         this.commands.addCommand(new HelpCommand(plugin));

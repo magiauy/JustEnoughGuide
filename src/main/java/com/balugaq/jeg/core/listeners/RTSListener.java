@@ -173,7 +173,7 @@ public class RTSListener implements Listener {
      * @return the hash of the player head, or null if the item is not a player head
      */
     @SuppressWarnings("DataFlowIssue")
-    public static String getHash(ItemStack item) {
+    public static String getHash(@Nullable ItemStack item) {
         if (item != null && (item.getType() == Material.PLAYER_HEAD || item.getType() == Material.PLAYER_WALL_HEAD)) {
             ItemMeta meta = item.getItemMeta();
             if (meta instanceof SkullMeta) {

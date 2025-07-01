@@ -30,6 +30,7 @@ package com.balugaq.jeg.core.integrations.gastronomicon;
 import com.balugaq.jeg.api.recipe_complete.RecipeCompletableRegistry;
 import com.balugaq.jeg.core.integrations.Integration;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +44,7 @@ public class GastronomiconIntegrationMain implements Integration {
     public static final int[] ELECTRIC_KITCHEN_INPUT_SLOTS = new int[]{10, 11, 12, 19, 20, 21, 28, 29, 30, 37, 38, 39};
     public static final List<SlimefunItem> handledSlimefunItems = new ArrayList<>();
 
-    public static void rrc(String id, int[] slots, boolean unordered) {
+    public static void rrc(@NotNull String id, int @NotNull [] slots, boolean unordered) {
         SlimefunItem slimefunItem = SlimefunItem.getById(id);
         if (slimefunItem != null) {
             rrc(slimefunItem, slots, unordered);
@@ -51,13 +52,13 @@ public class GastronomiconIntegrationMain implements Integration {
     }
 
 
-    public static void rrc(SlimefunItem slimefunItem, int[] slots, boolean unordered) {
+    public static void rrc(@NotNull SlimefunItem slimefunItem, int @NotNull [] slots, boolean unordered) {
         handledSlimefunItems.add(slimefunItem);
         RecipeCompletableRegistry.registerRecipeCompletable(slimefunItem, slots, unordered);
     }
 
     @Override
-    public String getHookPlugin() {
+    public @NotNull String getHookPlugin() {
         return "Gastronomicon";
     }
 

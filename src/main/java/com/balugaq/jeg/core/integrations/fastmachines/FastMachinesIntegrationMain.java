@@ -31,6 +31,7 @@ import com.balugaq.jeg.api.recipe_complete.RecipeCompletableRegistry;
 import com.balugaq.jeg.core.integrations.Integration;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,20 +49,20 @@ public class FastMachinesIntegrationMain implements Integration {
     };
     public static final List<SlimefunItem> handledSlimefunItems = new ArrayList<>();
 
-    public static void rrc(String id) {
+    public static void rrc(@NotNull String id) {
         SlimefunItem slimefunItem = SlimefunItem.getById(id);
         if (slimefunItem != null) {
             rrc(slimefunItem, MANUAL_CRAFTER_INPUT_SLOTS);
         }
     }
 
-    public static void rrc(SlimefunItem slimefunItem, int[] slots) {
+    public static void rrc(@NotNull SlimefunItem slimefunItem, int @NotNull [] slots) {
         handledSlimefunItems.add(slimefunItem);
         RecipeCompletableRegistry.registerRecipeCompletable(slimefunItem, slots, true);
     }
 
     @Override
-    public String getHookPlugin() {
+    public @NotNull String getHookPlugin() {
         return "FastMachines";
     }
 
