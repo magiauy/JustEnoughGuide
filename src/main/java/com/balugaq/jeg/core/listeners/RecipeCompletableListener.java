@@ -72,6 +72,7 @@ import java.util.function.BiConsumer;
  * @author balugaq
  * @since 1.9
  */
+@SuppressWarnings("unused")
 public class RecipeCompletableListener implements Listener {
     public static final int[] DISPENSER_SLOTS = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8};
     public static final Map<UUID, GuideEvents.ItemButtonClickEvent> LAST_EVENTS = new ConcurrentHashMap<>();
@@ -142,9 +143,7 @@ public class RecipeCompletableListener implements Listener {
                     // Strategy mode
                     // Default strategy see {@link DefaultPlayerInventoryRecipeCompleteSlimefunSource}
                     if (source.handleable(blockMenu, player, clickAction, slots, unordered)) {
-                        source.openGuide(blockMenu, player, clickAction, slots, unordered, () -> {
-                            listening.remove(player.getUniqueId());
-                        });
+                        source.openGuide(blockMenu, player, clickAction, slots, unordered, () -> listening.remove(player.getUniqueId()));
                         break;
                     }
                 }
@@ -173,6 +172,7 @@ public class RecipeCompletableListener implements Listener {
         return Optional.ofNullable(INGREDIENT_SLOTS.get(slimefunItem)).orElse(new Pair<>(new int[0], false)).second();
     }
 
+    @SuppressWarnings("RedundantIfStatement")
     public static boolean isApplicable(@NotNull SlimefunItem slimefunItem) {
         if (slimefunItem instanceof NotApplicable) {
             return false;

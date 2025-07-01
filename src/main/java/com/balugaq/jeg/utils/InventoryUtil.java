@@ -46,6 +46,7 @@ import java.util.Map;
  * @author balugaq
  * @since 1.9
  */
+@SuppressWarnings("unused")
 @UtilityClass
 public class InventoryUtil {
     @Nullable
@@ -96,6 +97,7 @@ public class InventoryUtil {
         }
     }
 
+    @SuppressWarnings("ConstantValue")
     @NotNull
     public static Map<ItemStack, Integer> pushItem(
             @NotNull final Inventory inventory,

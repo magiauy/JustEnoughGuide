@@ -42,6 +42,7 @@ import org.jetbrains.annotations.Range;
  * @author balugaq
  * @since 1.9
  */
+@SuppressWarnings("unused")
 public interface SlimefunSource extends Source {
     @SuppressWarnings("deprecation")
     boolean handleable(@NotNull BlockMenu blockMenu, @NotNull Player player, @NotNull ClickAction clickAction, @Range(from = 0, to = 53) int @NotNull [] ingredientSlots, boolean unordered);

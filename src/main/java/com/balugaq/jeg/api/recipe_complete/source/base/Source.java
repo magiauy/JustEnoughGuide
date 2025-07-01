@@ -54,6 +54,7 @@ import java.util.List;
 public interface Source {
     JavaPlugin plugin();
 
+    @SuppressWarnings("ConstantValue")
     default @Nullable List<RecipeChoice> getRecipe(@NotNull ItemStack itemStack) {
         SlimefunItem sf = SlimefunItem.getByItem(itemStack);
         if (sf != null) {

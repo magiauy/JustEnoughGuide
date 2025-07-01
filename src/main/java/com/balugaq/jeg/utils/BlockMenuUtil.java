@@ -46,6 +46,7 @@ import java.util.Map;
  * @author balugaq
  * @since 1.9
  */
+@SuppressWarnings("unused")
 @UtilityClass
 public class BlockMenuUtil {
     @Nullable
@@ -96,6 +97,7 @@ public class BlockMenuUtil {
         }
     }
 
+    @SuppressWarnings("ConstantValue")
     @NotNull
     public static Map<ItemStack, Integer> pushItem(
             @NotNull final BlockMenu blockMenu,

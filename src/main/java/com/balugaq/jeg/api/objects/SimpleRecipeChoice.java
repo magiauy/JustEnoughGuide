@@ -38,6 +38,7 @@ import java.util.List;
  * @author balugaq
  * @since 1.9
  */
+@SuppressWarnings("unused")
 public class SimpleRecipeChoice extends RecipeChoice.ExactChoice implements RecipeChoice {
     public SimpleRecipeChoice(@NotNull ItemStack choice) {
         super(choice);

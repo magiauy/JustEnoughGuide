@@ -40,6 +40,7 @@ import java.util.List;
  * @author balugaq
  * @since 1.9
  */
+@SuppressWarnings("unused")
 @Getter
 public class RecipeCompleteProvider {
     @Getter

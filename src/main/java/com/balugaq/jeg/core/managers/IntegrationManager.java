@@ -61,6 +61,7 @@ import java.util.List;
  * @author balugaq
  * @since 1.2
  */
+@SuppressWarnings({"unused", "LombokGetterMayBeUsed"})
 @Getter
 public class IntegrationManager extends AbstractManager {
     private static final List<Integration> integrations = new ArrayList<>();

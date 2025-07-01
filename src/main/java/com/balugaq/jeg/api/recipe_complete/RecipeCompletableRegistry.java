@@ -37,6 +37,7 @@ import org.jetbrains.annotations.Range;
  * @author balugaq
  * @since 1.9
  */
+@SuppressWarnings("unused")
 @ApiStatus.Obsolete
 public class RecipeCompletableRegistry {
     /**
