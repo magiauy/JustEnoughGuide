@@ -28,17 +28,17 @@
 package com.balugaq.jeg.core.integrations.def;
 
 import com.balugaq.jeg.api.objects.events.GuideEvents;
-import com.balugaq.jeg.api.recipe_complete.source.base.SlimefunSource;
+import com.balugaq.jeg.api.recipe_complete.source.base.VanillaSource;
 import com.balugaq.jeg.core.integrations.networksexpansion.NetworksExpansionIntegrationMain;
 import com.balugaq.jeg.core.listeners.RecipeCompleteListener;
-import com.balugaq.jeg.utils.BlockMenuUtil;
+import com.balugaq.jeg.utils.InventoryUtil;
 import com.balugaq.jeg.utils.GuideUtil;
-import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
-import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -51,41 +51,27 @@ import java.util.List;
  * @author balugaq
  * @since 1.9
  */
-public class DefaultPlayerInventoryRecipeCompleteSource implements SlimefunSource {
+public class DefaultPlayerInventoryRecipeCompleteVanillaSource implements VanillaSource {
     @SuppressWarnings("deprecation")
     @Override
-    public boolean handleable(@NotNull BlockMenu blockMenu, @NotNull Player player, @NotNull ClickAction clickAction, int @NotNull [] ingredientSlots, boolean unordered) {
+    public boolean handleable(@NotNull Block block, @NotNull Inventory inventory, @NotNull Player player, @NotNull ClickAction clickAction, int @NotNull [] ingredientSlots, boolean unordered) {
         // Always available
         return true;
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public boolean openGuide(@NotNull BlockMenu blockMenu, @NotNull Player player, @NotNull ClickAction clickAction, int @NotNull [] ingredientSlots, boolean unordered, @Nullable Runnable callback) {
+    public boolean openGuide(@NotNull Block block, @NotNull Inventory inventory, @NotNull Player player, @NotNull ClickAction clickAction, int @NotNull [] ingredientSlots, boolean unordered, @Nullable Runnable callback) {
         GuideEvents.ItemButtonClickEvent lastEvent = RecipeCompleteListener.getLastEvent(player.getUniqueId());
         if (clickAction.isRightClicked() && lastEvent != null) {
             int times = 1;
             if (clickAction.isShiftClicked()) {
                 times = 64;
             }
-
-            BlockMenu actualMenu = StorageCacheUtils.getMenu(blockMenu.getLocation());
-            if (actualMenu == null) {
-                if (callback != null) {
-                    callback.run();
-                }
-                return false;
-            }
-
-            if (!actualMenu.getPreset().getID().equals(blockMenu.getPreset().getID())) {
-                if (callback != null) {
-                    callback.run();
-                }
-                return false;
-            }
+            
 
             for (int i = 0; i < times; i++) {
-                completeRecipeWithGuide(actualMenu, lastEvent, ingredientSlots, unordered);
+                completeRecipeWithGuide(block, inventory, lastEvent, ingredientSlots, unordered);
             }
             if (callback != null) {
                 callback.run();
@@ -95,21 +81,6 @@ public class DefaultPlayerInventoryRecipeCompleteSource implements SlimefunSourc
 
         GuideUtil.openMainMenuAsync(player, SlimefunGuideMode.SURVIVAL_MODE, 1);
         RecipeCompleteListener.addCallback(player.getUniqueId(), ((event, profile) -> {
-            BlockMenu actualMenu = StorageCacheUtils.getMenu(blockMenu.getLocation());
-            if (actualMenu == null) {
-                if (callback != null) {
-                    callback.run();
-                }
-                return;
-            }
-
-            if (!actualMenu.getPreset().getID().equals(blockMenu.getPreset().getID())) {
-                if (callback != null) {
-                    callback.run();
-                }
-                return;
-            }
-
             int times = 1;
             if (event.getClickAction().isRightClicked()) {
                 times = 64;
@@ -117,11 +88,11 @@ public class DefaultPlayerInventoryRecipeCompleteSource implements SlimefunSourc
 
             // I think it is runnable
             for (int i = 0; i < times; i++) {
-                completeRecipeWithGuide(actualMenu, event, ingredientSlots, unordered);
+                completeRecipeWithGuide(block, inventory, event, ingredientSlots, unordered);
             }
 
             player.updateInventory();
-            actualMenu.open(player);
+            player.openInventory(inventory);
             if (callback != null) {
                 callback.run();
             }
@@ -131,7 +102,7 @@ public class DefaultPlayerInventoryRecipeCompleteSource implements SlimefunSourc
     }
 
     @Override
-    public boolean completeRecipeWithGuide(@NotNull BlockMenu blockMenu, GuideEvents.@NotNull ItemButtonClickEvent event, int @NotNull [] ingredientSlots, boolean unordered) {
+    public boolean completeRecipeWithGuide(@NotNull Block block, @NotNull Inventory inventory, GuideEvents.@NotNull ItemButtonClickEvent event, int @NotNull [] ingredientSlots, boolean unordered) {
         Player player = event.getPlayer();
 
         ItemStack clickedItem = event.getClickedItem();
@@ -160,7 +131,7 @@ public class DefaultPlayerInventoryRecipeCompleteSource implements SlimefunSourc
             }
 
             if (!unordered) {
-                ItemStack existing = blockMenu.getItemInSlot(ingredientSlots[i]);
+                ItemStack existing = inventory.getItem(ingredientSlots[i]);
                 if (existing != null && existing.getType() != Material.AIR) {
                     if (existing.getAmount() >= existing.getMaxStackSize()) {
                         continue;
@@ -179,9 +150,9 @@ public class DefaultPlayerInventoryRecipeCompleteSource implements SlimefunSourc
                     ItemStack received = getItemStack(player, itemStack);
                     if (received != null && received.getType() != Material.AIR) {
                         if (unordered) {
-                            BlockMenuUtil.pushItem(blockMenu, received, ingredientSlots);
+                            InventoryUtil.pushItem(inventory, received, ingredientSlots);
                         } else {
-                            BlockMenuUtil.pushItem(blockMenu, received, ingredientSlots[i]);
+                            InventoryUtil.pushItem(inventory, received, ingredientSlots[i]);
                         }
                     }
                 }
@@ -190,9 +161,9 @@ public class DefaultPlayerInventoryRecipeCompleteSource implements SlimefunSourc
                     ItemStack received = getItemStack(player, itemStack);
                     if (received != null && received.getType() != Material.AIR) {
                         if (unordered) {
-                            BlockMenuUtil.pushItem(blockMenu, received, ingredientSlots);
+                            InventoryUtil.pushItem(inventory, received, ingredientSlots);
                         } else {
-                            BlockMenuUtil.pushItem(blockMenu, received, ingredientSlots[i]);
+                            InventoryUtil.pushItem(inventory, received, ingredientSlots[i]);
                         }
                     }
                 }

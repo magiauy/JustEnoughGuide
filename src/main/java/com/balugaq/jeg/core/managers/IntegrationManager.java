@@ -30,7 +30,8 @@ package com.balugaq.jeg.core.managers;
 import com.balugaq.jeg.api.managers.AbstractManager;
 import com.balugaq.jeg.api.recipe_complete.source.base.RecipeCompleteProvider;
 import com.balugaq.jeg.core.integrations.Integration;
-import com.balugaq.jeg.core.integrations.def.DefaultPlayerInventoryRecipeCompleteSource;
+import com.balugaq.jeg.core.integrations.def.DefaultPlayerInventoryRecipeCompleteSlimefunSource;
+import com.balugaq.jeg.core.integrations.def.DefaultPlayerInventoryRecipeCompleteVanillaSource;
 import com.balugaq.jeg.core.integrations.fastmachines.FastMachinesIntegrationMain;
 import com.balugaq.jeg.core.integrations.finalTECHChangedv3.FinalTECHChangedIntegrationMain;
 import com.balugaq.jeg.core.integrations.finalTECHv2.FinalTECHIntegrationMain;
@@ -184,7 +185,8 @@ public class IntegrationManager extends AbstractManager {
 
             startupIntegrations();
 
-            RecipeCompleteProvider.addSource(new DefaultPlayerInventoryRecipeCompleteSource());
+            RecipeCompleteProvider.addSource(new DefaultPlayerInventoryRecipeCompleteSlimefunSource());
+            RecipeCompleteProvider.addSource(new DefaultPlayerInventoryRecipeCompleteVanillaSource());
         }, 1L);
     }
 

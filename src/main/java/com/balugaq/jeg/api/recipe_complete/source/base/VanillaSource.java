@@ -29,6 +29,8 @@ package com.balugaq.jeg.api.recipe_complete.source.base;
 
 import com.balugaq.jeg.api.objects.events.GuideEvents;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
+import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
+import org.bukkit.block.Block;
 import org.bukkit.block.Dispenser;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -45,7 +47,10 @@ import org.jetbrains.annotations.Range;
  */
 public interface VanillaSource extends Source {
     @SuppressWarnings("deprecation")
-    boolean openGuide(@NotNull Inventory inventory, @NotNull Player player, @NotNull ClickAction clickAction, @Range(from = 0, to = 53) int @NotNull [] ingredientSlots, boolean unordered, @Nullable Runnable callback);
+    boolean handleable(@NotNull Block block, @NotNull Inventory inventory, @NotNull Player player, @NotNull ClickAction clickAction, @Range(from = 0, to = 53) int @NotNull [] ingredientSlots, boolean unordered);
 
-    boolean completeRecipeWithGuide(@NotNull Inventory inventory, GuideEvents.@NotNull ItemButtonClickEvent event, @Range(from = 0, to = 53) int @NotNull [] ingredientSlots, boolean unordered);
+    @SuppressWarnings("deprecation")
+    boolean openGuide(@NotNull Block block, @NotNull Inventory inventory, @NotNull Player player, @NotNull ClickAction clickAction, @Range(from = 0, to = 53) int @NotNull [] ingredientSlots, boolean unordered, @Nullable Runnable callback);
+
+    boolean completeRecipeWithGuide(@NotNull Block block, @NotNull Inventory inventory, GuideEvents.@NotNull ItemButtonClickEvent event, @Range(from = 0, to = 53) int @NotNull [] ingredientSlots, boolean unordered);
 }

@@ -25,25 +25,19 @@
  *
  */
 
-package com.balugaq.jeg.core.integrations.networksexpansion;
+package com.balugaq.jeg.core.integrations.def;
 
 import com.balugaq.jeg.api.objects.events.GuideEvents;
 import com.balugaq.jeg.api.recipe_complete.source.base.SlimefunSource;
+import com.balugaq.jeg.core.integrations.networksexpansion.NetworksExpansionIntegrationMain;
 import com.balugaq.jeg.core.listeners.RecipeCompleteListener;
 import com.balugaq.jeg.utils.BlockMenuUtil;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
-import io.github.sefiraat.networks.NetworkStorage;
-import io.github.sefiraat.networks.network.NetworkRoot;
-import io.github.sefiraat.networks.network.NodeDefinition;
-import io.github.sefiraat.networks.network.stackcaches.ItemRequest;
-import io.github.sefiraat.networks.slimefun.network.NetworkDirectional;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
@@ -57,35 +51,12 @@ import java.util.List;
  * @author balugaq
  * @since 1.9
  */
-public class NetworksExpansionRecipeCompleteSource implements SlimefunSource {
-    @Nullable
-    public static NetworkRoot findNearbyNetworkRoot(@NotNull Location location) {
-        NetworkRoot root = null;
-
-        for (BlockFace blockFace : NetworkDirectional.VALID_FACES) {
-            Location clone = location.clone();
-            switch (blockFace) {
-                case NORTH -> clone.set(clone.getBlockX(), clone.getBlockY(), clone.getBlockZ() - 1);
-                case EAST -> clone.set(clone.getBlockX() + 1, clone.getBlockY(), clone.getBlockZ());
-                case SOUTH -> clone.set(clone.getBlockX(), clone.getBlockY(), clone.getBlockZ() + 1);
-                case WEST -> clone.set(clone.getBlockX() - 1, clone.getBlockY(), clone.getBlockZ());
-                case UP -> clone.set(clone.getBlockX(), clone.getBlockY() + 1, clone.getBlockZ());
-                case DOWN -> clone.set(clone.getBlockX(), clone.getBlockY() - 1, clone.getBlockZ());
-            }
-            NodeDefinition def2 = NetworkStorage.getNode(clone);
-            if (def2 != null && def2.getNode() != null) {
-                root = def2.getNode().getRoot();
-                break;
-            }
-        }
-
-        return root;
-    }
-
+public class DefaultPlayerInventoryRecipeCompleteSlimefunSource implements SlimefunSource {
     @SuppressWarnings("deprecation")
     @Override
     public boolean handleable(@NotNull BlockMenu blockMenu, @NotNull Player player, @NotNull ClickAction clickAction, int @NotNull [] ingredientSlots, boolean unordered) {
-        return findNearbyNetworkRoot(blockMenu.getLocation()) != null;
+        // Always available
+        return true;
     }
 
     @SuppressWarnings("deprecation")
@@ -113,7 +84,6 @@ public class NetworksExpansionRecipeCompleteSource implements SlimefunSource {
                 return false;
             }
 
-            // I think it is runnable
             for (int i = 0; i < times; i++) {
                 completeRecipeWithGuide(actualMenu, lastEvent, ingredientSlots, unordered);
             }
@@ -145,6 +115,7 @@ public class NetworksExpansionRecipeCompleteSource implements SlimefunSource {
                 times = 64;
             }
 
+            // I think it is runnable
             for (int i = 0; i < times; i++) {
                 completeRecipeWithGuide(actualMenu, event, ingredientSlots, unordered);
             }
@@ -161,7 +132,6 @@ public class NetworksExpansionRecipeCompleteSource implements SlimefunSource {
 
     @Override
     public boolean completeRecipeWithGuide(@NotNull BlockMenu blockMenu, GuideEvents.@NotNull ItemButtonClickEvent event, int @NotNull [] ingredientSlots, boolean unordered) {
-        NetworkRoot root = findNearbyNetworkRoot(blockMenu.getLocation());
         Player player = event.getPlayer();
 
         ItemStack clickedItem = event.getClickedItem();
@@ -206,7 +176,7 @@ public class NetworksExpansionRecipeCompleteSource implements SlimefunSource {
                 List<ItemStack> itemStacks =
                         materialChoice.getChoices().stream().map(ItemStack::new).toList();
                 for (ItemStack itemStack : itemStacks) {
-                    ItemStack received = getItemStack(root, player, itemStack);
+                    ItemStack received = getItemStack(player, itemStack);
                     if (received != null && received.getType() != Material.AIR) {
                         if (unordered) {
                             BlockMenuUtil.pushItem(blockMenu, received, ingredientSlots);
@@ -217,7 +187,7 @@ public class NetworksExpansionRecipeCompleteSource implements SlimefunSource {
                 }
             } else if (choice instanceof RecipeChoice.ExactChoice exactChoice) {
                 for (ItemStack itemStack : exactChoice.getChoices()) {
-                    ItemStack received = getItemStack(root, player, itemStack);
+                    ItemStack received = getItemStack(player, itemStack);
                     if (received != null && received.getType() != Material.AIR) {
                         if (unordered) {
                             BlockMenuUtil.pushItem(blockMenu, received, ingredientSlots);
@@ -234,14 +204,8 @@ public class NetworksExpansionRecipeCompleteSource implements SlimefunSource {
     }
 
     @Nullable
-    private ItemStack getItemStack(@NotNull NetworkRoot root, @NotNull Player player, @NotNull ItemStack itemStack) {
-        ItemStack i1 = getItemStackFromPlayerInventory(player, itemStack);
-        if (i1 != null) {
-            return i1;
-        }
-
-        // get from root
-        return root.getItemStack0(player.getLocation(), new ItemRequest(itemStack, 1));
+    private ItemStack getItemStack(@NotNull Player player, @NotNull ItemStack itemStack) {
+        return getItemStackFromPlayerInventory(player, itemStack);
     }
 
     @Override

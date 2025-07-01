@@ -68,7 +68,8 @@ public class NetworksExpansionIntegrationMain implements Integration {
 
     @Override
     public void onEnable() {
-        RecipeCompleteProvider.addSource(new NetworksExpansionRecipeCompleteSource());
+        RecipeCompleteProvider.addSource(new NetworksExpansionRecipeCompleteSlimefunSource());
+        RecipeCompleteProvider.addSource(new NetworksExpansionRecipeCompleteVanillaSource());
 
         rrc(ExpansionItems.ANCIENT_ALTAR_RECIPE_ENCODER, ENCODER_RECIPE_SLOTS, false);
         rrc(ExpansionItems.ARMOR_FORGE_RECIPE_ENCODER, CRAFTING_GRID_RECIPE_SLOTS, false);
