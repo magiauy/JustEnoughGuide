@@ -155,7 +155,7 @@ public class LogitechIntegrationMain implements Integration {
             }
         }
 
-        rrc("LOGITECH_BUG_CRAFTER", BUG_CRAFTER_INPUT_SLOTS, true);
+        rrc("LOGITECH_BUG_CRAFTER", BUG_CRAFTER_INPUT_SLOTS, false);
     }
 
     @Override
