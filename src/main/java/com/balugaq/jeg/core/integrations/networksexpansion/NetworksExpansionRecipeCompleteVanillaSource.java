@@ -102,6 +102,7 @@ public class NetworksExpansionRecipeCompleteVanillaSource implements VanillaSour
             for (int i = 0; i < times; i++) {
                 completeRecipeWithGuide(block, inventory, lastEvent, ingredientSlots, unordered);
             }
+
             if (callback != null) {
                 callback.run();
             }

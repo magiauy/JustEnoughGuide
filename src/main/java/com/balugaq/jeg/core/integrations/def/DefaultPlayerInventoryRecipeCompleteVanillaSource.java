@@ -69,7 +69,6 @@ public class DefaultPlayerInventoryRecipeCompleteVanillaSource implements Vanill
                 times = 64;
             }
 
-
             for (int i = 0; i < times; i++) {
                 completeRecipeWithGuide(block, inventory, lastEvent, ingredientSlots, unordered);
             }
