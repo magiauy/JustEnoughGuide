@@ -91,7 +91,7 @@ public class VanillaItemsGroup extends FlexItemGroup {
 
     static {
         Bukkit.getScheduler().runTaskLater(JAVA_PLUGIN, () -> {
-            boolean before = disableAutomaticallyLoadItems();
+            boolean before = JustEnoughGuide.disableAutomaticallyLoadItems();
             try {
                 for (Material material : Material.values()) {
                     if (!material.isAir() && material.isItem() && !material.isLegacy()) {
@@ -101,7 +101,7 @@ public class VanillaItemsGroup extends FlexItemGroup {
             } catch (Exception e) {
                 Debug.trace(e);
             } finally {
-                setAutomaticallyLoadItems(before);
+                JustEnoughGuide.setAutomaticallyLoadItems(before);
             }
         }, 1L);
     }
@@ -126,16 +126,6 @@ public class VanillaItemsGroup extends FlexItemGroup {
         super(hiddenItemsGroup.key, new ItemStack(Material.BARRIER));
         this.page = page;
         this.pageMap.put(page, this);
-    }
-
-    public static boolean disableAutomaticallyLoadItems() {
-        boolean before = Slimefun.getConfigManager().isAutoLoadingEnabled();
-        Slimefun.getConfigManager().setAutoLoadingMode(false);
-        return before;
-    }
-
-    public static void setAutomaticallyLoadItems(boolean value) {
-        Slimefun.getConfigManager().setAutoLoadingMode(value);
     }
 
     /**

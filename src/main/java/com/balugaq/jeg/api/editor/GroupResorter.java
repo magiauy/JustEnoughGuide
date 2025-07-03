@@ -27,6 +27,7 @@
 
 package com.balugaq.jeg.api.editor;
 
+import com.balugaq.jeg.api.objects.annotations.CallTimeSensitive;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.Debug;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
@@ -62,6 +63,11 @@ public class GroupResorter {
     public static FileConfiguration config = null;
 
     static {
+        load();
+    }
+
+    @CallTimeSensitive(CallTimeSensitive.AfterSlimefunLoaded)
+    public static void load() {
         Bukkit.getScheduler().runTaskLater(JustEnoughGuide.getInstance(), () -> {
             if (hasCfg()) {
                 int offset = 0;
@@ -135,6 +141,7 @@ public class GroupResorter {
         setTierCfg(getKey(itemGroup), tier);
     }
 
+    @CallTimeSensitive(CallTimeSensitive.AfterSlimefunLoaded)
     public static void resort() {
         List<ItemGroup> copy = new ArrayList<>(Slimefun.getRegistry().getAllItemGroups());
         for (ItemGroup itemGroup : copy) {

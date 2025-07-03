@@ -35,6 +35,7 @@ import com.balugaq.jeg.api.interfaces.DisplayInSurvivalMode;
 import com.balugaq.jeg.api.interfaces.JEGSlimefunGuideImplementation;
 import com.balugaq.jeg.api.interfaces.NotDisplayInSurvivalMode;
 import com.balugaq.jeg.api.interfaces.VanillaItemShade;
+import com.balugaq.jeg.api.objects.annotations.CallTimeSensitive;
 import com.balugaq.jeg.api.objects.events.GuideEvents;
 import com.balugaq.jeg.api.patches.JEGGuideSettings;
 import com.balugaq.jeg.core.listeners.GuideListener;
@@ -182,6 +183,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
      * @return a {@link List} of visible {@link ItemGroup} instances
      */
     @Override
+    @CallTimeSensitive(CallTimeSensitive.AfterSlimefunLoaded)
     public @NotNull List<ItemGroup> getVisibleItemGroups(@NotNull Player p, @NotNull PlayerProfile profile) {
         List<ItemGroup> groups = new LinkedList<>();
 
@@ -192,6 +194,10 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
                 }
                 if (group.getClass().isAnnotationPresent(DisplayInSurvivalMode.class)) {
                     groups.add(group);
+                    continue;
+                }
+                if (GuideUtil.isForceHidden(group)) {
+                    continue;
                 }
                 if (group instanceof FlexItemGroup flexItemGroup) {
                     if (flexItemGroup.isVisible(p, profile, getMode())) {

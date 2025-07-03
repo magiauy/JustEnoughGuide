@@ -27,6 +27,7 @@
 
 package com.balugaq.jeg.implementation;
 
+import com.balugaq.jeg.api.CustomGroupConfigurations;
 import com.balugaq.jeg.api.editor.GroupResorter;
 import com.balugaq.jeg.api.groups.VanillaItemsGroup;
 import com.balugaq.jeg.api.recipe_complete.source.base.RecipeCompleteProvider;
@@ -42,6 +43,7 @@ import com.balugaq.jeg.implementation.items.GroupSetup;
 import com.balugaq.jeg.implementation.items.ItemsSetup;
 import com.balugaq.jeg.implementation.option.BeginnersGuideOption;
 import com.balugaq.jeg.utils.Debug;
+import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.MinecraftVersion;
 import com.balugaq.jeg.utils.ReflectionUtil;
 import com.balugaq.jeg.utils.SlimefunRegistryUtil;
@@ -177,6 +179,16 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
         Bukkit.getScheduler().runTaskLaterAsynchronously(getInstance(), runnable, 1L);
     }
 
+    public static boolean disableAutomaticallyLoadItems() {
+        boolean before = Slimefun.getConfigManager().isAutoLoadingEnabled();
+        Slimefun.getConfigManager().setAutoLoadingMode(false);
+        return before;
+    }
+
+    public static void setAutomaticallyLoadItems(boolean value) {
+        Slimefun.getConfigManager().setAutoLoadingMode(value);
+    }
+
     /**
      * Initializes the plugin and sets up all necessary components.
      */
@@ -245,6 +257,9 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
 
             getLogger().info("正在加载物品组...");
             GroupSetup.setup();
+            if (survivalOverride) {
+                CustomGroupConfigurations.load();
+            }
             getLogger().info("物品组加载完毕！");
 
             if (getConfigManager().isBeginnerOption()) {
@@ -281,30 +296,18 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
     }
 
     /**
-     * Attempts to update the plugin if auto-update is enabled.
-     */
-    public void tryUpdate() {
-        try {
-            if (configManager.isAutoUpdate() && getDescription().getVersion().startsWith("Build")) {
-                GuizhanUpdater.start(this, getFile(), username, repo, branch);
-            }
-        } catch (NoClassDefFoundError | NullPointerException | UnsupportedClassVersionError e) {
-            getLogger().info("自动更新失败: " + e.getMessage());
-            Debug.trace(e);
-        }
-    }
-
-    /**
      * Cleans up resources and shuts down the plugin.
      */
     @Override
     public void onDisable() {
+        CustomGroupConfigurations.unload();
         GroupResorter.rollback();
 
         getIntegrationManager().shutdownIntegrations();
 
         GroupSetup.shutdown();
         RecipeCompleteProvider.shutdown();
+        GuideUtil.shutdown();
 
         /**
          * Unregister all {@link SlimefunItem}
@@ -452,5 +455,19 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
      */
     public boolean isDebug() {
         return getConfigManager().isDebug();
+    }
+
+    /**
+     * Attempts to update the plugin if auto-update is enabled.
+     */
+    public void tryUpdate() {
+        try {
+            if (configManager.isAutoUpdate() && getDescription().getVersion().startsWith("Build")) {
+                GuizhanUpdater.start(this, getFile(), username, repo, branch);
+            }
+        } catch (NoClassDefFoundError | NullPointerException | UnsupportedClassVersionError e) {
+            getLogger().info("自动更新失败: " + e.getMessage());
+            Debug.trace(e);
+        }
     }
 }

@@ -62,6 +62,8 @@ import org.jetbrains.annotations.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class contains utility methods for the guide system.
@@ -72,6 +74,7 @@ import java.lang.reflect.Method;
  */
 @UtilityClass
 public final class GuideUtil {
+    private static final List<ItemGroup> forceHiddens = new ArrayList<>();
     private static final ItemStack BOOK_MARK_MENU_BUTTON =
             ItemStackUtil.getCleanItem(Converter.getItem(Material.NETHER_STAR, "&e&l收藏物列表"));
     private static final ItemStack ITEM_MARK_MENU_BUTTON =
@@ -257,5 +260,26 @@ public final class GuideUtil {
                 menu.addItem(ss, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
             }
         }
+    }
+
+    public static void setForceHiddens(@NotNull ItemGroup itemGroup, boolean forceHidden) {
+        if (forceHidden) {
+            forceHiddens.add(itemGroup);
+        } else {
+            forceHiddens.remove(itemGroup);
+        }
+    }
+
+    @NotNull
+    public static List<ItemGroup> getForceHiddens() {
+        return new ArrayList<>(forceHiddens);
+    }
+
+    public static boolean isForceHidden(@NotNull ItemGroup group) {
+        return forceHiddens.contains(group);
+    }
+
+    public static void shutdown() {
+        forceHiddens.clear();
     }
 }

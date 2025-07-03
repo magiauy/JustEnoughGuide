@@ -25,44 +25,20 @@
  *
  */
 
-package com.balugaq.jeg.utils.formatter;
+package com.balugaq.jeg.api.objects.annotations;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * @author balugaq
- * @since 1.6
+ * @since 1.9
  */
-public class Formats {
-    public static final Map<String, Format> customFormats = new HashMap<>();
-    public static final MainFormat main = new MainFormat();
-    public static final NestedGroupFormat nested = new NestedGroupFormat();
-    public static final SubGroupFormat sub = new SubGroupFormat();
-    public static final RecipeFormat recipe = new RecipeFormat();
-    public static final HelperFormat helper = new HelperFormat();
-    public static final RecipeVanillaFormat recipe_vanilla = new RecipeVanillaFormat();
-    public static final RecipeDisplayFormat recipe_display = new RecipeDisplayFormat();
-    public static final SettingsFormat settings = new SettingsFormat();
-    public static final ContributorsFormat contributors = new ContributorsFormat();
-
-    static {
-        main.loadMapping();
-        nested.loadMapping();
-        sub.loadMapping();
-        recipe.loadMapping();
-        helper.loadMapping();
-        recipe_vanilla.loadMapping();
-        recipe_display.loadMapping();
-        settings.loadMapping();
-        contributors.loadMapping();
-    }
-
-    public static void addCustomFormat(String id, Format format) {
-        customFormats.put(id, format);
-    }
-
-    public static void unload() {
-        customFormats.clear();
-    }
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.METHOD, ElementType.CONSTRUCTOR})
+public @interface CallTimeSensitive {
+    String AfterSlimefunLoaded = "After Slimefun loaded";
+    String value() default "";
 }

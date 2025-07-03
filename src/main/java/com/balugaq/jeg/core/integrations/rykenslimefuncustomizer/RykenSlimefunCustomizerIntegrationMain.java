@@ -27,6 +27,7 @@
 
 package com.balugaq.jeg.core.integrations.rykenslimefuncustomizer;
 
+import com.balugaq.jeg.api.objects.annotations.CallTimeSensitive;
 import com.balugaq.jeg.api.recipe_complete.RecipeCompletableRegistry;
 import com.balugaq.jeg.core.integrations.Integration;
 import com.balugaq.jeg.utils.ReflectionUtil;
@@ -67,6 +68,7 @@ public class RykenSlimefunCustomizerIntegrationMain implements Integration {
     }
 
     @Override
+    @CallTimeSensitive(CallTimeSensitive.AfterSlimefunLoaded)
     public void onEnable() {
         try {
             classCustomWorkbench = (Class<? extends SlimefunItem>) Class.forName("org.lins.mmmjjkx.rykenslimefuncustomizer.objects.customs.machine.CustomWorkbench");

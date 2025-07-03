@@ -36,6 +36,7 @@ import com.balugaq.jeg.api.interfaces.DisplayInCheatMode;
 import com.balugaq.jeg.api.interfaces.JEGSlimefunGuideImplementation;
 import com.balugaq.jeg.api.interfaces.NotDisplayInCheatMode;
 import com.balugaq.jeg.api.interfaces.VanillaItemShade;
+import com.balugaq.jeg.api.objects.annotations.CallTimeSensitive;
 import com.balugaq.jeg.api.objects.events.GuideEvents;
 import com.balugaq.jeg.api.patches.JEGGuideSettings;
 import com.balugaq.jeg.core.listeners.GroupTierEditorListener;
@@ -250,6 +251,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
      * @param guideTierMode Whether the guide is in tier mode
      * @return a {@link List} of visible {@link ItemGroup} instances
      */
+    @CallTimeSensitive(CallTimeSensitive.AfterSlimefunLoaded)
     public @NotNull List<ItemGroup> getVisibleItemGroups(@NotNull Player p, @NotNull PlayerProfile profile, boolean guideTierMode) {
         List<ItemGroup> groups = new LinkedList<>();
         List<ItemGroup> specialGroups = new LinkedList<>();
@@ -260,6 +262,9 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                 }
                 if (group.getClass().isAnnotationPresent(DisplayInCheatMode.class)) {
                     groups.add(group);
+                    continue;
+                }
+                if (!guideTierMode && GuideUtil.isForceHidden(group)) {
                     continue;
                 }
                 if (group instanceof FlexItemGroup flexItemGroup) {

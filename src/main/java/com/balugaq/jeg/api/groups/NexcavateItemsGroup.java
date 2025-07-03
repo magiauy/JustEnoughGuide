@@ -30,6 +30,7 @@ package com.balugaq.jeg.api.groups;
 import city.norain.slimefun4.VaultIntegration;
 import com.balugaq.jeg.api.interfaces.JEGSlimefunGuideImplementation;
 import com.balugaq.jeg.api.interfaces.NotDisplayInSurvivalMode;
+import com.balugaq.jeg.api.objects.annotations.CallTimeSensitive;
 import com.balugaq.jeg.api.objects.events.GuideEvents;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.EventUtil;
@@ -102,6 +103,7 @@ public class NexcavateItemsGroup extends FlexItemGroup {
     private final List<SlimefunItem> slimefunItemList;
     private Map<Integer, NexcavateItemsGroup> pageMap = new LinkedHashMap<>();
 
+    @CallTimeSensitive(CallTimeSensitive.AfterSlimefunLoaded)
     @ParametersAreNonnullByDefault
     public NexcavateItemsGroup(NamespacedKey key, ItemStack icon) {
         super(key, icon);
