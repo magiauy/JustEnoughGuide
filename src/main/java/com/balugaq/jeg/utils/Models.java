@@ -84,7 +84,7 @@ public class Models {
     public static final SlimefunItemStack SUPPORTED_ADDONS_INFO = new SlimefunItemStack("JEG_RECIPE_COMPLETE_SUPPORTED_ADDONS_INFO", Converter.getItem(
             Material.PAPER,
             "&a对以下附属的部分机器适配了配方补全",
-            "&7如需适配更多可在 JEG GitHub 提 issue",
+            "&7如需适配更多可在 JEG GitHub 提交 issue",
             "",
             "&7- &a快捷机器",
             "&7- &a乱序技艺 2.0-Preview",
