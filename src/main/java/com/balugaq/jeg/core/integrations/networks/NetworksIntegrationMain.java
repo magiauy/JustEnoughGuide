@@ -45,6 +45,13 @@ public class NetworksIntegrationMain implements Integration {
     public static final int[] CRAFTING_GRID_RECIPE_SLOTS = new int[]{6, 7, 8, 15, 16, 17, 24, 25, 26};
     public static final List<SlimefunItem> handledSlimefunItems = new ArrayList<>();
 
+    public static void rrc(@NotNull String id, int @NotNull [] slots, boolean unordered) {
+        SlimefunItem slimefunItem = SlimefunItem.getById(id);
+        if (slimefunItem != null) {
+            rrc(slimefunItem, slots, unordered);
+        }
+    }
+
     public static void rrc(@NotNull SlimefunItem slimefunItem, int @NotNull [] slots, boolean unordered) {
         handledSlimefunItems.add(slimefunItem);
         RecipeCompletableRegistry.registerRecipeCompletable(slimefunItem, slots, unordered);
@@ -57,8 +64,8 @@ public class NetworksIntegrationMain implements Integration {
 
     @Override
     public void onEnable() {
-        rrc(NetworkSlimefunItems.NETWORK_RECIPE_ENCODER, ENCODER_RECIPE_SLOTS, false);
-        rrc(NetworkSlimefunItems.NETWORK_CRAFTING_GRID, CRAFTING_GRID_RECIPE_SLOTS, false);
+        rrc("NTW_RECIPE_ENCODER", ENCODER_RECIPE_SLOTS, false);
+        rrc("NTW_CRAFTING_GRID", CRAFTING_GRID_RECIPE_SLOTS, false);
     }
 
     @Override

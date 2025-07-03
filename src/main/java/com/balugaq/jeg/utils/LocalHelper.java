@@ -318,6 +318,7 @@ public class LocalHelper {
         addonLocals.put("Aeterum", "众神之马");
         addonLocals.put("PoseidonAddon", "浪涌科技");
         addonLocals.put("Aircraft", "粘液飞机");
+        addonLocals.put("InfinityExpansion2", "无尽贪婪2");
     }
 
     @NotNull

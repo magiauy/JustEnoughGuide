@@ -25,17 +25,12 @@
  *
  */
 
-package com.balugaq.jeg.core.integrations.networksexpansion;
+package com.balugaq.jeg.core.integrations.bedrocktechnology;
 
 import com.balugaq.jeg.api.recipe_complete.RecipeCompletableRegistry;
-import com.balugaq.jeg.api.recipe_complete.source.base.RecipeCompleteProvider;
 import com.balugaq.jeg.core.integrations.Integration;
-import com.ytdd9527.networksexpansion.implementation.ExpansionItems;
-import io.github.sefiraat.networks.Networks;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,19 +39,16 @@ import java.util.List;
  * @author balugaq
  * @since 1.9
  */
-public class NetworksExpansionIntegrationMain implements Integration {
-    public static final int[] ENCODER_RECIPE_SLOTS = new int[]{12, 13, 14, 21, 22, 23, 30, 31, 32};
-    public static final int[] CRAFTING_GRID_RECIPE_SLOTS = new int[]{6, 7, 8, 15, 16, 17, 24, 25, 26};
+public class BedrockTechnologyIntegrationMain implements Integration {
+    public static final int[] BEKT_CRAFTING_TABLE_INPUT_SLOTS = new int[]{
+            1,  2,  3,  4,  5,  6,
+            10, 11, 12, 13, 14, 15,
+            19, 20, 21, 22, 23, 24,
+            28, 29, 30, 31, 32, 33,
+            37, 38, 39, 40, 41, 42,
+            46, 47, 48, 49, 50, 51
+    };
     public static final List<SlimefunItem> handledSlimefunItems = new ArrayList<>();
-    public static @Nullable JavaPlugin plugin = null;
-
-    public static JavaPlugin getPlugin() {
-        if (plugin == null) {
-            plugin = Networks.getInstance();
-        }
-
-        return plugin;
-    }
 
     public static void rrc(@NotNull String id, int @NotNull [] slots, boolean unordered) {
         SlimefunItem slimefunItem = SlimefunItem.getById(id);
@@ -65,6 +57,7 @@ public class NetworksExpansionIntegrationMain implements Integration {
         }
     }
 
+
     public static void rrc(@NotNull SlimefunItem slimefunItem, int @NotNull [] slots, boolean unordered) {
         handledSlimefunItems.add(slimefunItem);
         RecipeCompletableRegistry.registerRecipeCompletable(slimefunItem, slots, unordered);
@@ -72,26 +65,12 @@ public class NetworksExpansionIntegrationMain implements Integration {
 
     @Override
     public @NotNull String getHookPlugin() {
-        return "NetworksExpansion";
+        return "BedrockTechnology";
     }
 
     @Override
     public void onEnable() {
-        RecipeCompleteProvider.addSource(new NetworksExpansionRecipeCompleteSlimefunSource());
-        RecipeCompleteProvider.addSource(new NetworksExpansionRecipeCompleteVanillaSource());
-
-        rrc("NTW_EXPANSION_ANCIENT_ALTAR_RECIPE_ENCODER", ENCODER_RECIPE_SLOTS, false);
-        rrc("NTW_EXPANSION_ARMOR_FORGE_RECIPE_ENCODER", CRAFTING_GRID_RECIPE_SLOTS, false);
-        rrc("NTW_EXPANSION_COMPRESSOR_RECIPE_ENCODER", CRAFTING_GRID_RECIPE_SLOTS, false);
-        rrc("NTW_EXPANSION_EXPANSION_WORKBENCH_RECIPE_ENCODER", CRAFTING_GRID_RECIPE_SLOTS, false);
-        rrc("NTW_EXPANSION_GRIND_STONE_RECIPE_ENCODER", CRAFTING_GRID_RECIPE_SLOTS, false);
-        rrc("NTW_EXPANSION_JUICER_RECIPE_ENCODER", CRAFTING_GRID_RECIPE_SLOTS, false);
-        rrc("NTW_EXPANSION_AUTO_MAGIC_WORKBENCH", CRAFTING_GRID_RECIPE_SLOTS, false);
-        rrc("NTW_EXPANSION_ORE_CRUSHER_RECIPE_ENCODER", CRAFTING_GRID_RECIPE_SLOTS, false);
-        rrc("NTW_EXPANSION_PRESSURE_CHAMBER_RECIPE_ENCODER", CRAFTING_GRID_RECIPE_SLOTS, false);
-        rrc("NTW_EXPANSION_QUANTUM_WORKBENCH_RECIPE_ENCODER", CRAFTING_GRID_RECIPE_SLOTS, false);
-        rrc("NTW_EXPANSION_SMELTERY_RECIPE_ENCODER", CRAFTING_GRID_RECIPE_SLOTS, false);
-        rrc("NTW_EXPANSION_CRAFTING_GRID_NEW_STYLE", CRAFTING_GRID_RECIPE_SLOTS, false);
+        rrc("BEKT_CRAFTING_TABLE", BEKT_CRAFTING_TABLE_INPUT_SLOTS, false);
     }
 
     @Override

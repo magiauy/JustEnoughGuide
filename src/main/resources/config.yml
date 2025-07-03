@@ -451,6 +451,7 @@ local-translate:
   Aeterum: "众神之马"
   PoseidonAddon: "浪涌科技"
   Aircraft: "粘液飞机"
+  InfinityExpansion2: "无尽贪婪2"
 
 # Do not change this value unless you know what you are doing.
 config-version: 1.8
