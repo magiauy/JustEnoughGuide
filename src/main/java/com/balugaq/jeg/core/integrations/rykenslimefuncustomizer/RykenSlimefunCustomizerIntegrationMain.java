@@ -43,7 +43,7 @@ import java.util.List;
  * @author balugaq
  * @since 1.9
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "unused"})
 public class RykenSlimefunCustomizerIntegrationMain implements Integration {
     public static @Nullable Class<? extends SlimefunItem> classCustomWorkbench = null;
     public static @Nullable Class<? extends SlimefunItem> classCustomLinkedRecipeMachine = null;

@@ -93,5 +93,8 @@ public class HelpCommand implements JEGCommand {
         sender.sendMessage(ChatColor.GREEN + "/jeg help - Show this help message");
         sender.sendMessage(ChatColor.GREEN + "/jeg reload - Reload JEG plugin");
         sender.sendMessage(ChatColor.GREEN + "/jeg cache <section> <key>");
+        sender.sendMessage(ChatColor.GREEN + "/jeg disable - Disable JEG plugin");
+        sender.sendMessage(ChatColor.GREEN + "/jeg gteg - Get Guide Tier Editor");
+        sender.sendMessage(ChatColor.GREEN + "/jeg categories - View all the groups");
     }
 }

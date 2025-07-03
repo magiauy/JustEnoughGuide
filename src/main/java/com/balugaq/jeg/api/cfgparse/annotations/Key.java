@@ -13,6 +13,6 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Key {
-    public static final String ALL_KEY = "ALL_KEY";
+    String ALL_KEY = "ALL_KEY";
     String value() default "";
 }

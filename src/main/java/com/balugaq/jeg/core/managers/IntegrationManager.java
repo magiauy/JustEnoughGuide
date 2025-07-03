@@ -63,7 +63,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -89,6 +88,7 @@ public class IntegrationManager extends AbstractManager {
     private boolean enabledFluffyMachines;
     private boolean enabledGalactifun;
     private boolean enabledGastronomicon;
+    private boolean enabledGuguSlimefunLib;
     private boolean enabledInfinityExpansion;
     private boolean enabledInfinityExpansion2;
     private boolean enabledInfinityExpansion_Changed;
@@ -129,6 +129,7 @@ public class IntegrationManager extends AbstractManager {
             this.enabledFluffyMachines = pm.isPluginEnabled("FluffyMachines");
             this.enabledGalactifun = pm.isPluginEnabled("Galactifun");
             this.enabledGastronomicon = pm.isPluginEnabled("Gastronomicon");
+            this.enabledGuguSlimefunLib = pm.isPluginEnabled("GuguSlimefunLib");
             this.enabledInfinityExpansion_Changed = pm.isPluginEnabled("InfinityExpansion-Changed");
             this.enabledInfinityExpansion = enabledInfinityExpansion_Changed || pm.isPluginEnabled("InfinityExpansion");
             this.enabledInfinityExpansion2 = pm.isPluginEnabled("InfinityExpansion2");
@@ -210,6 +211,7 @@ public class IntegrationManager extends AbstractManager {
         return enabledFinalTECH_Changed;
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public Run addIntegration(boolean enabled, Supplier<Integration> supplier) {
         if (enabled) {
             Integration integration = supplier.get();

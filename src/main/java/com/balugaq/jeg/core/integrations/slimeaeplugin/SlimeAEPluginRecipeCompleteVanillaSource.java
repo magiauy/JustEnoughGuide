@@ -25,16 +25,18 @@
  *
  */
 
-package com.balugaq.jeg.core.integrations.networksexpansion;
+package com.balugaq.jeg.core.integrations.slimeaeplugin;
 
 import com.balugaq.jeg.api.objects.events.GuideEvents;
 import com.balugaq.jeg.api.recipe_complete.source.base.VanillaSource;
+import com.balugaq.jeg.core.integrations.networksexpansion.NetworksExpansionIntegrationMain;
 import com.balugaq.jeg.core.listeners.RecipeCompletableListener;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.InventoryUtil;
-import io.github.sefiraat.networks.network.NetworkRoot;
-import io.github.sefiraat.networks.network.stackcaches.ItemRequest;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
+import me.ddggdd135.guguslimefunlib.items.ItemKey;
+import me.ddggdd135.slimeae.api.interfaces.IStorage;
+import me.ddggdd135.slimeae.api.items.ItemRequest;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -52,12 +54,11 @@ import java.util.List;
  * @author balugaq
  * @since 1.9
  */
-public class NetworksExpansionRecipeCompleteVanillaSource implements VanillaSource {
-
+public class SlimeAEPluginRecipeCompleteVanillaSource implements VanillaSource {
     @SuppressWarnings("deprecation")
     @Override
     public boolean handleable(@NotNull Block block, @NotNull Inventory inventory, @NotNull Player player, @NotNull ClickAction clickAction, int @NotNull [] ingredientSlots, boolean unordered) {
-        return NetworksExpansionIntegrationMain.findNearbyNetworkRoot(block.getLocation()) != null;
+        return SlimeAEPluginIntegrationMain.findNearbyIStorage(block.getLocation()) != null;
     }
 
     @SuppressWarnings("deprecation")
@@ -104,7 +105,7 @@ public class NetworksExpansionRecipeCompleteVanillaSource implements VanillaSour
 
     @Override
     public boolean completeRecipeWithGuide(@NotNull Block block, @NotNull Inventory inventory, GuideEvents.@NotNull ItemButtonClickEvent event, int @NotNull [] ingredientSlots, boolean unordered) {
-        NetworkRoot root = NetworksExpansionIntegrationMain.findNearbyNetworkRoot(block.getLocation());
+        IStorage root = SlimeAEPluginIntegrationMain.findNearbyIStorage(block.getLocation());
         if (root == null) {
             return false;
         }
@@ -181,14 +182,19 @@ public class NetworksExpansionRecipeCompleteVanillaSource implements VanillaSour
     }
 
     @Nullable
-    private ItemStack getItemStack(@NotNull NetworkRoot root, @NotNull Player player, @NotNull ItemStack itemStack) {
+    private ItemStack getItemStack(@NotNull IStorage networkStorage, @NotNull Player player, @NotNull ItemStack itemStack) {
         ItemStack i1 = getItemStackFromPlayerInventory(player, itemStack);
         if (i1 != null) {
             return i1;
         }
 
-        // get from root
-        return root.getItemStack0(player.getLocation(), new ItemRequest(itemStack, 1));
+        // get from networkStorage
+        ItemStack[] gotten = networkStorage.takeItem(new ItemRequest(new ItemKey(itemStack), 1L)).toItemStacks();
+        if (gotten.length != 0) {
+            return gotten[0];
+        }
+
+        return null;
     }
 
     @Override

@@ -72,6 +72,7 @@ import java.util.List;
  * @author balugaq
  * @since 1.0
  */
+@SuppressWarnings("unused")
 @UtilityClass
 public final class GuideUtil {
     private static final List<ItemGroup> forceHiddens = new ArrayList<>();

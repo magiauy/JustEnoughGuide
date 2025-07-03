@@ -33,17 +33,12 @@ import com.balugaq.jeg.core.listeners.RecipeCompletableListener;
 import com.balugaq.jeg.utils.BlockMenuUtil;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
-import io.github.sefiraat.networks.NetworkStorage;
 import io.github.sefiraat.networks.network.NetworkRoot;
-import io.github.sefiraat.networks.network.NodeDefinition;
 import io.github.sefiraat.networks.network.stackcaches.ItemRequest;
-import io.github.sefiraat.networks.slimefun.network.NetworkDirectional;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
@@ -58,34 +53,11 @@ import java.util.List;
  * @since 1.9
  */
 public class NetworksExpansionRecipeCompleteSlimefunSource implements SlimefunSource {
-    @Nullable
-    public static NetworkRoot findNearbyNetworkRoot(@NotNull Location location) {
-        NetworkRoot root = null;
-
-        for (BlockFace blockFace : NetworkDirectional.VALID_FACES) {
-            Location clone = location.clone();
-            switch (blockFace) {
-                case NORTH -> clone.set(clone.getBlockX(), clone.getBlockY(), clone.getBlockZ() - 1);
-                case EAST -> clone.set(clone.getBlockX() + 1, clone.getBlockY(), clone.getBlockZ());
-                case SOUTH -> clone.set(clone.getBlockX(), clone.getBlockY(), clone.getBlockZ() + 1);
-                case WEST -> clone.set(clone.getBlockX() - 1, clone.getBlockY(), clone.getBlockZ());
-                case UP -> clone.set(clone.getBlockX(), clone.getBlockY() + 1, clone.getBlockZ());
-                case DOWN -> clone.set(clone.getBlockX(), clone.getBlockY() - 1, clone.getBlockZ());
-            }
-            NodeDefinition def2 = NetworkStorage.getNode(clone);
-            if (def2 != null && def2.getNode() != null) {
-                root = def2.getNode().getRoot();
-                break;
-            }
-        }
-
-        return root;
-    }
 
     @SuppressWarnings("deprecation")
     @Override
     public boolean handleable(@NotNull BlockMenu blockMenu, @NotNull Player player, @NotNull ClickAction clickAction, int @NotNull [] ingredientSlots, boolean unordered) {
-        return findNearbyNetworkRoot(blockMenu.getLocation()) != null;
+        return NetworksExpansionIntegrationMain.findNearbyNetworkRoot(blockMenu.getLocation()) != null;
     }
 
     @SuppressWarnings("deprecation")
@@ -161,7 +133,7 @@ public class NetworksExpansionRecipeCompleteSlimefunSource implements SlimefunSo
 
     @Override
     public boolean completeRecipeWithGuide(@NotNull BlockMenu blockMenu, GuideEvents.@NotNull ItemButtonClickEvent event, int @NotNull [] ingredientSlots, boolean unordered) {
-        NetworkRoot root = findNearbyNetworkRoot(blockMenu.getLocation());
+        NetworkRoot root = NetworksExpansionIntegrationMain.findNearbyNetworkRoot(blockMenu.getLocation());
         if (root == null) {
             return false;
         }

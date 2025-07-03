@@ -28,9 +28,18 @@
 package com.balugaq.jeg.core.integrations.slimeaeplugin;
 
 import com.balugaq.jeg.api.recipe_complete.RecipeCompletableRegistry;
+import com.balugaq.jeg.api.recipe_complete.source.base.RecipeCompleteProvider;
 import com.balugaq.jeg.core.integrations.Integration;
+import com.balugaq.jeg.implementation.JustEnoughGuide;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import me.ddggdd135.slimeae.SlimeAEPlugin;
+import me.ddggdd135.slimeae.api.interfaces.IStorage;
+import me.ddggdd135.slimeae.core.NetworkInfo;
+import org.bukkit.Location;
+import org.bukkit.block.BlockFace;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +57,16 @@ public class SlimeAEPluginIntegrationMain implements Integration {
             18, 19, 20, 21, 22, 23, 24, 25, 26
     };
     public static final List<SlimefunItem> handledSlimefunItems = new ArrayList<>();
+    public static final BlockFace[] VALID_FACES = new BlockFace[]{BlockFace.UP, BlockFace.DOWN, BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST};
+    public static @Nullable JavaPlugin plugin = null;
+
+    public static JavaPlugin getPlugin() {
+        if (plugin == null) {
+            plugin = SlimeAEPlugin.getInstance();
+        }
+
+        return plugin;
+    }
 
     public static void rrc(@NotNull String id, int @NotNull [] slots, boolean unordered) {
         SlimefunItem slimefunItem = SlimefunItem.getById(id);
@@ -62,6 +81,30 @@ public class SlimeAEPluginIntegrationMain implements Integration {
         RecipeCompletableRegistry.registerRecipeCompletable(slimefunItem, slots, unordered);
     }
 
+    @Nullable
+    public static IStorage findNearbyIStorage(@NotNull Location location) {
+        IStorage networkStorage = null;
+
+        for (BlockFace blockFace : VALID_FACES) {
+            Location clone = location.clone();
+            switch (blockFace) {
+                case NORTH -> clone.set(clone.getBlockX(), clone.getBlockY(), clone.getBlockZ() - 1);
+                case EAST -> clone.set(clone.getBlockX() + 1, clone.getBlockY(), clone.getBlockZ());
+                case SOUTH -> clone.set(clone.getBlockX(), clone.getBlockY(), clone.getBlockZ() + 1);
+                case WEST -> clone.set(clone.getBlockX() - 1, clone.getBlockY(), clone.getBlockZ());
+                case UP -> clone.set(clone.getBlockX(), clone.getBlockY() + 1, clone.getBlockZ());
+                case DOWN -> clone.set(clone.getBlockX(), clone.getBlockY() - 1, clone.getBlockZ());
+            }
+            NetworkInfo def2 = SlimeAEPlugin.getNetworkData().getNetworkInfo(clone);
+            if (def2 != null) {
+                networkStorage = def2.getStorage();
+                break;
+            }
+        }
+
+        return networkStorage;
+    }
+
     @Override
     public @NotNull String getHookPlugin() {
         return "SlimeAEPlugin";
@@ -69,6 +112,11 @@ public class SlimeAEPluginIntegrationMain implements Integration {
 
     @Override
     public void onEnable() {
+        if (JustEnoughGuide.getIntegrationManager().isEnabledGuguSlimefunLib()) {
+            RecipeCompleteProvider.addSource(new SlimeAEPluginRecipeCompleteSlimefunSource());
+            RecipeCompleteProvider.addSource(new SlimeAEPluginRecipeCompleteVanillaSource());
+        }
+
         rrc("ME_CRAFTING_TERMINAL", CRAFTING_TERMINAL_INPUT_SLOTS, false);
         rrc("ME_PATTERN_TERMINAL", PATTERN_TERMINAL_INPUT_SLOTS, false);
         rrc("PATTERN_WORKBENCH", PATTERN_WORKBENCH_INPUT_SLOTS, true);

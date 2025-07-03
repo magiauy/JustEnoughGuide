@@ -42,7 +42,6 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.skins.PlayerHead;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.skins.PlayerSkin;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
@@ -55,6 +54,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+@SuppressWarnings("unused")
 @NoArgsConstructor
 @Data
 public class CustomGroupConfiguration implements IParsable {
@@ -86,6 +86,7 @@ public class CustomGroupConfiguration implements IParsable {
         return IParsable.fieldNames(CustomGroupConfiguration.class);
     }
 
+    @SuppressWarnings("unused")
     @Data
     public static class Display implements IParsable {
         @Key("material")
@@ -176,6 +177,7 @@ public class CustomGroupConfiguration implements IParsable {
         }
     }
 
+    @SuppressWarnings("unused")
     public enum Mode {
         TRANSFER,
         MERGE

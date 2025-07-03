@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.balugaq.jeg</groupId>
     <artifactId>JustEnoughGuide</artifactId>
-    <version>Insider-108</version>
+    <version>Insider-109</version>
 
     <pluginRepositories>
         <pluginRepository>
@@ -243,6 +243,21 @@
             <version>Special-Version-40</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/original-NetworksExpansion vS40.jar</systemPath>
+        </dependency>
+
+        <!-- Recipe Completable compatible -->
+        <dependency>
+            <groupId>me.ddggdd135.slimeae</groupId>
+            <artifactId>SlimeAE</artifactId>
+            <version>Build-72</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/SlimeAE-Build 72.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.github.TimetownDev</groupId>
+            <artifactId>GuguSlimefunLib</artifactId>
+            <version>afeac968aa</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- AnvilGUI 1.16- Paper 1.21.2 / Spigot 1.21.3 -->

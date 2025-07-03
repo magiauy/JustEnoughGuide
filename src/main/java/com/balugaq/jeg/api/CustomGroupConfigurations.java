@@ -31,6 +31,7 @@ import com.balugaq.jeg.api.cfgparse.parser.ConfigurationParser;
 import com.balugaq.jeg.api.objects.CustomGroupConfiguration;
 import com.balugaq.jeg.api.groups.CustomGroup;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
+import com.balugaq.jeg.utils.Debug;
 import com.balugaq.jeg.utils.formatter.Formats;
 import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
@@ -42,6 +43,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public class CustomGroupConfigurations {
     public static final String FILE_NAME = "custom-groups.yml";
     public static final File fileCustomGroups = new File(JustEnoughGuide.getInstance().getDataFolder(), FILE_NAME);
@@ -78,8 +80,7 @@ public class CustomGroupConfigurations {
                 CustomGroupConfiguration parsed = ConfigurationParser.parse(section, CustomGroupConfiguration.class);
                 configurations.add(parsed);
             } catch (Exception e) {
-                e.printStackTrace();
-                continue;
+                Debug.trace(e);
             }
         }
 
