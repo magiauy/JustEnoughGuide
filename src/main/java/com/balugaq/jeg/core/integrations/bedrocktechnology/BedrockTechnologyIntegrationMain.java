@@ -41,7 +41,7 @@ import java.util.List;
  */
 public class BedrockTechnologyIntegrationMain implements Integration {
     public static final int[] BEKT_CRAFTING_TABLE_INPUT_SLOTS = new int[]{
-            1,  2,  3,  4,  5,  6,
+            1, 2, 3, 4, 5, 6,
             10, 11, 12, 13, 14, 15,
             19, 20, 21, 22, 23, 24,
             28, 29, 30, 31, 32, 33,

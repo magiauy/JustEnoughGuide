@@ -14,5 +14,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Key {
     String ALL_KEY = "ALL_KEY";
+
     String value() default "";
 }

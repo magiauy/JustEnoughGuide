@@ -68,56 +68,13 @@ public class CategoriesCommand implements JEGCommand {
         this.plugin = plugin;
     }
 
-    @Override
-    public @NotNull List<String> onTabCompleteRaw(@NotNull CommandSender sender, @NotNull String @NotNull [] args) {
-        switch (args.length) {
-            case 1 -> {
-                return List.of("categories");
-            }
-
-            default -> {
-                return List.of();
-            }
-        }
-    }
-
-    @Override
-    public boolean canCommand(
-            @NotNull CommandSender sender,
-            @NotNull Command command,
-            @NotNull String label,
-            @NotNull String @NotNull [] args) {
-        if (sender.isOp()) {
-            if (args.length == 1) {
-                return "categories".equalsIgnoreCase(args[0]);
-            }
-        }
-        return false;
-    }
-
-    @Override
-    @SuppressWarnings("deprecation")
-    public void onCommand(
-            @NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (sender instanceof Player player) {
-            ChestMenu menu = new ChestMenu("&6物品组大全");
-            menu.setSize(54);
-
-            populateCategoryMenu(menu, Slimefun.getRegistry().getAllItemGroups(), 1, player);
-
-            menu.setPlayerInventoryClickable(false);
-            menu.open(player);
-        } else {
-            sender.sendMessage(Slimefun.getLocalization().getMessage("messages.only-players"));
-        }
-    }
-
     /**
      * Populates the category gui. 45 items per page.
-     * @param menu the SCMenu to populate
+     *
+     * @param menu   the SCMenu to populate
      * @param groups the List of itemgroups
-     * @param page the page number
-     * @param p the player that will be viewing this menu
+     * @param page   the page number
+     * @param p      the player that will be viewing this menu
      */
     @SuppressWarnings("deprecation")
     @ParametersAreNonnullByDefault
@@ -174,5 +131,49 @@ public class CategoriesCommand implements JEGCommand {
 
     private static ItemGroup getItemGroupOrNull(List<ItemGroup> groups, int index) {
         return index < groups.size() ? groups.get(index) : null;
+    }
+
+    @Override
+    public @NotNull List<String> onTabCompleteRaw(@NotNull CommandSender sender, @NotNull String @NotNull [] args) {
+        switch (args.length) {
+            case 1 -> {
+                return List.of("categories");
+            }
+
+            default -> {
+                return List.of();
+            }
+        }
+    }
+
+    @Override
+    public boolean canCommand(
+            @NotNull CommandSender sender,
+            @NotNull Command command,
+            @NotNull String label,
+            @NotNull String @NotNull [] args) {
+        if (sender.isOp()) {
+            if (args.length == 1) {
+                return "categories".equalsIgnoreCase(args[0]);
+            }
+        }
+        return false;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public void onCommand(
+            @NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if (sender instanceof Player player) {
+            ChestMenu menu = new ChestMenu("&6物品组大全");
+            menu.setSize(54);
+
+            populateCategoryMenu(menu, Slimefun.getRegistry().getAllItemGroups(), 1, player);
+
+            menu.setPlayerInventoryClickable(false);
+            menu.open(player);
+        } else {
+            sender.sendMessage(Slimefun.getLocalization().getMessage("messages.only-players"));
+        }
     }
 }

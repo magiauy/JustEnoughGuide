@@ -221,7 +221,7 @@ public class SlimeAEPluginRecipeCompleteSlimefunSource implements SlimefunSource
         if (gotten.length != 0) {
             return gotten[0];
         }
-        
+
         return null;
     }
 

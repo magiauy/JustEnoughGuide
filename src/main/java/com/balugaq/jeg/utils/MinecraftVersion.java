@@ -130,4 +130,13 @@ public enum MinecraftVersion {
     public boolean isNotUnknown() {
         return this != UNKNOWN;
     }
+
+    /**
+     * Humanize the version
+     *
+     * @return 1.x.x
+     */
+    public String humanize() {
+        return "1." + this.major + "." + this.minor;
+    }
 }

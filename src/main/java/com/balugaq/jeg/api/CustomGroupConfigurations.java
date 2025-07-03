@@ -28,8 +28,8 @@
 package com.balugaq.jeg.api;
 
 import com.balugaq.jeg.api.cfgparse.parser.ConfigurationParser;
-import com.balugaq.jeg.api.objects.CustomGroupConfiguration;
 import com.balugaq.jeg.api.groups.CustomGroup;
+import com.balugaq.jeg.api.objects.CustomGroupConfiguration;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.Debug;
 import com.balugaq.jeg.utils.formatter.Formats;

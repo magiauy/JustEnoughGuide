@@ -67,7 +67,7 @@ public class DankTech2IntegrationMain implements Integration {
 
     @Override
     public void onEnable() {
-        rrc( "DK2_CRAFTER_1", CRAFTER_INPUT_SLOTS, false);
+        rrc("DK2_CRAFTER_1", CRAFTER_INPUT_SLOTS, false);
     }
 
     @Override

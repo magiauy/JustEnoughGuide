@@ -76,6 +76,8 @@ import java.util.function.Supplier;
 public class IntegrationManager extends AbstractManager {
     private static final List<Integration> integrations = new ArrayList<>();
     private final @NotNull JavaPlugin plugin;
+    @Deprecated
+    private final boolean hasRecipeCompletableWithGuide = false;
     private boolean enabledAlchimiaVitae;
     private boolean enabledBedrockTechnology;
     private boolean enabledClayTech;
@@ -102,9 +104,6 @@ public class IntegrationManager extends AbstractManager {
     private boolean enabledSlimeAEPlugin;
     private boolean enabledSlimeFrame;
     private boolean enabledSlimeTinker;
-
-    @Deprecated
-    private final boolean hasRecipeCompletableWithGuide = false;
 
     public IntegrationManager(@NotNull JavaPlugin plugin) {
         this.plugin = plugin;
@@ -137,7 +136,7 @@ public class IntegrationManager extends AbstractManager {
             this.enabledNetworks = enabledNetworksExpansion || pm.isPluginEnabled("Networks");
             this.enabledNexcavate = pm.isPluginEnabled("Nexcavate");
             this.enabledObsidianExpansion = pm.isPluginEnabled("ObsidianExpansion");
-            this.enabledOreWorkshop = plugin.getServer().getPluginManager().isPluginEnabled("OreWorkshop");
+            this.enabledOreWorkshop = pm.isPluginEnabled("OreWorkshop");
             this.enabledRykenSlimefunCustomizer = pm.isPluginEnabled("RykenSlimefunCustomizer");
             this.enabledSlimeAEPlugin = pm.isPluginEnabled("SlimeAEPlugin");
             this.enabledSlimeFrame = pm.isPluginEnabled("SlimeFrame");

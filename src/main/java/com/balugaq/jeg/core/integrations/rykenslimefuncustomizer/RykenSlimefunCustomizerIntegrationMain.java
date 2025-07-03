@@ -45,9 +45,9 @@ import java.util.List;
  */
 @SuppressWarnings({"unchecked", "unused"})
 public class RykenSlimefunCustomizerIntegrationMain implements Integration {
+    public static final List<SlimefunItem> handledSlimefunItems = new ArrayList<>();
     public static @Nullable Class<? extends SlimefunItem> classCustomWorkbench = null;
     public static @Nullable Class<? extends SlimefunItem> classCustomLinkedRecipeMachine = null;
-    public static final List<SlimefunItem> handledSlimefunItems = new ArrayList<>();
 
     public static void rrc(@NotNull String id, int @NotNull [] slots, boolean unordered) {
         SlimefunItem slimefunItem = SlimefunItem.getById(id);
@@ -88,7 +88,7 @@ public class RykenSlimefunCustomizerIntegrationMain implements Integration {
         for (SlimefunItem sf : Slimefun.getRegistry().getAllSlimefunItems()) {
             Class<? extends SlimefunItem> clazz = sf.getClass();
             if (!((classCustomWorkbench != null && clazz == classCustomWorkbench) ||
-                (classCustomLinkedRecipeMachine != null && clazz == classCustomLinkedRecipeMachine))) {
+                    (classCustomLinkedRecipeMachine != null && clazz == classCustomLinkedRecipeMachine))) {
                 continue;
             }
 

@@ -81,9 +81,89 @@ public class CustomGroupConfiguration implements IParsable {
 
     @Key("formats")
     String[] formats;
+    private Format format;
+    private List<Object> objects;
 
     public static String[] fieldNames() {
         return IParsable.fieldNames(CustomGroupConfiguration.class);
+    }
+
+    public boolean enabled() {
+        return this.enabled;
+    }
+
+    @Range(from = Integer.MIN_VALUE, to = Integer.MAX_VALUE)
+    public int tier() {
+        return this.tier;
+    }
+
+    @NotNull
+    public String id() {
+        return this.id;
+    }
+
+    @NotNull
+    public Display display() {
+        return this.display;
+    }
+
+    @NotNull
+    public Mode mode() {
+        return this.mode;
+    }
+
+    public @NotNull String @NotNull [] items() {
+        return this.items;
+    }
+
+    public @NotNull String @NotNull [] groups() {
+        return this.groups;
+    }
+
+    public @NotNull String @NotNull [] formats() {
+        return this.formats;
+    }
+
+    public @NotNull Format format() {
+        if (this.format != null) return format;
+        this.format = new Format() {
+            @Override
+            public void loadMapping() {
+                loadMapping(Arrays.stream(formats()).toList());
+            }
+        };
+        Formats.addCustomFormat(this.id, this.format);
+
+        return this.format;
+    }
+
+    @CallTimeSensitive(CallTimeSensitive.AfterSlimefunLoaded)
+    @NotNull
+    public List<Object> objects() {
+        if (this.objects != null) return this.objects;
+
+        List<Object> objects = new ArrayList<>(Arrays.stream(groups).map(s -> {
+            for (ItemGroup itemGroup : Slimefun.getRegistry().getAllItemGroups())
+                if (itemGroup.getKey().toString().equals(s)) return itemGroup;
+            return null;
+        }).filter(Objects::nonNull).map(s -> (Object) s).toList());
+        objects.addAll(Arrays.stream(items).map(s -> SlimefunItem.getById(s.toUpperCase())).filter(Objects::nonNull).map(s -> (Object) s).toList());
+        this.objects = objects;
+        return objects;
+    }
+
+    public NamespacedKey key() {
+        return KeyUtil.newKey(id);
+    }
+
+    public ItemStack item() {
+        return display.item();
+    }
+
+    @SuppressWarnings("unused")
+    public enum Mode {
+        TRANSFER,
+        MERGE
     }
 
     @SuppressWarnings("unused")
@@ -96,6 +176,10 @@ public class CustomGroupConfiguration implements IParsable {
         String name;
 
         ItemStack itemStack;
+
+        public static String[] fieldNames() {
+            return IParsable.fieldNames(Display.class);
+        }
 
         @NotNull
         public ItemStack item() {
@@ -171,90 +255,5 @@ public class CustomGroupConfiguration implements IParsable {
 
             return null;
         }
-
-        public static String[] fieldNames() {
-            return IParsable.fieldNames(Display.class);
-        }
-    }
-
-    @SuppressWarnings("unused")
-    public enum Mode {
-        TRANSFER,
-        MERGE
-    }
-
-    public boolean enabled() {
-        return this.enabled;
-    }
-
-    @Range(from = Integer.MIN_VALUE, to = Integer.MAX_VALUE)
-    public int tier() {
-        return this.tier;
-    }
-
-    @NotNull
-    public String id() {
-        return this.id;
-    }
-
-    @NotNull
-    public Display display() {
-        return this.display;
-    }
-
-    @NotNull
-    public Mode mode() {
-        return this.mode;
-    }
-
-    public @NotNull String @NotNull [] items() {
-        return this.items;
-    }
-
-    public @NotNull String @NotNull [] groups() {
-        return this.groups;
-    }
-
-    public @NotNull String @NotNull [] formats() {
-        return this.formats;
-    }
-
-    public @NotNull Format format() {
-        if (this.format != null) return format;
-        this.format = new Format() {
-            @Override
-            public void loadMapping() {
-                loadMapping(Arrays.stream(formats()).toList());
-            }
-        };
-        Formats.addCustomFormat(this.id, this.format);
-
-        return this.format;
-    }
-
-    private Format format;
-    private List<Object> objects;
-
-    @CallTimeSensitive(CallTimeSensitive.AfterSlimefunLoaded)
-    @NotNull
-    public List<Object> objects() {
-        if (this.objects != null) return this.objects;
-
-        List<Object> objects = new ArrayList<>(Arrays.stream(groups).map(s -> {
-            for (ItemGroup itemGroup : Slimefun.getRegistry().getAllItemGroups())
-                if (itemGroup.getKey().toString().equals(s)) return itemGroup;
-            return null;
-        }).filter(Objects::nonNull).map(s -> (Object) s).toList());
-        objects.addAll(Arrays.stream(items).map(s -> SlimefunItem.getById(s.toUpperCase())).filter(Objects::nonNull).map(s -> (Object) s).toList());
-        this.objects = objects;
-        return objects;
-    }
-
-    public NamespacedKey key() {
-        return KeyUtil.newKey(id);
-    }
-
-    public ItemStack item() {
-        return display.item();
     }
 }

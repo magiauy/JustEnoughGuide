@@ -75,6 +75,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
 
 /**
  * This is the main class of the JustEnoughGuide plugin.
@@ -429,20 +430,24 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
         this.minecraftVersion = MinecraftVersion.getCurrentVersion();
         this.javaVersion = NumberUtils.getJavaVersion();
         if (minecraftVersion == null) {
-            getLogger().warning("无法获取到 Minecraft 版本！");
+            getLogger().warning("无法获取到 Minecraft 版本!");
             return false;
         }
 
         if (minecraftVersion == MinecraftVersion.UNKNOWN) {
-            getLogger().warning("无法识别到 Minecraft 版本！");
-        }
-
-        if (!minecraftVersion.isAtLeast(RECOMMENDED_MC_VERSION)) {
-            getLogger().warning("Minecraft 版本过低，请使用 Minecraft 1." + RECOMMENDED_MC_VERSION.getMajor() + "." + RECOMMENDED_MC_VERSION.getMinor() + " 或以上版本！");
+            getLogger().warning("无法识别当前的 Minecraft 版本! (" + javaVersion + ")");
+        } else if (!minecraftVersion.isAtLeast(RECOMMENDED_MC_VERSION)) {
+            getLogger().warning("当前 Minecraft 版本过低(" + minecraftVersion.humanize() + "), 请使用 Minecraft " + RECOMMENDED_MC_VERSION.humanize() + " 或以上版本!");
         }
 
         if (javaVersion < RECOMMENDED_JAVA_VERSION) {
-            getLogger().warning("Java 版本过低，请使用 Java " + RECOMMENDED_JAVA_VERSION + " 或以上版本！");
+            getLogger().warning("Java 版本过低，请使用 Java " + RECOMMENDED_JAVA_VERSION + " 或以上版本!");
+        }
+
+        if (!Bukkit.getServer().getPluginManager().isPluginEnabled("GuizhanLibPlugin")) {
+            getLogger().log(Level.SEVERE, "本插件需要 鬼斩前置库插件(GuizhanLibPlugin) 才能运行!");
+            getLogger().log(Level.SEVERE, "从此处下载: https://50l.cc/gzlib");
+            getLogger().log(Level.SEVERE, "当出现该报错时, 作者对一切后续的报错不负责");
         }
 
         return true;

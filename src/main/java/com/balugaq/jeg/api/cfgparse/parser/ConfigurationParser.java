@@ -205,7 +205,7 @@ public class ConfigurationParser {
 
         if (clazz.isEnum()) {
             Class<? extends Enum> enumClass = (Class<? extends Enum>) clazz;
-            try{
+            try {
                 if (value != null) {
                     return (T) Enum.valueOf(enumClass, value.toString().toUpperCase(Locale.ROOT));
                 }
