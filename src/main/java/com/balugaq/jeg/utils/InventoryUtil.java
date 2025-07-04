@@ -27,7 +27,7 @@
 
 package com.balugaq.jeg.utils;
 
-import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
+import com.balugaq.jeg.utils.compatibility.Converter;
 import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Material;
@@ -91,7 +91,7 @@ public class InventoryUtil {
         }
 
         if (leftAmount > 0) {
-            return new CustomItemStack(item, leftAmount);
+            return Converter.getItem(item, leftAmount);
         } else {
             return null;
         }
