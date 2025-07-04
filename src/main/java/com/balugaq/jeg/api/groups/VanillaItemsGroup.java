@@ -227,7 +227,7 @@ public class VanillaItemsGroup extends FlexItemGroup {
 
         SlimefunGuideImplementation implementation = Slimefun.getRegistry().getSlimefunGuide(slimefunGuideMode);
 
-        for (var ss : Formats.sub.getChars('b')) {
+        for (int ss : Formats.sub.getChars('b')) {
             chestMenu.addItem(ss, PatchScope.Back.patch(player, ChestMenuUtils.getBackButton(player)));
             chestMenu.addMenuClickHandler(ss, (pl, s, is, action) -> EventUtil.callEvent(new GuideEvents.BackButtonClickEvent(pl, is, s, action, chestMenu, implementation)).ifSuccess(() -> {
                 GuideHistory guideHistory = playerProfile.getGuideHistory();
@@ -241,7 +241,7 @@ public class VanillaItemsGroup extends FlexItemGroup {
         }
 
         // Search feature!
-        for (var ss : Formats.sub.getChars('S')) {
+        for (int ss : Formats.sub.getChars('S')) {
             chestMenu.addItem(ss, PatchScope.Search.patch(player, ChestMenuUtils.getSearchButton(player)));
             chestMenu.addMenuClickHandler(ss, (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.SearchButtonClickEvent(pl, item, slot, action, chestMenu, implementation)).ifSuccess(() -> {
                 pl.closeInventory();
@@ -257,7 +257,7 @@ public class VanillaItemsGroup extends FlexItemGroup {
             }));
         }
 
-        for (var ss : Formats.sub.getChars('P')) {
+        for (int ss : Formats.sub.getChars('P')) {
             chestMenu.addItem(
                     ss,
                     PatchScope.PreviousPage.patch(player, ChestMenuUtils.getPreviousButton(
@@ -270,7 +270,7 @@ public class VanillaItemsGroup extends FlexItemGroup {
             }));
         }
 
-        for (var ss : Formats.sub.getChars('N')) {
+        for (int ss : Formats.sub.getChars('N')) {
             chestMenu.addItem(
                     ss,
                     PatchScope.NextPage.patch(player, ChestMenuUtils.getNextButton(
@@ -284,12 +284,12 @@ public class VanillaItemsGroup extends FlexItemGroup {
             }));
         }
 
-        for (var ss : Formats.sub.getChars('B')) {
+        for (int ss : Formats.sub.getChars('B')) {
             chestMenu.addItem(ss, PatchScope.Background.patch(player, ChestMenuUtils.getBackground()));
             chestMenu.addMenuClickHandler(ss, ChestMenuUtils.getEmptyClickHandler());
         }
 
-        var contentSlots = Formats.sub.getChars('i');
+        List<Integer> contentSlots = Formats.sub.getChars('i');
         for (int i = 0; i < contentSlots.size(); i++) {
             int index = i + this.page * contentSlots.size() - contentSlots.size();
             if (index < slimefunItems.size()) {

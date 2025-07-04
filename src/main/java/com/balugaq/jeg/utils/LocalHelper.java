@@ -60,7 +60,7 @@ public class LocalHelper {
 
     static {
         loadDefault();
-        for (var entry : JustEnoughGuide.getConfigManager().getLocalTranslate().entrySet()) {
+        for (Map.Entry<String, String> entry : JustEnoughGuide.getConfigManager().getLocalTranslate().entrySet()) {
             addonLocals.put(entry.getKey(), ChatColors.color(entry.getValue()));
         }
     }

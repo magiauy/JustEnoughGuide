@@ -214,6 +214,7 @@ public class GroupResorter {
 
     @SneakyThrows
     public static void saveCfg() {
+        if (config == null) return;
         config.save(tiersFile);
     }
 

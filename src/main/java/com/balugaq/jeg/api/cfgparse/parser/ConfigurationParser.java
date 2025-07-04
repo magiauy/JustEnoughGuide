@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -53,7 +54,7 @@ public class ConfigurationParser {
 
         List<String> list = List.of(fieldNames);
         LinkedHashMap<Field, Object> read = new LinkedHashMap<>();
-        for (var field : clazz.getDeclaredFields()) {
+        for (Field field : clazz.getDeclaredFields()) {
             if (list.contains(field.getName())) {
                 if (field.isAnnotationPresent(Key.class)) {
                     Key define = field.getAnnotation(Key.class);
@@ -61,22 +62,22 @@ public class ConfigurationParser {
                     if (Key.ALL_KEY.equals(key)) {
                         Set<String> subKeys = section.getKeys(false);
                         List<Object> arg = new ArrayList<>();
-                        for (var subKey : subKeys) {
+                        for (String subKey : subKeys) {
                             if (List.class.isAssignableFrom(field.getType()) && field.getType().getTypeParameters().length > 0 && field.getGenericType() instanceof ParameterizedType parameterizedType && parameterizedType.getActualTypeArguments()[0] instanceof Class<?> genericType) {
-                                var value = parseValue(genericType, section.get(subKey));
+                                Object value = parseValue(genericType, section.get(subKey));
                                 arg.add(value);
                             } else {
-                                var value = parseValue(field.getType(), section.get(subKey));
+                                Object value = parseValue(field.getType(), section.get(subKey));
                                 arg.add(value);
                             }
                         }
                         read.put(field, arg);
                     } else {
                         if (!List.class.isAssignableFrom(field.getType()) && field.getType().getTypeParameters().length > 0 && field.getGenericType() instanceof ParameterizedType parameterizedType && parameterizedType.getActualTypeArguments()[0] instanceof Class<?> genericType) {
-                            var value = parseValue(genericType, section.get(key));
+                            Object value = parseValue(genericType, section.get(key));
                             read.put(field, value);
                         } else {
-                            var value = parseValue(field.getType(), section.get(key));
+                            Object value = parseValue(field.getType(), section.get(key));
                             read.put(field, value);
                         }
                     }
@@ -96,7 +97,7 @@ public class ConfigurationParser {
 
             T object = constructor.newInstance();
             // find setter
-            for (var entry : read.entrySet()) {
+            for (Map.Entry<Field, Object> entry : read.entrySet()) {
                 // when field.getName() is "query"
                 // setterName: setQuery
                 // setterName2: query

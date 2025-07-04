@@ -322,7 +322,7 @@ public abstract class GuideGroup extends FlexItemGroup {
             if (isClassic()) {
                 jeg.createHeader(player, playerProfile, menu, Formats.helper);
             }
-            for (var ss : Formats.helper.getChars('b')) {
+            for (int ss : Formats.helper.getChars('b')) {
                 menu.addItem(ss, PatchScope.Back.patch(player, ChestMenuUtils.getBackButton(player)));
                 menu.addMenuClickHandler(ss, (pl, s, is, action) -> EventUtil.callEvent(new GuideEvents.BackButtonClickEvent(pl, is, s, action, menu, guide)).ifSuccess(() -> {
                     GuideHistory guideHistory = playerProfile.getGuideHistory();
@@ -347,7 +347,7 @@ public abstract class GuideGroup extends FlexItemGroup {
                 );
             }
 
-            for (var s : Formats.helper.getChars('P')) {
+            for (int s : Formats.helper.getChars('P')) {
                 menu.addItem(
                         s,
                         PatchScope.PreviousPage.patch(player, ChestMenuUtils.getPreviousButton(
@@ -362,7 +362,7 @@ public abstract class GuideGroup extends FlexItemGroup {
                 }));
             }
 
-            for (var s : Formats.helper.getChars('N')) {
+            for (int s : Formats.helper.getChars('N')) {
                 menu.addItem(
                         s,
                         PatchScope.NextPage.patch(player, ChestMenuUtils.getNextButton(

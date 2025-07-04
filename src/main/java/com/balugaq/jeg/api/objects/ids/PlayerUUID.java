@@ -32,6 +32,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
+@SuppressWarnings("unused")
 public class PlayerUUID extends CustomID {
     public PlayerUUID(@NotNull UUID uuid) {
         super(uuid);

@@ -165,7 +165,7 @@ public final class GuideUtil {
     @SuppressWarnings("deprecation")
     public static void addRTSButton(@NotNull ChestMenu menu, @NotNull Player p, @NotNull PlayerProfile profile, @NotNull Format format, SlimefunGuideMode mode, @NotNull SlimefunGuideImplementation implementation) {
         if (JustEnoughGuide.getConfigManager().isRTSSearch()) {
-            for (var ss : format.getChars('R')) {
+            for (int ss : format.getChars('R')) {
                 menu.addItem(ss, PatchScope.RealTimeSearch.patch(p, Models.RTS_ITEM), (pl, slot, itemstack, action) -> EventUtil.callEvent(new GuideEvents.RTSButtonClickEvent(pl, itemstack, slot, action, menu, implementation)).ifSuccess(() -> {
                     try {
                         RTSSearchGroup.newRTSInventoryFor(pl, mode, (s, stateSnapshot) -> {
@@ -214,7 +214,7 @@ public final class GuideUtil {
                 }));
             }
         } else {
-            for (var ss : format.getChars('R')) {
+            for (int ss : format.getChars('R')) {
                 menu.addItem(ss, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
             }
         }
@@ -224,7 +224,7 @@ public final class GuideUtil {
     public static void addBookMarkButton(@NotNull ChestMenu menu, @NotNull Player p, @NotNull PlayerProfile profile, @NotNull Format format, @NotNull JEGSlimefunGuideImplementation implementation, ItemGroup itemGroup) {
         if (JustEnoughGuide.getConfigManager().isBookmark()) {
             BookmarkRelocation b = itemGroup instanceof BookmarkRelocation bookmarkRelocation ? bookmarkRelocation : null;
-            for (var s : b != null ? b.getBookMark(implementation, p) : format.getChars('C')) {
+            for (int s : b != null ? b.getBookMark(implementation, p) : format.getChars('C')) {
                 menu.addItem(
                         s,
                         PatchScope.BookMark.patch(p, getBookMarkMenuButton()),
@@ -234,7 +234,7 @@ public final class GuideUtil {
                         }));
             }
         } else {
-            for (var s : format.getChars('C')) {
+            for (int s : format.getChars('C')) {
                 menu.addItem(
                         s,
                         ChestMenuUtils.getBackground(),
@@ -248,7 +248,7 @@ public final class GuideUtil {
     public static void addItemMarkButton(@NotNull ChestMenu menu, @NotNull Player p, @NotNull PlayerProfile profile, @NotNull Format format, @NotNull JEGSlimefunGuideImplementation implementation, @Nullable ItemGroup itemGroup) {
         if (itemGroup != null && JustEnoughGuide.getConfigManager().isBookmark() && isTaggedGroupType(itemGroup)) {
             BookmarkRelocation b = itemGroup instanceof BookmarkRelocation relocation ? relocation : null;
-            for (var ss : b != null ? b.getItemMark(implementation, p) : format.getChars('c')) {
+            for (int ss : b != null ? b.getItemMark(implementation, p) : format.getChars('c')) {
                 menu.addItem(
                         ss,
                         PatchScope.ItemMark.patch(p, getItemMarkMenuButton()),
@@ -258,7 +258,7 @@ public final class GuideUtil {
                         }));
             }
         } else {
-            for (var ss : format.getChars('c')) {
+            for (int ss : format.getChars('c')) {
                 menu.addItem(ss, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
             }
         }

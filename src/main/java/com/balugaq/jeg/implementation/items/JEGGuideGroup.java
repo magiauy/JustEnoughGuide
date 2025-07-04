@@ -80,7 +80,7 @@ public class JEGGuideGroup extends ClassicGuideGroup {
             addGuide(slot, ChestMenuUtils.getBackground());
         }
         boolean loaded = false;
-        for (var s : Formats.helper.getChars('A')) {
+        for (int s : Formats.helper.getChars('A')) {
             addGuide(s, HEADER);
             loaded = true;
         }

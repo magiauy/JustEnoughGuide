@@ -390,7 +390,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
         int target = (SurvivalGuideImplementation.MAX_ITEM_GROUPS * (page - 1)) - 1;
         int pages = target == itemGroups.size() - 1 ? page : (itemGroups.size() - 1) / SurvivalGuideImplementation.MAX_ITEM_GROUPS + 1;
 
-        var indexes = Formats.main.getChars('G');
+        List<Integer> indexes = Formats.main.getChars('G');
         int index = 0;
 
         while (target < (itemGroups.size() - 1) && index < SurvivalGuideImplementation.MAX_ITEM_GROUPS) {
@@ -402,7 +402,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             index++;
         }
 
-        for (var s : Formats.main.getChars('P')) {
+        for (int s : Formats.main.getChars('P')) {
             menu.addItem(s, PatchScope.PreviousPage.patch(p, ChestMenuUtils.getPreviousButton(p, page, pages)));
             menu.addMenuClickHandler(s, (pl, slot, item, action) -> {
                 int previous = page - 1;
@@ -415,7 +415,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             });
         }
 
-        for (var s : Formats.main.getChars('N')) {
+        for (int s : Formats.main.getChars('N')) {
             menu.addItem(s, PatchScope.NextPage.patch(p, ChestMenuUtils.getNextButton(p, page, pages)));
             menu.addMenuClickHandler(s, (pl, slot, item, action) -> {
                 int next = page + 1;
@@ -525,7 +525,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
 
         int pages = (itemGroup.getItems().size() - 1) / SurvivalGuideImplementation.MAX_ITEMS + 1;
 
-        for (var s : Formats.sub.getChars('P')) {
+        for (int s : Formats.sub.getChars('P')) {
             menu.addItem(s, PatchScope.PreviousPage.patch(p, ChestMenuUtils.getPreviousButton(p, page, pages)));
             menu.addMenuClickHandler(s, (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.PreviousButtonClickEvent(pl, item, slot, action, menu, this)).ifSuccess(() -> {
                 int previous = page - 1;
@@ -538,7 +538,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             }));
         }
 
-        for (var s : Formats.sub.getChars('N')) {
+        for (int s : Formats.sub.getChars('N')) {
             menu.addItem(s, PatchScope.NextPage.patch(p, ChestMenuUtils.getNextButton(p, page, pages)));
             menu.addMenuClickHandler(s, (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.NextButtonClickEvent(pl, item, slot, action, menu, this)).ifSuccess(() -> {
                 int next = page + 1;
@@ -551,7 +551,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             }));
         }
 
-        var indexes = Formats.sub.getChars('i');
+        List<Integer> indexes = Formats.sub.getChars('i');
         int itemGroupIndex = SurvivalGuideImplementation.MAX_ITEMS * (page - 1);
 
         for (int i = 0; i < SurvivalGuideImplementation.MAX_ITEMS; i++) {
@@ -594,8 +594,8 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
 
         this.createHeader(p, profile, menu, Formats.nested);
 
-        var ss = Formats.nested.getChars('G');
-        var groupsPerPage = ss.size();
+        List<Integer> ss = Formats.nested.getChars('G');
+        int groupsPerPage = ss.size();
 
         try {
             @SuppressWarnings("unchecked") List<SubItemGroup> subGroups = (List<SubItemGroup>) ReflectionUtil.getValue(nested, "subGroups");
@@ -636,7 +636,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             }
 
             int pages = target == subGroups.size() - 1 ? page : (subGroups.size() - 1) / groupsPerPage + 1;
-            for (var s : Formats.nested.getChars('P')) {
+            for (int s : Formats.nested.getChars('P')) {
                 menu.addItem(s, PatchScope.PreviousPage.patch(p, ChestMenuUtils.getPreviousButton(p, page, pages)));
                 menu.addMenuClickHandler(s, (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.PreviousButtonClickEvent(pl, item, slot, action, menu, this)).ifSuccess(() -> {
                     int next = page - 1;
@@ -648,7 +648,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                 }));
             }
 
-            for (var s : Formats.nested.getChars('N')) {
+            for (int s : Formats.nested.getChars('N')) {
                 menu.addItem(s, PatchScope.NextPage.patch(p, ChestMenuUtils.getNextButton(p, page, pages)));
                 menu.addMenuClickHandler(s, (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.NextButtonClickEvent(pl, item, slot, action, menu, this)).ifSuccess(() -> {
                     int next = page + 1;
@@ -847,14 +847,14 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
         displayItem(menu, profile, p, item, result, recipeType, recipeItems, task, Formats.recipe_vanilla);
 
         if (recipes.length > 1) {
-            for (var s : Formats.recipe_vanilla.getChars('B')) {
+            for (int s : Formats.recipe_vanilla.getChars('B')) {
                 menu.addItem(
                         s,
                         PatchScope.Background.patch(p, ChestMenuUtils.getBackground()),
                         ChestMenuUtils.getEmptyClickHandler());
             }
 
-            for (var s : Formats.recipe_vanilla.getChars('P')) {
+            for (int s : Formats.recipe_vanilla.getChars('P')) {
                 menu.addItem(
                         s,
                         PatchScope.PreviousPage.patch(p, ChestMenuUtils.getPreviousButton(p, index + 1, recipes.length)),
@@ -866,7 +866,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                         }));
             }
 
-            for (var s : Formats.recipe_vanilla.getChars('N')) {
+            for (int s : Formats.recipe_vanilla.getChars('N')) {
                 menu.addItem(
                         s,
                         PatchScope.NextPage.patch(p, ChestMenuUtils.getNextButton(p, index + 1, recipes.length)),
@@ -893,7 +893,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             @NotNull T recipe, ItemStack[] recipeItems, @NotNull AsyncRecipeChoiceTask task) {
         RecipeChoice[] choices = Slimefun.getMinecraftRecipeService().getRecipeShape(recipe);
 
-        var recipeSlots = Formats.recipe_vanilla.getChars('r');
+        List<Integer> recipeSlots = Formats.recipe_vanilla.getChars('r');
         if (choices.length == 1 && choices[0] instanceof MaterialChoice materialChoice) {
             recipeItems[4] = new ItemStack(materialChoice.getChoices().get(0));
 
@@ -938,7 +938,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
         Optional<String> wiki = item.getWikipage();
 
         if (wiki.isPresent()) {
-            for (var s : format.getChars('w')) {
+            for (int s : format.getChars('w')) {
                 menu.addItem(
                         s,
                         PatchScope.ItemWiki.patch(p, Converter.getItem(
@@ -975,7 +975,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
 
 
         if (maybeSpecial && SpecialMenuProvider.isSpecialItem(item)) {
-            for (var s : format.getChars('E')) {
+            for (int s : format.getChars('E')) {
                 menu.addItem(s, PatchScope.BigRecipe.patch(p, Models.SPECIAL_MENU_ITEM), (pl, slot, itemstack, action) -> EventUtil.callEvent(new GuideEvents.BigRecipeButtonClickEvent(pl, itemstack, slot, action, menu, this)).ifSuccess(() -> {
                     try {
                         SpecialMenuProvider.open(profile.getPlayer(), profile, getMode(), item);
@@ -1020,7 +1020,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             ItemStack[] recipe,
             @NotNull AsyncRecipeChoiceTask task,
             @NotNull Format format) {
-        for (var s : format.getChars('b')) {
+        for (int s : format.getChars('b')) {
             addBackButton0(menu, s, p, profile);
         }
 
@@ -1037,7 +1037,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
 
         boolean isSlimefunRecipe = item instanceof SlimefunItem && !(item instanceof VanillaItemShade);
 
-        var recipeSlots = format.getChars('r');
+        List<Integer> recipeSlots = format.getChars('r');
         for (int i = 0; i < 9; i++) {
             ItemStack recipeItem = getDisplayItem(p, isSlimefunRecipe, recipe[i]);
             menu.addItem(recipeSlots.get(i), PatchScope.ItemRecipeIngredient.patch(p, recipeItem), clickHandler);
@@ -1055,13 +1055,13 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             }
         }
 
-        for (var s : format.getChars('t')) {
+        for (int s : format.getChars('t')) {
             menu.addItem(s, PatchScope.ItemRecipeType.patch(p, recipeType.getItem(p)), (pl, slot, itemStack, action) -> EventUtil.callEvent(new GuideEvents.RecipeTypeButtonClickEvent(pl, itemStack, slot, action, menu, this)).ifSuccess(false));
             BeginnerUtils.applyWith(this, menu, s);
             GroupLinker.applyWith(this, menu, s);
             NamePrinter.applyWith(this, menu, s);
         }
-        for (var s : format.getChars('i')) {
+        for (int s : format.getChars('i')) {
             menu.addItem(s, PatchScope.ItemRecipeOut.patch(p, output), (pl, slot, itemStack, action) -> EventUtil.callEvent(new GuideEvents.ItemButtonClickEvent(pl, itemStack, slot, action, menu, this)).ifSuccess(false));
             BeginnerUtils.applyWith(this, menu, s);
             GroupLinker.applyWith(this, menu, s);
@@ -1078,19 +1078,19 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
     @ParametersAreNonnullByDefault
     @Override
     public void createHeader(Player p, PlayerProfile profile, ChestMenu menu, Format format) {
-        for (var s : format.getChars('B')) {
+        for (int s : format.getChars('B')) {
             menu.addItem(
                     s,
                     PatchScope.Background.patch(p, ChestMenuUtils.getBackground()),
                     ChestMenuUtils.getEmptyClickHandler());
         }
 
-        for (var s : format.getChars('b')) {
+        for (int s : format.getChars('b')) {
             addBackButton0(menu, s, p, profile);
         }
 
         // Settings Panel
-        for (var s : format.getChars('T')) {
+        for (int s : format.getChars('T')) {
             menu.addItem(s, PatchScope.Settings.patch(p, ChestMenuUtils.getMenuButton(p)));
             menu.addMenuClickHandler(s, (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.SettingsButtonClickEvent(pl, item, slot, action, menu, this)).ifSuccess(() -> {
                 JEGGuideSettings.openSettings(pl, pl.getInventory().getItemInMainHand());
@@ -1099,7 +1099,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
         }
 
         // Search feature!
-        for (var s : format.getChars('S')) {
+        for (int s : format.getChars('S')) {
             menu.addItem(s, PatchScope.Search.patch(p, ChestMenuUtils.getSearchButton(p)));
             menu.addMenuClickHandler(s, (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.SearchButtonClickEvent(pl, item, slot, action, menu, this)).ifSuccess(() -> {
                 pl.closeInventory();
@@ -1122,7 +1122,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
     @ParametersAreNonnullByDefault
     @Override
     public void createHeader(Player p, PlayerProfile profile, ChestMenu menu, ItemGroup itemGroup) {
-        for (var s : Formats.main.getChars('B')) {
+        for (int s : Formats.main.getChars('B')) {
             menu.addItem(
                     s,
                     PatchScope.Background.patch(p, ChestMenuUtils.getBackground()),
@@ -1130,7 +1130,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
         }
 
         // Settings Panel
-        for (var s : Formats.main.getChars('T')) {
+        for (int s : Formats.main.getChars('T')) {
             menu.addItem(s, PatchScope.Settings.patch(p, ChestMenuUtils.getMenuButton(p)));
             menu.addMenuClickHandler(s, (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.SettingsButtonClickEvent(pl, item, slot, action, menu, this)).ifSuccess(() -> {
                 JEGGuideSettings.openSettings(pl, pl.getInventory().getItemInMainHand());
@@ -1139,7 +1139,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
         }
 
         // Search feature!
-        for (var s : Formats.main.getChars('S')) {
+        for (int s : Formats.main.getChars('S')) {
             menu.addItem(s, PatchScope.Search.patch(p, ChestMenuUtils.getSearchButton(p)));
             menu.addMenuClickHandler(s, (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.SearchButtonClickEvent(pl, item, slot, action, menu, this)).ifSuccess(() -> {
                 pl.closeInventory();
@@ -1197,7 +1197,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             menu.addItem(Formats.recipe_display.getSize() - 1, ItemStackUtil.getCleanItem(null));
 
             if (page == 0) {
-                for (var s : Formats.recipe_display.getChars('B')) {
+                for (int s : Formats.recipe_display.getChars('B')) {
                     menu.replaceExistingItem(
                             s,
                             PatchScope.Background.patch(p, Converter.getItem(
@@ -1206,11 +1206,11 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                 }
             }
 
-            var ds = Formats.recipe_display.getChars('d');
-            var length = ds.size();
+            List<Integer> ds = Formats.recipe_display.getChars('d');
+            int length = ds.size();
             int pages = (recipes.size() - 1) / length + 1;
 
-            for (var s : Formats.recipe_display.getChars('P')) {
+            for (int s : Formats.recipe_display.getChars('P')) {
                 menu.replaceExistingItem(
                         s, PatchScope.PreviousPage.patch(p, ChestMenuUtils.getPreviousButton(p, page + 1, pages)));
                 menu.addMenuClickHandler(s, (pl, slot, itemstack, action) -> EventUtil.callEvent(new GuideEvents.PreviousButtonClickEvent(pl, itemstack, slot, action, menu, this)).ifSuccess(() -> {
@@ -1223,7 +1223,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                 }));
             }
 
-            for (var s : Formats.recipe_display.getChars('N')) {
+            for (int s : Formats.recipe_display.getChars('N')) {
                 menu.replaceExistingItem(s, PatchScope.NextPage.patch(p, ChestMenuUtils.getNextButton(p, page + 1, pages)));
                 menu.addMenuClickHandler(s, (pl, slot, itemstack, action) -> EventUtil.callEvent(new GuideEvents.NextButtonClickEvent(pl, itemstack, slot, action, menu, this)).ifSuccess(() -> {
                     if (recipes.size() > (length * (page + 1))) {
@@ -1235,7 +1235,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                 }));
             }
 
-            var fds = RecipeDisplayFormat.fenceShuffle(ds);
+            List<Integer> fds = RecipeDisplayFormat.fenceShuffle(ds);
             for (int index = 0; index < length; index++) {
                 addDisplayRecipe0(menu, profile, recipes, fds.get(index), index, page);
             }
@@ -1251,7 +1251,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             int slot,
             int index,
             int page) {
-        var l = Formats.recipe_display.getChars('d').size();
+        int l = Formats.recipe_display.getChars('d').size();
         if ((index + (page * l)) < recipes.size()) {
             ItemStack displayItem = recipes.get(index + (page * l));
 

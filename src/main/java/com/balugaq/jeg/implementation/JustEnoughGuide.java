@@ -334,7 +334,7 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
             @SuppressWarnings("unchecked") List<SlimefunGuideOption<?>> l = (List<SlimefunGuideOption<?>>) ReflectionUtil.getStaticValue(SlimefunGuideSettings.class, "options");
             if (l != null) {
                 List<SlimefunGuideOption<?>> copy = new ArrayList<>(l);
-                for (var option : copy) {
+                for (SlimefunGuideOption<?> option : copy) {
                     if (option.getAddon().equals(JustEnoughGuide.getInstance())) {
                         l.remove(option);
                     }

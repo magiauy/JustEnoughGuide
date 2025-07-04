@@ -30,6 +30,7 @@ package com.balugaq.jeg.utils.compatibility;
 import com.balugaq.jeg.utils.ReflectionUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
@@ -50,7 +51,7 @@ public class Sounds {
     }
 
     public static @Nullable Sound byKey(@NotNull String key) {
-        var registry = Bukkit.getRegistry(Sound.class);
+        Registry<Sound> registry = Bukkit.getRegistry(Sound.class);
         if (registry == null) {
             return null;
         }
@@ -65,7 +66,7 @@ public class Sounds {
     }
 
     public static Sound byKeyOrDefault(@NotNull String key, Sound def) {
-        var sound = byKey(key);
+        Sound sound = byKey(key);
         return sound == null ? def : sound;
     }
 

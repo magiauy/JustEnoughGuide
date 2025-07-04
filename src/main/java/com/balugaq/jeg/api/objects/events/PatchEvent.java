@@ -45,6 +45,7 @@ import org.jetbrains.annotations.Nullable;
  * @author balugaq
  * @since 1.9
  */
+@SuppressWarnings("unused")
 @Getter
 public class PatchEvent extends Event {
     private static final HandlerList handlers = new HandlerList();

@@ -62,8 +62,8 @@ public abstract class Format {
     @ApiStatus.Obsolete
     public void loadMapping(@NotNull List<String> format) {
         int index = -1;
-        for (var string : format) {
-            for (var c : string.toCharArray()) {
+        for (String string : format) {
+            for (char c : string.toCharArray()) {
                 index++;
                 if (c != ' ') {
                     mapping.put(index, c);
@@ -84,7 +84,7 @@ public abstract class Format {
         }
 
         List<Integer> list = new ArrayList<>();
-        for (var entry : mapping.entrySet()) {
+        for (Map.Entry<Integer, Character> entry : mapping.entrySet()) {
             if (entry.getValue() == c) {
                 list.add(entry.getKey());
             }

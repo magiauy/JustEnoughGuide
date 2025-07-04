@@ -220,7 +220,7 @@ public class ItemMarkGroup extends FlexItemGroup {
         chestMenu.setEmptySlotsClickable(false);
         chestMenu.addMenuOpeningHandler(pl -> pl.playSound(pl.getLocation(), Sounds.GUIDE_BUTTON_CLICK_SOUND, 1, 1));
 
-        for (var ss : itemGroup instanceof BookmarkRelocation relocation ?
+        for (int ss : itemGroup instanceof BookmarkRelocation relocation ?
                 relocation.getBackButton(implementation, player) :
                 Formats.sub.getChars('b')) {
             chestMenu.addItem(ss, PatchScope.Back.patch(player, ChestMenuUtils.getBackButton(player)));
@@ -236,7 +236,7 @@ public class ItemMarkGroup extends FlexItemGroup {
         }
 
         // Search feature!
-        for (var ss : itemGroup instanceof BookmarkRelocation relocation ?
+        for (int ss : itemGroup instanceof BookmarkRelocation relocation ?
                 relocation.getSearchButton(implementation, player) :
                 Formats.sub.getChars('S')) {
             chestMenu.addItem(ss, PatchScope.Search.patch(player, ChestMenuUtils.getSearchButton(player)));
@@ -254,7 +254,7 @@ public class ItemMarkGroup extends FlexItemGroup {
             }));
         }
 
-        for (var ss : itemGroup instanceof BookmarkRelocation relocation ?
+        for (int ss : itemGroup instanceof BookmarkRelocation relocation ?
                 relocation.getPreviousButton(implementation, player) :
                 Formats.sub.getChars('P')) {
             chestMenu.addItem(
@@ -269,7 +269,7 @@ public class ItemMarkGroup extends FlexItemGroup {
             }));
         }
 
-        for (var ss : itemGroup instanceof BookmarkRelocation relocation ?
+        for (int ss : itemGroup instanceof BookmarkRelocation relocation ?
                 relocation.getNextButton(implementation, player) :
                 Formats.sub.getChars('N')) {
             chestMenu.addItem(
@@ -285,14 +285,14 @@ public class ItemMarkGroup extends FlexItemGroup {
             }));
         }
 
-        for (var ss : itemGroup instanceof BookmarkRelocation relocation ?
+        for (int ss : itemGroup instanceof BookmarkRelocation relocation ?
                 relocation.getBorder(implementation, player) :
                 Formats.sub.getChars('B')) {
             chestMenu.addItem(ss, PatchScope.Background.patch(player, ICON_BACKGROUND));
             chestMenu.addMenuClickHandler(ss, ChestMenuUtils.getEmptyClickHandler());
         }
 
-        var contentSlots = itemGroup instanceof BookmarkRelocation relocation ?
+        List<Integer> contentSlots = itemGroup instanceof BookmarkRelocation relocation ?
                 relocation.getMainContents(implementation, player) :
                 Formats.sub.getChars('i');
 

@@ -32,6 +32,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
+@SuppressWarnings("unused")
 @Data
 public class CustomID {
     private final @NotNull UUID uuid;

@@ -62,7 +62,7 @@ import java.util.Map;
  * @author balugaq
  * @since 1.0
  */
-@SuppressWarnings("ConstantValue")
+@SuppressWarnings({"ConstantValue", "unused"})
 public class ConfigManager extends AbstractManager {
     private final boolean AUTO_UPDATE;
     private final boolean DEBUG;
@@ -121,7 +121,7 @@ public class ConfigManager extends AbstractManager {
         }
 
         this.BEGINNER_OPTION = plugin.getConfig().getBoolean("improvements.beginner-option", true);
-        var rawBlacklist = plugin.getConfig().getStringList("blacklist");
+        List<String> rawBlacklist = plugin.getConfig().getStringList("blacklist");
         if (rawBlacklist == null || rawBlacklist.isEmpty()) {
             this.BLACKLIST = new ArrayList<>();
             this.BLACKLIST.add("快捷");
@@ -129,7 +129,7 @@ public class ConfigManager extends AbstractManager {
             this.BLACKLIST = rawBlacklist;
         }
 
-        var rawSharedChars = plugin.getConfig().getStringList("shared-chars");
+        List<String> rawSharedChars = plugin.getConfig().getStringList("shared-chars");
         if (rawSharedChars == null || rawSharedChars.isEmpty()) {
             this.SHARED_CHARS = new ArrayList<>();
             this.SHARED_CHARS.add("粘黏");
@@ -143,7 +143,7 @@ public class ConfigManager extends AbstractManager {
             this.SHARED_CHARS = rawSharedChars;
         }
 
-        var rawMainFormat = plugin.getConfig().getStringList("custom-format.main");
+        List<String> rawMainFormat = plugin.getConfig().getStringList("custom-format.main");
         if (rawMainFormat == null || rawMainFormat.isEmpty()) {
             this.MAIN_FORMAT = new ArrayList<>();
             this.MAIN_FORMAT.add("BTBBBBRSB");
@@ -156,7 +156,7 @@ public class ConfigManager extends AbstractManager {
             this.MAIN_FORMAT = rawMainFormat;
         }
 
-        var rawNestedGroupFormat = plugin.getConfig().getStringList("custom-format.nested-group");
+        List<String> rawNestedGroupFormat = plugin.getConfig().getStringList("custom-format.nested-group");
         if (rawNestedGroupFormat == null || rawNestedGroupFormat.isEmpty()) {
             this.NESTED_GROUP_FORMAT = new ArrayList<>();
             this.NESTED_GROUP_FORMAT.add("BbBBBBRSB");
@@ -169,7 +169,7 @@ public class ConfigManager extends AbstractManager {
             this.NESTED_GROUP_FORMAT = rawNestedGroupFormat;
         }
 
-        var rawSubGroupFormat = plugin.getConfig().getStringList("custom-format.sub-group");
+        List<String> rawSubGroupFormat = plugin.getConfig().getStringList("custom-format.sub-group");
         if (rawSubGroupFormat == null || rawSubGroupFormat.isEmpty()) {
             this.SUB_GROUP_FORMAT = new ArrayList<>();
             this.SUB_GROUP_FORMAT.add("BbBBBBRSB");
@@ -182,7 +182,7 @@ public class ConfigManager extends AbstractManager {
             this.SUB_GROUP_FORMAT = rawSubGroupFormat;
         }
 
-        var rawRecipeFormat = plugin.getConfig().getStringList("custom-format.recipe");
+        List<String> rawRecipeFormat = plugin.getConfig().getStringList("custom-format.recipe");
         if (rawRecipeFormat == null || rawRecipeFormat.isEmpty()) {
             this.RECIPE_FORMAT = new ArrayList<>();
             this.RECIPE_FORMAT.add("b  rrr  w");
@@ -192,7 +192,7 @@ public class ConfigManager extends AbstractManager {
             this.RECIPE_FORMAT = rawRecipeFormat;
         }
 
-        var rawHelperFormat = plugin.getConfig().getStringList("custom-format.helper");
+        List<String> rawHelperFormat = plugin.getConfig().getStringList("custom-format.helper");
         if (rawHelperFormat == null || rawHelperFormat.isEmpty()) {
             this.HELPER_FORMAT = new ArrayList<>();
             this.HELPER_FORMAT.add("BbBBBBRSB");
@@ -205,7 +205,7 @@ public class ConfigManager extends AbstractManager {
             this.HELPER_FORMAT = rawHelperFormat;
         }
 
-        var rawRecipeVanillaFormat = plugin.getConfig().getStringList("custom-format.recipe-vanilla");
+        List<String> rawRecipeVanillaFormat = plugin.getConfig().getStringList("custom-format.recipe-vanilla");
         if (rawRecipeVanillaFormat == null || rawRecipeVanillaFormat.isEmpty()) {
             this.RECIPE_VANILLA_FORMAT = new ArrayList<>();
             this.RECIPE_VANILLA_FORMAT.add("b  rrr  w");
@@ -216,7 +216,7 @@ public class ConfigManager extends AbstractManager {
             this.RECIPE_VANILLA_FORMAT = rawRecipeVanillaFormat;
         }
 
-        var rawRecipeDisplayFormat = plugin.getConfig().getStringList("custom-format.recipe-display");
+        List<String> rawRecipeDisplayFormat = plugin.getConfig().getStringList("custom-format.recipe-display");
         if (rawRecipeDisplayFormat == null || rawRecipeDisplayFormat.isEmpty()) {
             this.RECIPE_DISPLAY_FORMAT = new ArrayList<>();
             this.RECIPE_DISPLAY_FORMAT.add("b  rrr  w");
@@ -229,7 +229,7 @@ public class ConfigManager extends AbstractManager {
             this.RECIPE_DISPLAY_FORMAT = rawRecipeDisplayFormat;
         }
 
-        var rawSettingsFormat = plugin.getConfig().getStringList("custom-format.settings");
+        List<String> rawSettingsFormat = plugin.getConfig().getStringList("custom-format.settings");
         if (rawSettingsFormat == null || rawSettingsFormat.isEmpty()) {
             this.SETTINGS_FORMAT = new ArrayList<>();
             this.SETTINGS_FORMAT.add("bBsBvBuBW");
@@ -242,7 +242,7 @@ public class ConfigManager extends AbstractManager {
             this.SETTINGS_FORMAT = rawSettingsFormat;
         }
 
-        var rawContributorsFormat = plugin.getConfig().getStringList("custom-format.contributors");
+        List<String> rawContributorsFormat = plugin.getConfig().getStringList("custom-format.contributors");
         if (rawContributorsFormat == null || rawContributorsFormat.isEmpty()) {
             this.CONTRIBUTORS_FORMAT = new ArrayList<>();
             this.CONTRIBUTORS_FORMAT.add("BbBBBBBBB");
@@ -256,9 +256,9 @@ public class ConfigManager extends AbstractManager {
         }
 
         this.LOCAL_TRANSLATE = new HashMap<>();
-        var c = plugin.getConfig().getConfigurationSection("local-translate");
+        ConfigurationSection c = plugin.getConfig().getConfigurationSection("local-translate");
         if (c != null) {
-            for (var k : c.getKeys(false)) {
+            for (String k : c.getKeys(false)) {
                 this.LOCAL_TRANSLATE.put(k, c.getString(k));
             }
         }

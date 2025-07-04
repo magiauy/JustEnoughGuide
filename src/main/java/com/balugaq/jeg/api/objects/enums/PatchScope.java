@@ -38,6 +38,7 @@ import org.jetbrains.annotations.Nullable;
  * @author balugaq
  * @since 1.9
  */
+@SuppressWarnings("unused")
 public enum PatchScope {
     Background,
     Back,
@@ -83,7 +84,7 @@ public enum PatchScope {
         return patch(player, itemStack);
     }
 
-    @NotNull
+    @Nullable
     public ItemStack patch(@NotNull Player player, @Nullable ItemStack itemStack) {
         return PatchEvent.patch(this, player, itemStack);
     }

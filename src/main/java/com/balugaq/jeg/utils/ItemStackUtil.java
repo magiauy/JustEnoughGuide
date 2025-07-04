@@ -146,7 +146,7 @@ public final class ItemStackUtil {
         if (material.contains("|")) {
             String[] split = material.split("\\|");
             for (String mat : split) {
-                var item = readItem(
+                ItemStack item = readItem(
                         c,
                         section,
                         type,
