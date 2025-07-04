@@ -28,6 +28,7 @@
 package com.balugaq.jeg.utils.formatter;
 
 import com.balugaq.jeg.api.groups.GuideGroup;
+import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -98,6 +99,9 @@ public abstract class Format {
         for (Map.Entry<Character, ItemStack> entry : customMapping.entrySet()) {
             for (int slot : getChars(entry.getKey())) {
                 menu.addItem(slot, entry.getValue());
+                if (menu.getMenuClickHandler(slot) == null) {
+                    menu.addMenuClickHandler(slot, ChestMenuUtils.getEmptyClickHandler());
+                }
             }
         }
     }
@@ -106,6 +110,9 @@ public abstract class Format {
         for (Map.Entry<Character, ItemStack> entry : customMapping.entrySet()) {
             for (int slot : getChars(entry.getKey())) {
                 menu.addGuide(slot, entry.getValue());
+                if (menu.getMenuClickHandler(slot) == null) {
+                    menu.addGuide(slot, ChestMenuUtils.getEmptyClickHandler());
+                }
             }
         }
     }

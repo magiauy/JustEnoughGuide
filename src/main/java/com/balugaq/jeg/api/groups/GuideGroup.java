@@ -48,12 +48,14 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -117,6 +119,59 @@ public abstract class GuideGroup extends FlexItemGroup {
         contents.computeIfAbsent(page, k -> new LinkedHashMap<>()).put(slot, itemStack);
         clickHandlers.computeIfAbsent(page, k -> new LinkedHashMap<>()).put(slot, handler);
         return this;
+    }
+
+    /**
+     * Add a {@link ChestMenu.MenuClickHandler} to the group
+     * @param page the page
+     * @param slot the slot
+     * @param handler the handler
+     * @return the group itself
+     */
+    @NotNull
+    public GuideGroup addGuide(
+            @Range(from = 1, to = Byte.MAX_VALUE) int page,
+            @Range(from = 0, to = 53) int slot,
+            @NotNull ChestMenu.MenuClickHandler handler) {
+
+        slots.computeIfAbsent(page, k -> new HashSet<>()).add(slot);
+        contents.computeIfAbsent(page, k -> new LinkedHashMap<>()).put(slot, item);
+        clickHandlers.computeIfAbsent(page, k -> new LinkedHashMap<>()).put(slot, handler);
+        return this;
+    }
+
+    /**
+     * Add a {@link ChestMenu.MenuClickHandler} to the group
+     * @param slot the slot
+     * @param handler the handler
+     * @return the group itself
+     */
+    @NotNull
+    public GuideGroup addGuide(
+            @Range(from = 0, to = 53) int slot,
+            @NotNull ChestMenu.MenuClickHandler handler) {
+        return addGuide(1, slot, handler);
+    }
+
+    /**
+     * Adds a guide
+     * @param slot slot
+     * @return the guide itself
+     */
+    @Nullable
+    public ChestMenu.MenuClickHandler getMenuClickHandler(@Range(from = 0, to = 53) int slot) {
+        return getMenuClickHandler(1, slot);
+    }
+
+    /**
+     * Adds a guide
+     * @param page page number
+     * @param slot slot
+     * @return the guide itself
+     */
+    @Nullable
+    public ChestMenu.MenuClickHandler getMenuClickHandler(@Range(from = 1, to = Byte.MAX_VALUE) int page, @Range(from = 0, to = 53) int slot) {
+        return Optional.ofNullable(clickHandlers.get(page)).orElse(new HashMap<>()).get(slot);
     }
 
     /**
