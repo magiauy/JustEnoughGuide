@@ -849,7 +849,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
             @NotNull RecipeType recipeType,
             ItemStack[] recipe,
             @NotNull AsyncRecipeChoiceTask task,
-            Format format) {
+            @NotNull Format format) {
         for (var s : format.getChars('b')) {
             addBackButton0(menu, s, p, profile);
         }

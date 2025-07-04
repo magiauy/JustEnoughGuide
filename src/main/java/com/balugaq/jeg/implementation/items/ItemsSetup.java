@@ -34,16 +34,17 @@ import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author balugaq
  * @since 1.9
  */
 public class ItemsSetup {
-    public static final RecipeCompleteGuide RECIPE_COMPLETE_GUIDE;
-    public static final SlimefunItem USAGE_INFO;
-    public static final SlimefunItem MECHANISM;
-    public static final SlimefunItem SUPPORTED_ADDONS_INFO;
+    public static final @NotNull RecipeCompleteGuide RECIPE_COMPLETE_GUIDE;
+    public static final @NotNull SlimefunItem USAGE_INFO;
+    public static final @NotNull SlimefunItem MECHANISM;
+    public static final @NotNull SlimefunItem SUPPORTED_ADDONS_INFO;
 
     static {
         ItemStack craftingTable = new ItemStack(Material.CRAFTING_TABLE);
@@ -96,7 +97,7 @@ public class ItemsSetup {
         );
     }
 
-    public static void setup(SlimefunAddon addon) {
+    public static void setup(@NotNull SlimefunAddon addon) {
         boolean before = JustEnoughGuide.disableAutomaticallyLoadItems();
         RECIPE_COMPLETE_GUIDE.register(addon);
         USAGE_INFO.register(addon);
