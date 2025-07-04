@@ -177,6 +177,15 @@ public class IntegrationManager extends AbstractManager {
         }, 1L);
     }
 
+    public static boolean classExists(@NotNull String className) {
+        try {
+            Class.forName(className);
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
+
     @Deprecated
     public boolean hasRecipeCompletableWithGuide() {
         return hasRecipeCompletableWithGuide;
@@ -214,15 +223,6 @@ public class IntegrationManager extends AbstractManager {
 
     public boolean isEnabledFinalTECH_Changed() {
         return enabledFinalTECH_Changed;
-    }
-
-    public static boolean classExists(@NotNull String className) {
-        try {
-            Class.forName(className);
-            return true;
-        } catch (ClassNotFoundException e) {
-            return false;
-        }
     }
 
     @SuppressWarnings("UnusedReturnValue")

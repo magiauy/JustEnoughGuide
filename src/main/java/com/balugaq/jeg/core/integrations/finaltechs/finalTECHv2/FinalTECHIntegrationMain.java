@@ -31,7 +31,6 @@ import com.balugaq.jeg.api.recipe_complete.RecipeCompletableRegistry;
 import com.balugaq.jeg.core.integrations.Integration;
 import com.balugaq.jeg.core.integrations.finaltechs.finalTECHCommon.FinalTECHItemPatchListener;
 import com.balugaq.jeg.core.integrations.finaltechs.finalTECHCommon.FinalTECHValueDisplayOption;
-import com.balugaq.jeg.core.integrations.finaltechs.finaltechv1.FinalTechItemPatchListener;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.core.guide.options.SlimefunGuideSettings;

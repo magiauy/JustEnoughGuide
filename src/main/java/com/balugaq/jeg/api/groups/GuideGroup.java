@@ -123,8 +123,9 @@ public abstract class GuideGroup extends FlexItemGroup {
 
     /**
      * Add a {@link ChestMenu.MenuClickHandler} to the group
-     * @param page the page
-     * @param slot the slot
+     *
+     * @param page    the page
+     * @param slot    the slot
      * @param handler the handler
      * @return the group itself
      */
@@ -142,7 +143,8 @@ public abstract class GuideGroup extends FlexItemGroup {
 
     /**
      * Add a {@link ChestMenu.MenuClickHandler} to the group
-     * @param slot the slot
+     *
+     * @param slot    the slot
      * @param handler the handler
      * @return the group itself
      */
@@ -155,6 +157,7 @@ public abstract class GuideGroup extends FlexItemGroup {
 
     /**
      * Adds a guide
+     *
      * @param slot slot
      * @return the guide itself
      */
@@ -165,6 +168,7 @@ public abstract class GuideGroup extends FlexItemGroup {
 
     /**
      * Adds a guide
+     *
      * @param page page number
      * @param slot slot
      * @return the guide itself
