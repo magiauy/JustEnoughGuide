@@ -29,6 +29,7 @@ package com.balugaq.jeg.api.objects;
 
 import com.balugaq.jeg.api.cfgparse.annotations.IParsable;
 import com.balugaq.jeg.api.cfgparse.annotations.Key;
+import com.balugaq.jeg.api.cfgparse.annotations.Required;
 import com.balugaq.jeg.api.objects.annotations.CallTimeSensitive;
 import com.balugaq.jeg.utils.Debug;
 import com.balugaq.jeg.utils.KeyUtil;
@@ -58,29 +59,38 @@ import java.util.Objects;
 @NoArgsConstructor
 @Data
 public class CustomGroupConfiguration implements IParsable {
+    @Required
     @Key("enabled")
     boolean enabled;
 
+    @Required
     @Key("tier")
     int tier;
 
+    @Required
     @Key("id")
     String id;
 
+    @Required
     @Key("display")
     Display display;
 
+    @Required
     @Key("mode")
     Mode mode;
 
+    @Required
     @Key("items")
     String[] items;
 
+    @Required
     @Key("groups")
     String[] groups;
 
+    @Required
     @Key("formats")
     String[] formats;
+
     private Format format;
     private List<Object> objects;
 
@@ -169,15 +179,17 @@ public class CustomGroupConfiguration implements IParsable {
     @SuppressWarnings("unused")
     @Data
     public static class Display implements IParsable {
+        @Required
         @Key("material")
         String material;
 
+        @Required
         @Key("name")
         String name;
 
         @Nullable ItemStack itemStack;
 
-        public static String @NotNull [] fieldNames() {
+        public static @NotNull String @NotNull [] fieldNames() {
             return IParsable.fieldNames(Display.class);
         }
 
