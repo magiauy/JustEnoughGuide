@@ -36,6 +36,7 @@ import com.balugaq.jeg.core.integrations.claytech.ClayTechIntegrationMain;
 import com.balugaq.jeg.core.integrations.danktech2.DankTech2IntegrationMain;
 import com.balugaq.jeg.core.integrations.def.DefaultPlayerInventoryRecipeCompleteSlimefunSource;
 import com.balugaq.jeg.core.integrations.def.DefaultPlayerInventoryRecipeCompleteVanillaSource;
+import com.balugaq.jeg.core.integrations.emctech.EMCTechIntegrationMain;
 import com.balugaq.jeg.core.integrations.fastmachines.FastMachinesIntegrationMain;
 import com.balugaq.jeg.core.integrations.finalTECHChangedv3.FinalTECHChangedIntegrationMain;
 import com.balugaq.jeg.core.integrations.finalTECHv2.FinalTECHIntegrationMain;
@@ -84,6 +85,7 @@ public class IntegrationManager extends AbstractManager {
     private boolean enabledClayTechFixed;
     private boolean enabledCMILib;
     private boolean enabledDankTech2;
+    private boolean enabledEMCTech;
     private boolean enabledFastMachines;
     private boolean enabledFinalTech;
     private boolean enabledFinalTECH;
@@ -123,6 +125,7 @@ public class IntegrationManager extends AbstractManager {
             this.enabledClayTech = enabledClayTechFixed || pm.isPluginEnabled("ClayTech");
             this.enabledCMILib = pm.isPluginEnabled("CMILib");
             this.enabledDankTech2 = pm.isPluginEnabled("DankTech2");
+            this.enabledEMCTech = pm.isPluginEnabled("EMCTech");
             this.enabledFastMachines = pm.isPluginEnabled("FastMachines");
             this.enabledFinalTech = pm.isPluginEnabled("FinalTech");
             this.enabledFinalTECH = pm.isPluginEnabled("FinalTECH");
@@ -149,6 +152,7 @@ public class IntegrationManager extends AbstractManager {
             addIntegration(enabledBedrockTechnology, BedrockTechnologyIntegrationMain::new);
             addIntegration(enabledClayTech, ClayTechIntegrationMain::new);
             addIntegration(enabledDankTech2, DankTech2IntegrationMain::new);
+            addIntegration(enabledEMCTech, EMCTechIntegrationMain::new);
             addIntegration(enabledFastMachines, FastMachinesIntegrationMain::new);
             addIntegration(enabledFinalTech, FinalTechIntegrationMain::new);
             addIntegration(enabledFinalTECH, FinalTECHIntegrationMain::new);

@@ -185,13 +185,13 @@ public class CustomGroupConfiguration implements IParsable {
         public ItemStack item() {
             if (itemStack != null) return itemStack;
             itemStack = getHashLike(material);
-            if (itemStack != null) return itemStack;
+            if (itemStack != null) return itemStack = Converter.getItem(itemStack, this.name);
 
             itemStack = getBase64Like(material);
-            if (itemStack != null) return itemStack;
+            if (itemStack != null) return itemStack = Converter.getItem(itemStack, this.name);
 
             itemStack = getURLLike(material);
-            if (itemStack != null) return itemStack;
+            if (itemStack != null) return itemStack = Converter.getItem(itemStack, this.name);
 
             Material material = Material.getMaterial(this.material.toUpperCase());
             if (material == null || !material.isItem() || material.isLegacy()) {

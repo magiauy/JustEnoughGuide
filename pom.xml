@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.balugaq.jeg</groupId>
     <artifactId>JustEnoughGuide</artifactId>
-    <version>Insider-111</version>
+    <version>Insider-112</version>
 
     <pluginRepositories>
         <pluginRepository>
@@ -271,6 +271,14 @@
             <artifactId>GuguSlimefunLib</artifactId>
             <version>afeac968aa</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.sefiraat</groupId>
+            <artifactId>EMCTech</artifactId>
+            <version>Build-8</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/EMCTech-Build 8.jar</systemPath>
         </dependency>
 
         <!-- AnvilGUI 1.16- Paper 1.21.2 / Spigot 1.21.3 -->

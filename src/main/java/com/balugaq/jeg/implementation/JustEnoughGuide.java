@@ -30,6 +30,7 @@ package com.balugaq.jeg.implementation;
 import com.balugaq.jeg.api.CustomGroupConfigurations;
 import com.balugaq.jeg.api.editor.GroupResorter;
 import com.balugaq.jeg.api.groups.VanillaItemsGroup;
+import com.balugaq.jeg.api.patches.Patcher;
 import com.balugaq.jeg.api.recipe_complete.source.base.RecipeCompleteProvider;
 import com.balugaq.jeg.core.managers.BookmarkManager;
 import com.balugaq.jeg.core.managers.CommandManager;
@@ -306,6 +307,7 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
 
         getIntegrationManager().shutdownIntegrations();
 
+        Patcher.shutdown();
         GroupSetup.shutdown();
         RecipeCompleteProvider.shutdown();
         GuideUtil.shutdown();
