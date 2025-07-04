@@ -1,6 +1,7 @@
 package com.balugaq.jeg.api.cfgparse.annotations;
 
 import lombok.SneakyThrows;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -12,7 +13,7 @@ import java.util.Arrays;
 @SuppressWarnings("unused")
 public interface IParsable {
     @SneakyThrows
-    static String[] fieldNames(Class<? extends IParsable> clazz) {
+    static String @NotNull [] fieldNames(@NotNull Class<? extends IParsable> clazz) {
         try {
             clazz.getDeclaredConstructor();
         } catch (NoSuchMethodException e) {

@@ -37,6 +37,7 @@ import com.balugaq.jeg.utils.formatter.Formats;
 import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -108,7 +109,7 @@ public class CustomGroupConfigurations {
         return groups.get(id);
     }
 
-    public static List<CustomGroup> getGroups() {
+    public static @NotNull List<CustomGroup> getGroups() {
         return new ArrayList<>(groups.values());
     }
 }

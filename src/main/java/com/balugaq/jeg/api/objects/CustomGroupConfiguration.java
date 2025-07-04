@@ -84,7 +84,7 @@ public class CustomGroupConfiguration implements IParsable {
     private Format format;
     private List<Object> objects;
 
-    public static String[] fieldNames() {
+    public static String @NotNull [] fieldNames() {
         return IParsable.fieldNames(CustomGroupConfiguration.class);
     }
 
@@ -152,11 +152,11 @@ public class CustomGroupConfiguration implements IParsable {
         return objects;
     }
 
-    public NamespacedKey key() {
+    public @NotNull NamespacedKey key() {
         return KeyUtil.newKey(id);
     }
 
-    public ItemStack item() {
+    public @NotNull ItemStack item() {
         return display.item();
     }
 
@@ -175,9 +175,9 @@ public class CustomGroupConfiguration implements IParsable {
         @Key("name")
         String name;
 
-        ItemStack itemStack;
+        @Nullable ItemStack itemStack;
 
-        public static String[] fieldNames() {
+        public static String @NotNull [] fieldNames() {
             return IParsable.fieldNames(Display.class);
         }
 

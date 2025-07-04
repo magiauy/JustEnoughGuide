@@ -64,7 +64,7 @@ public class PatchEvent extends Event {
         return handlers;
     }
 
-    public static ItemStack patch(final @NotNull PatchScope patchScope, final @NotNull Player player, final @Nullable ItemStack itemStack) {
+    public static @Nullable ItemStack patch(final @NotNull PatchScope patchScope, final @NotNull Player player, final @Nullable ItemStack itemStack) {
         PatchEvent event = new PatchEvent(patchScope, player, Converter.getItem(ItemStackUtil.getCleanItem(itemStack)));
         try {
             Bukkit.getPluginManager().callEvent(event);

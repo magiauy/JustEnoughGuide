@@ -60,7 +60,7 @@ public class GroupResorter {
     public static final Map<Player, ItemGroup> selectedGroup = new ConcurrentHashMap<>();
     public static final Map<ItemGroup, Integer> jegGroupTier = new ConcurrentHashMap<>();
     public static final File tiersFile = new File(JustEnoughGuide.getInstance().getDataFolder(), "tiers.yml");
-    public static FileConfiguration config = null;
+    public static @Nullable FileConfiguration config = null;
 
     static {
         load();

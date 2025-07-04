@@ -8,8 +8,8 @@ import lombok.experimental.UtilityClass;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
@@ -34,7 +34,7 @@ public class ConfigurationParser {
     @ApiStatus.Obsolete
     @ParametersAreNonnullByDefault
     @SneakyThrows
-    public static <T> T parse(ConfigurationSection section, Class<T> clazz) {
+    public static <T> @NotNull T parse(ConfigurationSection section, Class<T> clazz) {
         Method method;
         try {
             method = clazz.getDeclaredMethod("fieldNames");
@@ -90,7 +90,7 @@ public class ConfigurationParser {
     @ApiStatus.Obsolete
     @ParametersAreNonnullByDefault
     @SneakyThrows
-    public static <T> T consturctObject(Class<T> clazz, LinkedHashMap<Field, Object> read) {
+    public static <T> @NotNull T consturctObject(Class<T> clazz, LinkedHashMap<Field, Object> read) {
         try {
             Constructor<T> constructor = clazz.getDeclaredConstructor();
 
@@ -129,7 +129,7 @@ public class ConfigurationParser {
     @SuppressWarnings("rawtypes")
     @ApiStatus.Obsolete
     @SneakyThrows
-    public static <T> T parseValue(@NotNull Class<T> clazz, @Nullable Object value) {
+    public static <T> @Nullable T parseValue(@NotNull Class<T> clazz, @Nullable Object value) {
         if (value == null) {
             Class<?>[] interfaces = clazz.getInterfaces();
             for (Class<?> interfaceClass : interfaces) {

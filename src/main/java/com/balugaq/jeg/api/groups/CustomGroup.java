@@ -73,7 +73,7 @@ import java.util.function.Consumer;
 @ToString
 @Getter
 public class CustomGroup extends FlexItemGroup {
-    public final CustomGroupConfiguration configuration;
+    public final @NotNull CustomGroupConfiguration configuration;
     public final List<Object> objects; // ItemGroup first, SlimefunItem then.
     private final int page;
     private Map<Integer, CustomGroup> pageMap = new LinkedHashMap<>();
@@ -125,7 +125,7 @@ public class CustomGroup extends FlexItemGroup {
     }
 
     @Override
-    public void open(Player player, PlayerProfile playerProfile, SlimefunGuideMode slimefunGuideMode) {
+    public void open(@NotNull Player player, @NotNull PlayerProfile playerProfile, @NotNull SlimefunGuideMode slimefunGuideMode) {
         playerProfile.getGuideHistory().add(this, this.page);
         this.generateMenu(player, playerProfile, slimefunGuideMode).open(player);
     }
@@ -285,13 +285,13 @@ public class CustomGroup extends FlexItemGroup {
         return chestMenu;
     }
 
-    public void ifig(Object object, Consumer<ItemGroup> consumer) {
+    public void ifig(Object object, @NotNull Consumer<ItemGroup> consumer) {
         if (object instanceof ItemGroup ig) {
             consumer.accept(ig);
         }
     }
 
-    public void ifsf(Object object, Consumer<SlimefunItem> consumer) {
+    public void ifsf(Object object, @NotNull Consumer<SlimefunItem> consumer) {
         if (object instanceof SlimefunItem si) {
             consumer.accept(si);
         }
