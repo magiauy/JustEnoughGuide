@@ -25,4 +25,4 @@
  *
  */
 
-package com.balugaq.jeg.core.integrations.finalTECHv2;
+package com.balugaq.jeg.core.integrations.finaltechs.finalTECHCommon;

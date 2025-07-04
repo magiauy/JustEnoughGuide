@@ -28,10 +28,7 @@
 package com.balugaq.jeg.core.integrations.emctech;
 
 import com.balugaq.jeg.core.integrations.Integration;
-import com.balugaq.jeg.core.listeners.emctech.EMCItemPatchListener;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
-import com.balugaq.jeg.implementation.option.EMCValueDisplayOption;
-import com.balugaq.jeg.utils.Debug;
 import io.github.sefiraat.emctech.utils.EmcUtils;
 import io.github.thebusybiscuit.slimefun4.core.guide.options.SlimefunGuideSettings;
 import org.bukkit.inventory.ItemStack;

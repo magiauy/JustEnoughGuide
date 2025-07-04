@@ -25,11 +25,13 @@
  *
  */
 
-package com.balugaq.jeg.core.integrations.finaltechv1;
+package com.balugaq.jeg.core.integrations.finaltechs.finaltechv1;
 
 import com.balugaq.jeg.api.recipe_complete.RecipeCompletableRegistry;
 import com.balugaq.jeg.core.integrations.Integration;
+import com.balugaq.jeg.implementation.JustEnoughGuide;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import io.github.thebusybiscuit.slimefun4.core.guide.options.SlimefunGuideSettings;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -82,6 +84,11 @@ public class FinalTechIntegrationMain implements Integration {
 
     @Override
     public void onEnable() {
+        if (JustEnoughGuide.getConfigManager().isFinalTechValueDisplay()) {
+            SlimefunGuideSettings.addOption(FinalTechValueDisplayOption.instance());
+            JustEnoughGuide.getListenerManager().registerListener(new FinalTechItemPatchListener());
+        }
+
         rrc("FINALTECH_MANUAL_CRAFTING_TABLE");
         rrc("FINALTECH_MANUAL_ENHANCED_CRAFTING_TABLE");
         rrc("FINALTECH_MANUAL_GRIND_STONE");

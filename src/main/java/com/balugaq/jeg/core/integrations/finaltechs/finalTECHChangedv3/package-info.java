@@ -25,4 +25,4 @@
  *
  */
 
-package com.balugaq.jeg.core.listeners.emctech;
+package com.balugaq.jeg.core.integrations.finaltechs.finalTECHChangedv3;

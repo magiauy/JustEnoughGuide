@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2024-2025 balugaq
- *
+ *  
  * This file is part of JustEnoughGuide, available under MIT license.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,7 +25,7 @@
  *
  */
 
-package com.balugaq.jeg.implementation.option;
+package com.balugaq.jeg.core.integrations.finaltechs.finalTECHCommon;
 
 import com.balugaq.jeg.api.patches.JEGGuideSettings;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
@@ -46,15 +46,15 @@ import java.util.Optional;
  * @since 1.9
  */
 @SuppressWarnings({"UnnecessaryUnicodeEscape", "SameReturnValue"})
-public class EMCValueDisplayOption implements SlimefunGuideOption<Boolean> {
-    public static final @NotNull EMCValueDisplayOption instance = new EMCValueDisplayOption();
+public class FinalTECHValueDisplayOption implements SlimefunGuideOption<Boolean> {
+    public static final @NotNull FinalTECHValueDisplayOption instance = new FinalTECHValueDisplayOption();
 
-    public static EMCValueDisplayOption instance() {
+    public static FinalTECHValueDisplayOption instance() {
         return instance;
     }
 
     public static @NotNull NamespacedKey key0() {
-        return new NamespacedKey(JustEnoughGuide.getInstance(), "emc_item");
+        return new NamespacedKey(JustEnoughGuide.getInstance(), "finaltechv2_emc_item");
     }
 
     public static boolean isEnabled(Player p) {
@@ -79,17 +79,17 @@ public class EMCValueDisplayOption implements SlimefunGuideOption<Boolean> {
     public Optional<ItemStack> getDisplayItem(Player p, ItemStack guide) {
         boolean enabled = getSelectedOption(p, guide).orElse(true);
         ItemStack item = Converter.getItem(
-                isEnabled(p) ? Material.CARTOGRAPHY_TABLE : Material.CRAFTING_TABLE,
-                "&bEMC值显示: &" + (enabled ? "a启用" : "4禁用"),
+                isEnabled(p) ? Material.RESPAWN_ANCHOR : Material.REDSTONE_LAMP,
+                "&b新乱序EMC值显示: &" + (enabled ? "a启用" : "4禁用"),
                 "",
                 "&7你现在可以选择是否",
                 "&7在查阅一个新物品的时候",
-                "&7显示它的EMC数值",
+                "&7显示它的新乱序EMC数值",
                 "",
                 "&7注: 此EMC数值为",
-                "&7EMCTech中的数值",
-                "不等同于乱序等附属的数值",
-                "&7\u21E8 &e点击 " + (enabled ? "禁用" : "启用") + " EMC值显示");
+                "&7新乱序中的数值",
+                "不等同于旧乱序, EMCTech等附属的数值",
+                "&7\u21E8 &e点击 " + (enabled ? "禁用" : "启用") + " 新乱序EMC值显示");
         return Optional.of(item);
     }
 

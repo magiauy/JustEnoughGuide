@@ -25,12 +25,11 @@
  *
  */
 
-package com.balugaq.jeg.core.listeners.emctech;
+package com.balugaq.jeg.core.integrations.finaltechs.finaltechv1;
 
 import com.balugaq.jeg.api.objects.enums.PatchScope;
 import com.balugaq.jeg.api.objects.events.PatchEvent;
-import com.balugaq.jeg.core.integrations.emctech.EMCTechIntegrationMain;
-import com.balugaq.jeg.implementation.option.EMCValueDisplayOption;
+import com.balugaq.jeg.core.integrations.emctech.EMCValueDisplayOption;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.common.ChatColors;
 import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
 import org.bukkit.entity.Player;
@@ -51,7 +50,7 @@ import java.util.List;
  * @author balugaq
  * @since 1.9
  */
-public class EMCItemPatchListener implements Listener {
+public class FinalTechItemPatchListener implements Listener {
     public static final EnumSet<PatchScope> VALID_SCOPES = EnumSet.of(
             PatchScope.SlimefunItem,
             PatchScope.ItemMarkItem,
@@ -59,14 +58,7 @@ public class EMCItemPatchListener implements Listener {
             PatchScope.SearchItem,
             PatchScope.ItemRecipeIngredient
     );
-    public static final DecimalFormat EMCFormat = new DecimalFormat("#.###");
 
-    /**
-     * Fix Official Slimefun: SlimefunItemStack break changes
-     * Fix 1.21+ Minecraft bug: SlimefunItemStack cannot cast to CraftItemStack
-     *
-     * @param event PatchEvent
-     */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void patchItem(@NotNull PatchEvent event) {
         PatchScope scope = event.getPatchScope();
@@ -101,10 +93,8 @@ public class EMCItemPatchListener implements Listener {
             return;
         }
 
-        double emc = EMCTechIntegrationMain.getEMC(itemStack);
-        if (emc <= 0.0D) {
-            return;
-        }
+        String inputEmc = io.taraxacum.finaltech.api.factory.ItemValueTable.getInstance().getOrCalItemInputValue(itemStack);
+        String outputEmc = io.taraxacum.finaltech.api.factory.ItemValueTable.getInstance().getOrCalItemOutputValue(itemStack);
 
         ItemMeta meta = itemStack.getItemMeta();
         if (meta == null) {
@@ -116,7 +106,8 @@ public class EMCItemPatchListener implements Listener {
             lore = new ArrayList<>();
         }
 
-        lore.add(ChatColors.color("&7EMC: &6" + EMCFormat.format(emc)));
+        lore.add(ChatColors.color("&7旧乱序输入EMC: &6" + inputEmc));
+        lore.add(ChatColors.color("&7旧乱序输出EMC: &6" + outputEmc));
         meta.setLore(lore);
         itemStack.setItemMeta(meta);
     }

@@ -14,6 +14,8 @@ improvements:
   rts-search: true
   beginner-option: true
   emc-display-option: true
+  finaltech-emc-display-option: true
+  finalTECH-emc-display-option: true
 
 # 禁止搜索非限定词时出现名字包含以下任意词的物品
 blacklist:

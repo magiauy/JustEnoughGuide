@@ -38,9 +38,9 @@ import com.balugaq.jeg.core.integrations.def.DefaultPlayerInventoryRecipeComplet
 import com.balugaq.jeg.core.integrations.def.DefaultPlayerInventoryRecipeCompleteVanillaSource;
 import com.balugaq.jeg.core.integrations.emctech.EMCTechIntegrationMain;
 import com.balugaq.jeg.core.integrations.fastmachines.FastMachinesIntegrationMain;
-import com.balugaq.jeg.core.integrations.finalTECHChangedv3.FinalTECHChangedIntegrationMain;
-import com.balugaq.jeg.core.integrations.finalTECHv2.FinalTECHIntegrationMain;
-import com.balugaq.jeg.core.integrations.finaltechv1.FinalTechIntegrationMain;
+import com.balugaq.jeg.core.integrations.finaltechs.finalTECHChangedv3.FinalTECHChangedIntegrationMain;
+import com.balugaq.jeg.core.integrations.finaltechs.finalTECHv2.FinalTECHIntegrationMain;
+import com.balugaq.jeg.core.integrations.finaltechs.finaltechv1.FinalTechIntegrationMain;
 import com.balugaq.jeg.core.integrations.fluffymachines.FluffyMachinesIntegrationMain;
 import com.balugaq.jeg.core.integrations.galacitfun.GalactifunIntegrationMain;
 import com.balugaq.jeg.core.integrations.gastronomicon.GastronomiconIntegrationMain;
@@ -127,9 +127,9 @@ public class IntegrationManager extends AbstractManager {
             this.enabledDankTech2 = pm.isPluginEnabled("DankTech2");
             this.enabledEMCTech = pm.isPluginEnabled("EMCTech");
             this.enabledFastMachines = pm.isPluginEnabled("FastMachines");
-            this.enabledFinalTech = pm.isPluginEnabled("FinalTech");
-            this.enabledFinalTECH = pm.isPluginEnabled("FinalTECH");
+            this.enabledFinalTech = classExists("io.taraxacum.finaltech.api.factory.ItemValueTable");
             this.enabledFinalTECH_Changed = pm.isPluginEnabled("FinalTECH-Changed");
+            this.enabledFinalTECH = enabledFinalTECH_Changed || classExists("io.taraxacum.libs.slimefun.dto.ItemValueTable");
             this.enabledFluffyMachines = pm.isPluginEnabled("FluffyMachines");
             this.enabledGalactifun = pm.isPluginEnabled("Galactifun");
             this.enabledGastronomicon = pm.isPluginEnabled("Gastronomicon");
@@ -214,6 +214,15 @@ public class IntegrationManager extends AbstractManager {
 
     public boolean isEnabledFinalTECH_Changed() {
         return enabledFinalTECH_Changed;
+    }
+
+    public static boolean classExists(@NotNull String className) {
+        try {
+            Class.forName(className);
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
     }
 
     @SuppressWarnings("UnusedReturnValue")
