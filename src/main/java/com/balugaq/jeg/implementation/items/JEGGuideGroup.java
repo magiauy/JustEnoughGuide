@@ -538,6 +538,8 @@ public class JEGGuideGroup extends ClassicGuideGroup {
                     return false;
                 }
         );
+
+        Formats.helper.renderCustom(this);
     }
 
     public static void doIf(boolean expression, @NotNull Runnable runnable) {

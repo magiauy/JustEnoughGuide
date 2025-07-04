@@ -69,6 +69,38 @@ public class Debug {
         return plugin;
     }
 
+    public static void severe(Object @NotNull ... objects) {
+        StringBuilder sb = new StringBuilder();
+        for (Object obj : objects) {
+            if (obj == null) {
+                sb.append("null");
+            } else {
+                sb.append(obj);
+            }
+            sb.append(" ");
+        }
+        warn(sb.toString());
+    }
+
+    public static void severe(@NotNull Throwable e) {
+        warn(e.getMessage());
+        trace(e);
+    }
+
+    public static void severe(@Nullable Object object) {
+        warn(object == null ? "null" : object.toString());
+    }
+
+    public static void severe(String @NotNull ... messages) {
+        for (String message : messages) {
+            warn(message);
+        }
+    }
+
+    public static void severe(String message) {
+        log("&e[ERROR] " + message);
+    }
+
     public static void warn(Object @NotNull ... objects) {
         StringBuilder sb = new StringBuilder();
         for (Object obj : objects) {

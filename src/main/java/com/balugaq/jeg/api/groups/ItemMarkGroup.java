@@ -370,6 +370,7 @@ public class ItemMarkGroup extends FlexItemGroup {
         GuideUtil.addBookMarkButton(chestMenu, player, playerProfile, Formats.sub, implementation, this);
         GuideUtil.addItemMarkButton(chestMenu, player, playerProfile, Formats.sub, implementation, this);
 
+        Formats.sub.renderCustom(chestMenu);
         return chestMenu;
     }
 

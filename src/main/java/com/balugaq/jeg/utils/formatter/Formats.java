@@ -27,14 +27,24 @@
 
 package com.balugaq.jeg.utils.formatter;
 
+import com.balugaq.jeg.implementation.JustEnoughGuide;
+import com.balugaq.jeg.utils.ItemStackUtil;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemStack;
+
+import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author balugaq
  * @since 1.6
  */
 public class Formats {
+    public static final String FILE_NAME = "custom-icons.yml";
+    public static final File fileCustomIcons = new File(JustEnoughGuide.getInstance().getDataFolder(), FILE_NAME);
     public static final Map<String, Format> customFormats = new HashMap<>();
     public static final MainFormat main = new MainFormat();
     public static final NestedGroupFormat nested = new NestedGroupFormat();
@@ -56,6 +66,31 @@ public class Formats {
         recipe_display.loadMapping();
         settings.loadMapping();
         contributors.loadMapping();
+
+        loadCustomIcon();
+    }
+
+    public static void loadCustomIcon() {
+        if (!fileCustomIcons.exists()) {
+            JustEnoughGuide.getInstance().saveResource(FILE_NAME, false);
+            JustEnoughGuide.getInstance().getLogger().info("Created " + FILE_NAME);
+        }
+
+        YamlConfiguration configuration = YamlConfiguration.loadConfiguration(fileCustomIcons);
+
+        Set<String> keys = configuration.getKeys(false);
+        for (String key : keys) {
+            if (key.length() > 1) {
+                JustEnoughGuide.getInstance().getLogger().warning(FILE_NAME + " 中发现无效的 Icon 自定义字符: " + key);
+                continue;
+            }
+
+            char c = key.charAt(0);
+            ItemStack read = ItemStackUtil.readItem(c, configuration.getConfigurationSection(key));
+            if (read != null) {
+                Format.customMapping.put(c, read);
+            }
+        }
     }
 
     public static void addCustomFormat(String id, Format format) {
@@ -64,5 +99,6 @@ public class Formats {
 
     public static void unload() {
         customFormats.clear();
+        Format.customMapping.clear();
     }
 }

@@ -121,6 +121,18 @@ public class Converter {
      * @param lore      the lore of the item
      * @return the converted Bukkit ItemStack
      */
+    public static @NotNull ItemStack getItem(@NotNull ItemStack itemStack, @Nullable String name, @NotNull List<String> lore) {
+        return new CustomItemStack(itemStack, name, lore).asBukkit();
+    }
+
+    /**
+     * Converts a Bukkit ItemStack to another Bukkit ItemStack with a name and lore.
+     *
+     * @param itemStack the Bukkit ItemStack to convert
+     * @param name      the name of the item
+     * @param lore      the lore of the item
+     * @return the converted Bukkit ItemStack
+     */
     public static @NotNull ItemStack getItem(@NotNull ItemStack itemStack, @Nullable String name, @NotNull String @NotNull ... lore) {
         return new CustomItemStack(itemStack, name, lore).asBukkit();
     }

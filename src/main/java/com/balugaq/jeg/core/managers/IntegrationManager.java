@@ -82,6 +82,7 @@ public class IntegrationManager extends AbstractManager {
     private boolean enabledBedrockTechnology;
     private boolean enabledClayTech;
     private boolean enabledClayTechFixed;
+    private boolean enabledCMILib;
     private boolean enabledDankTech2;
     private boolean enabledFastMachines;
     private boolean enabledFinalTech;
@@ -120,6 +121,7 @@ public class IntegrationManager extends AbstractManager {
             this.enabledBedrockTechnology = pm.isPluginEnabled("BedrockTechnology");
             this.enabledClayTechFixed = pm.isPluginEnabled("ClayTech-Fixed");
             this.enabledClayTech = enabledClayTechFixed || pm.isPluginEnabled("ClayTech");
+            this.enabledCMILib = pm.isPluginEnabled("CMILib");
             this.enabledDankTech2 = pm.isPluginEnabled("DankTech2");
             this.enabledFastMachines = pm.isPluginEnabled("FastMachines");
             this.enabledFinalTech = pm.isPluginEnabled("FinalTech");

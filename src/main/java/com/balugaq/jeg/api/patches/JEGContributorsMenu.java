@@ -126,6 +126,7 @@ final class JEGContributorsMenu {
             });
         }
 
+        Formats.contributors.renderCustom(menu);
         menu.open(p);
     }
 

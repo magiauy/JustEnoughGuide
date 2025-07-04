@@ -79,6 +79,7 @@ public class JEGGuideSettings {
         addHeader(p, menu, guide);
         addConfigurableOptions(p, menu, guide, page);
 
+        Formats.settings.renderCustom(menu);
         menu.open(p);
     }
 

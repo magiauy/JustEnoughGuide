@@ -101,6 +101,17 @@ public class CustomItemStack implements Cloneable {
      * @param name      the name of the item
      * @param lore      the lore of the item
      */
+    public CustomItemStack(@NotNull ItemStack itemStack, @Nullable String name, @NotNull List<String> lore) {
+        this(itemStack, name, lore.toArray(new String[0]));
+    }
+
+    /**
+     * Creates a CustomItemStack from a Bukkit ItemStack with a name and lore.
+     *
+     * @param itemStack the Bukkit ItemStack to create from
+     * @param name      the name of the item
+     * @param lore      the lore of the item
+     */
     public CustomItemStack(@NotNull ItemStack itemStack, @Nullable String name, @NotNull String @NotNull ... lore) {
         this(itemStack, itemMeta -> {
             if (name != null) {

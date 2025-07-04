@@ -704,6 +704,8 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
             }
         }
 
+        Formats.recipe_vanilla.renderCustom(menu);
+
         menu.open(p);
 
         if (!task.isEmpty()) {
@@ -813,6 +815,8 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
                 }));
             }
         }
+
+        format.renderCustom(menu);
 
         menu.open(p);
 
@@ -975,9 +979,11 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
             }));
         }
 
-        GuideUtil.addRTSButton(menu, p, profile, Formats.main, getMode(), this);
-        GuideUtil.addBookMarkButton(menu, p, profile, Formats.main, this, null);
-        GuideUtil.addItemMarkButton(menu, p, profile, Formats.main, this, null);
+        GuideUtil.addRTSButton(menu, p, profile, format, getMode(), this);
+        GuideUtil.addBookMarkButton(menu, p, profile, format, this, null);
+        GuideUtil.addItemMarkButton(menu, p, profile, format, this, null);
+
+        format.renderCustom(menu);
     }
 
 

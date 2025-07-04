@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.balugaq.jeg</groupId>
     <artifactId>JustEnoughGuide</artifactId>
-    <version>Insider-110</version>
+    <version>Insider-111</version>
 
     <pluginRepositories>
         <pluginRepository>
@@ -85,6 +85,10 @@
                                 <relocation>
                                     <pattern>net.wesjd.anvilgui</pattern>
                                     <shadedPattern>com.balugaq.jeg.libraries.anvilgui</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>net.Zrips.CMILib</pattern>
+                                    <shadedPattern>com.balugaq.jeg.libraries.cmilib</shadedPattern>
                                 </relocation>
                             </relocations>
                             <filters>
@@ -253,6 +257,15 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/SlimeAE-Build 72.jar</systemPath>
         </dependency>
+
+        <!-- Custom Icon Color API -->
+        <dependency>
+            <groupId>com.github.Zrips</groupId>
+            <artifactId>CMILib</artifactId>
+            <version>1.4.7.4</version>
+            <scope>provided</scope>
+        </dependency>
+
         <dependency>
             <groupId>com.github.TimetownDev</groupId>
             <artifactId>GuguSlimefunLib</artifactId>

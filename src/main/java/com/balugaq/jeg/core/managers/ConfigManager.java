@@ -74,6 +74,8 @@ public class ConfigManager extends AbstractManager {
     private final boolean BEGINNER_OPTION;
     private final @NotNull String SURVIVAL_GUIDE_TITLE;
     private final @NotNull String CHEAT_GUIDE_TITLE;
+    private final @NotNull String SETTINGS_GUIDE_TITLE;
+    private final @NotNull String CREDITS_GUIDE_TITLE;
     private final @NotNull List<String> SHARED_CHARS;
     private final @NotNull List<String> BLACKLIST;
     private final @NotNull List<String> MAIN_FORMAT;
@@ -102,6 +104,8 @@ public class ConfigManager extends AbstractManager {
         this.BOOKMARK = plugin.getConfig().getBoolean("improvements.bookmark", true);
         this.SURVIVAL_GUIDE_TITLE = plugin.getConfig().getString("guide.survival-guide-title", "&2&lSlimefun 指南 (生存模式)         &e&l爱来自 JustEnoughGuide");
         this.CHEAT_GUIDE_TITLE = plugin.getConfig().getString("guide.cheat-guide-title", "&c&lSlimefun 指南 (作弊模式)         &e&l爱来自 JustEnoughGuide");
+        this.SETTINGS_GUIDE_TITLE = plugin.getConfig().getString("guide.settings-guide-title", "设置 & 详情");
+        this.CREDITS_GUIDE_TITLE = plugin.getConfig().getString("guide.credits-guide-title", "Slimefun4 贡献者");
         this.RTS_SEARCH = plugin.getConfig().getBoolean("improvements.rts-search", true);
         if (JustEnoughGuide.getMCVersion().isAtLeast(MinecraftVersion.MINECRAFT_1_21_2)) {
             if (PaperLib.isPaper()) {
@@ -330,6 +334,14 @@ public class ConfigManager extends AbstractManager {
 
     public @NotNull String getCheatGuideTitle() {
         return CHEAT_GUIDE_TITLE;
+    }
+
+    public @NotNull String getSettingsGuideTitle() {
+        return SETTINGS_GUIDE_TITLE;
+    }
+
+    public @NotNull String getCreditsGuideTitle() {
+        return CREDITS_GUIDE_TITLE;
     }
 
     public boolean isRTSSearch() {

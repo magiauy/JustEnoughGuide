@@ -109,7 +109,7 @@ public abstract class GuideGroup extends FlexItemGroup {
     @NotNull
     public GuideGroup addGuide(
             @Range(from = 1, to = Byte.MAX_VALUE) int page,
-            @Range(from = 9, to = 44) int slot,
+            @Range(from = 0, to = 53) int slot,
             @NotNull ItemStack itemStack,
             @NotNull ChestMenu.MenuClickHandler handler) {
 
@@ -129,7 +129,7 @@ public abstract class GuideGroup extends FlexItemGroup {
      */
     @NotNull
     public GuideGroup addGuide(
-            @Range(from = 9, to = 44) int slot,
+            @Range(from = 0, to = 53) int slot,
             @NotNull ItemStack itemStack,
             @NotNull ChestMenu.MenuClickHandler handler) {
         return addGuide(1, slot, itemStack, handler);
@@ -143,7 +143,7 @@ public abstract class GuideGroup extends FlexItemGroup {
      * @return The group itself.
      */
     @NotNull
-    public GuideGroup addGuide(@Range(from = 9, to = 44) int slot, @NotNull ItemStack itemStack) {
+    public GuideGroup addGuide(@Range(from = 0, to = 53) int slot, @NotNull ItemStack itemStack) {
         return addGuide(slot, itemStack, ChestMenuUtils.getEmptyClickHandler());
     }
 
@@ -168,6 +168,31 @@ public abstract class GuideGroup extends FlexItemGroup {
     @NotNull
     public GuideGroup addGuide(@NotNull ItemStack itemStack, @Range(from = 1, to = Byte.MAX_VALUE) int page) {
         return addGuide(itemStack, ChestMenuUtils.getEmptyClickHandler(), page);
+    }
+
+    /**
+     * Replace the icon.
+     * @param slot The slot where the icon should be placed.
+     * @param icon The icon to place.
+     * @return The group itself.
+     */
+    @NotNull
+    public GuideGroup replaceICon(@Range(from = 0, to = 53) int slot, @NotNull ItemStack icon) {
+        return replaceIcon(1, slot, icon);
+    }
+
+    /**
+     * Replace the icon.
+     * @param page      The page where the icon should be placed.
+     * @param slot      The slot where the icon should be placed.
+     * @param itemStack The icon to place
+     * @return The group itself.
+     */
+    @NotNull
+    public GuideGroup replaceIcon(@Range(from = 1, to = Byte.MAX_VALUE) int page, @Range(from = 0, to = 53) int slot, @NotNull ItemStack itemStack) {
+        slots.computeIfAbsent(page, k -> new HashSet<>()).add(slot);
+        contents.computeIfAbsent(page, k -> new LinkedHashMap<>()).put(slot, itemStack);
+        return this;
     }
 
     /**

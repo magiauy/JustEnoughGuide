@@ -878,6 +878,8 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             }
         }
 
+        Formats.recipe_vanilla.renderCustom(menu);
+
         menu.open(p);
 
         if (!task.isEmpty()) {
@@ -983,6 +985,8 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                 }));
             }
         }
+
+        format.renderCustom(menu);
 
         menu.open(p);
 
@@ -1110,6 +1114,8 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
         GuideUtil.addRTSButton(menu, p, profile, format, getMode(), this);
         GuideUtil.addBookMarkButton(menu, p, profile, format, this, null);
         GuideUtil.addItemMarkButton(menu, p, profile, format, this, null);
+
+        format.renderCustom(menu);
     }
 
     @ParametersAreNonnullByDefault

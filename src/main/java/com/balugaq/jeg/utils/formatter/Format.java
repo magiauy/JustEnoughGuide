@@ -27,9 +27,12 @@
 
 package com.balugaq.jeg.utils.formatter;
 
+import com.balugaq.jeg.api.groups.GuideGroup;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -46,11 +49,10 @@ import java.util.Map;
 @Getter
 @ToString
 public abstract class Format {
-    @ToString.Include
+    public static final Map<Character, ItemStack> customMapping = new HashMap<>();
     public final Map<Integer, Character> mapping = new HashMap<>();
     @ToString.Exclude
     public final Map<Character, List<Integer>> cached = new HashMap<>();
-    @ToString.Include
     @Setter
     public int size = 54;
 
@@ -89,5 +91,22 @@ public abstract class Format {
 
         cached.put(c, list);
         return list;
+    }
+
+    @SuppressWarnings("deprecation")
+    public void renderCustom(@NotNull ChestMenu menu) {
+        for (Map.Entry<Character, ItemStack> entry : customMapping.entrySet()) {
+            for (int slot : getChars(entry.getKey())) {
+                menu.addItem(slot, entry.getValue());
+            }
+        }
+    }
+
+    public void renderCustom(@NotNull GuideGroup menu) {
+        for (Map.Entry<Character, ItemStack> entry : customMapping.entrySet()) {
+            for (int slot : getChars(entry.getKey())) {
+                menu.addGuide(slot, entry.getValue());
+            }
+        }
     }
 }
