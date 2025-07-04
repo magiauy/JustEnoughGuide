@@ -136,7 +136,7 @@ public enum MinecraftVersion {
      *
      * @return 1.x.x
      */
-    public String humanize() {
+    public @NotNull String humanize() {
         return "1." + this.major + "." + this.minor;
     }
 }

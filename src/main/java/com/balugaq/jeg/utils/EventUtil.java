@@ -49,7 +49,7 @@ public class EventUtil {
     @SuppressWarnings({"ClassCanBeRecord", "SameReturnValue", "unused"})
     @Getter
     public static class EventBuilder<T extends Event> {
-        private final T event;
+        private final @NotNull T event;
 
         public EventBuilder(@NotNull T event) {
             this.event = event;

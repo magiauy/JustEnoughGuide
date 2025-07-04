@@ -221,7 +221,7 @@ public final class GuideUtil {
     }
 
     @SuppressWarnings("deprecation")
-    public static void addBookMarkButton(@NotNull ChestMenu menu, Player p, @NotNull PlayerProfile profile, @NotNull Format format, @NotNull JEGSlimefunGuideImplementation implementation, ItemGroup itemGroup) {
+    public static void addBookMarkButton(@NotNull ChestMenu menu, @NotNull Player p, @NotNull PlayerProfile profile, @NotNull Format format, @NotNull JEGSlimefunGuideImplementation implementation, ItemGroup itemGroup) {
         if (JustEnoughGuide.getConfigManager().isBookmark()) {
             BookmarkRelocation b = itemGroup instanceof BookmarkRelocation bookmarkRelocation ? bookmarkRelocation : null;
             for (var s : b != null ? b.getBookMark(implementation, p) : format.getChars('C')) {
@@ -245,7 +245,7 @@ public final class GuideUtil {
     }
 
     @SuppressWarnings("deprecation")
-    public static void addItemMarkButton(@NotNull ChestMenu menu, Player p, @NotNull PlayerProfile profile, @NotNull Format format, @NotNull JEGSlimefunGuideImplementation implementation, @Nullable ItemGroup itemGroup) {
+    public static void addItemMarkButton(@NotNull ChestMenu menu, @NotNull Player p, @NotNull PlayerProfile profile, @NotNull Format format, @NotNull JEGSlimefunGuideImplementation implementation, @Nullable ItemGroup itemGroup) {
         if (itemGroup != null && JustEnoughGuide.getConfigManager().isBookmark() && isTaggedGroupType(itemGroup)) {
             BookmarkRelocation b = itemGroup instanceof BookmarkRelocation relocation ? relocation : null;
             for (var ss : b != null ? b.getItemMark(implementation, p) : format.getChars('c')) {

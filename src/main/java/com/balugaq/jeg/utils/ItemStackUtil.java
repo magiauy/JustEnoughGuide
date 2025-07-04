@@ -68,7 +68,7 @@ public final class ItemStackUtil {
             "TURTLE_SCUTE", "SCUTE");
 
     @Author("lijinhong11")
-    public static ItemStack doGlow(ItemStack item) {
+    public static @NotNull ItemStack doGlow(@NotNull ItemStack item) {
         item.addUnsafeEnchantment(Enchantment.INFINITY, 1);
         item.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
@@ -109,7 +109,7 @@ public final class ItemStackUtil {
     @SneakyThrows
     @Nullable
     @Author("lijinhong11 & balugaq")
-    public static ItemStack readItem(char c, ConfigurationSection section) {
+    public static ItemStack readItem(char c, @Nullable ConfigurationSection section) {
         if (section == null) {
             return null;
         }
@@ -189,11 +189,11 @@ public final class ItemStackUtil {
     @Author("lijinhong11 & balugaq")
     public static ItemStack readItem(
             char c,
-            ConfigurationSection section,
+            @NotNull ConfigurationSection section,
             String type,
-            String material,
-            String name,
-            List<String> lore,
+            @NotNull String material,
+            @NotNull String name,
+            @NotNull List<String> lore,
             boolean glow,
             boolean hasEnchantment,
             int modelId,
