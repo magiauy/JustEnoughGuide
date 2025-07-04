@@ -32,6 +32,7 @@ import com.balugaq.jeg.api.interfaces.BookmarkRelocation;
 import com.balugaq.jeg.api.interfaces.JEGSlimefunGuideImplementation;
 import com.balugaq.jeg.api.interfaces.NotDisplayInCheatMode;
 import com.balugaq.jeg.api.interfaces.NotDisplayInSurvivalMode;
+import com.balugaq.jeg.api.objects.enums.PatchScope;
 import com.balugaq.jeg.api.objects.events.GuideEvents;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.EventUtil;
@@ -222,7 +223,7 @@ public class ItemMarkGroup extends FlexItemGroup {
         for (var ss : itemGroup instanceof BookmarkRelocation relocation ?
                 relocation.getBackButton(implementation, player) :
                 Formats.sub.getChars('b')) {
-            chestMenu.addItem(ss, ItemStackUtil.getCleanItem(ChestMenuUtils.getBackButton(player)));
+            chestMenu.addItem(ss, PatchScope.Back.patch(player, ChestMenuUtils.getBackButton(player)));
             chestMenu.addMenuClickHandler(ss, (pl, s, is, action) -> EventUtil.callEvent(new GuideEvents.BackButtonClickEvent(pl, is, s, action, chestMenu, implementation)).ifSuccess(() -> {
                 GuideHistory guideHistory = playerProfile.getGuideHistory();
                 if (action.isShiftClicked()) {
@@ -238,7 +239,7 @@ public class ItemMarkGroup extends FlexItemGroup {
         for (var ss : itemGroup instanceof BookmarkRelocation relocation ?
                 relocation.getSearchButton(implementation, player) :
                 Formats.sub.getChars('S')) {
-            chestMenu.addItem(ss, ItemStackUtil.getCleanItem(ChestMenuUtils.getSearchButton(player)));
+            chestMenu.addItem(ss, PatchScope.Search.patch(player, ChestMenuUtils.getSearchButton(player)));
             chestMenu.addMenuClickHandler(ss, (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.SearchButtonClickEvent(pl, item, slot, action, chestMenu, implementation)).ifSuccess(() -> {
                 pl.closeInventory();
 
@@ -258,7 +259,7 @@ public class ItemMarkGroup extends FlexItemGroup {
                 Formats.sub.getChars('P')) {
             chestMenu.addItem(
                     ss,
-                    ItemStackUtil.getCleanItem(ChestMenuUtils.getPreviousButton(
+                    PatchScope.PreviousPage.patch(player, ChestMenuUtils.getPreviousButton(
                             player, this.page, (this.slimefunItemList.size() - 1) / Formats.sub.getChars('i').size() + 1)));
             chestMenu.addMenuClickHandler(ss, (p, slot, item, action) -> EventUtil.callEvent(new GuideEvents.PreviousButtonClickEvent(p, item, slot, action, chestMenu, implementation)).ifSuccess(() -> {
                 GuideUtil.removeLastEntry(playerProfile.getGuideHistory());
@@ -273,7 +274,7 @@ public class ItemMarkGroup extends FlexItemGroup {
                 Formats.sub.getChars('N')) {
             chestMenu.addItem(
                     ss,
-                    ItemStackUtil.getCleanItem(ChestMenuUtils.getNextButton(
+                    PatchScope.NextPage.patch(player, ChestMenuUtils.getNextButton(
                             player, this.page, (this.slimefunItemList.size() - 1) / Formats.sub.getChars('i').size() + 1)));
             chestMenu.addMenuClickHandler(ss, (p, slot, item, action) -> EventUtil.callEvent(new GuideEvents.NextButtonClickEvent(p, item, slot, action, chestMenu, implementation)).ifSuccess(() -> {
                 GuideUtil.removeLastEntry(playerProfile.getGuideHistory());
@@ -287,7 +288,7 @@ public class ItemMarkGroup extends FlexItemGroup {
         for (var ss : itemGroup instanceof BookmarkRelocation relocation ?
                 relocation.getBorder(implementation, player) :
                 Formats.sub.getChars('B')) {
-            chestMenu.addItem(ss, ItemStackUtil.getCleanItem(ICON_BACKGROUND));
+            chestMenu.addItem(ss, PatchScope.Background.patch(player, ICON_BACKGROUND));
             chestMenu.addMenuClickHandler(ss, ChestMenuUtils.getEmptyClickHandler());
         }
 
@@ -362,7 +363,7 @@ public class ItemMarkGroup extends FlexItemGroup {
                     });
                 }
 
-                chestMenu.addItem(contentSlots.get(i), ItemStackUtil.getCleanItem(itemstack), handler);
+                chestMenu.addItem(contentSlots.get(i), PatchScope.ItemMarkItem.patch(player, itemstack), handler);
             }
         }
 

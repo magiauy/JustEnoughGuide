@@ -35,6 +35,7 @@ import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import me.ddggdd135.slimeae.SlimeAEPlugin;
 import me.ddggdd135.slimeae.api.interfaces.IStorage;
 import me.ddggdd135.slimeae.core.NetworkInfo;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -62,7 +63,7 @@ public class SlimeAEPluginIntegrationMain implements Integration {
 
     public static JavaPlugin getPlugin() {
         if (plugin == null) {
-            plugin = SlimeAEPlugin.getInstance();
+            plugin = (JavaPlugin) Bukkit.getPluginManager().getPlugin("SlimeAEPlugin");
         }
 
         return plugin;

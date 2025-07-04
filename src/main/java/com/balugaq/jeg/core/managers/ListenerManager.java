@@ -28,11 +28,12 @@
 package com.balugaq.jeg.core.managers;
 
 import com.balugaq.jeg.api.managers.AbstractManager;
+import com.balugaq.jeg.core.listeners.DefaultItemPatchListener;
+import com.balugaq.jeg.core.listeners.emctech.EMCItemPatchListener;
 import com.balugaq.jeg.core.listeners.GroupTierEditorListener;
 import com.balugaq.jeg.core.listeners.GuideListener;
 import com.balugaq.jeg.core.listeners.RTSListener;
 import com.balugaq.jeg.core.listeners.RecipeCompletableListener;
-import com.balugaq.jeg.core.listeners.SearchGroupInitListener;
 import com.balugaq.jeg.core.listeners.SpecialMenuFixListener;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import lombok.Getter;
@@ -60,13 +61,18 @@ public class ListenerManager extends AbstractManager {
     public ListenerManager(JavaPlugin plugin) {
         this.plugin = plugin;
         listeners.add(new GuideListener());
-        listeners.add(new SearchGroupInitListener());
         listeners.add(new SpecialMenuFixListener());
         listeners.add(new RTSListener());
         listeners.add(new GroupTierEditorListener());
+        listeners.add(new DefaultItemPatchListener());
         if (JustEnoughGuide.getConfigManager().isRecipeComplete()) {
             listeners.add(new RecipeCompletableListener());
         }
+    }
+
+    public void registerListener(@NotNull Listener listener) {
+        listeners.add(listener);
+        Bukkit.getServer().getPluginManager().registerEvents(listener, plugin);
     }
 
     private void registerListeners() {

@@ -27,6 +27,13 @@
 
 package com.balugaq.jeg.api.objects.enums;
 
+import com.balugaq.jeg.api.objects.events.PatchEvent;
+import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * @author balugaq
  * @since 1.9
@@ -59,5 +66,25 @@ public enum PatchScope {
     AddonCount,
     UnofficialTips,
     UnknownFeature,
-    Contributor
+    Contributor,
+    LockedItemGroup,
+    NoPermission,
+    LockedItem,
+    BookMarkItem,
+    ItemMarkItem,
+    SearchItem;
+
+    @Nullable
+    public ItemStack patch(@NotNull PlayerProfile profile, @Nullable ItemStack itemStack) {
+        Player player = profile.getPlayer();
+        if (player == null) {
+            return itemStack;
+        }
+        return patch(player, itemStack);
+    }
+
+    @NotNull
+    public ItemStack patch(@NotNull Player player, @Nullable ItemStack itemStack) {
+        return PatchEvent.patch(this, player, itemStack);
+    }
 }

@@ -25,16 +25,29 @@
  *
  */
 
-package com.balugaq.jeg.api.patches;
+package com.balugaq.jeg.core.listeners;
 
-import lombok.Data;
+import com.balugaq.jeg.api.objects.events.PatchEvent;
+import com.balugaq.jeg.utils.ItemStackUtil;
+import com.balugaq.jeg.utils.compatibility.Converter;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author balugaq
  * @since 1.9
  */
-@Data
-public class PersonalPatchOptions {
-    // Property name rule: function_addon_feature
-    private boolean display_EMCTech_EMCValue;
+public class DefaultItemPatchListener implements Listener {
+    /**
+     * Fix Official Slimefun: SlimefunItemStack break changes
+     * Fix 1.21+ Minecraft bug: SlimefunItemStack cannot cast to CraftItemStack
+     *
+     * @param event PatchEvent
+     */
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void patchItem(@NotNull PatchEvent event) {
+        event.setItemStack(Converter.getItem(ItemStackUtil.getCleanItem(event.getItemStack())));
+    }
 }

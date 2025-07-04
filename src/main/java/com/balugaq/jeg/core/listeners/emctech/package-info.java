@@ -25,41 +25,4 @@
  *
  */
 
-package com.balugaq.jeg.api.patches;
-
-import com.balugaq.jeg.api.objects.ids.PlayerUUID;
-import lombok.Getter;
-import org.bukkit.entity.Player;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
-/**
- * @author balugaq
- * @since 1.9
- */
-public class Patcher {
-    @Getter
-    private static final Map<PlayerUUID, PersonalPatchOptions> personalPatchOptions = new HashMap<>();
-
-    @ParametersAreNonnullByDefault
-    public static void addPersonalPatchOptions(UUID uuid, PersonalPatchOptions personalPatchOptions) {
-        Patcher.personalPatchOptions.put(PlayerUUID.warp(uuid), personalPatchOptions);
-    }
-
-    @ParametersAreNonnullByDefault
-    public static void addPersonalPatchOptions(Player player, PersonalPatchOptions personalPatchOptions) {
-        Patcher.personalPatchOptions.put(PlayerUUID.warp(player), personalPatchOptions);
-    }
-
-    @ParametersAreNonnullByDefault
-    public static void addPersonalPatchOptions(PlayerUUID uuid, PersonalPatchOptions personalPatchOptions) {
-        Patcher.personalPatchOptions.put(uuid, personalPatchOptions);
-    }
-
-    public static void shutdown() {
-        Patcher.personalPatchOptions.clear();
-    }
-}
+package com.balugaq.jeg.core.listeners.emctech;

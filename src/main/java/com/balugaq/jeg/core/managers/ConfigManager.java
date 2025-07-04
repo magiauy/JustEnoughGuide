@@ -90,6 +90,7 @@ public class ConfigManager extends AbstractManager {
     private final @NotNull Map<String, String> LOCAL_TRANSLATE;
     private final @NotNull List<String> BANLIST;
     private final @NotNull JavaPlugin plugin;
+    private final boolean EMC_VALUE_DISPLAY;
     private boolean RTS_SEARCH;
 
     public ConfigManager(@NotNull JavaPlugin plugin) {
@@ -261,6 +262,7 @@ public class ConfigManager extends AbstractManager {
         }
 
         this.BANLIST = plugin.getConfig().getStringList("banlist");
+        this.EMC_VALUE_DISPLAY = plugin.getConfig().getBoolean("improvements.emc-display-option", true);
     }
 
     private void setupDefaultConfig() {
@@ -402,5 +404,9 @@ public class ConfigManager extends AbstractManager {
 
     public boolean isRecipeComplete() {
         return RECIPE_COMPLETE;
+    }
+
+    public boolean isEMCValueDisplay() {
+        return EMC_VALUE_DISPLAY;
     }
 }

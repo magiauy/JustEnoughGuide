@@ -31,10 +31,10 @@ import com.balugaq.jeg.api.recipe_complete.RecipeCompletableRegistry;
 import com.balugaq.jeg.api.recipe_complete.source.base.RecipeCompleteProvider;
 import com.balugaq.jeg.core.integrations.Integration;
 import io.github.sefiraat.networks.NetworkStorage;
-import io.github.sefiraat.networks.Networks;
 import io.github.sefiraat.networks.network.NetworkRoot;
 import io.github.sefiraat.networks.network.NodeDefinition;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -57,7 +57,7 @@ public class NetworksExpansionIntegrationMain implements Integration {
 
     public static JavaPlugin getPlugin() {
         if (plugin == null) {
-            plugin = Networks.getInstance();
+            plugin = (JavaPlugin) Bukkit.getPluginManager().getPlugin("Networks");
         }
 
         return plugin;

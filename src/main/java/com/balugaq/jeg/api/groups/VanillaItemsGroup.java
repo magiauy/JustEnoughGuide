@@ -30,13 +30,13 @@ package com.balugaq.jeg.api.groups;
 import com.balugaq.jeg.api.interfaces.JEGSlimefunGuideImplementation;
 import com.balugaq.jeg.api.interfaces.NotDisplayInCheatMode;
 import com.balugaq.jeg.api.interfaces.VanillaItemShade;
+import com.balugaq.jeg.api.objects.enums.PatchScope;
 import com.balugaq.jeg.api.objects.events.GuideEvents;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.implementation.items.GroupSetup;
 import com.balugaq.jeg.utils.Debug;
 import com.balugaq.jeg.utils.EventUtil;
 import com.balugaq.jeg.utils.GuideUtil;
-import com.balugaq.jeg.utils.ItemStackUtil;
 import com.balugaq.jeg.utils.compatibility.Sounds;
 import com.balugaq.jeg.utils.formatter.Formats;
 import com.google.common.base.Preconditions;
@@ -228,7 +228,7 @@ public class VanillaItemsGroup extends FlexItemGroup {
         SlimefunGuideImplementation implementation = Slimefun.getRegistry().getSlimefunGuide(slimefunGuideMode);
 
         for (var ss : Formats.sub.getChars('b')) {
-            chestMenu.addItem(ss, ItemStackUtil.getCleanItem(ChestMenuUtils.getBackButton(player)));
+            chestMenu.addItem(ss, PatchScope.Back.patch(player, ChestMenuUtils.getBackButton(player)));
             chestMenu.addMenuClickHandler(ss, (pl, s, is, action) -> EventUtil.callEvent(new GuideEvents.BackButtonClickEvent(pl, is, s, action, chestMenu, implementation)).ifSuccess(() -> {
                 GuideHistory guideHistory = playerProfile.getGuideHistory();
                 if (action.isShiftClicked()) {
@@ -242,7 +242,7 @@ public class VanillaItemsGroup extends FlexItemGroup {
 
         // Search feature!
         for (var ss : Formats.sub.getChars('S')) {
-            chestMenu.addItem(ss, ItemStackUtil.getCleanItem(ChestMenuUtils.getSearchButton(player)));
+            chestMenu.addItem(ss, PatchScope.Search.patch(player, ChestMenuUtils.getSearchButton(player)));
             chestMenu.addMenuClickHandler(ss, (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.SearchButtonClickEvent(pl, item, slot, action, chestMenu, implementation)).ifSuccess(() -> {
                 pl.closeInventory();
 
@@ -260,7 +260,7 @@ public class VanillaItemsGroup extends FlexItemGroup {
         for (var ss : Formats.sub.getChars('P')) {
             chestMenu.addItem(
                     ss,
-                    ItemStackUtil.getCleanItem(ChestMenuUtils.getPreviousButton(
+                    PatchScope.PreviousPage.patch(player, ChestMenuUtils.getPreviousButton(
                             player, this.page, (slimefunItems.size() - 1) / Formats.sub.getChars('i').size() + 1)));
             chestMenu.addMenuClickHandler(ss, (p, slot, item, action) -> EventUtil.callEvent(new GuideEvents.PreviousButtonClickEvent(p, item, slot, action, chestMenu, implementation)).ifSuccess(() -> {
                 GuideUtil.removeLastEntry(playerProfile.getGuideHistory());
@@ -273,7 +273,7 @@ public class VanillaItemsGroup extends FlexItemGroup {
         for (var ss : Formats.sub.getChars('N')) {
             chestMenu.addItem(
                     ss,
-                    ItemStackUtil.getCleanItem(ChestMenuUtils.getNextButton(
+                    PatchScope.NextPage.patch(player, ChestMenuUtils.getNextButton(
                             player, this.page, (slimefunItems.size() - 1) / Formats.sub.getChars('i').size() + 1)));
             chestMenu.addMenuClickHandler(ss, (p, slot, item, action) -> EventUtil.callEvent(new GuideEvents.NextButtonClickEvent(p, item, slot, action, chestMenu, implementation)).ifSuccess(() -> {
                 GuideUtil.removeLastEntry(playerProfile.getGuideHistory());
@@ -285,7 +285,7 @@ public class VanillaItemsGroup extends FlexItemGroup {
         }
 
         for (var ss : Formats.sub.getChars('B')) {
-            chestMenu.addItem(ss, ItemStackUtil.getCleanItem(ChestMenuUtils.getBackground()));
+            chestMenu.addItem(ss, PatchScope.Background.patch(player, ChestMenuUtils.getBackground()));
             chestMenu.addMenuClickHandler(ss, ChestMenuUtils.getEmptyClickHandler());
         }
 
@@ -300,7 +300,7 @@ public class VanillaItemsGroup extends FlexItemGroup {
                 } else {
                     itemStack = slimefunItem.getItem();
                 }
-                chestMenu.addItem(contentSlots.get(i), ItemStackUtil.getCleanItem(itemStack), (pl, slot, itm, action) -> EventUtil.callEvent(new GuideEvents.ItemButtonClickEvent(pl, itm, slot, action, chestMenu, implementation)).ifSuccess(() -> {
+                chestMenu.addItem(contentSlots.get(i), PatchScope.SlimefunItem.patch(player, itemStack), (pl, slot, itm, action) -> EventUtil.callEvent(new GuideEvents.ItemButtonClickEvent(pl, itm, slot, action, chestMenu, implementation)).ifSuccess(() -> {
                     try {
                         if (implementation.getMode() != SlimefunGuideMode.SURVIVAL_MODE
                                 && (pl.isOp() || pl.hasPermission("slimefun.cheat.items"))) {

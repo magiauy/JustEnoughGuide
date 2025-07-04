@@ -31,6 +31,7 @@ import com.balugaq.jeg.api.groups.RTSSearchGroup;
 import com.balugaq.jeg.api.groups.SearchGroup;
 import com.balugaq.jeg.api.interfaces.BookmarkRelocation;
 import com.balugaq.jeg.api.interfaces.JEGSlimefunGuideImplementation;
+import com.balugaq.jeg.api.objects.enums.PatchScope;
 import com.balugaq.jeg.api.objects.events.GuideEvents;
 import com.balugaq.jeg.api.objects.events.RTSEvents;
 import com.balugaq.jeg.core.listeners.RTSListener;
@@ -165,7 +166,7 @@ public final class GuideUtil {
     public static void addRTSButton(@NotNull ChestMenu menu, @NotNull Player p, @NotNull PlayerProfile profile, @NotNull Format format, SlimefunGuideMode mode, @NotNull SlimefunGuideImplementation implementation) {
         if (JustEnoughGuide.getConfigManager().isRTSSearch()) {
             for (var ss : format.getChars('R')) {
-                menu.addItem(ss, ItemStackUtil.getCleanItem(Models.RTS_ITEM), (pl, slot, itemstack, action) -> EventUtil.callEvent(new GuideEvents.RTSButtonClickEvent(pl, itemstack, slot, action, menu, implementation)).ifSuccess(() -> {
+                menu.addItem(ss, PatchScope.RealTimeSearch.patch(p, Models.RTS_ITEM), (pl, slot, itemstack, action) -> EventUtil.callEvent(new GuideEvents.RTSButtonClickEvent(pl, itemstack, slot, action, menu, implementation)).ifSuccess(() -> {
                     try {
                         RTSSearchGroup.newRTSInventoryFor(pl, mode, (s, stateSnapshot) -> {
                             if (s == AnvilGUI.Slot.INPUT_LEFT) {
@@ -226,7 +227,7 @@ public final class GuideUtil {
             for (var s : b != null ? b.getBookMark(implementation, p) : format.getChars('C')) {
                 menu.addItem(
                         s,
-                        ItemStackUtil.getCleanItem(getBookMarkMenuButton()),
+                        PatchScope.BookMark.patch(p, getBookMarkMenuButton()),
                         (pl, slot, itemstack, action) -> EventUtil.callEvent(new GuideEvents.BookMarkButtonClickEvent(pl, itemstack, slot, action, menu, implementation)).ifSuccess(() -> {
                             implementation.openBookMarkGroup(pl, profile);
                             return false;
@@ -250,7 +251,7 @@ public final class GuideUtil {
             for (var ss : b != null ? b.getItemMark(implementation, p) : format.getChars('c')) {
                 menu.addItem(
                         ss,
-                        ItemStackUtil.getCleanItem(getItemMarkMenuButton()),
+                        PatchScope.ItemMark.patch(p, getItemMarkMenuButton()),
                         (pl, slot, itemstack, action) -> EventUtil.callEvent(new GuideEvents.ItemMarkButtonClickEvent(pl, itemstack, slot, action, menu, implementation)).ifSuccess(() -> {
                             implementation.openItemMarkGroup(itemGroup, pl, profile);
                             return false;

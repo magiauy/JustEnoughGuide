@@ -28,7 +28,12 @@
 package com.balugaq.jeg.core.integrations.emctech;
 
 import com.balugaq.jeg.core.integrations.Integration;
+import com.balugaq.jeg.core.listeners.emctech.EMCItemPatchListener;
+import com.balugaq.jeg.implementation.JustEnoughGuide;
+import com.balugaq.jeg.implementation.option.EMCValueDisplayOption;
+import com.balugaq.jeg.utils.Debug;
 import io.github.sefiraat.emctech.utils.EmcUtils;
+import io.github.thebusybiscuit.slimefun4.core.guide.options.SlimefunGuideSettings;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
@@ -38,6 +43,17 @@ import org.jetbrains.annotations.Range;
  * @since 1.9
  */
 public class EMCTechIntegrationMain implements Integration {
+    /**
+     * Get EMC value of itemStack
+     *
+     * @param itemStack The itemStack
+     * @return 0.0D if no EMC value, or EMC value
+     */
+    @Range(from = 0, to = Long.MAX_VALUE)
+    public static double getEMC(@NotNull ItemStack itemStack) {
+        return EmcUtils.getEmcValue(itemStack);
+    }
+
     @Override
     public @NotNull String getHookPlugin() {
         return "EMCTech";
@@ -45,19 +61,13 @@ public class EMCTechIntegrationMain implements Integration {
 
     @Override
     public void onEnable() {
+        if (JustEnoughGuide.getConfigManager().isEMCValueDisplay()) {
+            SlimefunGuideSettings.addOption(EMCValueDisplayOption.instance());
+            JustEnoughGuide.getListenerManager().registerListener(new EMCItemPatchListener());
+        }
     }
 
     @Override
     public void onDisable() {
-    }
-
-    /**
-     * Get EMC value of itemStack
-     * @param itemStack The itemStack
-     * @return 0.0D if no EMC value, or EMC value
-     */
-    @Range(from = 0, to = Long.MAX_VALUE)
-    public static double getEMC(ItemStack itemStack) {
-        return EmcUtils.getEmcValue(itemStack);
     }
 }

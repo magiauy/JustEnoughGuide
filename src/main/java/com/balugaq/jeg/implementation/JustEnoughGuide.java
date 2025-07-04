@@ -29,8 +29,8 @@ package com.balugaq.jeg.implementation;
 
 import com.balugaq.jeg.api.CustomGroupConfigurations;
 import com.balugaq.jeg.api.editor.GroupResorter;
+import com.balugaq.jeg.api.groups.SearchGroup;
 import com.balugaq.jeg.api.groups.VanillaItemsGroup;
-import com.balugaq.jeg.api.patches.Patcher;
 import com.balugaq.jeg.api.recipe_complete.source.base.RecipeCompleteProvider;
 import com.balugaq.jeg.core.managers.BookmarkManager;
 import com.balugaq.jeg.core.managers.CommandManager;
@@ -260,7 +260,7 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
             getLogger().info("正在加载物品组...");
             GroupSetup.setup();
             if (survivalOverride) {
-                CustomGroupConfigurations.load();
+                Bukkit.getScheduler().runTaskLaterAsynchronously(JustEnoughGuide.getInstance(), CustomGroupConfigurations::load, 1L);
             }
             getLogger().info("物品组加载完毕！");
 
@@ -294,6 +294,8 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
             }
         }
 
+        SearchGroup.init();
+
         getLogger().info("成功启用此附属");
     }
 
@@ -307,7 +309,6 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
 
         getIntegrationManager().shutdownIntegrations();
 
-        Patcher.shutdown();
         GroupSetup.shutdown();
         RecipeCompleteProvider.shutdown();
         GuideUtil.shutdown();

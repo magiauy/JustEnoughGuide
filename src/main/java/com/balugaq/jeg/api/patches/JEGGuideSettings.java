@@ -27,6 +27,7 @@
 
 package com.balugaq.jeg.api.patches;
 
+import com.balugaq.jeg.api.objects.enums.PatchScope;
 import com.balugaq.jeg.utils.ReflectionUtil;
 import com.balugaq.jeg.utils.compatibility.Converter;
 import com.balugaq.jeg.utils.formatter.Formats;
@@ -88,11 +89,11 @@ public class JEGGuideSettings {
         LocalizationService locale = Slimefun.getLocalization();
 
         // @formatter:off
-        ItemStack b = Converter.getItem(
+        ItemStack b = PatchScope.Background.patch(p, Converter.getItem(
                 SlimefunGuide.getItem(SlimefunGuideMode.SURVIVAL_MODE),
                 "&e\u21E6 " + locale.getMessage(p, "guide.back.title"),
                 "",
-                "&7" + locale.getMessage(p, "guide.back.guide"));
+                "&7" + locale.getMessage(p, "guide.back.guide")));
 
         for (int ss : Formats.settings.getChars('b')) {
             menu.addItem(ss, b, (pl, slot, item, action) -> {
@@ -116,10 +117,10 @@ public class JEGGuideSettings {
         contributorsLore.add("&7\u21E8 &e" + locale.getMessage(p, "guide.credits.open"));
 
         // @formatter:off
-        ItemStack s = Converter.getItem(
+        ItemStack s = PatchScope.SettingsContributors.patch(p, Converter.getItem(
                 SlimefunUtils.getCustomHead("e952d2b3f351a6b0487cc59db31bf5f2641133e5ba0006b18576e996a0293e52"),
                 "&c" + locale.getMessage(p, "guide.title.credits"),
-                contributorsLore.toArray(new String[0]));
+                contributorsLore.toArray(new String[0])));
         for (int ss : Formats.settings.getChars('s')) {
             menu.addItem(ss, s, (pl, slot, action, item) -> {
                 JEGContributorsMenu.open(pl, 0);
@@ -130,7 +131,7 @@ public class JEGGuideSettings {
 
 
         // @formatter:off
-        ItemStack v = Converter.getItem(
+        ItemStack v = PatchScope.SlimefunVersion.patch(p, Converter.getItem(
                 Material.WRITABLE_BOOK,
                 ChatColor.GREEN + locale.getMessage(p, "guide.title.versions"),
                 "&7&o" + locale.getMessage(p, "guide.tooltips.versions-notice"),
@@ -142,14 +143,14 @@ public class JEGGuideSettings {
                 "&cTHIS BUILD IS UNOFFICIAL BUILD, DO NOT REPORT TO SLIMEFUN DEV",
                 "",
                 "&fMinecraft: &a" + Bukkit.getBukkitVersion(),
-                "&fSlimefun: &a" + Slimefun.getVersion());
+                "&fSlimefun: &a" + Slimefun.getVersion()));
         for (int ss : Formats.settings.getChars('v')) {
             menu.addItem(ss, v, ChestMenuUtils.getEmptyClickHandler());
         }
         // @formatter:on
 
         // @formatter:off
-        ItemStack u = Converter.getItem(
+        ItemStack u = PatchScope.SlimefunSourceCode.patch(p, Converter.getItem(
                 Material.COMPARATOR,
                 "&e" + locale.getMessage(p, "guide.title.source"),
                 "",
@@ -162,7 +163,7 @@ public class JEGGuideSettings {
                 "&7&o如果你想让这个项目持续下去",
                 "&7&o你可以考虑对项目做出贡献",
                 "",
-                "&7\u21E8 &e点击前往汉化版 GitHub 仓库");
+                "&7\u21E8 &e点击前往汉化版 GitHub 仓库"));
         for (int ss : Formats.settings.getChars('u')) {
             menu.addItem(ss, u, (pl, slot, item, action) -> {
                 pl.closeInventory();
@@ -173,7 +174,7 @@ public class JEGGuideSettings {
         // @formatter:on
 
         // @formatter:off
-        ItemStack W = Converter.getItem(
+        ItemStack W = PatchScope.SlimefunWiki.patch(p, Converter.getItem(
                 Material.KNOWLEDGE_BOOK,
                 "&3" + locale.getMessage(p, "guide.title.wiki"),
                 "",
@@ -182,7 +183,7 @@ public class JEGGuideSettings {
                 "&7查看我们的由社区维护的维基",
                 "&7并考虑成为一名编辑者!",
                 "",
-                "&7\u21E8 &e点击前往非官方中文 Wiki");
+                "&7\u21E8 &e点击前往非官方中文 Wiki"));
         for (int ss : Formats.settings.getChars('W')) {
             menu.addItem(ss, W, (pl, slot, item, action) -> {
                 pl.closeInventory();
@@ -193,7 +194,7 @@ public class JEGGuideSettings {
         // @formatter:on
 
         // @formatter:off
-        ItemStack l = Converter.getItem(
+        ItemStack l = PatchScope.AddonCount.patch(p, Converter.getItem(
                 Material.BOOKSHELF,
                 "&3" + locale.getMessage(p, "guide.title.addons"),
                 "",
@@ -203,7 +204,7 @@ public class JEGGuideSettings {
                 "",
                 "&7该服务器已安装附属插件: &b" + Slimefun.getInstalledAddons().size(),
                 "",
-                "&7\u21E8 &e点击查看 Slimefun4 可用的附属插件");
+                "&7\u21E8 &e点击查看 Slimefun4 可用的附属插件"));
         for (int ss : Formats.settings.getChars('l')) {
             menu.addItem(ss, l, (pl, slot, item, action) -> {
                 pl.closeInventory();
@@ -218,7 +219,7 @@ public class JEGGuideSettings {
                 // @formatter:off
                 menu.addItem(
                         ss,
-                        Converter.getItem(
+                        PatchScope.UnofficialTips.patch(p, Converter.getItem(
                                 Material.REDSTONE_TORCH,
                                 "&4" + locale.getMessage(p, "guide.title.bugs"),
                                 "",
@@ -227,7 +228,7 @@ public class JEGGuideSettings {
                                 "&7Open Issues: &a" + github.getOpenIssues(),
                                 "&7Pending Pull Requests: &a" + github.getPendingPullRequests(),
                                 "",
-                                "&7\u21E8 &eClick to go to the Slimefun4 Bug Tracker"));
+                                "&7\u21E8 &eClick to go to the Slimefun4 Bug Tracker")));
                 // @formatter:on
 
                 menu.addMenuClickHandler(ss, (pl, slot, item, action) -> {
@@ -243,8 +244,8 @@ public class JEGGuideSettings {
         for (int ss : Formats.settings.getChars('U')) {
             menu.addItem(
                     ss,
-                    Converter.getItem(
-                            Material.TOTEM_OF_UNDYING, ChatColor.RED + locale.getMessage(p, "guide.work-in-progress")),
+                    PatchScope.UnknownFeature.patch(p, Converter.getItem(
+                            Material.TOTEM_OF_UNDYING, ChatColor.RED + locale.getMessage(p, "guide.work-in-progress"))),
                     (pl, slot, item, action) -> {
                         // Add something here
                         return false;
@@ -264,7 +265,7 @@ public class JEGGuideSettings {
             Optional<ItemStack> item = option.getDisplayItem(p, guide);
 
             if (item.isPresent()) {
-                menu.addItem(slot, item.get());
+                menu.addItem(slot, PatchScope.GuideOption.patch(p, item.get()));
                 menu.addMenuClickHandler(slot, (pl, s, stack, action) -> {
                     option.onClick(p, guide);
                     return false;

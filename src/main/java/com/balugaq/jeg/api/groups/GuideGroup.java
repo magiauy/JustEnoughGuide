@@ -29,10 +29,10 @@ package com.balugaq.jeg.api.groups;
 
 import com.balugaq.jeg.api.interfaces.JEGSlimefunGuideImplementation;
 import com.balugaq.jeg.api.interfaces.NotDisplayInCheatMode;
+import com.balugaq.jeg.api.objects.enums.PatchScope;
 import com.balugaq.jeg.api.objects.events.GuideEvents;
 import com.balugaq.jeg.utils.EventUtil;
 import com.balugaq.jeg.utils.GuideUtil;
-import com.balugaq.jeg.utils.ItemStackUtil;
 import com.balugaq.jeg.utils.formatter.Formats;
 import io.github.thebusybiscuit.slimefun4.api.items.groups.FlexItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
@@ -172,6 +172,7 @@ public abstract class GuideGroup extends FlexItemGroup {
 
     /**
      * Replace the icon.
+     *
      * @param slot The slot where the icon should be placed.
      * @param icon The icon to place.
      * @return The group itself.
@@ -183,6 +184,7 @@ public abstract class GuideGroup extends FlexItemGroup {
 
     /**
      * Replace the icon.
+     *
      * @param page      The page where the icon should be placed.
      * @param slot      The slot where the icon should be placed.
      * @param itemStack The icon to place
@@ -262,7 +264,7 @@ public abstract class GuideGroup extends FlexItemGroup {
                 jeg.createHeader(player, playerProfile, menu, Formats.helper);
             }
             for (var ss : Formats.helper.getChars('b')) {
-                menu.addItem(ss, ItemStackUtil.getCleanItem(ChestMenuUtils.getBackButton(player)));
+                menu.addItem(ss, PatchScope.Back.patch(player, ChestMenuUtils.getBackButton(player)));
                 menu.addMenuClickHandler(ss, (pl, s, is, action) -> EventUtil.callEvent(new GuideEvents.BackButtonClickEvent(pl, is, s, action, menu, guide)).ifSuccess(() -> {
                     GuideHistory guideHistory = playerProfile.getGuideHistory();
                     if (action.isShiftClicked()) {
@@ -275,7 +277,7 @@ public abstract class GuideGroup extends FlexItemGroup {
             }
 
             for (Map.Entry<Integer, ItemStack> entry : contents.getOrDefault(page, new LinkedHashMap<>()).entrySet()) {
-                menu.addItem(entry.getKey(), entry.getValue());
+                menu.addItem(entry.getKey(), PatchScope.FeatureDisplay.patch(player, entry.getValue()));
             }
 
             for (Map.Entry<Integer, ChestMenu.MenuClickHandler> entry : clickHandlers.getOrDefault(page, new LinkedHashMap<>()).entrySet()) {
@@ -289,7 +291,7 @@ public abstract class GuideGroup extends FlexItemGroup {
             for (var s : Formats.helper.getChars('P')) {
                 menu.addItem(
                         s,
-                        ItemStackUtil.getCleanItem(ChestMenuUtils.getPreviousButton(
+                        PatchScope.PreviousPage.patch(player, ChestMenuUtils.getPreviousButton(
                                 player, page, (this.contents.size() - 1) / 36 + 1)));
                 menu.addMenuClickHandler(s, (p, slot, item, action) -> EventUtil.callEvent(new GuideEvents.PreviousButtonClickEvent(p, item, slot, action, menu, guide)).ifSuccess(() -> {
                     if (page - 1 < 1) {
@@ -304,7 +306,7 @@ public abstract class GuideGroup extends FlexItemGroup {
             for (var s : Formats.helper.getChars('N')) {
                 menu.addItem(
                         s,
-                        ItemStackUtil.getCleanItem(ChestMenuUtils.getNextButton(
+                        PatchScope.NextPage.patch(player, ChestMenuUtils.getNextButton(
                                 player, page, (this.contents.size() - 1) / 36 + 1)));
                 menu.addMenuClickHandler(s, (p, slot, item, action) -> EventUtil.callEvent(new GuideEvents.NextButtonClickEvent(p, item, slot, action, menu, guide)).ifSuccess(() -> {
                     if (page + 1 > this.contents.size()) {

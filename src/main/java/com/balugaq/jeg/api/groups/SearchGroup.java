@@ -32,6 +32,7 @@ import com.balugaq.jeg.api.interfaces.NotDisplayInCheatMode;
 import com.balugaq.jeg.api.interfaces.NotDisplayInSurvivalMode;
 import com.balugaq.jeg.api.objects.Timer;
 import com.balugaq.jeg.api.objects.enums.FilterType;
+import com.balugaq.jeg.api.objects.enums.PatchScope;
 import com.balugaq.jeg.api.objects.events.GuideEvents;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.Debug;
@@ -67,6 +68,7 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.chat.ChatInput;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.collections.RandomizedSet;
 import io.github.thebusybiscuit.slimefun4.utils.ChatUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
+import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.AContainer;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.MachineRecipe;
@@ -114,8 +116,8 @@ import java.util.stream.Collectors;
 public class SearchGroup extends FlexItemGroup {
     @Deprecated
     public static final Integer ACONTAINER_OFFSET = 50000;
-    public static final Map<Character, Reference<Set<SlimefunItem>>> CACHE = new HashMap<>(); // fast way for by item name
-    public static final Map<Character, Reference<Set<SlimefunItem>>> CACHE2 = new HashMap<>(); // fast way for by display item name
+    public static final Char2ObjectOpenHashMap<Reference<Set<SlimefunItem>>> CACHE = new Char2ObjectOpenHashMap<>(); // fast way for by item name
+    public static final Char2ObjectOpenHashMap<Reference<Set<SlimefunItem>>> CACHE2 = new Char2ObjectOpenHashMap<>(); // fast way for by display item name
     public static final Map<String, Reference<Set<String>>> SPECIAL_CACHE = new HashMap<>();
     @Deprecated
     public static final Set<String> SHARED_CHARS = new HashSet<>();
@@ -325,7 +327,7 @@ public class SearchGroup extends FlexItemGroup {
             LOADED = true;
             Debug.debug("Initializing Search Group...");
             Timer.start();
-            Bukkit.getScheduler().runTaskAsynchronously(JAVA_PLUGIN, () -> {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(JAVA_PLUGIN, () -> {
                 // Initialize asynchronously
                 int i = 0;
                 for (SlimefunItem item : Slimefun.getRegistry().getEnabledSlimefunItems()) {
@@ -839,7 +841,7 @@ public class SearchGroup extends FlexItemGroup {
                 Debug.debug("Shared cache: " + JustEnoughGuide.getConfigManager().getSharedChars().size());
                 Debug.debug("Cache 1 (Keywords): " + CACHE.size());
                 Debug.debug("Cache 2 (Display Recipes): " + CACHE2.size());
-            });
+            }, 1L);
         }
     }
 
@@ -1034,7 +1036,7 @@ public class SearchGroup extends FlexItemGroup {
         chestMenu.addMenuOpeningHandler(pl -> pl.playSound(pl.getLocation(), Sounds.GUIDE_BUTTON_CLICK_SOUND, 1, 1));
 
         for (var ss : Formats.sub.getChars('b')) {
-            chestMenu.addItem(ss, ItemStackUtil.getCleanItem(ChestMenuUtils.getBackButton(player, "", "&f左键: &7返回上一页", "&fShift + 左键: &7返回主菜单")));
+            chestMenu.addItem(ss, PatchScope.Back.patch(player, ChestMenuUtils.getBackButton(player, "", "&f左键: &7返回上一页", "&fShift + 左键: &7返回主菜单")));
             chestMenu.addMenuClickHandler(ss, (pl, s, is, action) -> EventUtil.callEvent(new GuideEvents.BackButtonClickEvent(pl, is, s, action, chestMenu, implementation)).ifSuccess(() -> {
                 GuideHistory guideHistory = playerProfile.getGuideHistory();
                 if (action.isShiftClicked()) {
@@ -1048,7 +1050,7 @@ public class SearchGroup extends FlexItemGroup {
 
         // Search feature!
         for (var ss : Formats.sub.getChars('S')) {
-            chestMenu.addItem(ss, ItemStackUtil.getCleanItem(ChestMenuUtils.getSearchButton(player)));
+            chestMenu.addItem(ss, PatchScope.Search.patch(player, ChestMenuUtils.getSearchButton(player)));
             chestMenu.addMenuClickHandler(ss, (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.SearchButtonClickEvent(pl, item, slot, action, chestMenu, implementation)).ifSuccess(() -> {
                 pl.closeInventory();
 
@@ -1066,7 +1068,7 @@ public class SearchGroup extends FlexItemGroup {
         for (var ss : Formats.sub.getChars('P')) {
             chestMenu.addItem(
                     ss,
-                    ItemStackUtil.getCleanItem(ChestMenuUtils.getPreviousButton(
+                    PatchScope.PreviousPage.patch(player, ChestMenuUtils.getPreviousButton(
                             player, this.page, (this.slimefunItemList.size() - 1) / Formats.sub.getChars('i').size() + 1)));
             chestMenu.addMenuClickHandler(ss, (p, slot, item, action) -> EventUtil.callEvent(new GuideEvents.PreviousButtonClickEvent(p, item, slot, action, chestMenu, implementation)).ifSuccess(() -> {
                 GuideUtil.removeLastEntry(playerProfile.getGuideHistory());
@@ -1079,7 +1081,7 @@ public class SearchGroup extends FlexItemGroup {
         for (var ss : Formats.sub.getChars('N')) {
             chestMenu.addItem(
                     ss,
-                    ItemStackUtil.getCleanItem(ChestMenuUtils.getNextButton(
+                    PatchScope.NextPage.patch(player, ChestMenuUtils.getNextButton(
                             player, this.page, (this.slimefunItemList.size() - 1) / Formats.sub.getChars('i').size() + 1)));
             chestMenu.addMenuClickHandler(ss, (p, slot, item, action) -> EventUtil.callEvent(new GuideEvents.NextButtonClickEvent(p, item, slot, action, chestMenu, implementation)).ifSuccess(() -> {
                 GuideUtil.removeLastEntry(playerProfile.getGuideHistory());
@@ -1091,7 +1093,7 @@ public class SearchGroup extends FlexItemGroup {
         }
 
         for (var ss : Formats.sub.getChars('B')) {
-            chestMenu.addItem(ss, ItemStackUtil.getCleanItem(ChestMenuUtils.getBackground()));
+            chestMenu.addItem(ss, PatchScope.Background.patch(player, ChestMenuUtils.getBackground()));
             chestMenu.addMenuClickHandler(ss, ChestMenuUtils.getEmptyClickHandler());
         }
 
@@ -1121,7 +1123,7 @@ public class SearchGroup extends FlexItemGroup {
                             ItemFlag.HIDE_ENCHANTS,
                             JEGVersionedItemFlag.HIDE_ADDITIONAL_TOOLTIP);
                 }));
-                chestMenu.addItem(contentSlots.get(i), ItemStackUtil.getCleanItem(itemstack), (pl, slot, itm, action) -> EventUtil.callEvent(new GuideEvents.ItemButtonClickEvent(pl, itm, slot, action, chestMenu, implementation)).ifSuccess(() -> {
+                chestMenu.addItem(contentSlots.get(i), PatchScope.SearchItem.patch(player, itemstack), (pl, slot, itm, action) -> EventUtil.callEvent(new GuideEvents.ItemButtonClickEvent(pl, itm, slot, action, chestMenu, implementation)).ifSuccess(() -> {
                     try {
                         if (implementation.getMode() != SlimefunGuideMode.SURVIVAL_MODE
                                 && (pl.isOp() || pl.hasPermission("slimefun.cheat.items"))) {

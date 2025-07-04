@@ -27,6 +27,7 @@
 
 package com.balugaq.jeg.api.patches;
 
+import com.balugaq.jeg.api.objects.enums.PatchScope;
 import com.balugaq.jeg.utils.compatibility.Converter;
 import com.balugaq.jeg.utils.formatter.Formats;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuide;
@@ -73,8 +74,8 @@ final class JEGContributorsMenu {
         for (int ss : Formats.contributors.getChars('b')) {
             menu.addItem(
                     ss,
-                    Converter.getItem(ChestMenuUtils.getBackButton(
-                            p, "", "&7" + Slimefun.getLocalization().getMessage(p, "guide.back.settings"))));
+                    PatchScope.Back.patch(p, Converter.getItem(ChestMenuUtils.getBackButton(
+                            p, "", "&7" + Slimefun.getLocalization().getMessage(p, "guide.back.settings")))));
             menu.addMenuClickHandler(ss, (pl, slot, item, action) -> {
                 JEGGuideSettings.openSettings(pl, p.getInventory().getItemInMainHand());
                 return false;
@@ -92,7 +93,7 @@ final class JEGContributorsMenu {
             ItemStack skull = getContributorHead(p, contributor);
             int ss = slots.get(i - page * sizePerPage);
 
-            menu.addItem(ss, skull);
+            menu.addItem(ss, PatchScope.Contributor.patch(p, skull));
             menu.addMenuClickHandler(ss, (pl, slot, item, action) -> {
                 if (contributor.getProfile() != null) {
                     pl.closeInventory();
@@ -105,7 +106,7 @@ final class JEGContributorsMenu {
         int pages = (contributors.size() - 1) / sizePerPage + 1;
 
         for (int ss : Formats.contributors.getChars('P')) {
-            menu.addItem(ss, ChestMenuUtils.getPreviousButton(p, page + 1, pages));
+            menu.addItem(ss, PatchScope.PreviousPage.patch(p, ChestMenuUtils.getPreviousButton(p, page + 1, pages)));
             menu.addMenuClickHandler(ss, (pl, slot, item, action) -> {
                 if (page > 0) {
                     open(pl, page - 1);
@@ -116,7 +117,7 @@ final class JEGContributorsMenu {
         }
 
         for (int ss : Formats.contributors.getChars('N')) {
-            menu.addItem(ss, ChestMenuUtils.getNextButton(p, page + 1, pages));
+            menu.addItem(ss, PatchScope.NextPage.patch(p, ChestMenuUtils.getNextButton(p, page + 1, pages)));
             menu.addMenuClickHandler(ss, (pl, slot, item, action) -> {
                 if (page + 1 < pages) {
                     open(pl, page + 1);

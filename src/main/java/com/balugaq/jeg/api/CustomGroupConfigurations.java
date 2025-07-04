@@ -30,6 +30,7 @@ package com.balugaq.jeg.api;
 import com.balugaq.jeg.api.cfgparse.parser.ConfigurationParser;
 import com.balugaq.jeg.api.groups.CustomGroup;
 import com.balugaq.jeg.api.objects.CustomGroupConfiguration;
+import com.balugaq.jeg.api.objects.annotations.CallTimeSensitive;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.Debug;
 import com.balugaq.jeg.utils.formatter.Formats;
@@ -51,6 +52,7 @@ public class CustomGroupConfigurations {
     private static final List<CustomGroupConfiguration> configurations = new ArrayList<>();
     private static final Map<String, CustomGroup> groups = new HashMap<>();
 
+    @CallTimeSensitive(CallTimeSensitive.AfterSlimefunLoaded)
     public static void load() {
         if (!fileCustomGroups.exists()) {
             JustEnoughGuide.getInstance().saveResource(FILE_NAME, false);
@@ -87,6 +89,9 @@ public class CustomGroupConfigurations {
         for (CustomGroupConfiguration ccg : configurations) {
             if (ccg.enabled()) {
                 CustomGroup group = new CustomGroup(ccg);
+                if (group.objects.isEmpty()) {
+                    continue;
+                }
                 group.register(JustEnoughGuide.getInstance());
                 CustomGroupConfigurations.groups.put(ccg.id(), group);
             }

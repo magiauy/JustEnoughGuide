@@ -28,14 +28,18 @@
 package com.balugaq.jeg.api.objects.events;
 
 import com.balugaq.jeg.api.objects.enums.PatchScope;
+import com.balugaq.jeg.utils.Debug;
+import com.balugaq.jeg.utils.ItemStackUtil;
+import com.balugaq.jeg.utils.compatibility.Converter;
 import lombok.Getter;
-import lombok.With;
+import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author balugaq
@@ -44,29 +48,34 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 public class PatchEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
-    private final PatchScope patchScope;
-    private final Player player;
-    private final ItemStack itemStack;
+    private final @NotNull PatchScope patchScope;
+    private final @NotNull Player player;
+    @Setter
+    private @Nullable ItemStack itemStack;
 
-    public PatchEvent(final @NotNull PatchScope patchScope, final @NotNull Player player, final @NotNull ItemStack itemStack) {
+    public PatchEvent(final @NotNull PatchScope patchScope, final @NotNull Player player, final @Nullable ItemStack itemStack) {
         super(!Bukkit.isPrimaryThread());
         this.patchScope = patchScope;
         this.player = player;
         this.itemStack = itemStack;
     }
 
-    @Override
-    public final @NotNull HandlerList getHandlers() {
-        return handlers;
-    }
-
     public static @NotNull HandlerList getHandlerList() {
         return handlers;
     }
 
-    public static ItemStack patch(final @NotNull PatchScope patchScope, final @NotNull Player player, final @NotNull ItemStack itemStack) {
-        PatchEvent event = new PatchEvent(patchScope, player, itemStack);
-        Bukkit.getPluginManager().callEvent(event);
+    public static ItemStack patch(final @NotNull PatchScope patchScope, final @NotNull Player player, final @Nullable ItemStack itemStack) {
+        PatchEvent event = new PatchEvent(patchScope, player, Converter.getItem(ItemStackUtil.getCleanItem(itemStack)));
+        try {
+            Bukkit.getPluginManager().callEvent(event);
+        } catch (Throwable e) {
+            Debug.trace(e);
+        }
         return event.itemStack;
+    }
+
+    @Override
+    public final @NotNull HandlerList getHandlers() {
+        return handlers;
     }
 }
