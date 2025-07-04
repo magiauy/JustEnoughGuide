@@ -86,7 +86,7 @@ public class CustomGroup extends FlexItemGroup {
         List<SlimefunItem> slimefunItems = new ArrayList<>();
         for (Object obj : configuration.objects()) {
             if (obj instanceof ItemGroup group) {
-                if (configuration.mode() == CustomGroupConfiguration.Mode.MERGE) {
+                if (configuration.mode() == CustomGroupConfiguration.Mode.TRANSFER) {
                     // hide ItemGroup / SlimefunItem
                     GuideUtil.setForceHiddens(group, true);
                 }
