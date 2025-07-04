@@ -44,6 +44,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -129,7 +130,7 @@ public class CategoriesCommand implements JEGCommand {
 
     }
 
-    private static ItemGroup getItemGroupOrNull(List<ItemGroup> groups, int index) {
+    private static @Nullable ItemGroup getItemGroupOrNull(@NotNull List<ItemGroup> groups, int index) {
         return index < groups.size() ? groups.get(index) : null;
     }
 

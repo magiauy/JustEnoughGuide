@@ -226,7 +226,7 @@ public class IntegrationManager extends AbstractManager {
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    public Run addIntegration(boolean enabled, Supplier<Integration> supplier) {
+    public Run addIntegration(boolean enabled, @NotNull Supplier<Integration> supplier) {
         if (enabled) {
             Integration integration = supplier.get();
             integrations.add(integration);
@@ -251,7 +251,7 @@ public class IntegrationManager extends AbstractManager {
             return FAILURE.clone();
         }
 
-        public Run or(Supplier<Run> callable) {
+        public Run or(@NotNull Supplier<Run> callable) {
             if (!success) {
                 return callable.get();
             } else {

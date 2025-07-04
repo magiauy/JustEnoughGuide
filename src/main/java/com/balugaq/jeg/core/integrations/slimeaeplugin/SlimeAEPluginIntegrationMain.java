@@ -61,7 +61,7 @@ public class SlimeAEPluginIntegrationMain implements Integration {
     public static final BlockFace[] VALID_FACES = new BlockFace[]{BlockFace.UP, BlockFace.DOWN, BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST};
     public static @Nullable JavaPlugin plugin = null;
 
-    public static JavaPlugin getPlugin() {
+    public static @Nullable JavaPlugin getPlugin() {
         if (plugin == null) {
             plugin = (JavaPlugin) Bukkit.getPluginManager().getPlugin("SlimeAEPlugin");
         }

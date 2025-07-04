@@ -51,7 +51,7 @@ import java.util.List;
 @Getter
 public class CommandManager extends AbstractManager {
 
-    private final JustEnoughGuide plugin;
+    private final @NotNull JustEnoughGuide plugin;
     private final @NotNull JEGCommands commands;
 
     public CommandManager(@NotNull JustEnoughGuide plugin) {

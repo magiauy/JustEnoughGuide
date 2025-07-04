@@ -49,7 +49,7 @@ import java.util.Optional;
 public class FinalTechValueDisplayOption implements SlimefunGuideOption<Boolean> {
     public static final @NotNull FinalTechValueDisplayOption instance = new FinalTechValueDisplayOption();
 
-    public static FinalTechValueDisplayOption instance() {
+    public static @NotNull FinalTechValueDisplayOption instance() {
         return instance;
     }
 
@@ -57,11 +57,11 @@ public class FinalTechValueDisplayOption implements SlimefunGuideOption<Boolean>
         return new NamespacedKey(JustEnoughGuide.getInstance(), "finaltechv1_emc_item");
     }
 
-    public static boolean isEnabled(Player p) {
+    public static boolean isEnabled(@NotNull Player p) {
         return getSelectedOption(p);
     }
 
-    public static boolean getSelectedOption(Player p) {
+    public static boolean getSelectedOption(@NotNull Player p) {
         return !PersistentDataAPI.hasByte(p, key0()) || PersistentDataAPI.getByte(p, key0()) == (byte) 1;
     }
 
@@ -76,7 +76,7 @@ public class FinalTechValueDisplayOption implements SlimefunGuideOption<Boolean>
     }
 
     @Override
-    public Optional<ItemStack> getDisplayItem(Player p, ItemStack guide) {
+    public @NotNull Optional<ItemStack> getDisplayItem(@NotNull Player p, ItemStack guide) {
         boolean enabled = getSelectedOption(p, guide).orElse(true);
         ItemStack item = Converter.getItem(
                 isEnabled(p) ? Material.RESPAWN_ANCHOR : Material.REDSTONE_LAMP,
@@ -94,20 +94,20 @@ public class FinalTechValueDisplayOption implements SlimefunGuideOption<Boolean>
     }
 
     @Override
-    public void onClick(Player p, ItemStack guide) {
+    public void onClick(@NotNull Player p, @NotNull ItemStack guide) {
         setSelectedOption(p, guide, !getSelectedOption(p, guide).orElse(true));
         JEGGuideSettings.openSettings(p, guide);
     }
 
     @Override
-    public Optional<Boolean> getSelectedOption(Player p, ItemStack guide) {
+    public @NotNull Optional<Boolean> getSelectedOption(@NotNull Player p, ItemStack guide) {
         NamespacedKey key = getKey();
         boolean value = !PersistentDataAPI.hasByte(p, key) || PersistentDataAPI.getByte(p, key) == (byte) 1;
         return Optional.of(value);
     }
 
     @Override
-    public void setSelectedOption(Player p, ItemStack guide, Boolean value) {
+    public void setSelectedOption(@NotNull Player p, ItemStack guide, Boolean value) {
         PersistentDataAPI.setByte(p, getKey(), value ? (byte) 1 : (byte) 0);
     }
 }
