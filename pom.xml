@@ -284,7 +284,7 @@
         <dependency>
             <groupId>io.taraxacum</groupId>
             <artifactId>FinalTECH1</artifactId>
-            <version>Build 29 zh-CN(ECRO) (git b7d5167)</version>
+            <version>Build-29</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/FinalTECH-Build 29.jar</systemPath>
         </dependency>
@@ -292,7 +292,7 @@
         <dependency>
             <groupId>io.taraxacum</groupId>
             <artifactId>FinalTECH2</artifactId>
-            <version>Build 75 zh-CN(ECRO) (git 163ad4e)</version>
+            <version>Build-75</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/FinalTECH-Build 75.jar</systemPath>
         </dependency>
