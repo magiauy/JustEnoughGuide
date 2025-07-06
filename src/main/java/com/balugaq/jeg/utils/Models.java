@@ -60,7 +60,10 @@ public class Models {
             Material.SLIME_BALL,
             "&b配方补全书",
             "",
-            "&f点击进行配方补全"
+            "&f点击进行配方补全",
+            "&f左键打开补全界面",
+            "&f右键补全1个",
+            "&fShift+右键补全64个"
     ));
     public static final SlimefunItemStack USAGE_INFO = new SlimefunItemStack("JEG_RECIPE_COMPLETE_USAGE_INFO", Converter.getItem(
             Material.PAPER,
@@ -78,6 +81,7 @@ public class Models {
             "&f如果连接了网络，会尝试在网络中获取配方材料（仅网络拓展有效）",
             "&f如果连接了AE网络，会尝试在AE网络中获取配方材料",
             "",
+            "&9  配方书点击机制 &7vs&9  补全界面点击机制",
             "&a左键&e点击打开配方书 &7| &a左键&e点击物品补全1次",
             "&a右键&e点击可再次补全 &7| &a右键&e点击物品补全64次",
             "&e补全后再次&aShift+右键&e点击配方书补全64次"
