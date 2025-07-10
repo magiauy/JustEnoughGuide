@@ -265,90 +265,30 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                     groups.add(group);
                     continue;
                 }
+
                 if (!guideTierMode && GuideUtil.isForceHidden(group)) {
                     continue;
                 }
-                if (group instanceof FlexItemGroup flexItemGroup) {
-                    NamespacedKey key = group.getKey();
-                    String namespace = key.getNamespace();
-                    if (namespace.equalsIgnoreCase("logitech")) {
-                        if (key.getKey().equals("tools") || key.getKey().equals("info")) {
-                            continue;
-                        }
-                    }
-                    if (group.getClass().getName().equals("io.github.mooy1.infinityexpansion.categories.InfinityGroup")) {
+
+                if (DisplayInCheatMode.Checker.contains(group)) {
+                    if (DisplayInCheatMode.Checker.isSpecial(group)) {
+                        specialGroups.add(group);
                         continue;
-                    }
-                    if (group.getClass().getName().equals("me.lucasgithuber.obsidianexpansion.utils.ObsidianForgeGroup")) {
-                        continue;
-                    }
-                    if (namespace.equalsIgnoreCase("networks") || namespace.equalsIgnoreCase("networks-changed")) {
-                        if (group.getClass().getName()
-                                .equalsIgnoreCase("com.balugaq.netex.api.groups.MainItemGroup")) {
-                            continue;
-                        }
-                        if (group instanceof NestedItemGroup) {
-                            groups.add(group);
-                            continue;
-                        }
-                    }
-                    if (namespace.equalsIgnoreCase("finaltech") || namespace.equalsIgnoreCase("finaltech-changed")) {
-                        if (group.getClass().getName()
-                                .equalsIgnoreCase("io.taraxacum.finaltech.core.group.MainItemGroup")) {
-                            continue;
-                        }
-                        if (group instanceof NestedItemGroup) {
-                            groups.add(group);
-                            continue;
-                        }
-                    }
-                    if (namespace.equalsIgnoreCase("mobengineering")) {
-                        if (group.getClass().getName()
-                                .equalsIgnoreCase("io.github.ytdd9527.mobengineering.implementation.slimefun.groups.MainItemGroup")) {
-                            continue;
-                        }
-                        if (group instanceof NestedItemGroup) {
-                            groups.add(group);
-                            continue;
-                        }
-                    }
-                    if (namespace.equalsIgnoreCase("nexcavate")) {
-                        if (group.getClass().getName()
-                                .equalsIgnoreCase("me.char321.nexcavate.slimefun.NEItemGroup")) {
-                            continue;
-                        }
-                    }
-                    if (flexItemGroup.isVisible(p, profile, SlimefunGuideMode.SURVIVAL_MODE)) {
-                        groups.add(group);
                     } else {
-                        if (!flexItemGroup.getClass().getName().startsWith("com.balugaq.netex.api.groups")) {
-                            specialGroups.add(group);
-                        }
+                        groups.add(group);
+                        continue;
                     }
-                } else if (!group.isHidden(p)) {
-                    groups.add(group);
-                } else if (group instanceof SeasonalItemGroup || group instanceof LockedItemGroup) {
+                } else if (NotDisplayInCheatMode.Checker.contains(group)) {
+                    continue;
+                }
+
+                if (group instanceof SeasonalItemGroup || group instanceof LockedItemGroup) {
                     specialGroups.add(group);
                 } else {
-                    if (group.getClass()
-                            .getName()
-                            .equalsIgnoreCase("io.github.mooy1.infinityexpansion.infinitylib.groups.SubGroup")) {
-                        if (group.getKey().getKey().equalsIgnoreCase("infinity_cheat")) {
-                            specialGroups.add(group);
-                        }
-                    } else if (group.getClass()
-                            .getName()
-                            .equalsIgnoreCase("me.lucasgithuber.obsidianexpansion.infinitylib.groups.SubGroup")) {
-                        if (group.getKey().getKey().equalsIgnoreCase("omc_forge_cheat")) {
-                            specialGroups.add(group);
-                        }
-                    } else if (group.getClass()
-                            .getName()
-                            .startsWith("io.github.sefiraat.networks.slimefun.NetworksItemGroups")) {
-                        // io.github.sefiraat.networks.slimefun.NetworksItemGroups.HiddenItemGroup
-                        if (group.getKey().getKey().equalsIgnoreCase("disabled_items")) {
-                            specialGroups.add(group);
-                        }
+                    if (!group.isHidden(p)) {
+                        groups.add(group);
+                    } else {
+                        specialGroups.add(group);
                     }
                 }
             } catch (Exception | LinkageError x) {

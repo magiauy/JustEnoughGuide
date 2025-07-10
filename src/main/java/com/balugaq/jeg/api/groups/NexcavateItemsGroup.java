@@ -28,6 +28,7 @@
 package com.balugaq.jeg.api.groups;
 
 import city.norain.slimefun4.VaultIntegration;
+import com.balugaq.jeg.api.interfaces.DisplayInCheatMode;
 import com.balugaq.jeg.api.interfaces.JEGSlimefunGuideImplementation;
 import com.balugaq.jeg.api.interfaces.NotDisplayInSurvivalMode;
 import com.balugaq.jeg.api.objects.annotations.CallTimeSensitive;
@@ -78,6 +79,7 @@ import java.util.logging.Level;
  * @since 1.1
  */
 @SuppressWarnings({"deprecation", "unused"})
+@DisplayInCheatMode
 @NotDisplayInSurvivalMode
 public class NexcavateItemsGroup extends FlexItemGroup {
     private static final List<SlimefunItem> ALL_SLIMEFUN_ITEMS = Slimefun.getRegistry().getAllSlimefunItems();
@@ -111,7 +113,7 @@ public class NexcavateItemsGroup extends FlexItemGroup {
         this.page = 1;
         List<SlimefunItem> slimefunItemList = new ArrayList<>();
         for (SlimefunItem item : ALL_SLIMEFUN_ITEMS) {
-            if ("nexcavate".equalsIgnoreCase(item.getAddon().getName())) {
+            if ("Nexcavate".equalsIgnoreCase(item.getAddon().getName())) {
                 slimefunItemList.add(item);
             }
         }
@@ -192,7 +194,7 @@ public class NexcavateItemsGroup extends FlexItemGroup {
             @NotNull Player player,
             @NotNull PlayerProfile playerProfile,
             @NotNull SlimefunGuideMode slimefunGuideMode) {
-        ChestMenu chestMenu = new ChestMenu("隐藏物品");
+        ChestMenu chestMenu = new ChestMenu("文明复兴物品");
 
         chestMenu.setEmptySlotsClickable(false);
         chestMenu.addMenuOpeningHandler(pl -> pl.playSound(pl.getLocation(), Sounds.GUIDE_BUTTON_CLICK_SOUND, 1, 1));

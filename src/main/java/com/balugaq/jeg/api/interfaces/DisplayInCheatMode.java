@@ -27,6 +27,10 @@
 
 package com.balugaq.jeg.api.interfaces;
 
+import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.groups.FlexItemGroup;
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -49,4 +53,22 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface DisplayInCheatMode {
+    class Checker {
+        public static boolean contains(@NotNull ItemGroup group) {
+            return isSpecial(group);
+        }
+
+        public static boolean isSpecial(@NotNull ItemGroup group) {
+            String namespace = group.getKey().getNamespace();
+            String key = group.getKey().getKey();
+            String className = group.getClass().getName();
+
+            //@formatter:off
+            return
+                    (className.equals("io.github.mooy1.infinityexpansion.infinitylib.groups.SubGroup") && ((namespace.equals("infinityexpansion") || namespace.equals("infinityexpansion-changed")) && key.equals("infinity_cheat")))
+                    || (className.equals("me.lucasgithuber.obsidianexpansion.infinitylib.groups.SubGroup") && (namespace.equals("obsidianexpansion") && key.equals("omc_forge_cheat")))
+                    || className.equals("io.github.sefiraat.networks.slimefun.NetworksItemGroups$HiddenItemGroup");
+            //@formatter:on
+        }
+    }
 }

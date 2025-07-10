@@ -27,6 +27,12 @@
 
 package com.balugaq.jeg.api.interfaces;
 
+import com.balugaq.jeg.utils.Debug;
+import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.groups.FlexItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.groups.SubItemGroup;
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -49,4 +55,27 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface NotDisplayInCheatMode {
+    class Checker {
+        public static boolean contains(@NotNull ItemGroup group) {
+            String namespace = group.getKey().getNamespace();
+            String key = group.getKey().getKey();
+            String className = group.getClass().getName();
+
+            //@formatter:off
+            return
+                    className.equals("io.github.sefiraat.networks.slimefun.groups.DummyItemGroup")
+                    || className.startsWith("com.balugaq.netex.api.groups")
+                    || className.startsWith("io.github.ytdd9527.mobengineering.implementation.slimefun.groups")
+                    || className.startsWith("io.taraxacum.finaltech.core.group")
+                    || className.equals("me.matl114.logitech.utils.UtilClass.MenuClass.DummyItemGroup")
+                    || className.equals("me.matl114.logitech.Utils.UtilClass.MenuClass.DummyItemGroup")
+                    || className.equals("me.lucasgithuber.obsidianexpansion.utils.ObsidianForgeGroup")
+                    || className.equals("me.char321.nexcavate.slimefun.NEItemGroup")
+                    || className.equals("io.github.mooy1.infinityexpansion.categories.InfinityGroup")
+                    || className.equals("io.github.mooy1.infinityexpansion.infinitylib.groups.SubGroup")
+                    || className.equals("me.lucasgithuber.obsidianexpansion.infinitylib.groups.SubGroup")
+                    || (namespace.equals("logitech") && (key.equals("info") || key.equals("tools")));
+            //@formatter:on
+        }
+    }
 }

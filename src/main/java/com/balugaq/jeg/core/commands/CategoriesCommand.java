@@ -29,6 +29,7 @@ package com.balugaq.jeg.core.commands;
 
 import com.balugaq.jeg.api.interfaces.JEGCommand;
 import com.balugaq.jeg.utils.ClipboardUtil;
+import com.balugaq.jeg.utils.ItemStackUtil;
 import com.balugaq.jeg.utils.compatibility.Converter;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
@@ -94,21 +95,24 @@ public class CategoriesCommand implements JEGCommand {
             if (group != null) {
                 ItemStack catItem = group.getItem(p).clone();
                 ItemMeta catMeta = catItem.getItemMeta();
-                List<String> catLore = catMeta.getLore();
+                List<String> categoryLore = catMeta.getLore();
 
                 String id = group.getKey().getNamespace() + ":" + group.getKey().getKey();
-                if (catLore == null) {
-                    catLore = new ArrayList<>(1);
+                if (categoryLore == null) {
+                    categoryLore = new ArrayList<>(1);
                 }
-                catLore.set(catLore.size() - 1, ChatColors.color("&6ID: " + id)); // Replaces the "Click to Open" line
-                catLore.add(ChatColors.color("&a点击复制到聊天栏"));
-                catMeta.setLore(catLore);
+                categoryLore.set(categoryLore.size() - 1, ChatColors.color("&6ID: " + id)); // Replaces the "Click to Open" line
+                categoryLore.add("class: " + group.getClass().getName());
+                categoryLore.add(ChatColors.color("&a点击复制到聊天栏"));
+                catMeta.setLore(categoryLore);
                 catItem.setItemMeta(catMeta);
                 menu.replaceExistingItem(i, catItem);
                 menu.addMenuClickHandler(i, (p1, s1, i1, a1) -> {
                     ClipboardUtil.send(p1, "&d点击复制: " + id, "&d点击复制", id);
                     return false;
                 });
+            } else {
+                menu.replaceExistingItem(i, Converter.getItem(ItemStackUtil.getCleanItem(null)));
             }
         }
 
