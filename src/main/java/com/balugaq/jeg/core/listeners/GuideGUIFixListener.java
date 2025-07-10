@@ -39,7 +39,7 @@ import org.jetbrains.annotations.NotNull;
  * @author balugaq
  * @since 1.9
  */
-public class DefaultItemPatchListener implements Listener {
+public class GuideGUIFixListener implements Listener {
     /**
      * Fix Official Slimefun: SlimefunItemStack break changes
      * Fix 1.21+ Minecraft bug: SlimefunItemStack cannot cast to CraftItemStack
