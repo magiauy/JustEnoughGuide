@@ -110,12 +110,12 @@ public class ConfigManager extends AbstractManager {
         this.SETTINGS_GUIDE_TITLE = plugin.getConfig().getString("guide.settings-guide-title", "设置 & 详情");
         this.CREDITS_GUIDE_TITLE = plugin.getConfig().getString("guide.credits-guide-title", "Slimefun4 贡献者");
         this.RTS_SEARCH = plugin.getConfig().getBoolean("improvements.rts-search", true);
-        if (JustEnoughGuide.getMCVersion().isAtLeast(MinecraftVersion.MINECRAFT_1_21_2)) {
+        if (JustEnoughGuide.getMinecraftVersion().isAtLeast(MinecraftVersion.MINECRAFT_1_21_2)) {
             if (PaperLib.isPaper()) {
                 this.RTS_SEARCH = false;
             }
 
-            if (JustEnoughGuide.getMCVersion().isAtLeast(MinecraftVersion.MINECRAFT_1_21_3)) {
+            if (JustEnoughGuide.getMinecraftVersion().isAtLeast(MinecraftVersion.MINECRAFT_1_21_3)) {
                 this.RTS_SEARCH = false;
             }
         }

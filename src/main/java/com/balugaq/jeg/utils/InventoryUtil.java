@@ -28,7 +28,6 @@
 package com.balugaq.jeg.utils;
 
 import com.balugaq.jeg.utils.compatibility.Converter;
-import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
@@ -79,7 +78,7 @@ public class InventoryUtil {
                     continue;
                 }
 
-                if (!SlimefunUtils.isItemSimilar(item, existing, true, false)) {
+                if (!StackUtils.itemsMatch(item, existing)) {
                     continue;
                 }
 
@@ -155,7 +154,7 @@ public class InventoryUtil {
 
             if (stack == null || stack.getType() == Material.AIR) {
                 incoming -= item.getMaxStackSize();
-            } else if (stack.getMaxStackSize() > stack.getAmount() && SlimefunUtils.isItemSimilar(item, stack, true, false)) {
+            } else if (stack.getMaxStackSize() > stack.getAmount() && StackUtils.itemsMatch(item, stack)) {
                 incoming -= stack.getMaxStackSize() - stack.getAmount();
             }
 
@@ -228,7 +227,7 @@ public class InventoryUtil {
                         continue;
                     }
 
-                    if (!SlimefunUtils.isItemSimilar(item, existing, true, false)) {
+                    if (!StackUtils.itemsMatch(item, existing)) {
                         continue;
                     }
 
@@ -279,7 +278,7 @@ public class InventoryUtil {
         if (item != null && item.getType() != Material.AIR) {
             if (replaceConsumables
                     && item.getAmount() == 1
-                    && SlimefunUtils.isItemSimilar(item, new ItemStack(item.getType()), true, false)) {
+                    && StackUtils.itemsMatch(item, new ItemStack(item.getType()))) {
                 switch (item.getType()) {
                     case WATER_BUCKET,
                          LAVA_BUCKET,

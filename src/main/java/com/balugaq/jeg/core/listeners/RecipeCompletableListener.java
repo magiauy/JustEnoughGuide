@@ -28,21 +28,29 @@
 package com.balugaq.jeg.core.listeners;
 
 import com.balugaq.jeg.api.objects.collection.Pair;
+import com.balugaq.jeg.api.objects.enums.PatchScope;
 import com.balugaq.jeg.api.objects.events.GuideEvents;
+import com.balugaq.jeg.api.objects.events.PatchEvent;
 import com.balugaq.jeg.api.recipe_complete.source.base.RecipeCompleteProvider;
 import com.balugaq.jeg.api.recipe_complete.source.base.SlimefunSource;
 import com.balugaq.jeg.api.recipe_complete.source.base.VanillaSource;
 import com.balugaq.jeg.implementation.items.ItemsSetup;
+import com.balugaq.jeg.utils.KeyUtil;
+import com.balugaq.jeg.utils.Models;
 import com.balugaq.jeg.utils.ReflectionUtil;
+import com.balugaq.jeg.utils.StackUtils;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.core.guide.GuideHistory;
-import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.common.ChatColors;
 import lombok.SneakyThrows;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
+import net.guizhanss.guizhanlib.minecraft.helper.inventory.ItemStackHelper;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.Dispenser;
@@ -52,8 +60,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -83,6 +94,8 @@ public class RecipeCompletableListener implements Listener {
     public static final Map<SlimefunItem, Pair<int[], Boolean>> INGREDIENT_SLOTS = new ConcurrentHashMap<>();
     public static final List<SlimefunItem> NOT_APPLICABLE_ITEMS = new ArrayList<>();
     public static final Map<UUID, Location> DISPENSER_LISTENING = new ConcurrentHashMap<>();
+    public static final NamespacedKey LAST_RECIPE_COMPLETE_KEY = KeyUtil.newKey("last_recipe_complete");
+    private static ItemStack RECIPE_COMPLETABLE_BOOK_ITEM = null;
 
     /**
      * @param slimefunItem the {@link SlimefunItem} to add
@@ -131,19 +144,19 @@ public class RecipeCompletableListener implements Listener {
 
         blockMenu.addPlayerInventoryClickHandler((RecipeCompletableClickHandler) (player, slot, itemStack, clickAction) -> {
             // mixin start
-            if (SlimefunUtils.isItemSimilar(itemStack, getRecipeCompletableBookItem(), false, false, true, false) && blockMenu.isPlayerInventoryClickable()) {
-                if (listening.contains(player.getUniqueId())) {
+            if (StackUtils.itemsMatch(itemStack, getRecipeCompletableBookItem(), false, false, false, false) && blockMenu.isPlayerInventoryClickable()) {
+                if (isSelectingItemStackToRecipeComplete(player)) {
                     return false;
                 }
 
-                listening.add(player.getUniqueId());
+                enterSelectingItemStackToRecipeComplete(player);
                 int[] slots = getIngredientSlots(sf);
                 boolean unordered = isUnordered(sf);
                 for (SlimefunSource source : RecipeCompleteProvider.getSlimefunSources()) {
                     // Strategy mode
                     // Default strategy see {@link DefaultPlayerInventoryRecipeCompleteSlimefunSource}
                     if (source.handleable(blockMenu, player, clickAction, slots, unordered)) {
-                        source.openGuide(blockMenu, player, clickAction, slots, unordered, () -> listening.remove(player.getUniqueId()));
+                        source.openGuide(blockMenu, player, clickAction, slots, unordered, () -> exitSelectingItemStackToRecipeComplete(player));
                         break;
                     }
                 }
@@ -187,7 +200,11 @@ public class RecipeCompletableListener implements Listener {
     }
 
     public static @NotNull ItemStack getRecipeCompletableBookItem() {
-        return ItemsSetup.RECIPE_COMPLETE_GUIDE.getItem();
+        if (RECIPE_COMPLETABLE_BOOK_ITEM == null) {
+            RECIPE_COMPLETABLE_BOOK_ITEM = ItemsSetup.RECIPE_COMPLETE_GUIDE.getItem().clone();
+        }
+
+        return RECIPE_COMPLETABLE_BOOK_ITEM;
     }
 
     public static void addCallback(
@@ -267,6 +284,96 @@ public class RecipeCompletableListener implements Listener {
         ReflectionUtil.setValue(profile, "guideHistory", originHistory);
     }
 
+    @SuppressWarnings({"deprecation", "DuplicateCondition", "ConstantValue", "SizeReplaceableByIsEmpty"})
+    private static void tryPatchRecipeCompleteBook(@NotNull Player player, @NotNull ItemStack clickedItemStack) {
+        for (ItemStack itemStack : player.getInventory()) {
+            if (StackUtils.itemsMatch(itemStack, getRecipeCompletableBookItem(), false, false, false, false)) {
+                ItemMeta meta = itemStack.getItemMeta();
+                if (meta == null) {
+                    continue;
+                }
+
+                List<String> lore = meta.getLore();
+                if (lore == null) {
+                    lore = new ArrayList<>();
+                }
+
+                // Patch start
+                boolean applied = meta.getPersistentDataContainer().has(LAST_RECIPE_COMPLETE_KEY);
+                if (lore.size() >= 2 && applied) {
+                    // Remove last two lines
+                    if (lore.size() >= 2) {
+                        lore.remove(lore.size() - 1);
+                    }
+                    if (lore.size() >= 1) {
+                        lore.remove(lore.size() - 1);
+                    }
+                }
+
+                String itemName = ItemStackHelper.getDisplayName(clickedItemStack);
+                lore.add("");
+                lore.add("&6上次补全物品: " + itemName);
+
+                if (!applied) {
+                    meta.getPersistentDataContainer().set(LAST_RECIPE_COMPLETE_KEY, PersistentDataType.BOOLEAN, true);
+                }
+
+                // Patch end
+
+                meta.setLore(lore);
+                itemStack.setItemMeta(meta);
+                return;
+            }
+        }
+    }
+
+    @SuppressWarnings({"deprecation", "DuplicateCondition", "ConstantValue", "SizeReplaceableByIsEmpty"})
+    private static void tryRemoveRecipeCompleteBookLastRecipeCompleteLore(@NotNull Player player) {
+        for (ItemStack itemStack : player.getInventory()) {
+            if (StackUtils.itemsMatch(itemStack, getRecipeCompletableBookItem(), false, false, false, false)) {
+                ItemMeta meta = itemStack.getItemMeta();
+                if (meta == null) {
+                    continue;
+                }
+
+                List<String> lore = meta.getLore();
+                if (lore == null) {
+                    continue;
+                }
+
+                // Patch start
+                boolean applied = meta.getPersistentDataContainer().has(LAST_RECIPE_COMPLETE_KEY);
+                if (lore.size() >= 2 && applied) {
+                    // Remove last two lines
+                    if (lore.size() >= 2) {
+                        lore.remove(lore.size() - 1);
+                    }
+                    if (lore.size() >= 1) {
+                        lore.remove(lore.size() - 1);
+                    }
+                }
+
+                meta.getPersistentDataContainer().set(LAST_RECIPE_COMPLETE_KEY, PersistentDataType.BOOLEAN, false);
+                // Patch end
+
+                meta.setLore(lore);
+                itemStack.setItemMeta(meta);
+            }
+        }
+    }
+
+    public static boolean isSelectingItemStackToRecipeComplete(@NotNull Player player) {
+        return listening.contains(player.getUniqueId());
+    }
+
+    public static void enterSelectingItemStackToRecipeComplete(@NotNull Player player) {
+        listening.add(player.getUniqueId());
+    }
+
+    public static void exitSelectingItemStackToRecipeComplete(@NotNull Player player) {
+        listening.remove(player.getUniqueId());
+    }
+
     @EventHandler
     public void prepare(@NotNull InventoryOpenEvent event) {
         if (event.getInventory().getHolder() instanceof BlockMenu blockMenu) {
@@ -295,7 +402,7 @@ public class RecipeCompletableListener implements Listener {
             return;
         }
 
-        if (!SlimefunUtils.isItemSimilar(event.getCurrentItem(), getRecipeCompletableBookItem(), false, false, true, false)) {
+        if (!StackUtils.itemsMatch(event.getCurrentItem(), getRecipeCompletableBookItem(), false, false, false, false)) {
             return;
         }
 
@@ -330,6 +437,52 @@ public class RecipeCompletableListener implements Listener {
         RecipeCompletableListener.PROFILE_CALLBACKS.get(player.getUniqueId()).accept(event, profile);
         RecipeCompletableListener.PROFILE_CALLBACKS.remove(player.getUniqueId());
         RecipeCompletableListener.LAST_EVENTS.put(player.getUniqueId(), event);
+
+        ItemStack clickedItemStack = event.getClickedItem();
+        if (clickedItemStack != null) {
+            tryPatchRecipeCompleteBook(player, clickedItemStack);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
+        tryRemoveRecipeCompleteBookLastRecipeCompleteLore(event.getPlayer());
+    }
+
+    @SuppressWarnings("deprecation")
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void patchItem(@NotNull PatchEvent event) {
+        PatchScope scope = event.getPatchScope();
+        if (scope != PatchScope.SlimefunItem && scope != PatchScope.SearchItem) {
+            return;
+        }
+
+        if (isSelectingItemStackToRecipeComplete(event.getPlayer())) {
+            ItemStack old = event.getItemStack();
+            if (old == null || old.getType() == Material.AIR) {
+                return;
+            }
+
+            ItemMeta meta = old.getItemMeta();
+            if (meta == null) {
+                return;
+            }
+
+            List<String> lore = meta.getLore();
+            if (lore == null) {
+                lore = new ArrayList<>();
+            }
+
+            // Patch start
+            lore.add("");
+            lore.add(ChatColors.color(Models.RECIPE_COMPLETE_GUI_MECHANISM_1));
+            lore.add(ChatColors.color(Models.RECIPE_COMPLETE_GUI_MECHANISM_2));
+            // Patch end
+
+            meta.setLore(lore);
+            old.setItemMeta(meta);
+            event.setItemStack(old);
+        }
     }
 
     /**

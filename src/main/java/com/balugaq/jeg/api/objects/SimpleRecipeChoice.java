@@ -27,7 +27,7 @@
 
 package com.balugaq.jeg.api.objects;
 
-import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
+import com.balugaq.jeg.utils.StackUtils;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.jetbrains.annotations.NotNull;
@@ -54,7 +54,7 @@ public class SimpleRecipeChoice extends RecipeChoice.ExactChoice implements Reci
 
     public boolean test(@NotNull ItemStack other) {
         for (ItemStack choice : this.getChoices()) {
-            if (SlimefunUtils.isItemSimilar(choice, other, true, false)) {
+            if (StackUtils.itemsMatch(choice, other, true, false)) {
                 return true;
             }
         }

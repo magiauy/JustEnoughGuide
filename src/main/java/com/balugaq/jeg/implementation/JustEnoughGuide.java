@@ -143,7 +143,12 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
         return getInstance().listenerManager;
     }
 
+    @Deprecated
     public static MinecraftVersion getMCVersion() {
+        return getInstance().minecraftVersion;
+    }
+
+    public static MinecraftVersion getMinecraftVersion() {
         return getInstance().minecraftVersion;
     }
 

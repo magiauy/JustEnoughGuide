@@ -29,8 +29,8 @@ package com.balugaq.jeg.core.integrations.emctech;
 
 import com.balugaq.jeg.api.objects.enums.PatchScope;
 import com.balugaq.jeg.api.objects.events.PatchEvent;
+import com.balugaq.jeg.utils.StackUtils;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.common.ChatColors;
-import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -88,7 +88,7 @@ public class EMCItemPatchListener implements Listener {
             return;
         }
 
-        if (scope == PatchScope.ItemRecipeIngredient && SlimefunUtils.isItemSimilar(itemStack, new ItemStack(itemStack.getType()), true, false, true, true)) {
+        if (scope == PatchScope.ItemRecipeIngredient && StackUtils.itemsMatch(itemStack, new ItemStack(itemStack.getType()))) {
             // Do not process vanilla item
             return;
         }

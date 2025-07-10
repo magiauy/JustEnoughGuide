@@ -28,9 +28,9 @@
 package com.balugaq.jeg.api.recipe_complete.source.base;
 
 import com.balugaq.jeg.api.objects.SimpleRecipeChoice;
+import com.balugaq.jeg.utils.StackUtils;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
-import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -123,7 +123,7 @@ public interface Source {
             ItemStack itemStack1 = player.getInventory().getItem(i);
 
             if (itemStack1 != null && itemStack1.getType() != Material.AIR &&
-                    SlimefunUtils.isItemSimilar(itemStack1, itemStack, true, false)) {
+                    StackUtils.itemsMatch(itemStack1, itemStack)) {
 
                 int existing = itemStack1.getAmount();
 
