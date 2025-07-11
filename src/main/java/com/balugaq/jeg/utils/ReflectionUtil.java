@@ -37,6 +37,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * @author Final_ROOT
@@ -232,7 +234,7 @@ public class ReflectionUtil {
         }
     }
 
-    public static @Nullable Constructor<?> getConstructor(@NotNull Class<?> clazz, @NotNull Class<?> @NotNull ... parameterTypes) {
+    public static @Nullable Constructor<?> getConstructor(@NotNull Class<?> clazz, @Nullable Class<?> @Nullable ... parameterTypes) {
         try {
             return clazz.getDeclaredConstructor(parameterTypes);
         } catch (NoSuchMethodException e) {
@@ -242,9 +244,27 @@ public class ReflectionUtil {
     }
 
     @Nullable
-    public static Object invokeMethod(@NotNull Object object, @NotNull String methodName, @NotNull Object @NotNull ... args) {
+    public static Object invokeMethod(@NotNull Object object, @NotNull String methodName, @Nullable Object @Nullable ... args) {
         try {
-            Method method = getMethod(object.getClass(), methodName, args.length);
+            Method method;
+            if (args == null) {
+                method = getMethod(object.getClass(), methodName, 1);
+            } else {
+                boolean containsNull = false;
+                for (Object arg : args) {
+                    if (arg == null) {
+                        containsNull = true;
+                        break;
+                    }
+                }
+
+                if (containsNull) {
+                    method = getMethod(object.getClass(), methodName, args.length);
+                } else {
+                    method = getMethod(object.getClass(), methodName, Arrays.stream(args).filter(Objects::nonNull).map(Object::getClass).toArray(Class[]::new));
+                }
+            }
+
             if (method != null) {
                 method.setAccessible(true);
                 return method.invoke(object, args);
@@ -256,9 +276,26 @@ public class ReflectionUtil {
     }
 
     @Nullable
-    public static Object invokeStaticMethod(@NotNull Class<?> clazz, @NotNull String methodName, @NotNull Object @NotNull ... args) {
+    public static Object invokeStaticMethod(@NotNull Class<?> clazz, @NotNull String methodName, @Nullable Object @Nullable ... args) {
         try {
-            Method method = getMethod(clazz, methodName, args.length);
+            Method method;
+            if (args == null) {
+                method = getMethod(clazz, methodName, 1);
+            } else {
+                boolean containsNull = false;
+                for (Object arg : args) {
+                    if (arg == null) {
+                        containsNull = true;
+                        break;
+                    }
+                }
+
+                if (containsNull) {
+                    method = getMethod(clazz, methodName, args.length);
+                } else {
+                    method = getMethod(clazz, methodName, Arrays.stream(args).filter(Objects::nonNull).map(Object::getClass).toArray(Class[]::new));
+                }
+            }
             if (method != null) {
                 method.setAccessible(true);
                 return method.invoke(null, args);

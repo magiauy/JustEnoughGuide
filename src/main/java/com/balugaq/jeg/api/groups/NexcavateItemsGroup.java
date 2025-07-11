@@ -39,6 +39,7 @@ import com.balugaq.jeg.utils.EventUtil;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
 import com.balugaq.jeg.utils.JEGVersionedItemFlag;
+import com.balugaq.jeg.utils.Models;
 import com.balugaq.jeg.utils.compatibility.Converter;
 import com.balugaq.jeg.utils.compatibility.Sounds;
 import com.balugaq.jeg.utils.formatter.Formats;
@@ -57,7 +58,6 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.items.ItemUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
@@ -113,7 +113,7 @@ public class NexcavateItemsGroup extends FlexItemGroup {
         this.page = 1;
         List<SlimefunItem> slimefunItemList = new ArrayList<>();
         for (SlimefunItem item : ALL_SLIMEFUN_ITEMS) {
-            if ("Nexcavate".equalsIgnoreCase(item.getAddon().getName())) {
+            if ("nexcavate".equalsIgnoreCase(item.getAddon().getName())) {
                 slimefunItemList.add(item);
             }
         }
@@ -128,7 +128,7 @@ public class NexcavateItemsGroup extends FlexItemGroup {
      * @param page                The page number to display.
      */
     protected NexcavateItemsGroup(@NotNull NexcavateItemsGroup nexcavateItemsGroup, int page) {
-        super(nexcavateItemsGroup.key, new ItemStack(Material.BARRIER));
+        super(nexcavateItemsGroup.key, Models.NEXCAVATE_ITEMS_GROUP);
         this.page = page;
         this.slimefunItemList = nexcavateItemsGroup.slimefunItemList;
         this.pageMap.put(page, this);

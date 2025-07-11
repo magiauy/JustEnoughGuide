@@ -28,7 +28,6 @@
 package com.balugaq.jeg.api.interfaces;
 
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
-import io.github.thebusybiscuit.slimefun4.api.items.groups.FlexItemGroup;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.ElementType;
@@ -54,10 +53,30 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface DisplayInCheatMode {
     class Checker {
+        /**
+         * Check if the {@link ItemGroup} should be forced to display
+         *
+         * @param group The {@link ItemGroup} to check
+         * @return true if the {@link ItemGroup} should be forced to display, false otherwise
+         */
         public static boolean contains(@NotNull ItemGroup group) {
-            return isSpecial(group);
+            String namespace = group.getKey().getNamespace();
+            String key = group.getKey().getKey();
+            //@formatter:off
+            return isSpecial(group)
+                    || (namespace.equals("danktech2") && key.equals("main"))
+                    || (namespace.equals("slimeframe") && key.equals("wf_main"))
+                    || (namespace.equals("finaltech-changed") && (key.equals("_finaltech_category_main")))
+                    || (namespace.equals("finaltech") && (key.equals("finaltech_category_main")));
+            //@formatter:on
         }
 
+        /**
+         * Check if the {@link ItemGroup} should be put to the last
+         *
+         * @param group The {@link ItemGroup} to check
+         * @return true if the {@link ItemGroup} should be put to the last, false otherwise
+         */
         public static boolean isSpecial(@NotNull ItemGroup group) {
             String namespace = group.getKey().getNamespace();
             String key = group.getKey().getKey();

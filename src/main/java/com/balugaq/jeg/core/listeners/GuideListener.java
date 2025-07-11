@@ -53,7 +53,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Getter
 public class GuideListener implements Listener {
-    public static final int FATAL_ERROR_CODE = 6404;
+    public static final int FATAL_ERROR_CODE = 12208;
     public static final Map<Player, SlimefunGuideMode> guideModeMap = new ConcurrentHashMap<>();
 
     @EventHandler(priority = EventPriority.LOW)
@@ -76,8 +76,13 @@ public class GuideListener implements Listener {
         if (optional.isPresent()) {
             PlayerProfile profile = optional.get();
             SlimefunGuideImplementation guide = GuideUtil.getGuide(player, mode);
+            SlimefunGuideMode lastMode = guideModeMap.get(player);
             guideModeMap.put(player, mode);
-            profile.getGuideHistory().openLastEntry(guide);
+            if (lastMode != mode) {
+                GuideUtil.openMainMenu(player, profile, mode, 1);
+            } else {
+                profile.getGuideHistory().openLastEntry(guide);
+            }
         } else {
             GuideUtil.openMainMenuAsync(player, mode, 1);
         }

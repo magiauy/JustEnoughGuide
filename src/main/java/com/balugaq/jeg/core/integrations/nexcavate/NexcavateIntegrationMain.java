@@ -25,57 +25,46 @@
  *
  */
 
-package com.balugaq.jeg.implementation.items;
+package com.balugaq.jeg.core.integrations.nexcavate;
 
-import com.balugaq.jeg.api.groups.HiddenItemsGroup;
-import com.balugaq.jeg.api.groups.VanillaItemsGroup;
+import com.balugaq.jeg.api.groups.NexcavateItemsGroup;
+import com.balugaq.jeg.api.recipe_complete.RecipeCompletableRegistry;
+import com.balugaq.jeg.core.integrations.Integration;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.KeyUtil;
 import com.balugaq.jeg.utils.Models;
 import com.balugaq.jeg.utils.SlimefunRegistryUtil;
-import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * This class is responsible for registering all the JEG groups.
- *
  * @author balugaq
- * @since 1.3
+ * @since 1.9
  */
-public class GroupSetup {
-    public static JEGGuideGroup guideGroup;
-    public static HiddenItemsGroup hiddenItemsGroup;
-    public static VanillaItemsGroup vanillaItemsGroup;
-    public static ItemGroup jegItemsGroup;
+public class NexcavateIntegrationMain implements Integration {
+    public static @Nullable NexcavateItemsGroup nexcavateItemsGroup = null;
 
-    /**
-     * Registers all the JEG groups.
-     */
-    public static void setup() {
-        guideGroup = new JEGGuideGroup(
-                KeyUtil.newKey("jeg_guide_group"),
-                Models.JEG_GUIDE_GROUP);
-        guideGroup.register(JustEnoughGuide.getInstance());
-        hiddenItemsGroup = new HiddenItemsGroup(
-                KeyUtil.newKey("hidden_items_group"),
-                Models.HIDDEN_ITEMS_GROUP);
-        hiddenItemsGroup.register(JustEnoughGuide.getInstance());
-
-        vanillaItemsGroup = new VanillaItemsGroup(
-                KeyUtil.newKey("vanilla_items_group"),
-                Models.VANILLA_ITEMS_GROUP);
-        vanillaItemsGroup.register(JustEnoughGuide.getInstance());
-
-        jegItemsGroup = new ItemGroup(
-                KeyUtil.newKey("jeg_items_group"),
-                Models.JEG_ITEMS_GROUP
-        );
-        jegItemsGroup.setTier(Integer.MAX_VALUE);
+    @Override
+    public @NotNull String getHookPlugin() {
+        return "Nexcavate";
     }
 
-    /**
-     * Unregisters all the JEG groups.
-     */
-    public static void shutdown() {
-        SlimefunRegistryUtil.unregisterItemGroups(JustEnoughGuide.getInstance());
+    @Override
+    public void onEnable() {
+        nexcavateItemsGroup = new NexcavateItemsGroup(
+                KeyUtil.newKey("nexcavate_items_group"),
+                Models.NEXCAVATE_ITEMS_GROUP);
+        nexcavateItemsGroup.register(JustEnoughGuide.getInstance());
+    }
+
+    @Override
+    public void onDisable() {
+        if (nexcavateItemsGroup != null) {
+            SlimefunRegistryUtil.unregisterItemGroup(nexcavateItemsGroup);
+        }
     }
 }

@@ -40,10 +40,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 /**
- * This is the implementation of the "/jeg help" command.
- * It shows the list of available commands and their usage.
- * <p>
- * This command is also the default command when no other command is specified.
+ * This is the implementation of the "/jeg gteg" command.
  *
  * @author balugaq
  * @since 1.8

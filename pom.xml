@@ -281,22 +281,6 @@
             <systemPath>${project.basedir}/lib/EMCTech-Build 8.jar</systemPath>
         </dependency>
 
-        <dependency>
-            <groupId>io.taraxacum</groupId>
-            <artifactId>FinalTECH1</artifactId>
-            <version>Build-29</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/FinalTECH-Build 29.jar</systemPath>
-        </dependency>
-
-        <dependency>
-            <groupId>io.taraxacum</groupId>
-            <artifactId>FinalTECH2</artifactId>
-            <version>Build-75</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/FinalTECH-Build 75.jar</systemPath>
-        </dependency>
-
         <!-- AnvilGUI 1.16- Paper 1.21.2 / Spigot 1.21.3 -->
         <dependency>
             <groupId>net.wesjd</groupId>

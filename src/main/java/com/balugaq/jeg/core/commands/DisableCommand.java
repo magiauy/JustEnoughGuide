@@ -40,8 +40,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 /**
- * This is the implementation of the "/jeg reload" command.
- * It reloads the JEG plugin configuration.
+ * This is the implementation of the "/jeg disable" command.
  *
  * @author balugaq
  * @since 1.1

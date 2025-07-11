@@ -87,7 +87,10 @@ public class FinalTECHChangedIntegrationMain implements Integration {
     @Override
     public void onEnable() {
         if (JustEnoughGuide.getConfigManager().isFinalTECHValueDisplay()) {
-            SlimefunGuideSettings.addOption(FinalTECHValueDisplayOption.instance());
+            if (!FinalTECHValueDisplayOption.booted()) {
+                FinalTECHValueDisplayOption.boot();
+                SlimefunGuideSettings.addOption(FinalTECHValueDisplayOption.instance());
+            }
             JustEnoughGuide.getListenerManager().registerListener(new FinalTECHItemPatchListener());
         }
 

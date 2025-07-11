@@ -93,7 +93,6 @@ import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu.MenuClickHandler;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -282,7 +281,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                     continue;
                 }
 
-                if (group instanceof SeasonalItemGroup || group instanceof LockedItemGroup) {
+                if (group instanceof SeasonalItemGroup) {
                     specialGroups.add(group);
                 } else {
                     if (!group.isHidden(p)) {
@@ -329,6 +328,9 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
 
         int target = (SurvivalGuideImplementation.MAX_ITEM_GROUPS * (page - 1)) - 1;
         int pages = target == itemGroups.size() - 1 ? page : (itemGroups.size() - 1) / SurvivalGuideImplementation.MAX_ITEM_GROUPS + 1;
+        if (page > pages) {
+            page = pages;
+        }
 
         List<Integer> indexes = Formats.main.getChars('G');
         int index = 0;
@@ -344,8 +346,9 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
 
         for (int s : Formats.main.getChars('P')) {
             menu.addItem(s, PatchScope.PreviousPage.patch(p, ChestMenuUtils.getPreviousButton(p, page, pages)));
+            int finalPage1 = page;
             menu.addMenuClickHandler(s, (pl, slot, item, action) -> {
-                int previous = page - 1;
+                int previous = finalPage1 - 1;
 
                 if (previous > 0) {
                     openMainMenu(profile, previous);
@@ -357,8 +360,9 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
 
         for (int s : Formats.main.getChars('N')) {
             menu.addItem(s, PatchScope.NextPage.patch(p, ChestMenuUtils.getNextButton(p, page, pages)));
+            int finalPage = page;
             menu.addMenuClickHandler(s, (pl, slot, item, action) -> {
-                int next = page + 1;
+                int next = finalPage + 1;
 
                 if (next <= pages) {
                     openMainMenu(profile, next);

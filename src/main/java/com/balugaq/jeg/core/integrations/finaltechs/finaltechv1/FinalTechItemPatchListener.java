@@ -30,6 +30,8 @@ package com.balugaq.jeg.core.integrations.finaltechs.finaltechv1;
 import com.balugaq.jeg.api.objects.enums.PatchScope;
 import com.balugaq.jeg.api.objects.events.PatchEvent;
 import com.balugaq.jeg.core.integrations.emctech.EMCValueDisplayOption;
+import com.balugaq.jeg.utils.Debug;
+import com.balugaq.jeg.utils.ReflectionUtil;
 import com.balugaq.jeg.utils.StackUtils;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.common.ChatColors;
 import org.bukkit.entity.Player;
@@ -57,6 +59,52 @@ public class FinalTechItemPatchListener implements Listener {
             PatchScope.SearchItem,
             PatchScope.ItemRecipeIngredient
     );
+    public static final String DEFAULT_INPUT_VALUE = "0";
+    public static final String DEFAULT_OUTPUT_VALUE = "INFINITY";
+    public static Class<?> class_ItemValueTable = null;
+    public static Object ItemValueTableInstance = null;
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public static boolean initValueTable() {
+        if (class_ItemValueTable == null) {
+            try {
+                class_ItemValueTable = Class.forName("io.taraxacum.finaltech.api.factory.ItemValueTable");
+            } catch (ClassNotFoundException e) {
+                Debug.trace(e);
+                return false;
+            }
+        }
+
+        if (ItemValueTableInstance == null) {
+            ItemValueTableInstance = ReflectionUtil.invokeStaticMethod(class_ItemValueTable, "getInstance");
+        }
+
+        return ItemValueTableInstance != null;
+    }
+
+    public static String getOrCalItemInputValue(@Nullable ItemStack itemStack) {
+        if (!initValueTable()) {
+            return DEFAULT_INPUT_VALUE;
+        }
+
+        if (itemStack == null) {
+            return DEFAULT_INPUT_VALUE;
+        }
+
+        return (String) ReflectionUtil.invokeMethod(ItemValueTableInstance, "getOrCalItemInputValue", itemStack);
+    }
+
+    public static String getOrCalItemOutputValue(@Nullable ItemStack itemStack) {
+        if (!initValueTable()) {
+            return DEFAULT_OUTPUT_VALUE;
+        }
+
+        if (itemStack == null) {
+            return DEFAULT_OUTPUT_VALUE;
+        }
+
+        return (String) ReflectionUtil.invokeMethod(ItemValueTableInstance, "getOrCalItemOutputValue", itemStack);
+    }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void patchItem(@NotNull PatchEvent event) {
@@ -92,8 +140,8 @@ public class FinalTechItemPatchListener implements Listener {
             return;
         }
 
-        String inputEmc = io.taraxacum.finaltech.api.factory.ItemValueTable.getInstance().getOrCalItemInputValue(itemStack);
-        String outputEmc = io.taraxacum.finaltech.api.factory.ItemValueTable.getInstance().getOrCalItemOutputValue(itemStack);
+        String inputEmc = getOrCalItemInputValue(itemStack);
+        String outputEmc = getOrCalItemOutputValue(itemStack);
 
         ItemMeta meta = itemStack.getItemMeta();
         if (meta == null) {

@@ -61,6 +61,26 @@ public class Models {
             "&7 - &e中间物品为按键上一页",
             "&7 - &e右侧物品为按键下一页"
     )));
+    public static final ItemStack JEG_GUIDE_GROUP = Converter.getItem(new SlimefunItemStack("JEG_JEG_GUIDE_GROUP", Converter.getItem(
+            Material.KNOWLEDGE_BOOK,
+            "&bJEG 使用指南"
+    )));
+    public static final ItemStack HIDDEN_ITEMS_GROUP = Converter.getItem(new SlimefunItemStack("JEG_HIDDEN_ITEMS_GROUP", Converter.getItem(
+            Material.BARRIER,
+            "&c隐藏物品"
+    )));
+    public static final ItemStack NEXCAVATE_ITEMS_GROUP = Converter.getItem(new SlimefunItemStack("JEG_NEXCAVATE_ITEMS_GROUP_ICON", Converter.getItem(
+            Material.BLACKSTONE,
+            "&b文明复兴物品"
+    )));
+    public static final ItemStack VANILLA_ITEMS_GROUP = Converter.getItem(new SlimefunItemStack("JEG_VANILLA_ITEMS_GROUP", Converter.getItem(
+            Material.CRAFTING_TABLE,
+            "&7原版物品"
+    )));
+    public static final ItemStack JEG_ITEMS_GROUP = Converter.getItem(new SlimefunItemStack("JEG_JEG_ITEMS_GROUP", Converter.getItem(
+            Material.BOOK,
+            "&bJEG 物品"
+    )));
     public static final SlimefunItemStack RECIPE_COMPLETE_GUIDE = new SlimefunItemStack("JEG_RECIPE_COMPLETE_BOOK", Converter.getItem(
             Material.SLIME_BALL,
             "&b配方补全书",

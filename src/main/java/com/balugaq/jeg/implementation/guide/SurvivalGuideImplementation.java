@@ -243,6 +243,9 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
 
         int target = (MAX_ITEM_GROUPS * (page - 1)) - 1;
         int pages = target == itemGroups.size() - 1 ? page : (itemGroups.size() - 1) / MAX_ITEM_GROUPS + 1;
+        if (page > pages) {
+            page = pages;
+        }
 
         List<Integer> indexes = Formats.main.getChars('G');
         int index = 0;
@@ -258,8 +261,9 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
 
         for (int s : Formats.main.getChars('P')) {
             menu.addItem(s, PatchScope.PreviousPage.patch(profile, ChestMenuUtils.getPreviousButton(p, page, pages)));
+            int finalPage1 = page;
             menu.addMenuClickHandler(s, (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.PreviousButtonClickEvent(pl, item, slot, action, menu, this)).ifSuccess(() -> {
-                int previous = page - 1;
+                int previous = finalPage1 - 1;
 
                 if (previous > 0) {
                     openMainMenu(profile, previous);
@@ -271,8 +275,9 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
 
         for (int s : Formats.main.getChars('N')) {
             menu.addItem(s, PatchScope.NextPage.patch(profile, ChestMenuUtils.getNextButton(p, page, pages)));
+            int finalPage = page;
             menu.addMenuClickHandler(s, (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.NextButtonClickEvent(pl, item, slot, action, menu, this)).ifSuccess(() -> {
-                int next = page + 1;
+                int next = finalPage + 1;
 
                 if (next <= pages) {
                     openMainMenu(profile, next);

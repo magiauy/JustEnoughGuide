@@ -49,10 +49,12 @@ import com.balugaq.jeg.core.integrations.infinityexpansion2.InfinityExpansion2In
 import com.balugaq.jeg.core.integrations.logitech.LogitechIntegrationMain;
 import com.balugaq.jeg.core.integrations.networks.NetworksIntegrationMain;
 import com.balugaq.jeg.core.integrations.networksexpansion.NetworksExpansionIntegrationMain;
+import com.balugaq.jeg.core.integrations.nexcavate.NexcavateIntegrationMain;
 import com.balugaq.jeg.core.integrations.obsidianexpansion.ObsidianExpansionIntegrationMain;
 import com.balugaq.jeg.core.integrations.rykenslimefuncustomizer.RykenSlimefunCustomizerIntegrationMain;
 import com.balugaq.jeg.core.integrations.slimeaeplugin.SlimeAEPluginIntegrationMain;
 import com.balugaq.jeg.core.integrations.slimetinker.SlimeTinkerIntegrationMain;
+import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.Debug;
 import lombok.Data;
 import lombok.Getter;
@@ -163,6 +165,7 @@ public class IntegrationManager extends AbstractManager {
             addIntegration(enabledInfinityExpansion, InfinityExpansionIntegrationMain::new);
             addIntegration(enabledInfinityExpansion2, InfinityExpansion2IntegrationMain::new);
             addIntegration(enabledLogiTech, LogitechIntegrationMain::new);
+            addIntegration(enabledNexcavate, NexcavateIntegrationMain::new);
             addIntegration(enabledNetworks, NetworksIntegrationMain::new);
             addIntegration(enabledNetworksExpansion, NetworksExpansionIntegrationMain::new);
             addIntegration(enabledObsidianExpansion, ObsidianExpansionIntegrationMain::new);
@@ -267,5 +270,9 @@ public class IntegrationManager extends AbstractManager {
                 throw new AssertionError();
             }
         }
+    }
+
+    public static void scheduleRun(@NotNull Runnable runnable) {
+        Bukkit.getScheduler().runTaskLater(JustEnoughGuide.getInstance(), runnable, 2L);
     }
 }

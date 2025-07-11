@@ -53,10 +53,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This is the implementation of the "/jeg help" command.
- * It shows the list of available commands and their usage.
- * <p>
- * This command is also the default command when no other command is specified.
+ * This is the implementation of the "/jeg categories" command.
  *
  * @author balugaq
  * @since 1.8
@@ -98,17 +95,19 @@ public class CategoriesCommand implements JEGCommand {
                 List<String> categoryLore = catMeta.getLore();
 
                 String id = group.getKey().getNamespace() + ":" + group.getKey().getKey();
+                String className = group.getClass().getName();
                 if (categoryLore == null) {
-                    categoryLore = new ArrayList<>(1);
+                    categoryLore = new ArrayList<>(2);
                 }
                 categoryLore.set(categoryLore.size() - 1, ChatColors.color("&6ID: " + id)); // Replaces the "Click to Open" line
-                categoryLore.add("class: " + group.getClass().getName());
+                categoryLore.add(ChatColors.color("&6class: " + className));
                 categoryLore.add(ChatColors.color("&a点击复制到聊天栏"));
                 catMeta.setLore(categoryLore);
                 catItem.setItemMeta(catMeta);
                 menu.replaceExistingItem(i, catItem);
                 menu.addMenuClickHandler(i, (p1, s1, i1, a1) -> {
                     ClipboardUtil.send(p1, "&d点击复制: " + id, "&d点击复制", id);
+                    ClipboardUtil.send(p1, "&d点击复制: " + className, "&d点击复制", className);
                     return false;
                 });
             } else {
@@ -116,7 +115,7 @@ public class CategoriesCommand implements JEGCommand {
             }
         }
 
-        if (page != 1) {
+        if (page > 1) {
             menu.replaceExistingItem(46, Converter.getItem(Material.LIME_STAINED_GLASS_PANE, "&a上一页"));
             menu.addMenuClickHandler(46, (pl, s, is, action) -> {
                 populateCategoryMenu(menu, groups, page - 1, p);
@@ -124,7 +123,7 @@ public class CategoriesCommand implements JEGCommand {
             });
         }
 
-        if (getItemGroupOrNull(groups, 45 * page) != null) {
+        if (getItemGroupOrNull(groups, 45 * page + 1) != null) {
             menu.replaceExistingItem(52, Converter.getItem(Material.LIME_STAINED_GLASS_PANE, "&a下一页"));
             menu.addMenuClickHandler(52, (pl, s, is, action) -> {
                 populateCategoryMenu(menu, groups, page + 1, p);

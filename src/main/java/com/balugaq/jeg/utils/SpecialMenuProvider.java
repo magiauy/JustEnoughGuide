@@ -100,10 +100,7 @@ public class SpecialMenuProvider {
     public static @Nullable Constructor<?> constructorObsidianExpansion_BackEntry = null;
 
     static {
-        /**
-         * Delay 10L for {@link IntegrationManager}
-         */
-        Bukkit.getScheduler().runTaskLaterAsynchronously(JustEnoughGuide.getInstance(), SpecialMenuProvider::loadConfiguration, 10L);
+        IntegrationManager.scheduleRun(SpecialMenuProvider::loadConfiguration);
     }
 
     public static void loadConfiguration() {

@@ -48,6 +48,23 @@ import java.util.Optional;
 @SuppressWarnings({"UnnecessaryUnicodeEscape", "SameReturnValue"})
 public class FinalTECHValueDisplayOption implements SlimefunGuideOption<Boolean> {
     public static final @NotNull FinalTECHValueDisplayOption instance = new FinalTECHValueDisplayOption();
+    private static boolean booted = false;
+
+    private static void setBooted(boolean booted) {
+        FinalTECHValueDisplayOption.booted = booted;
+    }
+
+    public static boolean booted() {
+        return booted;
+    }
+
+    public static void boot() {
+        setBooted(true);
+    }
+
+    public static void unboot() {
+        setBooted(false);
+    }
 
     public static @NotNull FinalTECHValueDisplayOption instance() {
         return instance;
