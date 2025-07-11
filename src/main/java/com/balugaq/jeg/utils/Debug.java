@@ -198,12 +198,8 @@ public class Debug {
         player.sendMessage("[" + getPlugin().getName() + "]" + message);
     }
 
-    public static void stackTraceManually() {
-        try {
-            throw new Error();
-        } catch (Exception e) {
-            trace(e);
-        }
+    public static void dumpStack() {
+        Thread.dumpStack();
     }
 
     public static void log(Object @NotNull ... object) {
@@ -326,7 +322,7 @@ public class Debug {
 
                 warn("");
                 warn("An Error occurred! It has been saved as: ");
-                warn("/plugins/JustEnoughGuide/error-reports/{0}", file.getName());
+                warn("/plugins/JustEnoughGuide/error-reports/" + file.getName());
                 warn("Please put this file on https://pastebin.com/ and report this to the developer(s).");
 
                 warn("Please DO NOT send screenshots of these logs to the developer(s).");

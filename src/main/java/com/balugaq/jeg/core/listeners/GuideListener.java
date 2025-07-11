@@ -63,7 +63,7 @@ public class GuideListener implements Listener {
 
             try {
                 openGuide(e.getPlayer(), e.getGuideLayout());
-            } catch (Exception ex) {
+            } catch (Throwable ex) {
                 Debug.traceExactly(ex, "opening guide", FATAL_ERROR_CODE);
                 PlayerProfile.find(e.getPlayer()).ifPresent(profile -> GuideUtil.removeLastEntry(profile.getGuideHistory()));
             }

@@ -29,6 +29,7 @@ package com.balugaq.jeg.core.integrations.finaltechs.finalTECHCommon;
 
 import com.balugaq.jeg.api.patches.JEGGuideSettings;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
+import com.balugaq.jeg.utils.Debug;
 import com.balugaq.jeg.utils.compatibility.Converter;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.core.guide.options.SlimefunGuideOption;
@@ -67,6 +68,7 @@ public class FinalTECHValueDisplayOption implements SlimefunGuideOption<Boolean>
     }
 
     public static @NotNull FinalTECHValueDisplayOption instance() {
+        Debug.dumpStack();
         return instance;
     }
 

@@ -86,8 +86,7 @@ public class EMCValueDisplayOption implements SlimefunGuideOption<Boolean> {
                 "&7在查阅一个新物品的时候",
                 "&7显示它的EMC数值",
                 "",
-                "&7注: 此EMC数值为",
-                "&7EMCTech中的数值",
+                "&7注: 此EMC数值为EMCTech中的数值",
                 "&7不等同于乱序等附属的数值",
                 "&7\u21E8 &e点击 " + (enabled ? "禁用" : "启用") + " EMC值显示");
         return Optional.of(item);

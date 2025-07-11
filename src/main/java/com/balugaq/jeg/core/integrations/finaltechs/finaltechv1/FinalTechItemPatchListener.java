@@ -29,7 +29,6 @@ package com.balugaq.jeg.core.integrations.finaltechs.finaltechv1;
 
 import com.balugaq.jeg.api.objects.enums.PatchScope;
 import com.balugaq.jeg.api.objects.events.PatchEvent;
-import com.balugaq.jeg.core.integrations.emctech.EMCValueDisplayOption;
 import com.balugaq.jeg.utils.Debug;
 import com.balugaq.jeg.utils.ReflectionUtil;
 import com.balugaq.jeg.utils.StackUtils;
@@ -126,7 +125,7 @@ public class FinalTechItemPatchListener implements Listener {
     }
 
     public boolean disabledOption(@NotNull Player player) {
-        return !EMCValueDisplayOption.isEnabled(player);
+        return !FinalTechValueDisplayOption.isEnabled(player);
     }
 
     @SuppressWarnings("deprecation")
@@ -140,13 +139,13 @@ public class FinalTechItemPatchListener implements Listener {
             return;
         }
 
-        String inputEmc = getOrCalItemInputValue(itemStack);
-        String outputEmc = getOrCalItemOutputValue(itemStack);
-
         ItemMeta meta = itemStack.getItemMeta();
         if (meta == null) {
             return;
         }
+
+        String inputEmc = getOrCalItemInputValue(itemStack);
+        String outputEmc = getOrCalItemOutputValue(itemStack);
 
         List<String> lore = meta.getLore();
         if (lore == null) {

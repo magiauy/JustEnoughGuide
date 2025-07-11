@@ -90,8 +90,8 @@ public class FinalTECHChangedIntegrationMain implements Integration {
             if (!FinalTECHValueDisplayOption.booted()) {
                 FinalTECHValueDisplayOption.boot();
                 SlimefunGuideSettings.addOption(FinalTECHValueDisplayOption.instance());
+                JustEnoughGuide.getListenerManager().registerListener(new FinalTECHItemPatchListener());
             }
-            JustEnoughGuide.getListenerManager().registerListener(new FinalTECHItemPatchListener());
         }
 
         rrc("_FINALTECH_MANUAL_CRAFT_MACHINE");
