@@ -312,7 +312,7 @@ public class RecipeCompletableListener implements Listener {
 
                 String itemName = ItemStackHelper.getDisplayName(clickedItemStack);
                 lore.add("");
-                lore.add("&6上次补全物品: " + itemName);
+                lore.add(ChatColors.color("&6上次补全物品: " + itemName));
 
                 if (!applied) {
                     meta.getPersistentDataContainer().set(LAST_RECIPE_COMPLETE_KEY, PersistentDataType.BOOLEAN, true);
