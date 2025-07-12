@@ -55,6 +55,7 @@ public class FinalTECHValueDisplayOption implements SlimefunGuideOption<Boolean>
         FinalTECHValueDisplayOption.booted = booted;
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean booted() {
         return booted;
     }

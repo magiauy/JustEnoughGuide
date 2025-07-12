@@ -33,7 +33,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.balugaq.jeg</groupId>
     <artifactId>JustEnoughGuide</artifactId>
-    <version>Insider-117</version>
+    <version>Insider-118</version>
 
     <pluginRepositories>
         <pluginRepository>
@@ -308,11 +308,11 @@
             <systemPath>${project.basedir}/lib/EMCTech-Build 8.jar</systemPath>
         </dependency>
 
-        <!-- AnvilGUI 1.16- Paper 1.21.2 / Spigot 1.21.3 -->
+        <!-- AnvilGUI 1.16+ -->
         <dependency>
             <groupId>net.wesjd</groupId>
             <artifactId>anvilgui</artifactId>
-            <version>1.10.4-SNAPSHOT</version>
+            <version>1.10.7-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

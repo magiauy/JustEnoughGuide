@@ -74,6 +74,7 @@ public class JEGGuideGroup extends ClassicGuideGroup {
 
     public static final int[] BORDER_SLOTS = Formats.helper.getChars('B').stream().mapToInt(i -> i).toArray();
 
+    @SuppressWarnings("SameParameterValue")
     protected JEGGuideGroup(@NotNull NamespacedKey key, @NotNull ItemStack icon) {
         super(key, icon, Integer.MAX_VALUE);
         for (int slot : BORDER_SLOTS) {

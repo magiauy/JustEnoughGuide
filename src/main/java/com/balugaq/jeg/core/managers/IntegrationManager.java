@@ -189,6 +189,10 @@ public class IntegrationManager extends AbstractManager {
         }
     }
 
+    public static void scheduleRun(@NotNull Runnable runnable) {
+        Bukkit.getScheduler().runTaskLater(JustEnoughGuide.getInstance(), runnable, 2L);
+    }
+
     @Deprecated
     public boolean hasRecipeCompletableWithGuide() {
         return hasRecipeCompletableWithGuide;
@@ -270,9 +274,5 @@ public class IntegrationManager extends AbstractManager {
                 throw new AssertionError();
             }
         }
-    }
-
-    public static void scheduleRun(@NotNull Runnable runnable) {
-        Bukkit.getScheduler().runTaskLater(JustEnoughGuide.getInstance(), runnable, 2L);
     }
 }
