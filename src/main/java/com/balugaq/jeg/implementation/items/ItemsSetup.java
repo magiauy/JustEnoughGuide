@@ -54,47 +54,33 @@ public class ItemsSetup {
                 GroupSetup.jegItemsGroup,
                 Models.RECIPE_COMPLETE_GUIDE,
                 RecipeType.ENHANCED_CRAFTING_TABLE,
-                //@formatter:off
+                // @formatter:off
                 new ItemStack[] {
-                        craftingTable, craftingTable, craftingTable,
-                        craftingTable, book,          craftingTable,
-                        craftingTable, craftingTable, craftingTable
+                    craftingTable, craftingTable, craftingTable,
+                    craftingTable, book, craftingTable,
+                    craftingTable, craftingTable, craftingTable
                 }
-                //@formatter:on
-        );
+                // @formatter:on
+                );
 
-        USAGE_INFO = new SlimefunItem(
-                GroupSetup.jegItemsGroup,
-                Models.USAGE_INFO,
-                RecipeType.NULL,
-                new ItemStack[]{
-                        null, null, null,
-                        null, null, null,
-                        null, null, null
-                }
-        );
+        USAGE_INFO = new SlimefunItem(GroupSetup.jegItemsGroup, Models.USAGE_INFO, RecipeType.NULL, new ItemStack[] {
+            null, null, null,
+            null, null, null,
+            null, null, null
+        });
 
-        MECHANISM = new SlimefunItem(
-                GroupSetup.jegItemsGroup,
-                Models.MECHANISM,
-                RecipeType.NULL,
-                new ItemStack[]{
-                        null, null, null,
-                        null, null, null,
-                        null, null, null
-                }
-        );
+        MECHANISM = new SlimefunItem(GroupSetup.jegItemsGroup, Models.MECHANISM, RecipeType.NULL, new ItemStack[] {
+            null, null, null,
+            null, null, null,
+            null, null, null
+        });
 
         SUPPORTED_ADDONS_INFO = new SlimefunItem(
-                GroupSetup.jegItemsGroup,
-                Models.SUPPORTED_ADDONS_INFO,
-                RecipeType.NULL,
-                new ItemStack[]{
-                        null, null, null,
-                        null, null, null,
-                        null, null, null
-                }
-        );
+                GroupSetup.jegItemsGroup, Models.SUPPORTED_ADDONS_INFO, RecipeType.NULL, new ItemStack[] {
+                    null, null, null,
+                    null, null, null,
+                    null, null, null
+                });
     }
 
     public static void setup(@NotNull SlimefunAddon addon) {

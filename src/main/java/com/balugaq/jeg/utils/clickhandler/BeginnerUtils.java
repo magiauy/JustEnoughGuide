@@ -35,6 +35,7 @@ import com.balugaq.jeg.implementation.option.BeginnersGuideOption;
 import com.balugaq.jeg.utils.EventUtil;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation;
+import javax.annotation.ParametersAreNonnullByDefault;
 import lombok.Getter;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
@@ -48,8 +49,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 /**
  * @author balugaq
  * @since 1.5
@@ -58,8 +57,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class BeginnerUtils implements Applier {
     private static final BeginnerUtils instance = new BeginnerUtils();
 
-    private BeginnerUtils() {
-    }
+    private BeginnerUtils() {}
 
     public static void applyWith(@NotNull SlimefunGuideImplementation guide, @NotNull ChestMenu menu, int slot) {
         instance.apply(guide, menu, slot);
@@ -75,8 +73,8 @@ public class BeginnerUtils implements Applier {
             return;
         }
 
-        menu.addMenuClickHandler(slot, JEGClickHandler.of(guide, menu, slot)
-                .addProcessor(BeginnerProcessor.getInstance()));
+        menu.addMenuClickHandler(
+                slot, JEGClickHandler.of(guide, menu, slot).addProcessor(BeginnerProcessor.getInstance()));
     }
 
     public static class BeginnerProcessor extends Processor {
@@ -103,19 +101,30 @@ public class BeginnerUtils implements Applier {
          */
         @Override
         public boolean process(
-                @NotNull SlimefunGuideImplementation guide,
-                @NotNull ChestMenu menu,
-                @NotNull InventoryClickEvent event,
-                @NotNull Player player,
+                final @NotNull SlimefunGuideImplementation guide,
+                final @NotNull ChestMenu menu,
+                final @NotNull InventoryClickEvent event,
+                final @NotNull Player player,
                 @Range(from = 0, to = 53) int clickedSlot,
-                @Nullable ItemStack clickedItemStack,
-                @NotNull ClickAction clickAction,
-                @Nullable Boolean processedResult) {
-            if (isNew(player) && clickAction.isShiftClicked() && clickAction.isRightClicked() && clickedItemStack != null && clickedItemStack.getType() != Material.AIR) {
-                return EventUtil.callEvent(new GuideEvents.BeginnerButtonClickEvent(player, clickedItemStack, clickedSlot, clickAction, menu, guide)).ifSuccess(() -> {
-                    PlayerProfile.get(player, profile -> guide.openSearch(profile, ChatColor.stripColor(ItemStackHelper.getDisplayName(clickedItemStack)), true));
-                    return false;
-                });
+                final @Nullable ItemStack clickedItemStack,
+                final @NotNull ClickAction clickAction,
+                final @Nullable Boolean processedResult) {
+            if (isNew(player)
+                    && clickAction.isShiftClicked()
+                    && clickAction.isRightClicked()
+                    && clickedItemStack != null
+                    && clickedItemStack.getType() != Material.AIR) {
+                return EventUtil.callEvent(new GuideEvents.BeginnerButtonClickEvent(
+                                player, clickedItemStack, clickedSlot, clickAction, menu, guide))
+                        .ifSuccess(() -> {
+                            PlayerProfile.get(
+                                    player,
+                                    profile -> guide.openSearch(
+                                            profile,
+                                            ChatColor.stripColor(ItemStackHelper.getDisplayName(clickedItemStack)),
+                                            true));
+                            return false;
+                        });
             }
 
             return true;

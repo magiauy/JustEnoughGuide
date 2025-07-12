@@ -65,14 +65,14 @@ public abstract class Processor {
      */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public abstract boolean process(
-            @NotNull SlimefunGuideImplementation guide,
-            @NotNull ChestMenu menu,
-            @NotNull InventoryClickEvent event,
-            @NotNull Player player,
-            @Range(from = 0, to = 53) int clickedSlot,
-            @Nullable ItemStack clickedItemStack,
-            @NotNull ClickAction clickAction,
-            @Nullable Boolean processedResult);
+            final @NotNull SlimefunGuideImplementation guide,
+            final @NotNull ChestMenu menu,
+            final @NotNull InventoryClickEvent event,
+            final @NotNull Player player,
+            final @Range(from = 0, to = 53) int clickedSlot,
+            final @Nullable ItemStack clickedItemStack,
+            final @NotNull ClickAction clickAction,
+            final @Nullable Boolean processedResult);
 
     /**
      * @author balugaq

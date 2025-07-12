@@ -62,7 +62,7 @@ public class ConfigurationParser {
     @ApiStatus.Obsolete
     @ParametersAreNonnullByDefault
     @SneakyThrows
-    public static <T> @NotNull T parse(ConfigurationSection section, Class<T> clazz) {
+    public static <T> @NotNull T parse(final ConfigurationSection section, final Class<T> clazz) {
         Method method;
         try {
             method = clazz.getDeclaredMethod("fieldNames");
@@ -90,7 +90,10 @@ public class ConfigurationParser {
                         Set<String> subKeys = section.getKeys(false);
                         List<Object> arg = new ArrayList<>();
                         for (String subKey : subKeys) {
-                            if (List.class.isAssignableFrom(field.getType()) && field.getType().getTypeParameters().length > 0 && field.getGenericType() instanceof ParameterizedType parameterizedType && parameterizedType.getActualTypeArguments()[0] instanceof Class<?> genericType) {
+                            if (List.class.isAssignableFrom(field.getType())
+                                    && field.getType().getTypeParameters().length > 0
+                                    && field.getGenericType() instanceof ParameterizedType parameterizedType
+                                    && parameterizedType.getActualTypeArguments()[0] instanceof Class<?> genericType) {
                                 Object value = parseValue(genericType, section.get(subKey));
                                 arg.add(value);
                             } else {
@@ -100,7 +103,10 @@ public class ConfigurationParser {
                         }
                         read.put(field, arg);
                     } else {
-                        if (!List.class.isAssignableFrom(field.getType()) && field.getType().getTypeParameters().length > 0 && field.getGenericType() instanceof ParameterizedType parameterizedType && parameterizedType.getActualTypeArguments()[0] instanceof Class<?> genericType) {
+                        if (!List.class.isAssignableFrom(field.getType())
+                                && field.getType().getTypeParameters().length > 0
+                                && field.getGenericType() instanceof ParameterizedType parameterizedType
+                                && parameterizedType.getActualTypeArguments()[0] instanceof Class<?> genericType) {
                             Object value = parseValue(genericType, section.get(key));
                             read.put(field, value);
                         } else {
@@ -118,7 +124,7 @@ public class ConfigurationParser {
     @ApiStatus.Obsolete
     @ParametersAreNonnullByDefault
     @SneakyThrows
-    public static <T> @NotNull T consturctObject(Class<T> clazz, LinkedHashMap<Field, Object> read) {
+    public static <T> @NotNull T consturctObject(final Class<T> clazz, final LinkedHashMap<Field, Object> read) {
         try {
             Constructor<T> constructor = clazz.getDeclaredConstructor();
 
@@ -129,7 +135,8 @@ public class ConfigurationParser {
                 // setterName: setQuery
                 // setterName2: query
                 Field field = entry.getKey();
-                String setterName = "set" + field.getName().substring(0, 1).toUpperCase(Locale.ROOT) + field.getName().substring(1);
+                String setterName = "set" + field.getName().substring(0, 1).toUpperCase(Locale.ROOT)
+                        + field.getName().substring(1);
                 Method setter = ReflectionUtil.getMethod(clazz, setterName, field.getType());
                 if (setter != null) {
                     Object arg = entry.getValue();
@@ -157,7 +164,7 @@ public class ConfigurationParser {
     @SuppressWarnings("rawtypes")
     @ApiStatus.Obsolete
     @SneakyThrows
-    public static <T> @Nullable T parseValue(@NotNull Class<T> clazz, @Nullable Object value) {
+    public static <T> @Nullable T parseValue(final @NotNull Class<T> clazz, final @Nullable Object value) {
         if (value == null) {
             Class<?>[] interfaces = clazz.getInterfaces();
             for (Class<?> interfaceClass : interfaces) {

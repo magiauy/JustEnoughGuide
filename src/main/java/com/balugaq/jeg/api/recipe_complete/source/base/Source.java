@@ -122,8 +122,9 @@ public interface Source {
         for (int i = 0; i < player.getInventory().getSize(); i++) {
             ItemStack itemStack1 = player.getInventory().getItem(i);
 
-            if (itemStack1 != null && itemStack1.getType() != Material.AIR &&
-                    StackUtils.itemsMatch(itemStack1, itemStack)) {
+            if (itemStack1 != null
+                    && itemStack1.getType() != Material.AIR
+                    && StackUtils.itemsMatch(itemStack1, itemStack)) {
 
                 int existing = itemStack1.getAmount();
 
@@ -146,5 +147,4 @@ public interface Source {
 
         return null;
     }
-
 }

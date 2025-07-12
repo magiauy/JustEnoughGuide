@@ -33,6 +33,10 @@ import com.balugaq.jeg.api.objects.collection.cooldown.FrequencyWatcher;
 import com.balugaq.jeg.utils.ClipboardUtil;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.common.ChatColors;
+import java.text.MessageFormat;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.ParametersAreNonnullByDefault;
 import lombok.Getter;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
@@ -52,29 +56,19 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-import java.text.MessageFormat;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
-
 /**
  * @author balugaq
  * @since 1.7
  */
 @SuppressWarnings("deprecation")
 public class NamePrinter implements Applier {
-    public static final MessageFormat SHARED_ITEM_MESSAGE = new MessageFormat(ChatColors.color("&a{0} &e分享了物品 &7[{1}&r&7]&e <点击搜索>"));
+    public static final MessageFormat SHARED_ITEM_MESSAGE =
+            new MessageFormat(ChatColors.color("&a{0} &e分享了物品 &7[{1}&r&7]&e <点击搜索>"));
     public static final String CLICK_TO_SEARCH = ChatColors.color("&e点击搜索物品");
     private static final NamePrinter instance = new NamePrinter();
-    private static final FrequencyWatcher<UUID> watcher = new FrequencyWatcher<>(
-            1,
-            TimeUnit.MINUTES,
-            10,
-            5000
-    );
+    private static final FrequencyWatcher<UUID> watcher = new FrequencyWatcher<>(1, TimeUnit.MINUTES, 10, 5000);
 
-    private NamePrinter() {
-    }
+    private NamePrinter() {}
 
     public static void applyWith(@NotNull SlimefunGuideImplementation guide, @NotNull ChestMenu menu, int slot) {
         instance.apply(guide, menu, slot);
@@ -84,7 +78,7 @@ public class NamePrinter implements Applier {
     private static void shareSlimefunItem(Player player, String itemName) {
         String playerName = player.getName();
 
-        String sharedMessage = SHARED_ITEM_MESSAGE.format(new Object[]{playerName, ChatColors.color(itemName)});
+        String sharedMessage = SHARED_ITEM_MESSAGE.format(new Object[] {playerName, ChatColors.color(itemName)});
         TextComponent msg = new TextComponent(sharedMessage);
         msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(CLICK_TO_SEARCH)));
         String s = ChatColor.stripColor(itemName);
@@ -116,8 +110,8 @@ public class NamePrinter implements Applier {
 
     @ParametersAreNonnullByDefault
     public void apply(SlimefunGuideImplementation guide, ChestMenu menu, int slot) {
-        menu.addMenuClickHandler(slot, JEGClickHandler.of(guide, menu, slot)
-                .addProcessor(NamePrinterProcessor.getInstance()));
+        menu.addMenuClickHandler(
+                slot, JEGClickHandler.of(guide, menu, slot).addProcessor(NamePrinterProcessor.getInstance()));
     }
 
     public static class NamePrinterProcessor extends Processor {
@@ -144,15 +138,17 @@ public class NamePrinter implements Applier {
          */
         @Override
         public boolean process(
-                @NotNull SlimefunGuideImplementation guide,
-                @NotNull ChestMenu menu,
-                @NotNull InventoryClickEvent event,
-                @NotNull Player player,
+                final @NotNull SlimefunGuideImplementation guide,
+                final @NotNull ChestMenu menu,
+                final @NotNull InventoryClickEvent event,
+                final @NotNull Player player,
                 @Range(from = 0, to = 53) int clickedSlot,
-                @Nullable ItemStack clickedItemStack,
-                @NotNull ClickAction clickAction,
-                @Nullable Boolean processedResult) {
-            if (clickedItemStack != null && clickedItemStack.getType() != Material.AIR && (event.getClick() == ClickType.DROP || event.getClick() == ClickType.CONTROL_DROP)) {
+                final @Nullable ItemStack clickedItemStack,
+                final @NotNull ClickAction clickAction,
+                final @Nullable Boolean processedResult) {
+            if (clickedItemStack != null
+                    && clickedItemStack.getType() != Material.AIR
+                    && (event.getClick() == ClickType.DROP || event.getClick() == ClickType.CONTROL_DROP)) {
                 if (!checkCooldown(player)) {
                     return false;
                 }

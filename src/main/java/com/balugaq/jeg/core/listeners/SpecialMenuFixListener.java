@@ -31,14 +31,13 @@ import com.balugaq.jeg.utils.Debug;
 import com.balugaq.jeg.utils.ReflectionUtil;
 import com.balugaq.jeg.utils.SpecialMenuProvider;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
+import java.util.Deque;
+import java.util.Optional;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Deque;
-import java.util.Optional;
 
 /**
  * @author balugaq
@@ -59,7 +58,8 @@ public class SpecialMenuFixListener implements Listener {
         if (optional.isPresent()) {
             PlayerProfile profile = optional.get();
             try {
-                @SuppressWarnings("unchecked") Deque<Object> queue = (Deque<Object>) ReflectionUtil.getValue(profile.getGuideHistory(), "queue");
+                @SuppressWarnings("unchecked")
+                Deque<Object> queue = (Deque<Object>) ReflectionUtil.getValue(profile.getGuideHistory(), "queue");
                 if (queue == null || queue.isEmpty()) {
                     return;
                 }

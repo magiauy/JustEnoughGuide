@@ -152,12 +152,20 @@ public class CustomGroupConfiguration implements IParsable {
     public List<Object> objects() {
         if (this.objects != null) return this.objects;
 
-        List<Object> objects = new ArrayList<>(Arrays.stream(groups).map(s -> {
-            for (ItemGroup itemGroup : Slimefun.getRegistry().getAllItemGroups())
-                if (itemGroup.getKey().toString().equals(s)) return itemGroup;
-            return null;
-        }).filter(Objects::nonNull).map(s -> (Object) s).toList());
-        objects.addAll(Arrays.stream(items).map(s -> SlimefunItem.getById(s.toUpperCase())).filter(Objects::nonNull).map(s -> (Object) s).toList());
+        List<Object> objects = new ArrayList<>(Arrays.stream(groups)
+                .map(s -> {
+                    for (ItemGroup itemGroup : Slimefun.getRegistry().getAllItemGroups())
+                        if (itemGroup.getKey().toString().equals(s)) return itemGroup;
+                    return null;
+                })
+                .filter(Objects::nonNull)
+                .map(s -> (Object) s)
+                .toList());
+        objects.addAll(Arrays.stream(items)
+                .map(s -> SlimefunItem.getById(s.toUpperCase()))
+                .filter(Objects::nonNull)
+                .map(s -> (Object) s)
+                .toList());
         this.objects = objects;
         return objects;
     }
@@ -193,7 +201,7 @@ public class CustomGroupConfiguration implements IParsable {
             return IParsable.fieldNames(Display.class);
         }
 
-        @NotNull
+        final @NotNull
         public ItemStack item() {
             if (itemStack != null) return itemStack;
             itemStack = getHashLike(material);
@@ -219,11 +227,13 @@ public class CustomGroupConfiguration implements IParsable {
         }
 
         public boolean isBase64Like(@NotNull String value) {
-            return value.length() > 32 && value.matches("^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$");
+            return value.length() > 32
+                    && value.matches("^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$");
         }
 
         public boolean isURLLike(@NotNull String value) {
-            return value.matches("^https?://(?:[-\\w]+\\.)?[-\\w]+(?:\\.[a-zA-Z]{2,5}|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})(?::\\d{1,5})?(/[-\\w./]*)*(\\?[-\\w.&=]*)?(#[-\\w]*)?$");
+            return value.matches(
+                    "^https?://(?:[-\\w]+\\.)?[-\\w]+(?:\\.[a-zA-Z]{2,5}|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})(?::\\d{1,5})?(/[-\\w./]*)*(\\?[-\\w.&=]*)?(#[-\\w]*)?$");
         }
 
         @Nullable

@@ -58,24 +58,24 @@ import java.util.Map;
  * @since 1.8
  */
 @SuppressWarnings({"deprecation", "UnnecessaryUnicodeEscape"})
-final class JEGContributorsMenu {
-
-    private JEGContributorsMenu() {
-    }
-
+public class JEGContributorsMenu {
     public static void open(@NotNull Player p, int page) {
         ChestMenu menu = new ChestMenu(Slimefun.getLocalization().getMessage(p, "guide.title.credits"));
 
         menu.setEmptySlotsClickable(false);
         menu.addMenuOpeningHandler(SoundEffect.GUIDE_CONTRIBUTORS_OPEN_SOUND::playFor);
 
-        ChestMenuUtils.drawBackground(menu, Formats.contributors.getChars('B').stream().mapToInt(i -> i).toArray());
+        ChestMenuUtils.drawBackground(
+                menu,
+                Formats.contributors.getChars('B').stream().mapToInt(i -> i).toArray());
 
         for (int ss : Formats.contributors.getChars('b')) {
             menu.addItem(
                     ss,
-                    PatchScope.Back.patch(p, Converter.getItem(ChestMenuUtils.getBackButton(
-                            p, "", "&7" + Slimefun.getLocalization().getMessage(p, "guide.back.settings")))));
+                    PatchScope.Back.patch(
+                            p,
+                            Converter.getItem(ChestMenuUtils.getBackButton(
+                                    p, "", "&7" + Slimefun.getLocalization().getMessage(p, "guide.back.settings")))));
             menu.addMenuClickHandler(ss, (pl, slot, item, action) -> {
                 JEGGuideSettings.openSettings(pl, p.getInventory().getItemInMainHand());
                 return false;

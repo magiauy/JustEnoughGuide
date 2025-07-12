@@ -50,7 +50,6 @@ public class FluffyMachinesIntegrationMain implements Integration {
         }
     }
 
-
     public static void rrc(@NotNull SlimefunItem slimefunItem, int @NotNull [] slots, boolean unordered) {
         handledSlimefunItems.add(slimefunItem);
         RecipeCompletableRegistry.registerRecipeCompletable(slimefunItem, slots, unordered);

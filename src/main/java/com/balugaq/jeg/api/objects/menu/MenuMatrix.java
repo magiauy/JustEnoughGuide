@@ -50,7 +50,6 @@ public class MenuMatrix {
     private final Map<Character, ChestMenu.MenuClickHandler> handlerMap = new HashMap<>();
 
     public MenuMatrix() {
-
     }
 
     public @NotNull MenuMatrix addLine(String label) {

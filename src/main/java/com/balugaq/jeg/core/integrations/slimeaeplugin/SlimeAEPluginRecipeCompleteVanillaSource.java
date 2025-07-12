@@ -34,6 +34,7 @@ import com.balugaq.jeg.core.listeners.RecipeCompletableListener;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.InventoryUtil;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
+import java.util.List;
 import me.ddggdd135.guguslimefunlib.items.ItemKey;
 import me.ddggdd135.slimeae.api.interfaces.IStorage;
 import me.ddggdd135.slimeae.api.items.ItemRequest;
@@ -48,8 +49,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-
 /**
  * @author balugaq
  * @since 1.9
@@ -57,13 +56,26 @@ import java.util.List;
 public class SlimeAEPluginRecipeCompleteVanillaSource implements VanillaSource {
     @SuppressWarnings("deprecation")
     @Override
-    public boolean handleable(@NotNull Block block, @NotNull Inventory inventory, @NotNull Player player, @NotNull ClickAction clickAction, int @NotNull [] ingredientSlots, boolean unordered) {
+    public boolean handleable(
+            @NotNull Block block,
+            @NotNull Inventory inventory,
+            @NotNull Player player,
+            @NotNull ClickAction clickAction,
+            int @NotNull [] ingredientSlots,
+            boolean unordered) {
         return SlimeAEPluginIntegrationMain.findNearbyIStorage(block.getLocation()) != null;
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public boolean openGuide(@NotNull Block block, @NotNull Inventory inventory, @NotNull Player player, @NotNull ClickAction clickAction, int @NotNull [] ingredientSlots, boolean unordered, @Nullable Runnable callback) {
+    public boolean openGuide(
+            @NotNull Block block,
+            @NotNull Inventory inventory,
+            @NotNull Player player,
+            @NotNull ClickAction clickAction,
+            int @NotNull [] ingredientSlots,
+            boolean unordered,
+            @Nullable Runnable callback) {
         GuideEvents.ItemButtonClickEvent lastEvent = RecipeCompletableListener.getLastEvent(player.getUniqueId());
         if (clickAction.isRightClicked() && lastEvent != null) {
             int times = 1;
@@ -104,7 +116,12 @@ public class SlimeAEPluginRecipeCompleteVanillaSource implements VanillaSource {
     }
 
     @Override
-    public boolean completeRecipeWithGuide(@NotNull Block block, @NotNull Inventory inventory, GuideEvents.@NotNull ItemButtonClickEvent event, int @NotNull [] ingredientSlots, boolean unordered) {
+    public boolean completeRecipeWithGuide(
+            @NotNull Block block,
+            @NotNull Inventory inventory,
+            GuideEvents.@NotNull ItemButtonClickEvent event,
+            int @NotNull [] ingredientSlots,
+            boolean unordered) {
         IStorage root = SlimeAEPluginIntegrationMain.findNearbyIStorage(block.getLocation());
         if (root == null) {
             return false;
@@ -181,15 +198,17 @@ public class SlimeAEPluginRecipeCompleteVanillaSource implements VanillaSource {
         return true;
     }
 
-    @Nullable
-    private ItemStack getItemStack(@NotNull IStorage networkStorage, @NotNull Player player, @NotNull ItemStack itemStack) {
+    @Nullable private ItemStack getItemStack(
+            @NotNull IStorage networkStorage, @NotNull Player player, @NotNull ItemStack itemStack) {
         ItemStack i1 = getItemStackFromPlayerInventory(player, itemStack);
         if (i1 != null) {
             return i1;
         }
 
         // get from networkStorage
-        ItemStack[] gotten = networkStorage.takeItem(new ItemRequest(new ItemKey(itemStack), 1L)).toItemStacks();
+        ItemStack[] gotten = networkStorage
+                .takeItem(new ItemRequest(new ItemKey(itemStack), 1L))
+                .toItemStacks();
         if (gotten.length != 0) {
             return gotten[0];
         }

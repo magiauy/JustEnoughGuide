@@ -66,7 +66,10 @@ public interface JEGCommand {
      * @return If the command can be executed.
      */
     default boolean canCommand(
-            @NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+            final @NotNull CommandSender sender,
+            @NotNull Command command,
+            @NotNull String label,
+            @NotNull String[] args) {
         return false;
     }
 
@@ -79,5 +82,8 @@ public interface JEGCommand {
      * @param args    The arguments of the command.
      */
     void onCommand(
-            @NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args);
+            final @NotNull CommandSender sender,
+            @NotNull Command command,
+            @NotNull String label,
+            @NotNull String[] args);
 }

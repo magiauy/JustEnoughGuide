@@ -49,6 +49,11 @@ import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.ParametersAreNonnullByDefault;
 import lombok.experimental.UtilityClass;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import net.wesjd.anvilgui.AnvilGUI;
@@ -59,12 +64,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This class contains utility methods for the guide system.
@@ -151,8 +150,8 @@ public final class GuideUtil {
 
     public static boolean isTaggedGroupType(@NotNull ItemGroup itemGroup) {
         Class<?> clazz = itemGroup.getClass();
-        return !(itemGroup instanceof FlexItemGroup) &&
-                (clazz == ItemGroup.class
+        return !(itemGroup instanceof FlexItemGroup)
+                && (clazz == ItemGroup.class
                         || clazz == SubItemGroup.class
                         || clazz == LockedItemGroup.class
                         || clazz == SeasonalItemGroup.class
@@ -163,55 +162,96 @@ public final class GuideUtil {
     }
 
     @SuppressWarnings("deprecation")
-    public static void addRTSButton(@NotNull ChestMenu menu, @NotNull Player p, @NotNull PlayerProfile profile, @NotNull Format format, SlimefunGuideMode mode, @NotNull SlimefunGuideImplementation implementation) {
+    public static void addRTSButton(
+            @NotNull ChestMenu menu,
+            @NotNull Player p,
+            @NotNull PlayerProfile profile,
+            @NotNull Format format,
+            SlimefunGuideMode mode,
+            @NotNull SlimefunGuideImplementation implementation) {
         if (JustEnoughGuide.getConfigManager().isRTSSearch()) {
             for (int ss : format.getChars('R')) {
-                menu.addItem(ss, PatchScope.RealTimeSearch.patch(p, Models.RTS_ITEM), (pl, slot, itemstack, action) -> EventUtil.callEvent(new GuideEvents.RTSButtonClickEvent(pl, itemstack, slot, action, menu, implementation)).ifSuccess(() -> {
-                    try {
-                        RTSSearchGroup.newRTSInventoryFor(pl, mode, (s, stateSnapshot) -> {
-                            if (s == AnvilGUI.Slot.INPUT_LEFT) {
-                                // back button clicked
-                                GuideHistory history = profile.getGuideHistory();
-                                if (action.isShiftClicked()) {
-                                    implementation.openMainMenu(profile, profile.getGuideHistory().getMainMenuPage());
-                                } else {
-                                    history.goBack(implementation);
-                                }
-                            } else if (s == AnvilGUI.Slot.INPUT_RIGHT) {
-                                // previous page button clicked
-                                SearchGroup rts = RTSSearchGroup.RTS_SEARCH_GROUPS.get(pl);
-                                if (rts != null) {
-                                    int oldPage = RTSSearchGroup.RTS_PAGES.getOrDefault(pl, 1);
-                                    int newPage = Math.max(1, oldPage - 1);
-                                    RTSEvents.PageChangeEvent event = new RTSEvents.PageChangeEvent(pl, RTSSearchGroup.RTS_PLAYERS.get(pl), oldPage, newPage, mode);
-                                    Bukkit.getPluginManager().callEvent(event);
-                                    if (!event.isCancelled()) {
-                                        synchronized (RTSSearchGroup.RTS_PAGES) {
-                                            RTSSearchGroup.RTS_PAGES.put(pl, newPage);
-                                        }
+                menu.addItem(
+                        ss,
+                        PatchScope.RealTimeSearch.patch(p, Models.RTS_ITEM),
+                        (pl, slot, itemstack, action) -> EventUtil.callEvent(new GuideEvents.RTSButtonClickEvent(
+                                        pl, itemstack, slot, action, menu, implementation))
+                                .ifSuccess(() -> {
+                                    try {
+                                        RTSSearchGroup.newRTSInventoryFor(
+                                                pl,
+                                                mode,
+                                                (s, stateSnapshot) -> {
+                                                    if (s == AnvilGUI.Slot.INPUT_LEFT) {
+                                                        // back button clicked
+                                                        GuideHistory history = profile.getGuideHistory();
+                                                        if (action.isShiftClicked()) {
+                                                            implementation.openMainMenu(
+                                                                    profile,
+                                                                    profile.getGuideHistory()
+                                                                            .getMainMenuPage());
+                                                        } else {
+                                                            history.goBack(implementation);
+                                                        }
+                                                    } else if (s == AnvilGUI.Slot.INPUT_RIGHT) {
+                                                        // previous page button clicked
+                                                        SearchGroup rts = RTSSearchGroup.RTS_SEARCH_GROUPS.get(pl);
+                                                        if (rts != null) {
+                                                            int oldPage = RTSSearchGroup.RTS_PAGES.getOrDefault(pl, 1);
+                                                            int newPage = Math.max(1, oldPage - 1);
+                                                            RTSEvents.PageChangeEvent event =
+                                                                    new RTSEvents.PageChangeEvent(
+                                                                            pl,
+                                                                            RTSSearchGroup.RTS_PLAYERS.get(pl),
+                                                                            oldPage,
+                                                                            newPage,
+                                                                            mode);
+                                                            Bukkit.getPluginManager()
+                                                                    .callEvent(event);
+                                                            if (!event.isCancelled()) {
+                                                                synchronized (RTSSearchGroup.RTS_PAGES) {
+                                                                    RTSSearchGroup.RTS_PAGES.put(pl, newPage);
+                                                                }
+                                                            }
+                                                        }
+                                                    } else if (s == AnvilGUI.Slot.OUTPUT) {
+                                                        // next page button clicked
+                                                        SearchGroup rts = RTSSearchGroup.RTS_SEARCH_GROUPS.get(pl);
+                                                        if (rts != null) {
+                                                            int oldPage = RTSSearchGroup.RTS_PAGES.getOrDefault(pl, 1);
+                                                            int newPage = Math.min(
+                                                                    (rts.slimefunItemList.size() - 1)
+                                                                                    / RTSListener.FILL_ORDER.length
+                                                                            + 1,
+                                                                    oldPage + 1);
+                                                            RTSEvents.PageChangeEvent event =
+                                                                    new RTSEvents.PageChangeEvent(
+                                                                            pl,
+                                                                            RTSSearchGroup.RTS_PLAYERS.get(pl),
+                                                                            oldPage,
+                                                                            newPage,
+                                                                            mode);
+                                                            Bukkit.getPluginManager()
+                                                                    .callEvent(event);
+                                                            if (!event.isCancelled()) {
+                                                                synchronized (RTSSearchGroup.RTS_PAGES) {
+                                                                    RTSSearchGroup.RTS_PAGES.put(pl, newPage);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                new int[] {
+                                                    AnvilGUI.Slot.INPUT_LEFT,
+                                                    AnvilGUI.Slot.INPUT_RIGHT,
+                                                    AnvilGUI.Slot.OUTPUT
+                                                },
+                                                null);
+                                    } catch (Exception ignored) {
+                                        p.sendMessage(ChatColor.RED + "不兼容的版本! 无法使用实时搜索");
                                     }
-                                }
-                            } else if (s == AnvilGUI.Slot.OUTPUT) {
-                                // next page button clicked
-                                SearchGroup rts = RTSSearchGroup.RTS_SEARCH_GROUPS.get(pl);
-                                if (rts != null) {
-                                    int oldPage = RTSSearchGroup.RTS_PAGES.getOrDefault(pl, 1);
-                                    int newPage = Math.min((rts.slimefunItemList.size() - 1) / RTSListener.FILL_ORDER.length + 1, oldPage + 1);
-                                    RTSEvents.PageChangeEvent event = new RTSEvents.PageChangeEvent(pl, RTSSearchGroup.RTS_PLAYERS.get(pl), oldPage, newPage, mode);
-                                    Bukkit.getPluginManager().callEvent(event);
-                                    if (!event.isCancelled()) {
-                                        synchronized (RTSSearchGroup.RTS_PAGES) {
-                                            RTSSearchGroup.RTS_PAGES.put(pl, newPage);
-                                        }
-                                    }
-                                }
-                            }
-                        }, new int[]{AnvilGUI.Slot.INPUT_LEFT, AnvilGUI.Slot.INPUT_RIGHT, AnvilGUI.Slot.OUTPUT}, null);
-                    } catch (Exception ignored) {
-                        p.sendMessage(ChatColor.RED + "不兼容的版本! 无法使用实时搜索");
-                    }
-                    return false;
-                }));
+                                    return false;
+                                }));
             }
         } else {
             for (int ss : format.getChars('R')) {
@@ -221,41 +261,54 @@ public final class GuideUtil {
     }
 
     @SuppressWarnings("deprecation")
-    public static void addBookMarkButton(@NotNull ChestMenu menu, @NotNull Player p, @NotNull PlayerProfile profile, @NotNull Format format, @NotNull JEGSlimefunGuideImplementation implementation, ItemGroup itemGroup) {
+    public static void addBookMarkButton(
+            @NotNull ChestMenu menu,
+            @NotNull Player p,
+            @NotNull PlayerProfile profile,
+            @NotNull Format format,
+            @NotNull JEGSlimefunGuideImplementation implementation,
+            ItemGroup itemGroup) {
         if (JustEnoughGuide.getConfigManager().isBookmark()) {
-            BookmarkRelocation b = itemGroup instanceof BookmarkRelocation bookmarkRelocation ? bookmarkRelocation : null;
+            BookmarkRelocation b =
+                    itemGroup instanceof BookmarkRelocation bookmarkRelocation ? bookmarkRelocation : null;
             for (int s : b != null ? b.getBookMark(implementation, p) : format.getChars('C')) {
                 menu.addItem(
                         s,
                         PatchScope.BookMark.patch(p, getBookMarkMenuButton()),
-                        (pl, slot, itemstack, action) -> EventUtil.callEvent(new GuideEvents.BookMarkButtonClickEvent(pl, itemstack, slot, action, menu, implementation)).ifSuccess(() -> {
-                            implementation.openBookMarkGroup(pl, profile);
-                            return false;
-                        }));
+                        (pl, slot, itemstack, action) -> EventUtil.callEvent(new GuideEvents.BookMarkButtonClickEvent(
+                                        pl, itemstack, slot, action, menu, implementation))
+                                .ifSuccess(() -> {
+                                    implementation.openBookMarkGroup(pl, profile);
+                                    return false;
+                                }));
             }
         } else {
             for (int s : format.getChars('C')) {
-                menu.addItem(
-                        s,
-                        ChestMenuUtils.getBackground(),
-                        ChestMenuUtils.getEmptyClickHandler()
-                );
+                menu.addItem(s, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
             }
         }
     }
 
     @SuppressWarnings("deprecation")
-    public static void addItemMarkButton(@NotNull ChestMenu menu, @NotNull Player p, @NotNull PlayerProfile profile, @NotNull Format format, @NotNull JEGSlimefunGuideImplementation implementation, @Nullable ItemGroup itemGroup) {
+    public static void addItemMarkButton(
+            @NotNull ChestMenu menu,
+            @NotNull Player p,
+            @NotNull PlayerProfile profile,
+            @NotNull Format format,
+            @NotNull JEGSlimefunGuideImplementation implementation,
+            @Nullable ItemGroup itemGroup) {
         if (itemGroup != null && JustEnoughGuide.getConfigManager().isBookmark() && isTaggedGroupType(itemGroup)) {
             BookmarkRelocation b = itemGroup instanceof BookmarkRelocation relocation ? relocation : null;
             for (int ss : b != null ? b.getItemMark(implementation, p) : format.getChars('c')) {
                 menu.addItem(
                         ss,
                         PatchScope.ItemMark.patch(p, getItemMarkMenuButton()),
-                        (pl, slot, itemstack, action) -> EventUtil.callEvent(new GuideEvents.ItemMarkButtonClickEvent(pl, itemstack, slot, action, menu, implementation)).ifSuccess(() -> {
-                            implementation.openItemMarkGroup(itemGroup, pl, profile);
-                            return false;
-                        }));
+                        (pl, slot, itemstack, action) -> EventUtil.callEvent(new GuideEvents.ItemMarkButtonClickEvent(
+                                        pl, itemstack, slot, action, menu, implementation))
+                                .ifSuccess(() -> {
+                                    implementation.openItemMarkGroup(itemGroup, pl, profile);
+                                    return false;
+                                }));
             }
         } else {
             for (int ss : format.getChars('c')) {
@@ -272,8 +325,7 @@ public final class GuideUtil {
         }
     }
 
-    @NotNull
-    public static List<ItemGroup> getForceHiddens() {
+    @NotNull public static List<ItemGroup> getForceHiddens() {
         return new ArrayList<>(forceHiddens);
     }
 

@@ -59,12 +59,14 @@ public class RecipeCompletableRegistry {
     }
 
     @ApiStatus.Obsolete
-    public static void registerRecipeCompletable(@NotNull SlimefunItem slimefunItem, @Range(from = 0, to = 53) int @NotNull [] slots) {
+    public static void registerRecipeCompletable(
+            @NotNull SlimefunItem slimefunItem, @Range(from = 0, to = 53) int @NotNull [] slots) {
         RecipeCompletableListener.registerRecipeCompletable(slimefunItem, slots);
     }
 
     @ApiStatus.Obsolete
-    public static void registerRecipeCompletable(@NotNull SlimefunItem slimefunItem, @Range(from = 0, to = 53) int @NotNull [] slots, boolean unordered) {
+    public static void registerRecipeCompletable(
+            @NotNull SlimefunItem slimefunItem, @Range(from = 0, to = 53) int @NotNull [] slots, boolean unordered) {
         RecipeCompletableListener.registerRecipeCompletable(slimefunItem, slots, unordered);
     }
 

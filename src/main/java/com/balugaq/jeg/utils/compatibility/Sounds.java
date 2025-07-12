@@ -43,7 +43,8 @@ import org.jetbrains.annotations.Nullable;
  */
 @SuppressWarnings("deprecation")
 public class Sounds {
-    public static final Sound GUIDE_BUTTON_CLICK_SOUND = byKeyOrDefault("item.book.page_turn", byName("ITEM_BOOK_PAGE_TURN"));
+    public static final Sound GUIDE_BUTTON_CLICK_SOUND =
+            byKeyOrDefault("item.book.page_turn", byName("ITEM_BOOK_PAGE_TURN"));
     public static final Sound COLLECTED_ITEM = byKeyOrDefault("entity.player.levelup", byName("ENTITY_PLAYER_LEVELUP"));
 
     public static @Nullable Sound byName(@NotNull String name) {

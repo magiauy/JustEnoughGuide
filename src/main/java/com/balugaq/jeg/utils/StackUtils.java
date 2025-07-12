@@ -29,6 +29,9 @@ package com.balugaq.jeg.utils;
 
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Material;
 import org.bukkit.Tag;
@@ -61,10 +64,6 @@ import org.bukkit.inventory.meta.WritableBookMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
 /**
  * @author Sefiraat
  * @author baluagq
@@ -73,11 +72,12 @@ import java.util.Optional;
 @SuppressWarnings({"deprecation", "UnstableApiUsage", "unused"})
 @UtilityClass
 public class StackUtils {
-    public static final boolean IS_1_20_5 = JustEnoughGuide.getMinecraftVersion().isAtLeast(MinecraftVersion.MINECRAFT_1_20_5);
-    public static final boolean IS_1_21 = JustEnoughGuide.getMinecraftVersion().isAtLeast(MinecraftVersion.MINECRAFT_1_21);
+    public static final boolean IS_1_20_5 =
+            JustEnoughGuide.getMinecraftVersion().isAtLeast(MinecraftVersion.MINECRAFT_1_20_5);
+    public static final boolean IS_1_21 =
+            JustEnoughGuide.getMinecraftVersion().isAtLeast(MinecraftVersion.MINECRAFT_1_21);
 
-    @NotNull
-    public static ItemStack getAsQuantity(@Nullable ItemStack itemStack, int amount) {
+    @NotNull public static ItemStack getAsQuantity(@Nullable ItemStack itemStack, int amount) {
         if (itemStack == null) {
             return new ItemStack(Material.AIR);
         }
@@ -96,7 +96,6 @@ public class StackUtils {
     public static boolean itemsMatch(@Nullable ItemStack itemStack0, @Nullable ItemStack itemStack) {
         return itemsMatch(itemStack0, itemStack, true, false, true, true);
     }
-
 
     /**
      * Checks if items match each other, checks go in order from lightest to heaviest
@@ -119,7 +118,8 @@ public class StackUtils {
      * @param checkAmount If amount should be checked
      * @return True if items match
      */
-    public static boolean itemsMatch(@Nullable ItemStack itemStack0, @Nullable ItemStack itemStack, boolean checkLore, boolean checkAmount) {
+    public static boolean itemsMatch(
+            @Nullable ItemStack itemStack0, @Nullable ItemStack itemStack, boolean checkLore, boolean checkAmount) {
         return itemsMatch(itemStack0, itemStack, checkLore, checkAmount, true, true);
     }
 
@@ -133,7 +133,12 @@ public class StackUtils {
      * @param checkCustomModelId If custom model id should be checked
      * @return True if items match
      */
-    public static boolean itemsMatch(@Nullable ItemStack itemStack0, @Nullable ItemStack itemStack, boolean checkLore, boolean checkAmount, boolean checkCustomModelId) {
+    public static boolean itemsMatch(
+            @Nullable ItemStack itemStack0,
+            @Nullable ItemStack itemStack,
+            boolean checkLore,
+            boolean checkAmount,
+            boolean checkCustomModelId) {
         return itemsMatch(itemStack0, itemStack, checkLore, checkAmount, checkCustomModelId, true);
     }
 
@@ -150,8 +155,8 @@ public class StackUtils {
      */
     @SuppressWarnings({"UnstableApiUsage", "OptionalIsPresent"})
     public static boolean itemsMatch(
-            @Nullable ItemStack itemStack0,
-            @Nullable ItemStack itemStack,
+            final @Nullable ItemStack itemStack0,
+            final @Nullable ItemStack itemStack,
             boolean checkLore,
             boolean checkAmount,
             boolean checkCustomModelId,
@@ -221,7 +226,8 @@ public class StackUtils {
         }
 
         // PDCs don't match
-        if (checkPersistentDataContainer && !itemMeta.getPersistentDataContainer().equals(cachedMeta.getPersistentDataContainer())) {
+        if (checkPersistentDataContainer
+                && !itemMeta.getPersistentDataContainer().equals(cachedMeta.getPersistentDataContainer())) {
             return false;
         }
 

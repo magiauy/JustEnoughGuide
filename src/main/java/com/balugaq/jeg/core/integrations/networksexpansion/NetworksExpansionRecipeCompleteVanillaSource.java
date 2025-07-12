@@ -35,6 +35,7 @@ import com.balugaq.jeg.utils.InventoryUtil;
 import io.github.sefiraat.networks.network.NetworkRoot;
 import io.github.sefiraat.networks.network.stackcaches.ItemRequest;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
+import java.util.List;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -46,8 +47,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-
 /**
  * @author balugaq
  * @since 1.9
@@ -56,13 +55,26 @@ public class NetworksExpansionRecipeCompleteVanillaSource implements VanillaSour
 
     @SuppressWarnings("deprecation")
     @Override
-    public boolean handleable(@NotNull Block block, @NotNull Inventory inventory, @NotNull Player player, @NotNull ClickAction clickAction, int @NotNull [] ingredientSlots, boolean unordered) {
+    public boolean handleable(
+            @NotNull Block block,
+            @NotNull Inventory inventory,
+            @NotNull Player player,
+            @NotNull ClickAction clickAction,
+            int @NotNull [] ingredientSlots,
+            boolean unordered) {
         return NetworksExpansionIntegrationMain.findNearbyNetworkRoot(block.getLocation()) != null;
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public boolean openGuide(@NotNull Block block, @NotNull Inventory inventory, @NotNull Player player, @NotNull ClickAction clickAction, int @NotNull [] ingredientSlots, boolean unordered, @Nullable Runnable callback) {
+    public boolean openGuide(
+            @NotNull Block block,
+            @NotNull Inventory inventory,
+            @NotNull Player player,
+            @NotNull ClickAction clickAction,
+            int @NotNull [] ingredientSlots,
+            boolean unordered,
+            @Nullable Runnable callback) {
         GuideEvents.ItemButtonClickEvent lastEvent = RecipeCompletableListener.getLastEvent(player.getUniqueId());
         if (clickAction.isRightClicked() && lastEvent != null) {
             int times = 1;
@@ -103,7 +115,12 @@ public class NetworksExpansionRecipeCompleteVanillaSource implements VanillaSour
     }
 
     @Override
-    public boolean completeRecipeWithGuide(@NotNull Block block, @NotNull Inventory inventory, GuideEvents.@NotNull ItemButtonClickEvent event, int @NotNull [] ingredientSlots, boolean unordered) {
+    public boolean completeRecipeWithGuide(
+            @NotNull Block block,
+            @NotNull Inventory inventory,
+            GuideEvents.@NotNull ItemButtonClickEvent event,
+            int @NotNull [] ingredientSlots,
+            boolean unordered) {
         NetworkRoot root = NetworksExpansionIntegrationMain.findNearbyNetworkRoot(block.getLocation());
         if (root == null) {
             return false;
@@ -180,8 +197,7 @@ public class NetworksExpansionRecipeCompleteVanillaSource implements VanillaSour
         return true;
     }
 
-    @Nullable
-    private ItemStack getItemStack(@NotNull NetworkRoot root, @NotNull Player player, @NotNull ItemStack itemStack) {
+    @Nullable private ItemStack getItemStack(@NotNull NetworkRoot root, @NotNull Player player, @NotNull ItemStack itemStack) {
         ItemStack i1 = getItemStackFromPlayerInventory(player, itemStack);
         if (i1 != null) {
             return i1;

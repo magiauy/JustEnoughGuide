@@ -85,25 +85,31 @@ import java.util.logging.Level;
 @NotDisplayInCheatMode
 public class VanillaItemsGroup extends FlexItemGroup {
     public static final List<SlimefunItem> slimefunItems = new ArrayList<>();
+
     @Deprecated
     private static final @NotNull Set<Player> displayableFor = ConcurrentHashMap.newKeySet();
+
     private static final JavaPlugin JAVA_PLUGIN = JustEnoughGuide.getInstance();
 
     static {
-        Bukkit.getScheduler().runTaskLater(JAVA_PLUGIN, () -> {
-            boolean before = JustEnoughGuide.disableAutomaticallyLoadItems();
-            try {
-                for (Material material : Material.values()) {
-                    if (!material.isAir() && material.isItem() && !material.isLegacy()) {
-                        slimefunItems.add(createSlimefunItem(material));
-                    }
-                }
-            } catch (Exception e) {
-                Debug.trace(e);
-            } finally {
-                JustEnoughGuide.setAutomaticallyLoadItems(before);
-            }
-        }, 1L);
+        Bukkit.getScheduler()
+                .runTaskLater(
+                        JAVA_PLUGIN,
+                        () -> {
+                            boolean before = JustEnoughGuide.disableAutomaticallyLoadItems();
+                            try {
+                                for (Material material : Material.values()) {
+                                    if (!material.isAir() && material.isItem() && !material.isLegacy()) {
+                                        slimefunItems.add(createSlimefunItem(material));
+                                    }
+                                }
+                            } catch (Exception e) {
+                                Debug.trace(e);
+                            } finally {
+                                JustEnoughGuide.setAutomaticallyLoadItems(before);
+                            }
+                        },
+                        1L);
     }
 
     private final int page;
@@ -170,9 +176,9 @@ public class VanillaItemsGroup extends FlexItemGroup {
      */
     @Override
     public boolean isVisible(
-            @NotNull Player player,
-            @NotNull PlayerProfile playerProfile,
-            @NotNull SlimefunGuideMode slimefunGuideMode) {
+            final @NotNull Player player,
+            final @NotNull PlayerProfile playerProfile,
+            final @NotNull SlimefunGuideMode slimefunGuideMode) {
         return true;
     }
 
@@ -185,9 +191,9 @@ public class VanillaItemsGroup extends FlexItemGroup {
      */
     @Override
     public void open(
-            @NotNull Player player,
-            @NotNull PlayerProfile playerProfile,
-            @NotNull SlimefunGuideMode slimefunGuideMode) {
+            final @NotNull Player player,
+            final @NotNull PlayerProfile playerProfile,
+            final @NotNull SlimefunGuideMode slimefunGuideMode) {
         playerProfile.getGuideHistory().add(this, this.page);
         this.generateMenu(player, playerProfile, slimefunGuideMode).open(player);
     }
@@ -200,9 +206,9 @@ public class VanillaItemsGroup extends FlexItemGroup {
      * @param slimefunGuideMode The Slimefun guide mode.
      */
     public void refresh(
-            @NotNull Player player,
-            @NotNull PlayerProfile playerProfile,
-            @NotNull SlimefunGuideMode slimefunGuideMode) {
+            final @NotNull Player player,
+            final @NotNull PlayerProfile playerProfile,
+            final @NotNull SlimefunGuideMode slimefunGuideMode) {
         GuideUtil.removeLastEntry(playerProfile.getGuideHistory());
         this.open(player, playerProfile, slimefunGuideMode);
     }
@@ -217,9 +223,9 @@ public class VanillaItemsGroup extends FlexItemGroup {
      */
     @NotNull
     private ChestMenu generateMenu(
-            @NotNull Player player,
-            @NotNull PlayerProfile playerProfile,
-            @NotNull SlimefunGuideMode slimefunGuideMode) {
+            final @NotNull Player player,
+            final @NotNull PlayerProfile playerProfile,
+            final @NotNull SlimefunGuideMode slimefunGuideMode) {
         ChestMenu chestMenu = new ChestMenu("原版物品");
 
         chestMenu.setEmptySlotsClickable(false);
@@ -229,59 +235,85 @@ public class VanillaItemsGroup extends FlexItemGroup {
 
         for (int ss : Formats.sub.getChars('b')) {
             chestMenu.addItem(ss, PatchScope.Back.patch(player, ChestMenuUtils.getBackButton(player)));
-            chestMenu.addMenuClickHandler(ss, (pl, s, is, action) -> EventUtil.callEvent(new GuideEvents.BackButtonClickEvent(pl, is, s, action, chestMenu, implementation)).ifSuccess(() -> {
-                GuideHistory guideHistory = playerProfile.getGuideHistory();
-                if (action.isShiftClicked()) {
-                    SlimefunGuide.openMainMenu(playerProfile, slimefunGuideMode, guideHistory.getMainMenuPage());
-                } else {
-                    guideHistory.goBack(Slimefun.getRegistry().getSlimefunGuide(slimefunGuideMode));
-                }
-                return false;
-            }));
+            chestMenu.addMenuClickHandler(ss, (pl, s, is, action) -> EventUtil.callEvent(
+                            new GuideEvents.BackButtonClickEvent(pl, is, s, action, chestMenu, implementation))
+                    .ifSuccess(() -> {
+                        GuideHistory guideHistory = playerProfile.getGuideHistory();
+                        if (action.isShiftClicked()) {
+                            SlimefunGuide.openMainMenu(
+                                    playerProfile, slimefunGuideMode, guideHistory.getMainMenuPage());
+                        } else {
+                            guideHistory.goBack(Slimefun.getRegistry().getSlimefunGuide(slimefunGuideMode));
+                        }
+                        return false;
+                    }));
         }
 
         // Search feature!
         for (int ss : Formats.sub.getChars('S')) {
             chestMenu.addItem(ss, PatchScope.Search.patch(player, ChestMenuUtils.getSearchButton(player)));
-            chestMenu.addMenuClickHandler(ss, (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.SearchButtonClickEvent(pl, item, slot, action, chestMenu, implementation)).ifSuccess(() -> {
-                pl.closeInventory();
+            chestMenu.addMenuClickHandler(ss, (pl, slot, item, action) -> EventUtil.callEvent(
+                            new GuideEvents.SearchButtonClickEvent(pl, item, slot, action, chestMenu, implementation))
+                    .ifSuccess(() -> {
+                        pl.closeInventory();
 
-                Slimefun.getLocalization().sendMessage(pl, "guide.search.message");
-                ChatInput.waitForPlayer(
-                        JAVA_PLUGIN,
-                        pl,
-                        msg -> implementation.openSearch(
-                                playerProfile, msg, implementation.getMode() == SlimefunGuideMode.SURVIVAL_MODE));
+                        Slimefun.getLocalization().sendMessage(pl, "guide.search.message");
+                        ChatInput.waitForPlayer(
+                                JAVA_PLUGIN,
+                                pl,
+                                msg -> implementation.openSearch(
+                                        playerProfile,
+                                        msg,
+                                        implementation.getMode() == SlimefunGuideMode.SURVIVAL_MODE));
 
-                return false;
-            }));
+                        return false;
+                    }));
         }
 
         for (int ss : Formats.sub.getChars('P')) {
             chestMenu.addItem(
                     ss,
-                    PatchScope.PreviousPage.patch(player, ChestMenuUtils.getPreviousButton(
-                            player, this.page, (slimefunItems.size() - 1) / Formats.sub.getChars('i').size() + 1)));
-            chestMenu.addMenuClickHandler(ss, (p, slot, item, action) -> EventUtil.callEvent(new GuideEvents.PreviousButtonClickEvent(p, item, slot, action, chestMenu, implementation)).ifSuccess(() -> {
-                GuideUtil.removeLastEntry(playerProfile.getGuideHistory());
-                VanillaItemsGroup hiddenItemsGroup = this.getByPage(Math.max(this.page - 1, 1));
-                hiddenItemsGroup.open(player, playerProfile, slimefunGuideMode);
-                return false;
-            }));
+                    PatchScope.PreviousPage.patch(
+                            player,
+                            ChestMenuUtils.getPreviousButton(
+                                    player,
+                                    this.page,
+                                    (slimefunItems.size() - 1)
+                                            / Formats.sub.getChars('i').size()
+                                            + 1)));
+            chestMenu.addMenuClickHandler(ss, (p, slot, item, action) -> EventUtil.callEvent(
+                            new GuideEvents.PreviousButtonClickEvent(p, item, slot, action, chestMenu, implementation))
+                    .ifSuccess(() -> {
+                        GuideUtil.removeLastEntry(playerProfile.getGuideHistory());
+                        VanillaItemsGroup hiddenItemsGroup = this.getByPage(Math.max(this.page - 1, 1));
+                        hiddenItemsGroup.open(player, playerProfile, slimefunGuideMode);
+                        return false;
+                    }));
         }
 
         for (int ss : Formats.sub.getChars('N')) {
             chestMenu.addItem(
                     ss,
-                    PatchScope.NextPage.patch(player, ChestMenuUtils.getNextButton(
-                            player, this.page, (slimefunItems.size() - 1) / Formats.sub.getChars('i').size() + 1)));
-            chestMenu.addMenuClickHandler(ss, (p, slot, item, action) -> EventUtil.callEvent(new GuideEvents.NextButtonClickEvent(p, item, slot, action, chestMenu, implementation)).ifSuccess(() -> {
-                GuideUtil.removeLastEntry(playerProfile.getGuideHistory());
-                VanillaItemsGroup hiddenItemsGroup = this.getByPage(
-                        Math.min(this.page + 1, (slimefunItems.size() - 1) / Formats.sub.getChars('i').size() + 1));
-                hiddenItemsGroup.open(player, playerProfile, slimefunGuideMode);
-                return false;
-            }));
+                    PatchScope.NextPage.patch(
+                            player,
+                            ChestMenuUtils.getNextButton(
+                                    player,
+                                    this.page,
+                                    (slimefunItems.size() - 1)
+                                            / Formats.sub.getChars('i').size()
+                                            + 1)));
+            chestMenu.addMenuClickHandler(ss, (p, slot, item, action) -> EventUtil.callEvent(
+                            new GuideEvents.NextButtonClickEvent(p, item, slot, action, chestMenu, implementation))
+                    .ifSuccess(() -> {
+                        GuideUtil.removeLastEntry(playerProfile.getGuideHistory());
+                        VanillaItemsGroup hiddenItemsGroup = this.getByPage(Math.min(
+                                this.page + 1,
+                                (slimefunItems.size() - 1)
+                                        / Formats.sub.getChars('i').size()
+                                        + 1));
+                        hiddenItemsGroup.open(player, playerProfile, slimefunGuideMode);
+                        return false;
+                    }));
         }
 
         for (int ss : Formats.sub.getChars('B')) {
@@ -300,21 +332,25 @@ public class VanillaItemsGroup extends FlexItemGroup {
                 } else {
                     itemStack = slimefunItem.getItem();
                 }
-                chestMenu.addItem(contentSlots.get(i), PatchScope.SlimefunItem.patch(player, itemStack), (pl, slot, itm, action) -> EventUtil.callEvent(new GuideEvents.ItemButtonClickEvent(pl, itm, slot, action, chestMenu, implementation)).ifSuccess(() -> {
-                    try {
-                        if (implementation.getMode() != SlimefunGuideMode.SURVIVAL_MODE
-                                && (pl.isOp() || pl.hasPermission("slimefun.cheat.items"))) {
-                            pl.getInventory()
-                                    .addItem(itemStack.clone());
-                        } else {
-                            implementation.displayItem(playerProfile, slimefunItem, true);
-                        }
-                    } catch (Exception | LinkageError x) {
-                        printErrorMessage(pl, slimefunItem, x);
-                    }
+                chestMenu.addItem(
+                        contentSlots.get(i),
+                        PatchScope.SlimefunItem.patch(player, itemStack),
+                        (pl, slot, itm, action) -> EventUtil.callEvent(new GuideEvents.ItemButtonClickEvent(
+                                        pl, itm, slot, action, chestMenu, implementation))
+                                .ifSuccess(() -> {
+                                    try {
+                                        if (implementation.getMode() != SlimefunGuideMode.SURVIVAL_MODE
+                                                && (pl.isOp() || pl.hasPermission("slimefun.cheat.items"))) {
+                                            pl.getInventory().addItem(itemStack.clone());
+                                        } else {
+                                            implementation.displayItem(playerProfile, slimefunItem, true);
+                                        }
+                                    } catch (Exception | LinkageError x) {
+                                        printErrorMessage(pl, slimefunItem, x);
+                                    }
 
-                    return false;
-                }));
+                                    return false;
+                                }));
             }
         }
 
@@ -410,13 +446,7 @@ public class VanillaItemsGroup extends FlexItemGroup {
         @NotNull
         public static VanillaItem create(@NotNull Material material) {
             ItemStack icon = new ItemStack(material);
-            return new VanillaItem(
-                    new SlimefunItemStack(
-                            "JEG_VANILLA_" + material.name(),
-                            icon.clone()
-                    ),
-                    icon
-            );
+            return new VanillaItem(new SlimefunItemStack("JEG_VANILLA_" + material.name(), icon.clone()), icon);
         }
     }
 }

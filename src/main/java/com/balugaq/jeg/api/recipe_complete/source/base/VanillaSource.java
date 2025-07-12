@@ -47,11 +47,29 @@ import org.jetbrains.annotations.Range;
 @SuppressWarnings({"SameReturnValue", "unused"})
 public interface VanillaSource extends Source {
     @SuppressWarnings("deprecation")
-    boolean handleable(@NotNull Block block, @NotNull Inventory inventory, @NotNull Player player, @NotNull ClickAction clickAction, @Range(from = 0, to = 53) int @NotNull [] ingredientSlots, boolean unordered);
+    boolean handleable(
+            @NotNull Block block,
+            @NotNull Inventory inventory,
+            @NotNull Player player,
+            @NotNull ClickAction clickAction,
+            @Range(from = 0, to = 53) int @NotNull [] ingredientSlots,
+            boolean unordered);
 
     @SuppressWarnings({"deprecation", "UnusedReturnValue"})
-    boolean openGuide(@NotNull Block block, @NotNull Inventory inventory, @NotNull Player player, @NotNull ClickAction clickAction, @Range(from = 0, to = 53) int @NotNull [] ingredientSlots, boolean unordered, @Nullable Runnable callback);
+    boolean openGuide(
+            @NotNull Block block,
+            @NotNull Inventory inventory,
+            @NotNull Player player,
+            @NotNull ClickAction clickAction,
+            @Range(from = 0, to = 53) int @NotNull [] ingredientSlots,
+            boolean unordered,
+            @Nullable Runnable callback);
 
     @SuppressWarnings("UnusedReturnValue")
-    boolean completeRecipeWithGuide(@NotNull Block block, @NotNull Inventory inventory, GuideEvents.@NotNull ItemButtonClickEvent event, @Range(from = 0, to = 53) int @NotNull [] ingredientSlots, boolean unordered);
+    boolean completeRecipeWithGuide(
+            @NotNull Block block,
+            @NotNull Inventory inventory,
+            GuideEvents.@NotNull ItemButtonClickEvent event,
+            @Range(from = 0, to = 53) int @NotNull [] ingredientSlots,
+            boolean unordered);
 }

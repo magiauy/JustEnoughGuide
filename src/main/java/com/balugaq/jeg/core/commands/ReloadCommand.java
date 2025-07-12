@@ -70,10 +70,10 @@ public class ReloadCommand implements JEGCommand {
 
     @Override
     public boolean canCommand(
-            @NotNull CommandSender sender,
-            @NotNull Command command,
-            @NotNull String label,
-            @NotNull String @NotNull [] args) {
+            final @NotNull CommandSender sender,
+            final @NotNull Command command,
+            final @NotNull String label,
+            final @NotNull String @NotNull [] args) {
         if (sender.isOp()) {
             if (args.length == 1) {
                 return "reload".equalsIgnoreCase(args[0]);
@@ -84,7 +84,10 @@ public class ReloadCommand implements JEGCommand {
 
     @Override
     public void onCommand(
-            @NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+            final @NotNull CommandSender sender,
+            @NotNull Command command,
+            @NotNull String label,
+            @NotNull String[] args) {
         onReload(sender);
     }
 

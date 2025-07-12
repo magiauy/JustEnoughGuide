@@ -34,6 +34,10 @@ import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.common.ChatColors;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.skins.PlayerHead;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.skins.PlayerSkin;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import net.Zrips.CMILib.Colors.CMIChatColor;
@@ -46,11 +50,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 /**
  * This class provides utility methods for working with ItemStacks.
@@ -81,8 +80,7 @@ public final class ItemStackUtil {
      * @param item The MyItemStack to be converted.
      * @return A pure ItemStack.
      */
-    @NotNull
-    public static ItemStack getCleanItem(@Nullable ItemStack item) {
+    @NotNull public static ItemStack getCleanItem(@Nullable ItemStack item) {
         if (item == null) {
             return new ItemStack(Material.AIR);
         }
@@ -107,8 +105,7 @@ public final class ItemStackUtil {
     }
 
     @SneakyThrows
-    @Nullable
-    @Author("lijinhong11 & balugaq")
+    @Nullable @Author("lijinhong11 & balugaq")
     public static ItemStack readItem(char c, @Nullable ConfigurationSection section) {
         if (section == null) {
             return null;
@@ -119,7 +116,6 @@ public final class ItemStackUtil {
             Debug.severe("Icon 定义 " + c + " 缺少 material 字段");
             return null;
         }
-
 
         String material = section.getString("material", "");
         List<String> lore;
@@ -146,19 +142,8 @@ public final class ItemStackUtil {
         if (material.contains("|")) {
             String[] split = material.split("\\|");
             for (String mat : split) {
-                ItemStack item = readItem(
-                        c,
-                        section,
-                        type,
-                        mat.trim(),
-                        name,
-                        lore,
-                        glow,
-                        hasEnchantment,
-                        modelId,
-                        amount,
-                        true
-                );
+                ItemStack item =
+                        readItem(c, section, type, mat.trim(), name, lore, glow, hasEnchantment, modelId, amount, true);
                 if (item != null) {
                     return item;
                 }
@@ -168,32 +153,20 @@ public final class ItemStackUtil {
             return null;
         } else {
             return readItem(
-                    c,
-                    section,
-                    type,
-                    material.trim(),
-                    name,
-                    lore,
-                    glow,
-                    hasEnchantment,
-                    modelId,
-                    amount,
-                    false
-            );
+                    c, section, type, material.trim(), name, lore, glow, hasEnchantment, modelId, amount, false);
         }
     }
 
     @SneakyThrows
-    @Nullable
-    @SuppressWarnings("deprecation")
+    @Nullable @SuppressWarnings("deprecation")
     @Author("lijinhong11 & balugaq")
     public static ItemStack readItem(
             char c,
-            @NotNull ConfigurationSection section,
+            final @NotNull ConfigurationSection section,
             String type,
-            @NotNull String material,
-            @NotNull String name,
-            @NotNull List<String> lore,
+            final @NotNull String material,
+            final @NotNull String name,
+            final @NotNull List<String> lore,
             boolean glow,
             boolean hasEnchantment,
             int modelId,
@@ -253,7 +226,7 @@ public final class ItemStackUtil {
                     itemStack = Converter.getItem(Material.STONE, name, lore);
                 }
             }
-            // mc
+                // mc
             default -> {
                 Optional<Material> materialOptional = Optional.ofNullable(Material.matchMaterial(material));
                 Material mat = Material.STONE;

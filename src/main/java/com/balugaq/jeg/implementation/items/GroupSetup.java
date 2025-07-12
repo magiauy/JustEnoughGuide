@@ -51,24 +51,15 @@ public class GroupSetup {
      * Registers all the JEG groups.
      */
     public static void setup() {
-        guideGroup = new JEGGuideGroup(
-                KeyUtil.newKey("jeg_guide_group"),
-                Models.JEG_GUIDE_GROUP);
+        guideGroup = new JEGGuideGroup(KeyUtil.newKey("jeg_guide_group"), Models.JEG_GUIDE_GROUP);
         guideGroup.register(JustEnoughGuide.getInstance());
-        hiddenItemsGroup = new HiddenItemsGroup(
-                KeyUtil.newKey("hidden_items_group"),
-                Models.HIDDEN_ITEMS_GROUP);
+        hiddenItemsGroup = new HiddenItemsGroup(KeyUtil.newKey("hidden_items_group"), Models.HIDDEN_ITEMS_GROUP);
         hiddenItemsGroup.register(JustEnoughGuide.getInstance());
 
-        vanillaItemsGroup = new VanillaItemsGroup(
-                KeyUtil.newKey("vanilla_items_group"),
-                Models.VANILLA_ITEMS_GROUP);
+        vanillaItemsGroup = new VanillaItemsGroup(KeyUtil.newKey("vanilla_items_group"), Models.VANILLA_ITEMS_GROUP);
         vanillaItemsGroup.register(JustEnoughGuide.getInstance());
 
-        jegItemsGroup = new ItemGroup(
-                KeyUtil.newKey("jeg_items_group"),
-                Models.JEG_ITEMS_GROUP
-        );
+        jegItemsGroup = new ItemGroup(KeyUtil.newKey("jeg_items_group"), Models.JEG_ITEMS_GROUP);
         jegItemsGroup.setTier(Integer.MAX_VALUE);
     }
 

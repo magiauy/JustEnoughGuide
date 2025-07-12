@@ -39,7 +39,11 @@ import org.jetbrains.annotations.NotNull;
  * @since 1.9
  */
 public class RecipeCompleteGuide extends SlimefunItem {
-    public RecipeCompleteGuide(@NotNull ItemGroup itemGroup, @NotNull SlimefunItemStack item, @NotNull RecipeType recipeType, ItemStack @NotNull [] recipe) {
+    public RecipeCompleteGuide(
+            @NotNull ItemGroup itemGroup,
+            @NotNull SlimefunItemStack item,
+            @NotNull RecipeType recipeType,
+            ItemStack @NotNull [] recipe) {
         super(itemGroup, item, recipeType, recipe);
     }
 }

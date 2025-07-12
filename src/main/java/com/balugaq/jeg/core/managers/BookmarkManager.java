@@ -36,6 +36,11 @@ import io.github.thebusybiscuit.slimefun4.api.player.PlayerBackpack;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.core.config.SlimefunDatabaseManager;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -47,12 +52,6 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 /**
  * This class is responsible for managing bookmarks.
@@ -88,7 +87,7 @@ public class BookmarkManager extends AbstractManager {
     }
 
     private void addBookmark0(
-            @NotNull Player player, @NotNull PlayerBackpack backpack, @NotNull SlimefunItem slimefunItem) {
+            final @NotNull Player player, @NotNull PlayerBackpack backpack, @NotNull SlimefunItem slimefunItem) {
         ItemStack bookmarksItem = backpack.getInventory().getItem(DATA_ITEM_SLOT);
         if (bookmarksItem == null || bookmarksItem.getType() == Material.AIR) {
             bookmarksItem = markItemAsBookmarksItem(new ItemStack(Material.DIRT), player);
@@ -111,8 +110,7 @@ public class BookmarkManager extends AbstractManager {
         });
     }
 
-    @Nullable
-    public List<SlimefunItem> getBookmarkedItems(@NotNull Player player) {
+    @Nullable public List<SlimefunItem> getBookmarkedItems(@NotNull Player player) {
         PlayerBackpack backpack = getBookmarkBackpack(player);
         if (backpack == null) {
             return null;
@@ -191,7 +189,8 @@ public class BookmarkManager extends AbstractManager {
             return;
         }
 
-        ItemStack itemStack = ItemStackUtil.getCleanItem(Converter.getItem(bookmarksItem, itemMeta -> itemMeta.setLore(new ArrayList<>())));
+        ItemStack itemStack = ItemStackUtil.getCleanItem(
+                Converter.getItem(bookmarksItem, itemMeta -> itemMeta.setLore(new ArrayList<>())));
 
         backpack.getInventory().setItem(DATA_ITEM_SLOT, itemStack);
         operateController(controller -> {
@@ -199,8 +198,7 @@ public class BookmarkManager extends AbstractManager {
         });
     }
 
-    @Nullable
-    public PlayerBackpack getOrCreateBookmarkBackpack(@NotNull Player player) {
+    @Nullable public PlayerBackpack getOrCreateBookmarkBackpack(@NotNull Player player) {
         PlayerBackpack backpack = getBookmarkBackpack(player);
         if (backpack == null) {
             backpack = createBackpack(player);
@@ -209,8 +207,7 @@ public class BookmarkManager extends AbstractManager {
         return backpack;
     }
 
-    @Nullable
-    public PlayerBackpack createBackpack(@NotNull Player player) {
+    @Nullable public PlayerBackpack createBackpack(@NotNull Player player) {
         PlayerProfile profile = operateController(controller -> {
             return controller.getProfile(player);
         });
@@ -232,8 +229,7 @@ public class BookmarkManager extends AbstractManager {
         return backpack;
     }
 
-    @Nullable
-    public PlayerBackpack getBookmarkBackpack(@NotNull Player player) {
+    @Nullable public PlayerBackpack getBookmarkBackpack(@NotNull Player player) {
         PlayerProfile profile = operateController(controller -> {
             return controller.getProfile(player);
         });
@@ -275,8 +271,7 @@ public class BookmarkManager extends AbstractManager {
         return null;
     }
 
-    @NotNull
-    public ItemStack markItemAsBookmarksItem(@NotNull ItemStack itemStack, @NotNull Player player) {
+    @NotNull public ItemStack markItemAsBookmarksItem(@NotNull ItemStack itemStack, @NotNull Player player) {
         return ItemStackUtil.getCleanItem(Converter.getItem(itemStack, itemMeta -> itemMeta.getPersistentDataContainer()
                 .set(
                         BOOKMARKS_KEY,

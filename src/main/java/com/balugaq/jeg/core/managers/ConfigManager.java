@@ -29,13 +29,6 @@ package com.balugaq.jeg.core.managers;
 
 import com.balugaq.jeg.api.managers.AbstractManager;
 import com.balugaq.jeg.utils.Debug;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,6 +38,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.ParametersAreNonnullByDefault;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * This class is responsible for managing the configuration of the plugin.
@@ -102,8 +101,10 @@ public class ConfigManager extends AbstractManager {
         this.RECIPE_COMPLETE = plugin.getConfig().getBoolean("guide.recipe-complete", true);
         this.PINYIN_SEARCH = plugin.getConfig().getBoolean("improvements.pinyin-search", true);
         this.BOOKMARK = plugin.getConfig().getBoolean("improvements.bookmark", true);
-        this.SURVIVAL_GUIDE_TITLE = plugin.getConfig().getString("guide.survival-guide-title", "&2&lSlimefun 指南 (生存模式)         &e&l爱来自 JustEnoughGuide");
-        this.CHEAT_GUIDE_TITLE = plugin.getConfig().getString("guide.cheat-guide-title", "&c&lSlimefun 指南 (作弊模式)         &e&l爱来自 JustEnoughGuide");
+        this.SURVIVAL_GUIDE_TITLE = plugin.getConfig()
+                .getString("guide.survival-guide-title", "&2&lSlimefun 指南 (生存模式)         &e&l爱来自 JustEnoughGuide");
+        this.CHEAT_GUIDE_TITLE = plugin.getConfig()
+                .getString("guide.cheat-guide-title", "&c&lSlimefun 指南 (作弊模式)         &e&l爱来自 JustEnoughGuide");
         this.SETTINGS_GUIDE_TITLE = plugin.getConfig().getString("guide.settings-guide-title", "设置 & 详情");
         this.CREDITS_GUIDE_TITLE = plugin.getConfig().getString("guide.credits-guide-title", "Slimefun4 贡献者");
         this.RTS_SEARCH = plugin.getConfig().getBoolean("improvements.rts-search", true);

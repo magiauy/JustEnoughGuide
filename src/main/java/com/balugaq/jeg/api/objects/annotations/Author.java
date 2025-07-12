@@ -35,5 +35,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.METHOD, ElementType.CONSTRUCTOR, ElementType.LOCAL_VARIABLE})
 public @interface Author {
-    @SuppressWarnings("UnusedReturnValue") String value();
+    @SuppressWarnings("UnusedReturnValue")
+    String value();
 }

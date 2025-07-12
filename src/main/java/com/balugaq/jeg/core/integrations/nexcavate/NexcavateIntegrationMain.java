@@ -50,9 +50,8 @@ public class NexcavateIntegrationMain implements Integration {
 
     @Override
     public void onEnable() {
-        nexcavateItemsGroup = new NexcavateItemsGroup(
-                KeyUtil.newKey("nexcavate_items_group"),
-                Models.NEXCAVATE_ITEMS_GROUP);
+        nexcavateItemsGroup =
+                new NexcavateItemsGroup(KeyUtil.newKey("nexcavate_items_group"), Models.NEXCAVATE_ITEMS_GROUP);
         nexcavateItemsGroup.register(JustEnoughGuide.getInstance());
     }
 

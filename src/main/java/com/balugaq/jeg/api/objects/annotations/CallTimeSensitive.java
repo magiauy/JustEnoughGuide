@@ -41,5 +41,6 @@ import java.lang.annotation.Target;
 public @interface CallTimeSensitive {
     String AfterSlimefunLoaded = "After Slimefun loaded";
 
-    @SuppressWarnings("UnusedReturnValue") String value() default "";
+    @SuppressWarnings("UnusedReturnValue")
+    String value() default "";
 }

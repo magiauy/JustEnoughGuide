@@ -45,6 +45,7 @@ import java.util.List;
 public class RecipeCompleteProvider {
     @Getter
     private static final List<SlimefunSource> slimefunSources = new ArrayList<>();
+
     @Getter
     private static final List<VanillaSource> vanillaSources = new ArrayList<>();
 

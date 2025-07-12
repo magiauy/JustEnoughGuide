@@ -79,12 +79,18 @@ public class CacheCommand implements JEGCommand {
             case 3 -> {
                 switch (args[1]) {
                     case "1" -> {
-                        List<String> result = new ArrayList<>(SearchGroup.CACHE.keySet().stream().sorted().map(String::valueOf).toList());
+                        List<String> result = new ArrayList<>(SearchGroup.CACHE.keySet().stream()
+                                .sorted()
+                                .map(String::valueOf)
+                                .toList());
                         result.add("clear");
                         return result;
                     }
                     case "2" -> {
-                        List<String> result = new ArrayList<>(SearchGroup.CACHE2.keySet().stream().sorted().map(String::valueOf).toList());
+                        List<String> result = new ArrayList<>(SearchGroup.CACHE2.keySet().stream()
+                                .sorted()
+                                .map(String::valueOf)
+                                .toList());
                         result.add("clear");
                         return result;
                     }
@@ -102,10 +108,10 @@ public class CacheCommand implements JEGCommand {
 
     @Override
     public boolean canCommand(
-            @NotNull CommandSender sender,
-            @NotNull Command command,
-            @NotNull String label,
-            @NotNull String @NotNull [] args) {
+            final @NotNull CommandSender sender,
+            final @NotNull Command command,
+            final @NotNull String label,
+            final @NotNull String @NotNull [] args) {
         if (sender.isOp()) {
             if (args.length >= 1) {
                 return "cache".equalsIgnoreCase(args[0]);
@@ -116,7 +122,10 @@ public class CacheCommand implements JEGCommand {
 
     @Override
     public void onCommand(
-            @NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
+            final @NotNull CommandSender sender,
+            @NotNull Command command,
+            @NotNull String label,
+            @NotNull String @NotNull [] args) {
         onCheck(sender, args);
     }
 

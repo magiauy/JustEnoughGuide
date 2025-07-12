@@ -41,6 +41,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Range;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -68,50 +69,56 @@ public class GroupResorter {
 
     @CallTimeSensitive(CallTimeSensitive.AfterSlimefunLoaded)
     public static void load() {
-        Bukkit.getScheduler().runTaskLater(JustEnoughGuide.getInstance(), () -> {
-            if (hasCfg()) {
-                int offset = 0;
-                ItemGroup lastItemGroup = null;
-                for (ItemGroup itemGroup : Slimefun.getRegistry().getAllItemGroups()) {
-                    oldTiers.put(itemGroup, itemGroup.getTier());
+        Bukkit.getScheduler()
+                .runTaskLater(
+                        JustEnoughGuide.getInstance(),
+                        () -> {
+                            if (hasCfg()) {
+                                int offset = 0;
+                                ItemGroup lastItemGroup = null;
+                                for (ItemGroup itemGroup :
+                                        Slimefun.getRegistry().getAllItemGroups()) {
+                                    oldTiers.put(itemGroup, itemGroup.getTier());
 
-                    Integer cfg = getTierCfg(getKey(itemGroup));
-                    if (cfg != null) {
-                        setTier(itemGroup, cfg + offset);
-                    } else {
-                        if (lastItemGroup != null) {
-                            // New ItemGroup
-                            // Sort by related order.
-                            setTier(itemGroup, getTier(lastItemGroup) + 1);
-                            setNameCfg(getKey(itemGroup), getDisplayName(itemGroup));
-                            offset += 1;
-                        } else {
-                            // By default
-                            setTier(itemGroup, itemGroup.getTier());
-                        }
-                    }
-                    lastItemGroup = itemGroup;
-                }
-            } else {
-                int i = 0;
-                for (ItemGroup itemGroup : Slimefun.getRegistry().getAllItemGroups()) {
-                    setTier(itemGroup, i++);
-                    setNameCfg(getKey(itemGroup), getDisplayName(itemGroup));
-                }
-            }
-        }, 1L);
+                                    Integer cfg = getTierCfg(getKey(itemGroup));
+                                    if (cfg != null) {
+                                        setTier(itemGroup, cfg + offset);
+                                    } else {
+                                        if (lastItemGroup != null) {
+                                            // New ItemGroup
+                                            // Sort by related order.
+                                            setTier(itemGroup, getTier(lastItemGroup) + 1);
+                                            setNameCfg(getKey(itemGroup), getDisplayName(itemGroup));
+                                            offset += 1;
+                                        } else {
+                                            // By default
+                                            setTier(itemGroup, itemGroup.getTier());
+                                        }
+                                    }
+                                    lastItemGroup = itemGroup;
+                                }
+                            } else {
+                                int i = 0;
+                                for (ItemGroup itemGroup :
+                                        Slimefun.getRegistry().getAllItemGroups()) {
+                                    setTier(itemGroup, i++);
+                                    setNameCfg(getKey(itemGroup), getDisplayName(itemGroup));
+                                }
+                            }
+                        },
+                        1L);
     }
 
-    public static boolean isSelecting(@NotNull Player player) {
+    public static boolean isSelecting(final @NotNull Player player) {
         return selectingPlayers.contains(player);
     }
 
     @Nullable
-    public static ItemGroup getSelectedGroup(@NotNull Player player) {
+    public static ItemGroup getSelectedGroup(final @NotNull Player player) {
         return selectedGroup.get(player);
     }
 
-    public static void setSelectedGroup(@NotNull Player player, @Nullable ItemGroup itemGroup) {
+    public static void setSelectedGroup(final @NotNull Player player, final @Nullable ItemGroup itemGroup) {
         if (itemGroup == null) {
             selectedGroup.remove(player);
         } else {
@@ -119,24 +126,25 @@ public class GroupResorter {
         }
     }
 
-    public static void exitSelecting(@NotNull Player player) {
+    public static void exitSelecting(final @NotNull Player player) {
         selectedGroup.remove(player);
         selectingPlayers.remove(player);
     }
 
-    public static void enterSelecting(@NotNull Player player) {
+    public static void enterSelecting(final @NotNull Player player) {
         selectingPlayers.add(player);
     }
 
-    public static @NotNull String getDisplayName(@NotNull ItemGroup itemGroup) {
+    public static @NotNull String getDisplayName(final @NotNull ItemGroup itemGroup) {
         return itemGroup.getUnlocalizedName();
     }
 
-    public static int getTier(@NotNull ItemGroup itemGroup) {
+    public static int getTier(final @NotNull ItemGroup itemGroup) {
         return jegGroupTier.getOrDefault(itemGroup, itemGroup.getTier());
     }
 
-    public static void setTier(ItemGroup itemGroup, int tier) {
+    public static void setTier(
+            final ItemGroup itemGroup, final @Range(from = Integer.MIN_VALUE, to = Integer.MAX_VALUE) int tier) {
         jegGroupTier.put(itemGroup, tier);
         setTierCfg(getKey(itemGroup), tier);
     }
@@ -151,7 +159,7 @@ public class GroupResorter {
         Slimefun.getRegistry().getAllItemGroups().sort(Comparator.comparingInt(ItemGroup::getTier));
     }
 
-    public static void swap(@NotNull ItemGroup itemGroup1, @NotNull ItemGroup itemGroup2) {
+    public static void swap(final @NotNull ItemGroup itemGroup1, final @NotNull ItemGroup itemGroup2) {
         int tier1 = getTier(itemGroup1);
         int tier2 = getTier(itemGroup2);
         itemGroup1.setTier(tier2);
@@ -177,30 +185,32 @@ public class GroupResorter {
         return config = YamlConfiguration.loadConfiguration(tiersFile);
     }
 
-    public static void setTierCfg(String key, int tier) {
+    public static void setTierCfg(
+            final @NotNull String key, final @Range(from = Integer.MIN_VALUE, to = Integer.MAX_VALUE) int tier) {
         getOrCreateConfig().set(key + ".tier", tier);
         saveCfg();
     }
 
-    public static @Nullable Integer getTierCfg(String key) {
+    public static @Nullable Integer getTierCfg(final @NotNull String key) {
         return getOrCreateConfig().getObject(key + ".tier", Integer.class, null);
     }
 
-    public static void setNameCfg(String key, String name) {
+    public static void setNameCfg(final @NotNull String key, final @NotNull String name) {
         getOrCreateConfig().set(key + ".name", name);
     }
 
     @SuppressWarnings("unused")
-    public static @Nullable String getNameCfg(String key) {
+    public static @Nullable String getNameCfg(final @NotNull String key) {
         return getOrCreateConfig().getString(key + ".name");
     }
 
-    public static @NotNull String getKey(ItemGroup itemGroup) {
+    public static @NotNull String getKey(final @NotNull ItemGroup itemGroup) {
         if (itemGroup instanceof NestedItemGroup n) {
             return n.getKey().getNamespace() + "-" + n.getKey().getKey() + ".nested";
         } else if (itemGroup instanceof SubItemGroup s) {
             NestedItemGroup n = s.getParent();
-            return n.getKey().getNamespace() + "-" + n.getKey().getKey() + ".sub." + s.getKey().getNamespace() + "-" + n.getKey().getKey();
+            return n.getKey().getNamespace() + "-" + n.getKey().getKey() + ".sub."
+                    + s.getKey().getNamespace() + "-" + n.getKey().getKey();
         } else if (itemGroup.getClass() == ItemGroup.class) {
             return itemGroup.getKey().getNamespace() + "-" + itemGroup.getKey().getKey();
         } else {
@@ -224,7 +234,7 @@ public class GroupResorter {
         }
     }
 
-    public static void sort(@NotNull List<ItemGroup> list) {
+    public static void sort(final @NotNull List<ItemGroup> list) {
         list.sort(Comparator.comparingInt(GroupResorter::getTier));
     }
 }

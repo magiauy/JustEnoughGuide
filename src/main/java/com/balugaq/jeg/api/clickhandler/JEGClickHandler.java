@@ -52,7 +52,8 @@ public interface JEGClickHandler extends ChestMenu.AdvancedMenuClickHandler, Gui
 
     @ParametersAreNonnullByDefault
     @NotNull
-    static JEGClickHandler of(SlimefunGuideImplementation guide, ChestMenu menu, @Range(from = 0, to = 53) int slot) {
+    static JEGClickHandler of(
+            final SlimefunGuideImplementation guide, final ChestMenu menu, final @Range(from = 0, to = 53) int slot) {
         ChestMenu.MenuClickHandler current = menu.getMenuClickHandler(slot);
         if (current instanceof JEGClickHandler ech) {
             return ech;
@@ -88,29 +89,33 @@ public interface JEGClickHandler extends ChestMenu.AdvancedMenuClickHandler, Gui
         return ChestMenuUtils.getEmptyClickHandler();
     }
 
-    @NotNull
-    SlimefunGuideImplementation getGuide();
+    @NotNull SlimefunGuideImplementation getGuide();
+
+    @NotNull ChestMenu getMenu();
+
+    @NotNull Map<Class<? extends Processor>, Processor> getProcessors();
 
     @NotNull
-    ChestMenu getMenu();
-
-    @NotNull
-    Map<Class<? extends Processor>, Processor> getProcessors();
-
-    @NotNull
-    default JEGClickHandler addProcessor(@NotNull Processor processor) {
+    default JEGClickHandler addProcessor(final @NotNull Processor processor) {
         getProcessors().put(processor.getClass(), processor);
         return this;
     }
 
     @NotNull
-    default Collection<Processor> getProcessor(@NotNull Processor.Strategy strategy) {
-        return getProcessors().values().stream().filter(processor -> processor.getStrategy() == strategy).toList();
+    default Collection<Processor> getProcessor(final @NotNull Processor.Strategy strategy) {
+        return getProcessors().values().stream()
+                .filter(processor -> processor.getStrategy() == strategy)
+                .toList();
     }
 
     // Our implement
     @Override
-    default boolean onClick(@NotNull InventoryClickEvent event, @NotNull Player player, int clickedSlot, ItemStack cursor, @NotNull ClickAction clickAction) {
+    default boolean onClick(
+            final @NotNull InventoryClickEvent event,
+            final @NotNull Player player,
+            final @Range(from = 0, to = 53) int clickedSlot,
+            final ItemStack cursor,
+            final @NotNull ClickAction clickAction) {
         ItemStack itemStack = getMenu().getItemInSlot(clickedSlot);
         for (Processor processor : getProcessor(Processor.Strategy.HEAD)) {
             if (!processor.process(getGuide(), getMenu(), event, player, clickedSlot, itemStack, clickAction, null)) {
@@ -135,8 +140,11 @@ public interface JEGClickHandler extends ChestMenu.AdvancedMenuClickHandler, Gui
 
     // Fallback
     @Override
-    default boolean onClick(Player player, int clickedSlot, ItemStack itemStack, ClickAction clickAction) {
+    default boolean onClick(
+            final Player player,
+            final @Range(from = 0, to = 53) int clickedSlot,
+            final ItemStack itemStack,
+            final ClickAction clickAction) {
         return getOrigin().onClick(player, clickedSlot, itemStack, clickAction);
     }
-
 }

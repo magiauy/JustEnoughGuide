@@ -87,8 +87,7 @@ public class RTSEvents {
          *
          * @return the handler list
          */
-        @NotNull
-        @Override
+        final @NotNull @Override
         public HandlerList getHandlers() {
             return HANDLERS;
         }
@@ -129,7 +128,11 @@ public class RTSEvents {
          * @param guideMode        The guide mode.
          * @param presetSearchTerm The preset search term.
          */
-        public OpenRTSEvent(Player player, AnvilInventory openingInventory, SlimefunGuideMode guideMode, @Nullable String presetSearchTerm) {
+        public OpenRTSEvent(
+                Player player,
+                AnvilInventory openingInventory,
+                SlimefunGuideMode guideMode,
+                @Nullable String presetSearchTerm) {
             super(!Bukkit.isPrimaryThread());
             this.player = player;
             this.openingInventory = openingInventory;
@@ -151,8 +154,7 @@ public class RTSEvents {
          *
          * @return the handler list
          */
-        @NotNull
-        @Override
+        final @NotNull @Override
         public HandlerList getHandlers() {
             return HANDLERS;
         }
@@ -185,7 +187,13 @@ public class RTSEvents {
          * @param newSearchTerm    The new search term.
          * @param guideMode        The guide mode.
          */
-        public SearchTermChangeEvent(Player player, InventoryView inventoryView, AnvilInventory openingInventory, String oldSearchTerm, String newSearchTerm, SlimefunGuideMode guideMode) {
+        public SearchTermChangeEvent(
+                Player player,
+                InventoryView inventoryView,
+                AnvilInventory openingInventory,
+                String oldSearchTerm,
+                String newSearchTerm,
+                SlimefunGuideMode guideMode) {
             super(false);
             this.player = player;
             this.inventoryView = inventoryView;
@@ -209,8 +217,7 @@ public class RTSEvents {
          *
          * @return the handler list
          */
-        @NotNull
-        @Override
+        final @NotNull @Override
         public HandlerList getHandlers() {
             return HANDLERS;
         }
@@ -240,7 +247,8 @@ public class RTSEvents {
          * @param slot          The slot that was clicked.
          * @param guideMode     The guide mode.
          */
-        public ClickAnvilItemEvent(Player player, AnvilGUI.StateSnapshot stateSnapshot, int slot, SlimefunGuideMode guideMode) {
+        public ClickAnvilItemEvent(
+                Player player, AnvilGUI.StateSnapshot stateSnapshot, int slot, SlimefunGuideMode guideMode) {
             super(!Bukkit.isPrimaryThread());
             this.player = player;
             this.stateSnapshot = stateSnapshot;
@@ -262,8 +270,7 @@ public class RTSEvents {
          *
          * @return the handler list
          */
-        @NotNull
-        @Override
+        final @NotNull @Override
         public HandlerList getHandlers() {
             return HANDLERS;
         }
@@ -315,7 +322,8 @@ public class RTSEvents {
          * @param newPage          The new page number.
          * @param guideMode        The guide mode.
          */
-        public PageChangeEvent(Player player, AnvilInventory openingInventory, int oldPage, int newPage, SlimefunGuideMode guideMode) {
+        public PageChangeEvent(
+                Player player, AnvilInventory openingInventory, int oldPage, int newPage, SlimefunGuideMode guideMode) {
             super(!Bukkit.isPrimaryThread());
             this.player = player;
             this.openingInventory = openingInventory;
@@ -338,8 +346,7 @@ public class RTSEvents {
          *
          * @return the handler list
          */
-        @NotNull
-        @Override
+        final @NotNull @Override
         public HandlerList getHandlers() {
             return HANDLERS;
         }

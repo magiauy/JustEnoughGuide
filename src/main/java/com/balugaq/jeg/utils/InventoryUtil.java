@@ -28,6 +28,10 @@
 package com.balugaq.jeg.utils;
 
 import com.balugaq.jeg.utils.compatibility.Converter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
@@ -36,11 +40,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 /**
  * @author balugaq
  * @since 1.9
@@ -48,10 +47,9 @@ import java.util.Map;
 @SuppressWarnings("unused")
 @UtilityClass
 public class InventoryUtil {
-    @Nullable
-    public static ItemStack pushItem(
-            @NotNull final Inventory inventory,
-            @Nullable final ItemStack item,
+    @Nullable public static ItemStack pushItem(
+            final @NotNull Inventory inventory,
+            final @Nullable ItemStack item,
             @Range(from = 0, to = 53) final int @NotNull ... slots) {
         if (item == null || item.getType() == Material.AIR) {
             return null;
@@ -97,10 +95,9 @@ public class InventoryUtil {
     }
 
     @SuppressWarnings("ConstantValue")
-    @NotNull
-    public static Map<ItemStack, Integer> pushItem(
-            @NotNull final Inventory inventory,
-            @Nullable final ItemStack @NotNull [] items,
+    @NotNull public static Map<ItemStack, Integer> pushItem(
+            final @NotNull Inventory inventory,
+            final @Nullable ItemStack @NotNull [] items,
             @Range(from = 0, to = 53) final int @NotNull ... slots) {
         if (items == null || items.length == 0) {
             return new HashMap<>();
@@ -117,10 +114,9 @@ public class InventoryUtil {
         return pushItem(inventory, listItems, slots);
     }
 
-    @NotNull
-    public static Map<ItemStack, Integer> pushItem(
-            @NotNull final Inventory inventory,
-            @Nullable final List<ItemStack> items,
+    @NotNull public static Map<ItemStack, Integer> pushItem(
+            final @NotNull Inventory inventory,
+            final @Nullable List<ItemStack> items,
             @Range(from = 0, to = 53) final int @NotNull ... slots) {
         if (items == null || items.isEmpty()) {
             return new HashMap<>();
@@ -141,8 +137,8 @@ public class InventoryUtil {
     }
 
     public static boolean fits(
-            @NotNull final Inventory inventory,
-            @Nullable final ItemStack item,
+            final @NotNull Inventory inventory,
+            final @Nullable ItemStack item,
             @Range(from = 0, to = 53) final int @NotNull ... slots) {
         if (item == null || item.getType() == Material.AIR) {
             return true;
@@ -167,8 +163,8 @@ public class InventoryUtil {
     }
 
     public static boolean fits(
-            @NotNull final Inventory inventory,
-            @Nullable final ItemStack @Nullable [] items,
+            final @NotNull Inventory inventory,
+            final @Nullable ItemStack @Nullable [] items,
             @Range(from = 0, to = 53) final int @NotNull ... slots) {
         if (items == null || items.length == 0) {
             return false;
@@ -185,8 +181,8 @@ public class InventoryUtil {
     }
 
     public static boolean fits(
-            @NotNull final Inventory inventory,
-            @Nullable final List<ItemStack> items,
+            final @NotNull Inventory inventory,
+            final @Nullable List<ItemStack> items,
             @Range(from = 0, to = 53) final int @NotNull ... slots) {
         if (items == null || items.isEmpty()) {
             return false;
@@ -251,14 +247,14 @@ public class InventoryUtil {
     }
 
     public static void consumeItem(
-            @NotNull final Inventory inventory,
+            final @NotNull Inventory inventory,
             @Range(from = 0, to = 53) final int slot,
             final boolean replaceConsumables) {
         consumeItem(inventory, slot, 1, replaceConsumables);
     }
 
     public static void consumeItem(
-            @NotNull final Inventory inventory,
+            final @NotNull Inventory inventory,
             @Range(from = 0, to = 53) final int slot,
             @Range(from = 0, to = 64) final int amount) {
         consumeItem(inventory, slot, amount, false);
@@ -266,7 +262,7 @@ public class InventoryUtil {
 
     @SuppressWarnings("deprecation")
     public static void consumeItem(
-            @NotNull final Inventory inventory,
+            final @NotNull Inventory inventory,
             @Range(from = 0, to = 53) final int slot,
             @Range(from = 0, to = 64) final int amount,
             final boolean replaceConsumables) {
@@ -281,15 +277,15 @@ public class InventoryUtil {
                     && StackUtils.itemsMatch(item, new ItemStack(item.getType()))) {
                 switch (item.getType()) {
                     case WATER_BUCKET,
-                         LAVA_BUCKET,
-                         MILK_BUCKET,
-                         COD_BUCKET,
-                         SALMON_BUCKET,
-                         PUFFERFISH_BUCKET,
-                         TROPICAL_FISH_BUCKET,
-                         AXOLOTL_BUCKET,
-                         POWDER_SNOW_BUCKET,
-                         TADPOLE_BUCKET -> item.setType(Material.BUCKET);
+                            LAVA_BUCKET,
+                            MILK_BUCKET,
+                            COD_BUCKET,
+                            SALMON_BUCKET,
+                            PUFFERFISH_BUCKET,
+                            TROPICAL_FISH_BUCKET,
+                            AXOLOTL_BUCKET,
+                            POWDER_SNOW_BUCKET,
+                            TADPOLE_BUCKET -> item.setType(Material.BUCKET);
                     case POTION, SPLASH_POTION, LINGERING_POTION, HONEY_BOTTLE, DRAGON_BREATH -> item.setType(
                             Material.GLASS_BOTTLE);
                     case MUSHROOM_STEW, BEETROOT_SOUP, RABBIT_STEW, SUSPICIOUS_STEW -> item.setType(Material.BOWL);

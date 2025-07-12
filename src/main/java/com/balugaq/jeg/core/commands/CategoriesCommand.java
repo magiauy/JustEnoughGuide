@@ -77,7 +77,8 @@ public class CategoriesCommand implements JEGCommand {
      */
     @SuppressWarnings("deprecation")
     @ParametersAreNonnullByDefault
-    private static void populateCategoryMenu(ChestMenu menu, List<ItemGroup> groups, @Range(from = 1, to = Integer.MAX_VALUE) int page, Player p) {
+    private static void populateCategoryMenu(
+            ChestMenu menu, List<ItemGroup> groups, @Range(from = 1, to = Integer.MAX_VALUE) int page, Player p) {
         for (int i = 0; i < 54; i++) {
             menu.addMenuClickHandler(i, ChestMenuUtils.getEmptyClickHandler());
         }
@@ -99,7 +100,8 @@ public class CategoriesCommand implements JEGCommand {
                 if (categoryLore == null) {
                     categoryLore = new ArrayList<>(2);
                 }
-                categoryLore.set(categoryLore.size() - 1, ChatColors.color("&6ID: " + id)); // Replaces the "Click to Open" line
+                categoryLore.set(
+                        categoryLore.size() - 1, ChatColors.color("&6ID: " + id)); // Replaces the "Click to Open" line
                 categoryLore.add(ChatColors.color("&6class: " + className));
                 categoryLore.add(ChatColors.color("&a点击复制到聊天栏"));
                 catMeta.setLore(categoryLore);
@@ -130,7 +132,6 @@ public class CategoriesCommand implements JEGCommand {
                 return false;
             });
         }
-
     }
 
     private static @Nullable ItemGroup getItemGroupOrNull(@NotNull List<ItemGroup> groups, int index) {
@@ -152,10 +153,10 @@ public class CategoriesCommand implements JEGCommand {
 
     @Override
     public boolean canCommand(
-            @NotNull CommandSender sender,
-            @NotNull Command command,
-            @NotNull String label,
-            @NotNull String @NotNull [] args) {
+            final @NotNull CommandSender sender,
+            final @NotNull Command command,
+            final @NotNull String label,
+            final @NotNull String @NotNull [] args) {
         if (sender.isOp()) {
             if (args.length == 1) {
                 return "categories".equalsIgnoreCase(args[0]);
@@ -167,7 +168,10 @@ public class CategoriesCommand implements JEGCommand {
     @Override
     @SuppressWarnings("deprecation")
     public void onCommand(
-            @NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+            final @NotNull CommandSender sender,
+            @NotNull Command command,
+            @NotNull String label,
+            @NotNull String[] args) {
         if (sender instanceof Player player) {
             ChestMenu menu = new ChestMenu("&6物品组大全");
             menu.setSize(54);

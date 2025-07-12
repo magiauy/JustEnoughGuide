@@ -33,11 +33,10 @@ import com.balugaq.jeg.core.integrations.Integration;
 import com.balugaq.jeg.utils.ReflectionUtil;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author balugaq
@@ -56,7 +55,6 @@ public class RykenSlimefunCustomizerIntegrationMain implements Integration {
         }
     }
 
-
     public static void rrc(@NotNull SlimefunItem slimefunItem, int @NotNull [] slots, boolean unordered) {
         handledSlimefunItems.add(slimefunItem);
         RecipeCompletableRegistry.registerRecipeCompletable(slimefunItem, slots, unordered);
@@ -71,12 +69,14 @@ public class RykenSlimefunCustomizerIntegrationMain implements Integration {
     @CallTimeSensitive(CallTimeSensitive.AfterSlimefunLoaded)
     public void onEnable() {
         try {
-            classCustomWorkbench = (Class<? extends SlimefunItem>) Class.forName("org.lins.mmmjjkx.rykenslimefuncustomizer.objects.customs.machine.CustomWorkbench");
+            classCustomWorkbench = (Class<? extends SlimefunItem>)
+                    Class.forName("org.lins.mmmjjkx.rykenslimefuncustomizer.objects.customs.machine.CustomWorkbench");
         } catch (Throwable ignored) {
             classCustomWorkbench = null;
         }
         try {
-            classCustomLinkedRecipeMachine = (Class<? extends SlimefunItem>) Class.forName("org.lins.mmmjjkx.rykenslimefuncustomizer.objects.customs.machine.CustomLinkedRecipeMachine");
+            classCustomLinkedRecipeMachine = (Class<? extends SlimefunItem>) Class.forName(
+                    "org.lins.mmmjjkx.rykenslimefuncustomizer.objects.customs.machine.CustomLinkedRecipeMachine");
         } catch (Throwable ignored) {
             classCustomLinkedRecipeMachine = null;
         }
@@ -87,8 +87,8 @@ public class RykenSlimefunCustomizerIntegrationMain implements Integration {
 
         for (SlimefunItem sf : Slimefun.getRegistry().getAllSlimefunItems()) {
             Class<? extends SlimefunItem> clazz = sf.getClass();
-            if (!((classCustomWorkbench != null && clazz == classCustomWorkbench) ||
-                    (classCustomLinkedRecipeMachine != null && clazz == classCustomLinkedRecipeMachine))) {
+            if (!((classCustomWorkbench != null && clazz == classCustomWorkbench)
+                    || (classCustomLinkedRecipeMachine != null && clazz == classCustomLinkedRecipeMachine))) {
                 continue;
             }
 

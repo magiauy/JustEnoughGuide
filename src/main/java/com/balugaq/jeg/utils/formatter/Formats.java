@@ -29,13 +29,12 @@ package com.balugaq.jeg.utils.formatter;
 
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.ItemStackUtil;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.inventory.ItemStack;
-
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * @author balugaq
@@ -43,7 +42,8 @@ import java.util.Set;
  */
 public class Formats {
     public static final String FILE_NAME = "custom-icons.yml";
-    public static final File fileCustomIcons = new File(JustEnoughGuide.getInstance().getDataFolder(), FILE_NAME);
+    public static final File fileCustomIcons =
+            new File(JustEnoughGuide.getInstance().getDataFolder(), FILE_NAME);
     public static final Map<String, Format> customFormats = new HashMap<>();
     public static final MainFormat main = new MainFormat();
     public static final NestedGroupFormat nested = new NestedGroupFormat();

@@ -45,17 +45,37 @@ import org.jetbrains.annotations.Range;
 @SuppressWarnings("unused")
 public interface SlimefunSource extends Source {
     @SuppressWarnings("deprecation")
-    boolean handleable(@NotNull BlockMenu blockMenu, @NotNull Player player, @NotNull ClickAction clickAction, @Range(from = 0, to = 53) int @NotNull [] ingredientSlots, boolean unordered);
+    boolean handleable(
+            @NotNull BlockMenu blockMenu,
+            @NotNull Player player,
+            @NotNull ClickAction clickAction,
+            @Range(from = 0, to = 53) int @NotNull [] ingredientSlots,
+            boolean unordered);
 
     @CanIgnoreReturnValue
     @SuppressWarnings("deprecation")
-    default boolean openGuide(@NotNull BlockMenu blockMenu, @NotNull Player player, @NotNull ClickAction clickAction, @Range(from = 0, to = 53) int @NotNull [] ingredientSlots, boolean unordered) {
+    default boolean openGuide(
+            @NotNull BlockMenu blockMenu,
+            @NotNull Player player,
+            @NotNull ClickAction clickAction,
+            @Range(from = 0, to = 53) int @NotNull [] ingredientSlots,
+            boolean unordered) {
         return openGuide(blockMenu, player, clickAction, ingredientSlots, unordered, null);
     }
 
     @SuppressWarnings("deprecation")
-    boolean openGuide(@NotNull BlockMenu blockMenu, @NotNull Player player, @NotNull ClickAction clickAction, @Range(from = 0, to = 53) int @NotNull [] ingredientSlots, boolean unordered, @Nullable Runnable callback);
+    boolean openGuide(
+            @NotNull BlockMenu blockMenu,
+            @NotNull Player player,
+            @NotNull ClickAction clickAction,
+            @Range(from = 0, to = 53) int @NotNull [] ingredientSlots,
+            boolean unordered,
+            @Nullable Runnable callback);
 
     @CanIgnoreReturnValue
-    boolean completeRecipeWithGuide(@NotNull BlockMenu blockMenu, GuideEvents.@NotNull ItemButtonClickEvent event, @Range(from = 0, to = 53) int @NotNull [] ingredientSlots, boolean unordered);
+    boolean completeRecipeWithGuide(
+            @NotNull BlockMenu blockMenu,
+            GuideEvents.@NotNull ItemButtonClickEvent event,
+            @Range(from = 0, to = 53) int @NotNull [] ingredientSlots,
+            boolean unordered);
 }

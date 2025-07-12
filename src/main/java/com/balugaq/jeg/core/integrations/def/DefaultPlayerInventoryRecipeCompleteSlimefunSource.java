@@ -54,14 +54,25 @@ import java.util.List;
 public class DefaultPlayerInventoryRecipeCompleteSlimefunSource implements SlimefunSource {
     @SuppressWarnings("deprecation")
     @Override
-    public boolean handleable(@NotNull BlockMenu blockMenu, @NotNull Player player, @NotNull ClickAction clickAction, int @NotNull [] ingredientSlots, boolean unordered) {
+    public boolean handleable(
+            @NotNull BlockMenu blockMenu,
+            @NotNull Player player,
+            @NotNull ClickAction clickAction,
+            int @NotNull [] ingredientSlots,
+            boolean unordered) {
         // Always available
         return true;
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public boolean openGuide(@NotNull BlockMenu blockMenu, @NotNull Player player, @NotNull ClickAction clickAction, int @NotNull [] ingredientSlots, boolean unordered, @Nullable Runnable callback) {
+    public boolean openGuide(
+            @NotNull BlockMenu blockMenu,
+            @NotNull Player player,
+            @NotNull ClickAction clickAction,
+            int @NotNull [] ingredientSlots,
+            boolean unordered,
+            @Nullable Runnable callback) {
         GuideEvents.ItemButtonClickEvent lastEvent = RecipeCompletableListener.getLastEvent(player.getUniqueId());
         if (clickAction.isRightClicked() && lastEvent != null) {
             int times = 1;
@@ -131,7 +142,11 @@ public class DefaultPlayerInventoryRecipeCompleteSlimefunSource implements Slime
     }
 
     @Override
-    public boolean completeRecipeWithGuide(@NotNull BlockMenu blockMenu, GuideEvents.@NotNull ItemButtonClickEvent event, int @NotNull [] ingredientSlots, boolean unordered) {
+    public boolean completeRecipeWithGuide(
+            @NotNull BlockMenu blockMenu,
+            GuideEvents.@NotNull ItemButtonClickEvent event,
+            int @NotNull [] ingredientSlots,
+            boolean unordered) {
         Player player = event.getPlayer();
 
         ItemStack clickedItem = event.getClickedItem();

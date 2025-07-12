@@ -27,11 +27,13 @@
 
 package com.balugaq.jeg.api.cfgparse.annotations;
 
+import org.jetbrains.annotations.Nullable;
+
 /**
  * @author balugaq
  * @since 1.9
  */
 @SuppressWarnings("unused")
 public interface IDefaultValue<T> {
-    T defaultValue();
+    @Nullable T defaultValue();
 }

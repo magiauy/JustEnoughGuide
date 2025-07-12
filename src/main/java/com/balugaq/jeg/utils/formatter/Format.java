@@ -29,6 +29,10 @@ package com.balugaq.jeg.utils.formatter;
 
 import com.balugaq.jeg.api.groups.GuideGroup;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -36,11 +40,6 @@ import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author balugaq
@@ -52,8 +51,10 @@ import java.util.Map;
 public abstract class Format {
     public static final Map<Character, ItemStack> customMapping = new HashMap<>();
     public final Map<Integer, Character> mapping = new HashMap<>();
+
     @ToString.Exclude
     public final Map<Character, List<Integer>> cached = new HashMap<>();
+
     @Setter
     public int size = 54;
 

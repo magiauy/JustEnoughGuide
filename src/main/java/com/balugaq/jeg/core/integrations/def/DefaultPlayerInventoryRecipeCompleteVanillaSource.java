@@ -54,14 +54,27 @@ import java.util.List;
 public class DefaultPlayerInventoryRecipeCompleteVanillaSource implements VanillaSource {
     @SuppressWarnings("deprecation")
     @Override
-    public boolean handleable(@NotNull Block block, @NotNull Inventory inventory, @NotNull Player player, @NotNull ClickAction clickAction, int @NotNull [] ingredientSlots, boolean unordered) {
+    public boolean handleable(
+            @NotNull Block block,
+            @NotNull Inventory inventory,
+            @NotNull Player player,
+            @NotNull ClickAction clickAction,
+            int @NotNull [] ingredientSlots,
+            boolean unordered) {
         // Always available
         return true;
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public boolean openGuide(@NotNull Block block, @NotNull Inventory inventory, @NotNull Player player, @NotNull ClickAction clickAction, int @NotNull [] ingredientSlots, boolean unordered, @Nullable Runnable callback) {
+    public boolean openGuide(
+            @NotNull Block block,
+            @NotNull Inventory inventory,
+            @NotNull Player player,
+            @NotNull ClickAction clickAction,
+            int @NotNull [] ingredientSlots,
+            boolean unordered,
+            @Nullable Runnable callback) {
         GuideEvents.ItemButtonClickEvent lastEvent = RecipeCompletableListener.getLastEvent(player.getUniqueId());
         if (clickAction.isRightClicked() && lastEvent != null) {
             int times = 1;
@@ -101,7 +114,12 @@ public class DefaultPlayerInventoryRecipeCompleteVanillaSource implements Vanill
     }
 
     @Override
-    public boolean completeRecipeWithGuide(@NotNull Block block, @NotNull Inventory inventory, GuideEvents.@NotNull ItemButtonClickEvent event, int @NotNull [] ingredientSlots, boolean unordered) {
+    public boolean completeRecipeWithGuide(
+            @NotNull Block block,
+            @NotNull Inventory inventory,
+            GuideEvents.@NotNull ItemButtonClickEvent event,
+            int @NotNull [] ingredientSlots,
+            boolean unordered) {
         Player player = event.getPlayer();
 
         ItemStack clickedItem = event.getClickedItem();

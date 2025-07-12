@@ -27,6 +27,8 @@
 
 package com.balugaq.jeg.api.cfgparse.annotations;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -42,5 +44,5 @@ import java.lang.annotation.Target;
 public @interface Key {
     String ALL_KEY = "ALL_KEY";
 
-    String value() default "";
+    @NotNull String value();
 }

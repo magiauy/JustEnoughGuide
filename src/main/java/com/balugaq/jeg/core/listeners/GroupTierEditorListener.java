@@ -70,7 +70,8 @@ public class GroupTierEditorListener implements Listener {
             if (player.isOp()) {
                 ItemStack itemStack = event.getItem();
                 if (GroupTierEditorGuide.isGroupTierEditor(itemStack)) {
-                    Bukkit.getPluginManager().callEvent(new SlimefunGuideOpenEvent(player, itemStack, SlimefunGuideMode.CHEAT_MODE));
+                    Bukkit.getPluginManager()
+                            .callEvent(new SlimefunGuideOpenEvent(player, itemStack, SlimefunGuideMode.CHEAT_MODE));
                 }
             }
         }

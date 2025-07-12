@@ -74,63 +74,74 @@ public enum FilterType {
 
         return SearchGroup.isSearchFilterApplicable(recipeTypeIcon, lowerFilterValue, false);
     }),
-    BY_DISPLAY_ITEM_NAME("%", (player, item, lowerFilterValue, pinyin) -> {
-        List<ItemStack> display = null;
-        if (item instanceof AContainer ac) {
-            display = ac.getDisplayRecipes();
-        } else if (item instanceof MultiBlockMachine mb) {
-            // Fix: Fix NullPointerException occurred when searching items from SlimeFood
-            try {
-                display = mb.getDisplayRecipes();
-            } catch (Exception e) {
-                Debug.trace(e, "searching");
-                return false;
-            }
-        } else {
-            try {
-                if (SpecialMenuProvider.ENABLED_LogiTech && SpecialMenuProvider.classLogiTech_CustomSlimefunItem != null && SpecialMenuProvider.classLogiTech_CustomSlimefunItem.isInstance(item) && item instanceof RecipeDisplayItem rdi) {
-                    display = rdi.getDisplayRecipes();
-                }
-            } catch (Exception e) {
-                Debug.trace(e, "searching");
-                return false;
-            }
-        }
-        if (display != null) {
-            try {
-                for (ItemStack itemStack : display) {
-                    if (SearchGroup.isSearchFilterApplicable(itemStack, lowerFilterValue, false)) {
-                        return true;
+    BY_DISPLAY_ITEM_NAME(
+            "%",
+            (player, item, lowerFilterValue, pinyin) -> {
+                List<ItemStack> display = null;
+                if (item instanceof AContainer ac) {
+                    display = ac.getDisplayRecipes();
+                } else if (item instanceof MultiBlockMachine mb) {
+                    // Fix: Fix NullPointerException occurred when searching items from SlimeFood
+                    try {
+                        display = mb.getDisplayRecipes();
+                    } catch (Exception e) {
+                        Debug.trace(e, "searching");
+                        return false;
+                    }
+                } else {
+                    try {
+                        if (SpecialMenuProvider.ENABLED_LogiTech
+                                && SpecialMenuProvider.classLogiTech_CustomSlimefunItem != null
+                                && SpecialMenuProvider.classLogiTech_CustomSlimefunItem.isInstance(item)
+                                && item instanceof RecipeDisplayItem rdi) {
+                            display = rdi.getDisplayRecipes();
+                        }
+                    } catch (Exception e) {
+                        Debug.trace(e, "searching");
+                        return false;
                     }
                 }
-            } catch (Exception ignored) {
-                return false;
-            }
-        }
-
-        String id = item.getId();
-        Reference<Set<String>> ref = SearchGroup.SPECIAL_CACHE.get(id);
-        if (ref != null) {
-            Set<String> cache = ref.get();
-            if (cache != null) {
-                for (String s : cache) {
-                    if (SearchGroup.isSearchFilterApplicable(s, lowerFilterValue, false)) {
-                        return true;
+                if (display != null) {
+                    try {
+                        for (ItemStack itemStack : display) {
+                            if (SearchGroup.isSearchFilterApplicable(itemStack, lowerFilterValue, false)) {
+                                return true;
+                            }
+                        }
+                    } catch (Exception ignored) {
+                        return false;
                     }
                 }
-            }
-        }
 
-        return false;
-    }),
+                String id = item.getId();
+                Reference<Set<String>> ref = SearchGroup.SPECIAL_CACHE.get(id);
+                if (ref != null) {
+                    Set<String> cache = ref.get();
+                    if (cache != null) {
+                        for (String s : cache) {
+                            if (SearchGroup.isSearchFilterApplicable(s, lowerFilterValue, false)) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+
+                return false;
+            }),
     BY_ADDON_NAME("@", (player, item, lowerFilterValue, pinyin) -> {
         SlimefunAddon addon = item.getAddon();
         String localAddonName = LocalHelper.getAddonName(addon, item.getId()).toLowerCase();
         String originModName = (addon == null ? "Slimefun" : addon.getName()).toLowerCase();
         return localAddonName.contains(lowerFilterValue) || originModName.contains(lowerFilterValue);
     }),
-    BY_ITEM_NAME("!", (player, item, lowerFilterValue, pinyin) -> SearchGroup.isSearchFilterApplicable(item, lowerFilterValue, pinyin)),
-    BY_MATERIAL_NAME("~", (player, item, lowerFilterValue, pinyin) -> item.getItem().getType().name().toLowerCase().contains(lowerFilterValue));
+    BY_ITEM_NAME(
+            "!",
+            (player, item, lowerFilterValue, pinyin) ->
+                    SearchGroup.isSearchFilterApplicable(item, lowerFilterValue, pinyin)),
+    BY_MATERIAL_NAME(
+            "~",
+            (player, item, lowerFilterValue, pinyin) ->
+                    item.getItem().getType().name().toLowerCase().contains(lowerFilterValue));
 
     private @NotNull
     final String symbol;

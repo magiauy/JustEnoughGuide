@@ -81,44 +81,60 @@ public interface JEGSlimefunGuideImplementation extends SlimefunGuideImplementat
 
             ItemGroup itemGroup = slimefunItem.getItemGroup();
             if (slimefunItem.isDisabledIn(p.getWorld())) {
-                return ItemStackUtil.getCleanItem(Converter.getItem(
-                        Material.BARRIER,
-                        ItemUtils.getItemName(item),
-                        "&4&l 该 Slimefun 物品已被禁用"
-                ));
+                return ItemStackUtil.getCleanItem(
+                        Converter.getItem(Material.BARRIER, ItemUtils.getItemName(item), "&4&l 该 Slimefun 物品已被禁用"));
             }
             String lore = hasPermission0(p, slimefunItem)
                     ? String.format(
                     "&f需要在 %s 中解锁",
-                    (LocalHelper.getAddonName(itemGroup, slimefunItem.getId())) + ChatColor.WHITE + " - " + LocalHelper.getDisplayName(itemGroup, p))
+                    (LocalHelper.getAddonName(itemGroup, slimefunItem.getId())) + ChatColor.WHITE + " - "
+                            + LocalHelper.getDisplayName(itemGroup, p))
                     : "&f无权限";
             Research research = slimefunItem.getResearch();
             if (research == null) {
                 return ItemStackUtil.getCleanItem(
                         slimefunItem.canUse(p, false)
                                 ? item
-                                : Converter.getItem(Converter.getItem(
-                                Material.BARRIER,
-                                ItemUtils.getItemName(item),
-                                "&4&l" + Slimefun.getLocalization().getMessage(p, "guide.locked"),
-                                "",
-                                lore), meta -> meta.getPersistentDataContainer().set(UNLOCK_ITEM_KEY, PersistentDataType.STRING, slimefunItem.getId())));
+                                : Converter.getItem(
+                                Converter.getItem(
+                                        Material.BARRIER,
+                                        ItemUtils.getItemName(item),
+                                        "&4&l"
+                                                + Slimefun.getLocalization()
+                                                .getMessage(p, "guide.locked"),
+                                        "",
+                                        lore),
+                                meta -> meta.getPersistentDataContainer()
+                                        .set(
+                                                UNLOCK_ITEM_KEY,
+                                                PersistentDataType.STRING,
+                                                slimefunItem.getId())));
             } else {
-                String cost = VaultIntegration.isEnabled() ? String.format("%.2f", research.getCurrencyCost()) + " 游戏币" : research.getLevelCost() + " 级经验";
+                String cost = VaultIntegration.isEnabled()
+                        ? String.format("%.2f", research.getCurrencyCost()) + " 游戏币"
+                        : research.getLevelCost() + " 级经验";
                 return ItemStackUtil.getCleanItem(
                         slimefunItem.canUse(p, false)
                                 ? item
-                                : Converter.getItem(Converter.getItem(
-                                Material.BARRIER,
-                                ItemUtils.getItemName(item),
-                                "&4&l" + Slimefun.getLocalization().getMessage(p, "guide.locked"),
-                                "",
-                                lore,
-                                "",
-                                "&a单击解锁",
-                                "",
-                                "&7需要",
-                                "&b" + cost), meta -> meta.getPersistentDataContainer().set(UNLOCK_ITEM_KEY, PersistentDataType.STRING, slimefunItem.getId())));
+                                : Converter.getItem(
+                                Converter.getItem(
+                                        Material.BARRIER,
+                                        ItemUtils.getItemName(item),
+                                        "&4&l"
+                                                + Slimefun.getLocalization()
+                                                .getMessage(p, "guide.locked"),
+                                        "",
+                                        lore,
+                                        "",
+                                        "&a单击解锁",
+                                        "",
+                                        "&7需要",
+                                        "&b" + cost),
+                                meta -> meta.getPersistentDataContainer()
+                                        .set(
+                                                UNLOCK_ITEM_KEY,
+                                                PersistentDataType.STRING,
+                                                slimefunItem.getId())));
             }
         } else {
             return item;
@@ -166,8 +182,7 @@ public interface JEGSlimefunGuideImplementation extends SlimefunGuideImplementat
      * @param profile   The player profile.
      */
     @ParametersAreNonnullByDefault
-    default void openItemMarkGroup(
-            ItemGroup itemGroup, Player player, PlayerProfile profile) {
+    default void openItemMarkGroup(ItemGroup itemGroup, Player player, PlayerProfile profile) {
         new ItemMarkGroup(this, itemGroup, player).open(player, profile, getMode());
     }
 
@@ -190,41 +205,47 @@ public interface JEGSlimefunGuideImplementation extends SlimefunGuideImplementat
     void showMinecraftRecipe0(
             Recipe @NotNull [] recipes,
             int index,
-            @NotNull ItemStack item,
-            @NotNull PlayerProfile profile,
-            @NotNull Player p,
+            final @NotNull ItemStack item,
+            final @NotNull PlayerProfile profile,
+            final @NotNull Player p,
             boolean addToHistory);
 
     <T extends Recipe> void showRecipeChoices0(
-            @NotNull T recipe, ItemStack[] recipeItems, @NotNull AsyncRecipeChoiceTask task);
+            final @NotNull T recipe, ItemStack[] recipeItems, @NotNull AsyncRecipeChoiceTask task);
 
     @ParametersAreNonnullByDefault
     default void displayItem(PlayerProfile profile, SlimefunItem item, boolean addToHistory, boolean maybeSpecial) {
-        displayItem(profile, item, addToHistory, maybeSpecial, item instanceof RecipeDisplayItem ? Formats.recipe_display : Formats.recipe);
+        displayItem(
+                profile,
+                item,
+                addToHistory,
+                maybeSpecial,
+                item instanceof RecipeDisplayItem ? Formats.recipe_display : Formats.recipe);
     }
 
     @ParametersAreNonnullByDefault
-    void displayItem(PlayerProfile profile, SlimefunItem item, boolean addToHistory, boolean maybeSpecial, Format format);
+    void displayItem(
+            PlayerProfile profile, SlimefunItem item, boolean addToHistory, boolean maybeSpecial, Format format);
 
     void displayItem0(
-            @NotNull ChestMenu menu,
-            @NotNull PlayerProfile profile,
-            @NotNull Player p,
+            final @NotNull ChestMenu menu,
+            final @NotNull PlayerProfile profile,
+            final @NotNull Player p,
             Object item,
             ItemStack output,
-            @NotNull RecipeType recipeType,
+            final @NotNull RecipeType recipeType,
             ItemStack[] recipe,
-            @NotNull AsyncRecipeChoiceTask task);
+            final @NotNull AsyncRecipeChoiceTask task);
 
     void displayItem(
-            @NotNull ChestMenu menu,
-            @NotNull PlayerProfile profile,
-            @NotNull Player p,
+            final @NotNull ChestMenu menu,
+            final @NotNull PlayerProfile profile,
+            final @NotNull Player p,
             Object item,
             ItemStack output,
-            @NotNull RecipeType recipeType,
+            final @NotNull RecipeType recipeType,
             ItemStack[] recipe,
-            @NotNull AsyncRecipeChoiceTask task,
+            final @NotNull AsyncRecipeChoiceTask task,
             Format format);
 
     @ParametersAreNonnullByDefault

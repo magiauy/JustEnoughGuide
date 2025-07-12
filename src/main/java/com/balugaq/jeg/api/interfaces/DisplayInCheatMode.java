@@ -62,13 +62,13 @@ public @interface DisplayInCheatMode {
         public static boolean contains(@NotNull ItemGroup group) {
             String namespace = group.getKey().getNamespace();
             String key = group.getKey().getKey();
-            //@formatter:off
+            // @formatter:off
             return isSpecial(group)
                     || (namespace.equals("danktech2") && key.equals("main"))
                     || (namespace.equals("slimeframe") && key.equals("wf_main"))
                     || (namespace.equals("finaltech-changed") && (key.equals("_finaltech_category_main")))
                     || (namespace.equals("finaltech") && (key.equals("finaltech_category_main")));
-            //@formatter:on
+            // @formatter:on
         }
 
         /**
@@ -82,12 +82,14 @@ public @interface DisplayInCheatMode {
             String key = group.getKey().getKey();
             String className = group.getClass().getName();
 
-            //@formatter:off
-            return
-                    (className.equals("io.github.mooy1.infinityexpansion.infinitylib.groups.SubGroup") && ((namespace.equals("infinityexpansion") || namespace.equals("infinityexpansion-changed")) && key.equals("infinity_cheat")))
-                    || (className.equals("me.lucasgithuber.obsidianexpansion.infinitylib.groups.SubGroup") && (namespace.equals("obsidianexpansion") && key.equals("omc_forge_cheat")))
+            // @formatter:off
+            return (className.equals("io.github.mooy1.infinityexpansion.infinitylib.groups.SubGroup")
+                            && ((namespace.equals("infinityexpansion") || namespace.equals("infinityexpansion-changed"))
+                                    && key.equals("infinity_cheat")))
+                    || (className.equals("me.lucasgithuber.obsidianexpansion.infinitylib.groups.SubGroup")
+                            && (namespace.equals("obsidianexpansion") && key.equals("omc_forge_cheat")))
                     || className.equals("io.github.sefiraat.networks.slimefun.NetworksItemGroups$HiddenItemGroup");
-            //@formatter:on
+            // @formatter:on
         }
     }
 }

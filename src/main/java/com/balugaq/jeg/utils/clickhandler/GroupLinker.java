@@ -36,6 +36,8 @@ import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation;
+import java.util.concurrent.atomic.AtomicInteger;
+import javax.annotation.ParametersAreNonnullByDefault;
 import lombok.Getter;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
@@ -46,9 +48,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.concurrent.atomic.AtomicInteger;
-
 /**
  * @author balugaq
  * @since 1.5
@@ -57,8 +56,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class GroupLinker implements Applier {
     private static final GroupLinker instance = new GroupLinker();
 
-    private GroupLinker() {
-    }
+    private GroupLinker() {}
 
     public static void applyWith(@NotNull SlimefunGuideImplementation guide, @NotNull ChestMenu menu, int slot) {
         instance.apply(guide, menu, slot);
@@ -66,8 +64,8 @@ public class GroupLinker implements Applier {
 
     @ParametersAreNonnullByDefault
     public void apply(SlimefunGuideImplementation guide, ChestMenu menu, int slot) {
-        menu.addMenuClickHandler(slot, JEGClickHandler.of(guide, menu, slot)
-                .addProcessor(GroupLinkProcessor.getInstance()));
+        menu.addMenuClickHandler(
+                slot, JEGClickHandler.of(guide, menu, slot).addProcessor(GroupLinkProcessor.getInstance()));
     }
 
     @SuppressWarnings("ConstantValue")
@@ -95,14 +93,14 @@ public class GroupLinker implements Applier {
          */
         @Override
         public boolean process(
-                @NotNull SlimefunGuideImplementation guide,
-                @NotNull ChestMenu menu,
-                @NotNull InventoryClickEvent event,
-                @NotNull Player player,
+                final @NotNull SlimefunGuideImplementation guide,
+                final @NotNull ChestMenu menu,
+                final @NotNull InventoryClickEvent event,
+                final @NotNull Player player,
                 @Range(from = 0, to = 53) int clickedSlot,
-                @Nullable ItemStack clickedItemStack,
-                @NotNull ClickAction clickAction,
-                @Nullable Boolean processedResult) {
+                final @Nullable ItemStack clickedItemStack,
+                final @NotNull ClickAction clickAction,
+                final @Nullable Boolean processedResult) {
             if (!clickAction.isRightClicked() && clickAction.isShiftClicked()) {
                 // Open the item's item group if exists
                 final SlimefunItem sfItem = SlimefunItem.getByItem(clickedItemStack);
@@ -113,10 +111,13 @@ public class GroupLinker implements Applier {
                         if (GuideUtil.isTaggedGroupType(itemGroup)) {
                             page.set((itemGroup.getItems().indexOf(sfItem) / 36) + 1);
                         }
-                        return EventUtil.callEvent(new GuideEvents.GroupLinkButtonClickEvent(player, clickedItemStack, clickedSlot, clickAction, menu, guide)).ifSuccess(() -> {
-                            PlayerProfile.get(player, profile -> guide.openItemGroup(profile, itemGroup, page.get()));
-                            return false;
-                        });
+                        return EventUtil.callEvent(new GuideEvents.GroupLinkButtonClickEvent(
+                                        player, clickedItemStack, clickedSlot, clickAction, menu, guide))
+                                .ifSuccess(() -> {
+                                    PlayerProfile.get(
+                                            player, profile -> guide.openItemGroup(profile, itemGroup, page.get()));
+                                    return false;
+                                });
                     }
                 }
             }

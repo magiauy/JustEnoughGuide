@@ -30,12 +30,6 @@ package com.balugaq.jeg.utils;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.common.ChatColors;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -44,6 +38,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.UUID;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author balugaq
@@ -51,7 +50,8 @@ import java.util.UUID;
  */
 @SuppressWarnings({"unused", "deprecation", "CallToPrintStackTrace", "ResultOfMethodCallIgnored"})
 public class Debug {
-    public static final File errorsFolder = new File(JustEnoughGuide.getInstance().getDataFolder(), "error-reports");
+    public static final File errorsFolder =
+            new File(JustEnoughGuide.getInstance().getDataFolder(), "error-reports");
     private static final String debugPrefix = "[Debug] ";
     private static @Nullable JavaPlugin plugin = null;
 
@@ -61,8 +61,7 @@ public class Debug {
         }
     }
 
-    @NotNull
-    public static JavaPlugin getPlugin() {
+    @NotNull public static JavaPlugin getPlugin() {
         if (plugin == null) {
             plugin = JustEnoughGuide.getInstance();
         }
@@ -227,7 +226,9 @@ public class Debug {
     }
 
     public static void log(@NotNull String message) {
-        Bukkit.getServer().getConsoleSender().sendMessage("[" + JustEnoughGuide.getInstance().getName() + "] " + ChatColors.color(message));
+        Bukkit.getServer()
+                .getConsoleSender()
+                .sendMessage("[" + JustEnoughGuide.getInstance().getName() + "] " + ChatColors.color(message));
     }
 
     public static void log(@NotNull Throwable e) {
@@ -248,11 +249,17 @@ public class Debug {
 
     public static void trace(@NotNull Throwable e, @Nullable String doing, @Nullable Integer code) {
         try {
-            getPlugin().getLogger().severe("DO NOT REPORT THIS ERROR TO JustEnoughGuide DEVELOPERS!!! THIS IS NOT A JustEnoughGuide BUG!");
+            getPlugin()
+                    .getLogger()
+                    .severe(
+                            "DO NOT REPORT THIS ERROR TO JustEnoughGuide DEVELOPERS!!! THIS IS NOT A JustEnoughGuide BUG!");
             if (code != null) {
                 getPlugin().getLogger().severe("Error code: " + code);
             }
-            getPlugin().getLogger().severe("If you are sure that this is a JustEnoughGuide bug, please report to " + JustEnoughGuide.getInstance().getBugTrackerURL());
+            getPlugin()
+                    .getLogger()
+                    .severe("If you are sure that this is a JustEnoughGuide bug, please report to "
+                            + JustEnoughGuide.getInstance().getBugTrackerURL());
             if (doing != null) {
                 getPlugin().getLogger().severe("An unexpected error occurred while " + doing);
             } else {
@@ -269,12 +276,21 @@ public class Debug {
 
     public static void traceExactly(@NotNull Throwable e, @Nullable String doing, @Nullable Integer code) {
         try {
-            getPlugin().getLogger().severe("====================AN FATAL OCCURRED" + (doing != null ? (" WHEN " + doing.toUpperCase()) : "") + "====================");
-            getPlugin().getLogger().severe("DO NOT REPORT THIS ERROR TO JustEnoughGuide DEVELOPERS!!! THIS IS NOT A JustEnoughGuide BUG!");
+            getPlugin()
+                    .getLogger()
+                    .severe("====================AN FATAL OCCURRED"
+                            + (doing != null ? (" WHEN " + doing.toUpperCase()) : "") + "====================");
+            getPlugin()
+                    .getLogger()
+                    .severe(
+                            "DO NOT REPORT THIS ERROR TO JustEnoughGuide DEVELOPERS!!! THIS IS NOT A JustEnoughGuide BUG!");
             if (code != null) {
                 getPlugin().getLogger().severe("Error code: " + code);
             }
-            getPlugin().getLogger().severe("If you are sure that this is a JustEnoughGuide bug, please report to " + JustEnoughGuide.getInstance().getBugTrackerURL());
+            getPlugin()
+                    .getLogger()
+                    .severe("If you are sure that this is a JustEnoughGuide bug, please report to "
+                            + JustEnoughGuide.getInstance().getBugTrackerURL());
             if (doing != null) {
                 getPlugin().getLogger().severe("An unexpected error occurred while " + doing);
             } else {
@@ -298,19 +314,24 @@ public class Debug {
 
     public static void dumpToFile(@NotNull Throwable e, @Nullable Integer code) {
         // Format as: yyyy-MM-dd-HH-mm-ss-e.getClass().getSimpleName()-uuid
-        String fileName = "error-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss")) + "-" + e.getClass().getSimpleName() + "-" + UUID.randomUUID() + ".txt";
+        String fileName = "error-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss"))
+                + "-" + e.getClass().getSimpleName() + "-" + UUID.randomUUID() + ".txt";
 
         File file = new File(errorsFolder, fileName);
         try {
             file.createNewFile();
             try (PrintStream stream = new PrintStream(file, StandardCharsets.UTF_8)) {
                 stream.println("====================AN FATAL OCCURRED====================");
-                stream.println("DO NOT REPORT THIS ERROR TO JustEnoughGuide DEVELOPERS!!! THIS IS NOT A JustEnoughGuide BUG!");
-                stream.println("If you are sure that this is a JustEnoughGuide bug, please report to " + JustEnoughGuide.getInstance().getBugTrackerURL());
+                stream.println(
+                        "DO NOT REPORT THIS ERROR TO JustEnoughGuide DEVELOPERS!!! THIS IS NOT A JustEnoughGuide BUG!");
+                stream.println("If you are sure that this is a JustEnoughGuide bug, please report to "
+                        + JustEnoughGuide.getInstance().getBugTrackerURL());
                 stream.println("An unexpected error occurred.");
-                stream.println("JustEnoughGuide version: " + JustEnoughGuide.getInstance().getDescription().getVersion());
+                stream.println("JustEnoughGuide version: "
+                        + JustEnoughGuide.getInstance().getDescription().getVersion());
                 stream.println("Java version: " + System.getProperty("java.version"));
-                stream.println("OS: " + System.getProperty("os.name") + " " + System.getProperty("os.version") + " " + System.getProperty("os.arch"));
+                stream.println("OS: " + System.getProperty("os.name") + " " + System.getProperty("os.version") + " "
+                        + System.getProperty("os.arch"));
                 stream.println("Minecraft version: " + JustEnoughGuide.getMinecraftVersion());
                 stream.println("Slimefun version: " + Slimefun.getVersion());
                 if (code != null) {
