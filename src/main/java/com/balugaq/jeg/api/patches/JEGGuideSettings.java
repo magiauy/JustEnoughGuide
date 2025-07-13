@@ -36,6 +36,7 @@ import com.balugaq.jeg.utils.KeyUtil;
 import com.balugaq.jeg.utils.ReflectionUtil;
 import com.balugaq.jeg.utils.compatibility.Converter;
 import com.balugaq.jeg.utils.formatter.Formats;
+import com.ytdd9527.networksexpansion.utils.JavaUtil;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuide;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
 import io.github.thebusybiscuit.slimefun4.core.guide.options.SlimefunGuideOption;
@@ -374,7 +375,7 @@ public class JEGGuideSettings {
     }
 
     public static void unpatchSlimefun() {
-        for (SlimefunGuideOption<?> option : JEGGuideSettings.getPatched().reversed()) {
+        for (SlimefunGuideOption<?> option : JavaUtil.reserve(JEGGuideSettings.getPatched())) {
             JEGGuideSettings.getOptions().add(0, option);
         }
     }
