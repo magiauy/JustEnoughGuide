@@ -284,8 +284,6 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
             }
             getLogger().info("物品组加载完毕！");
 
-            JEGGuideSettings.patchSlimefun();
-
             if (getConfigManager().isBeginnerOption()) {
                 getLogger().info("正在加载新手指南选项...");
                 SlimefunGuideSettings.addOption(BeginnersGuideOption.instance());
@@ -356,7 +354,6 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
                 }
             }
             FinalTECHValueDisplayOption.unboot();
-            JEGGuideSettings.unpatchSlimefun();
         } catch (Exception ignored) {
         }
 

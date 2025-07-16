@@ -25,11 +25,11 @@
  *
  */
 
-package com.balugaq.jeg.core.integrations.networksexpansion;
+package com.balugaq.jeg.core.integrations.networks;
 
 import com.balugaq.jeg.api.objects.events.GuideEvents;
 import com.balugaq.jeg.api.recipe_complete.source.base.SlimefunSource;
-import com.balugaq.jeg.core.integrations.networks.NetworksIntegrationMain;
+import com.balugaq.jeg.core.integrations.networksexpansion.NetworksExpansionIntegrationMain;
 import com.balugaq.jeg.core.listeners.RecipeCompletableListener;
 import com.balugaq.jeg.utils.BlockMenuUtil;
 import com.balugaq.jeg.utils.GuideUtil;
@@ -37,7 +37,6 @@ import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
 import io.github.sefiraat.networks.network.NetworkRoot;
 import io.github.sefiraat.networks.network.stackcaches.ItemRequest;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
-import java.util.List;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import org.bukkit.Material;
@@ -48,11 +47,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 /**
  * @author balugaq
  * @since 1.9
  */
-public class NetworksExpansionRecipeCompleteSlimefunSource implements SlimefunSource {
+public class NetworksRecipeCompleteSlimefunSource implements SlimefunSource {
 
     @SuppressWarnings("deprecation")
     @Override
@@ -231,7 +232,7 @@ public class NetworksExpansionRecipeCompleteSlimefunSource implements SlimefunSo
         }
 
         // get from root
-        return root.getItemStack0(player.getLocation(), new ItemRequest(itemStack, 1));
+        return root.getItemStack(new ItemRequest(itemStack, 1));
     }
 
     @Override
