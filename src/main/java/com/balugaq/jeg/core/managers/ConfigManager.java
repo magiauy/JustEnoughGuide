@@ -86,6 +86,7 @@ public class ConfigManager extends AbstractManager {
     private final @NotNull List<String> CONTRIBUTORS_FORMAT;
     private final @NotNull Map<String, String> LOCAL_TRANSLATE;
     private final @NotNull List<String> BANLIST;
+    private final @NotNull String LANGUAGE;
     private final @NotNull JavaPlugin plugin;
     private final boolean EMC_VALUE_DISPLAY;
     private final boolean FinalTech_VALUE_DISPLAY;
@@ -256,7 +257,10 @@ public class ConfigManager extends AbstractManager {
         this.EMC_VALUE_DISPLAY = plugin.getConfig().getBoolean("improvements.emc-display-option", true);
         this.FinalTech_VALUE_DISPLAY = plugin.getConfig().getBoolean("improvements.finaltech-emc-display-option", true);
         this.FinalTECH_VALUE_DISPLAY = plugin.getConfig().getBoolean("improvements.finalTECH-emc-display-option", true);
-    }
+        this.LANGUAGE = plugin.getConfig().getString("language", "en-US");
+
+}
+    
 
     private void setupDefaultConfig() {
         // config.yml
@@ -283,7 +287,7 @@ public class ConfigManager extends AbstractManager {
     }
 
     @ParametersAreNonnullByDefault
-    private void checkKey(FileConfiguration existingConfig, FileConfiguration resourceConfig, String key) {
+    public static void checkKey(FileConfiguration existingConfig, FileConfiguration resourceConfig, String key) {
         final Object currentValue = existingConfig.get(key);
         final Object newValue = resourceConfig.get(key);
         if (newValue instanceof ConfigurationSection section) {
@@ -409,5 +413,8 @@ public class ConfigManager extends AbstractManager {
 
     public boolean isFinalTECHValueDisplay() {
         return FinalTECH_VALUE_DISPLAY;
+    }
+        public @NotNull String getLanguage() {
+        return LANGUAGE;
     }
 }

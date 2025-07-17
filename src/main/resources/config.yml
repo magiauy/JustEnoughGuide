@@ -1,6 +1,7 @@
 #file: noinspection GrazieInspection
 # Auto update from Guizhan Build is enabled by default.
 auto-update: true
+language: en-US
 
 guide:
   survival-improvements: true

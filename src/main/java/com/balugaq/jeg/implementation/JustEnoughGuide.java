@@ -40,6 +40,7 @@ import com.balugaq.jeg.core.managers.ConfigManager;
 import com.balugaq.jeg.core.managers.IntegrationManager;
 import com.balugaq.jeg.core.managers.ListenerManager;
 import com.balugaq.jeg.core.managers.RTSBackpackManager;
+import com.balugaq.jeg.core.services.LocalizationService;
 import com.balugaq.jeg.implementation.guide.CheatGuideImplementation;
 import com.balugaq.jeg.implementation.guide.SurvivalGuideImplementation;
 import com.balugaq.jeg.implementation.items.GroupSetup;
@@ -124,6 +125,9 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
 
     @Getter
     private RTSBackpackManager rtsBackpackManager = null;
+
+    @Getter
+    private LocalizationService localizationService;
 
     @Getter
     private MinecraftVersion minecraftVersion = null;
@@ -226,11 +230,15 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
             onDisable();
             return;
         }
-
         getLogger().info("正在加载配置文件...");
         saveDefaultConfig();
         this.configManager = new ConfigManager(this);
         this.configManager.load();
+
+        this.localizationService = new LocalizationService(this);
+        String language = getConfigManager().getLanguage();
+        this.localizationService.addLanguage(language);
+        this.localizationService.addLanguage("en-US"); // Default language
 
         getLogger().info("正在适配其他插件...");
         this.integrationManager = new IntegrationManager(this);
