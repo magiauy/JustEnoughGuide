@@ -48,8 +48,8 @@ import com.balugaq.jeg.utils.Debug;
 import com.balugaq.jeg.utils.EventUtil;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
+import com.balugaq.jeg.utils.Lang;
 import com.balugaq.jeg.utils.LocalHelper;
-import com.balugaq.jeg.utils.Models;
 import com.balugaq.jeg.utils.ReflectionUtil;
 import com.balugaq.jeg.utils.SpecialMenuProvider;
 import com.balugaq.jeg.utils.clickhandler.BeginnerUtils;
@@ -145,13 +145,13 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
     public static final int RTS_SLOT = 6;
 
     @Deprecated
-    public static final ItemStack RTS_ITEM = Models.RTS_ITEM;
+    public static final ItemStack RTS_ITEM = Lang.RTS_ITEM;
 
     @Deprecated
     public static final int SPECIAL_MENU_SLOT = 26;
 
     @Deprecated
-    public static final ItemStack SPECIAL_MENU_ITEM = Models.SPECIAL_MENU_ITEM;
+    public static final ItemStack SPECIAL_MENU_ITEM = Lang.SPECIAL_MENU_ITEM;
 
     @Deprecated
     public final int[] recipeSlots = SurvivalGuideImplementation.recipeSlots;
@@ -189,11 +189,8 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
 
             ItemGroup itemGroup = slimefunItem.getItemGroup();
             String lore = hasPermission(p, slimefunItem)
-                    ? String.format(
-                            "&f需要在 %s 中解锁",
-                            (LocalHelper.getAddonName(itemGroup, slimefunItem.getId())) + ChatColor.WHITE + " - "
-                                    + LocalHelper.getDisplayName(itemGroup, p))
-                    : "&f无权限";
+                    ? Lang.getGuideMessage("locked-item", "addon_name", LocalHelper.getAddonName(itemGroup, slimefunItem.getId()), "category_name", itemGroup.getDisplayName(p))
+                    : Lang.getGuideMessage("no-permission");
             return ItemStackUtil.getCleanItem(
                     slimefunItem.canUse(p, false)
                             ? item
@@ -299,10 +296,13 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                 }
             } catch (Exception | LinkageError x) {
                 SlimefunAddon addon = group.getAddon();
-                Logger logger = addon != null
-                        ? addon.getLogger()
-                        : JustEnoughGuide.getInstance().getLogger();
-                logger.log(Level.SEVERE, x, () -> "Could not display item group: " + group);
+                if (addon != null) {
+                    addon.getLogger().log(Level.SEVERE, x, () -> Lang.getError("could-not-display-item-group", "group", group));
+                } else {
+                    JustEnoughGuide.getInstance()
+                            .getLogger()
+                            .log(Level.SEVERE, x, () -> Lang.getError("could-not-display-item-group", "group", group));
+                }
             }
         }
 
@@ -414,11 +414,11 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                     ItemGroup selected = GroupResorter.getSelectedGroup(pl);
                     if (selected == null) {
                         GroupResorter.setSelectedGroup(pl, group);
-                        pl.sendMessage(ChatColors.color("&a已选择物品组: &e" + group.getDisplayName(pl)));
+                        pl.sendMessage(ChatColors.color("&aSelected item group: &e" + group.getDisplayName(pl)));
                     } else {
                         GroupResorter.swap(selected, group);
                         GroupResorter.setSelectedGroup(pl, null);
-                        pl.sendMessage(ChatColors.color("&a已交换物品组排序: &e" + selected.getDisplayName(pl) + " &7<-> &e"
+                        pl.sendMessage(ChatColors.color("&aSort by swapped item group order: &e" + selected.getDisplayName(pl) + " &7<-> &e"
                                 + group.getDisplayName(pl)));
                         openMainMenu(profile, page);
                     }
@@ -596,11 +596,12 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                                     ItemGroup selected = GroupResorter.getSelectedGroup(pl);
                                     if (selected == null) {
                                         GroupResorter.setSelectedGroup(pl, subGroup);
-                                        pl.sendMessage(ChatColors.color("&a已选择物品组: &e" + subGroup.getDisplayName(pl)));
+                                        pl.sendMessage(ChatColors.color("&aSelected item group: &e" + subGroup.getDisplayName(pl)));
                                     } else {
                                         GroupResorter.swap(selected, subGroup);
                                         GroupResorter.setSelectedGroup(pl, null);
-                                        pl.sendMessage(ChatColors.color("&a已交换物品组排序: &e" + selected.getDisplayName(pl)
+                                        //TODO: translation
+                                        pl.sendMessage(ChatColors.color("&aSort by swapped item group order: &e" + selected.getDisplayName(pl)
                                                 + " &7<-> &e" + subGroup.getDisplayName(pl)));
                                         openMainMenu(profile, page);
                                     }
@@ -674,9 +675,9 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             String lore;
 
             if (VaultIntegration.isEnabled()) {
-                lore = String.format("%.2f", research.getCurrencyCost()) + " 游戏币";
+                lore = String.format("%.2f", research.getCurrencyCost()) + " Currency";
             } else {
-                lore = research.getLevelCost() + " 级经验";
+                lore = research.getLevelCost() + " Levels";
             }
 
             menu.addItem(
@@ -689,10 +690,9 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                                     "&7" + sfitem.getId(),
                                     "&4&l" + Slimefun.getLocalization().getMessage(p, "guide.locked"),
                                     "",
-                                    "&a> 单击解锁",
+                                    Lang.getGuideMessage("click-to-unlock"),
                                     "",
-                                    "&7需要 &b",
-                                    lore)));
+                                    Lang.getGuideMessage("cost", "cost", research.getCost()))));
             menu.addMenuClickHandler(index, (pl, slot, item, action) -> EventUtil.callEvent(
                             new GuideEvents.ResearchItemEvent(pl, item, slot, action, menu, this))
                     .ifSuccess(() -> {
@@ -820,7 +820,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                 null,
                 null,
                 ItemStackUtil.getCleanItem(
-                        Converter.getItem(Material.BARRIER, "&4We are somehow unable to show you this Recipe :/")),
+                            Converter.getItem(Material.BARRIER, Lang.getError("unknown-recipe"))),
                 null,
                 null,
                 null,
@@ -984,7 +984,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             for (int s : format.getChars('E')) {
                 menu.addItem(
                         s,
-                        PatchScope.BigRecipe.patch(p, Models.SPECIAL_MENU_ITEM),
+                        PatchScope.BigRecipe.patch(p, Lang.SPECIAL_MENU_ITEM),
                         (pl, slot, itemstack, action) -> EventUtil.callEvent(new GuideEvents.BigRecipeButtonClickEvent(
                                         pl, itemstack, slot, action, menu, this))
                                 .ifSuccess(() -> {
@@ -1196,7 +1196,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
             menu.addItem(
                     slot,
                     PatchScope.Back.patch(
-                            p, ChestMenuUtils.getBackButton(p, "", "&f左键: &7返回上一页", "&fShift + 左键: &7返回主菜单")));
+                            p, ChestMenuUtils.getBackButton(p, "", "&fLeft click: &7Return to previous page", "&fShift + Left click: &7Return to main menu")));
 
             menu.addMenuClickHandler(slot, (pl, s, is, action) -> EventUtil.callEvent(
                             new GuideEvents.BackButtonClickEvent(pl, is, s, action, menu, this))
@@ -1341,17 +1341,24 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
     @ParametersAreNonnullByDefault
     @Override
     public void printErrorMessage0(Player p, Throwable x) {
-        p.sendMessage(ChatColor.DARK_RED + "服务器发生了一个内部错误. 请联系管理员处理.");
-        JustEnoughGuide.getInstance().getLogger().log(Level.SEVERE, "在打开指南书里的 Slimefun 物品时发生了意外!", x);
+        p.sendMessage(Lang.getError("internal-error"));
+        JustEnoughGuide.getInstance().getLogger().log(Level.SEVERE, Lang.getError("error-occurred"), x);
+        JustEnoughGuide.getInstance().getLogger().warning(Lang.getError("trying-fix-guide", "player_name", p.getName()));
+        PlayerProfile profile = PlayerProfile.find(p).orElse(null);
+        if (profile == null) {
+            return;
+        }
+        GuideUtil.removeLastEntry(profile.getGuideHistory());
     }
 
     @ParametersAreNonnullByDefault
-    @Override
     public void printErrorMessage0(Player p, SlimefunItem item, Throwable x) {
-        p.sendMessage(ChatColor.DARK_RED
-                + "An internal server error has occurred. Please inform an admin, check the console for"
-                + " further info.");
-        item.error(
-                "This item has caused an error message to be thrown while viewing it in the Slimefun" + " guide.", x);
+        p.sendMessage(Lang.getError("internal-error"));
+        item.error(Lang.getError("item-error"), x);
+        PlayerProfile profile = PlayerProfile.find(p).orElse(null);
+        if (profile == null) {
+            return;
+        }
+        GuideUtil.removeLastEntry(profile.getGuideHistory());
     }
 }

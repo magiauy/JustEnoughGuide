@@ -37,6 +37,7 @@ import com.balugaq.jeg.utils.compatibility.Converter;
 import com.balugaq.jeg.utils.compatibility.Sounds;
 import com.balugaq.jeg.utils.formatter.Format;
 import com.balugaq.jeg.utils.formatter.Formats;
+import com.balugaq.jeg.utils.Lang;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.groups.NestedItemGroup;
@@ -82,14 +83,15 @@ public interface JEGSlimefunGuideImplementation extends SlimefunGuideImplementat
             ItemGroup itemGroup = slimefunItem.getItemGroup();
             if (slimefunItem.isDisabledIn(p.getWorld())) {
                 return ItemStackUtil.getCleanItem(
-                        Converter.getItem(Material.BARRIER, ItemUtils.getItemName(item), "&4&l 该 Slimefun 物品已被禁用"));
+                        Converter.getItem(
+                                Material.BARRIER, 
+                                ItemUtils.getItemName(item),                         
+                                Lang.getGuideMessage("disabled-item")
+));
             }
             String lore = hasPermission0(p, slimefunItem)
-                    ? String.format(
-                    "&f需要在 %s 中解锁",
-                    (LocalHelper.getAddonName(itemGroup, slimefunItem.getId())) + ChatColor.WHITE + " - "
-                            + LocalHelper.getDisplayName(itemGroup, p))
-                    : "&f无权限";
+                    ? Lang.getGuideMessage("locked-item", "addon_name", LocalHelper.getAddonName(itemGroup, slimefunItem.getId()), "category_name", itemGroup.getDisplayName(p))
+                    : Lang.getGuideMessage("no-permission");
             Research research = slimefunItem.getResearch();
             if (research == null) {
                 return ItemStackUtil.getCleanItem(
@@ -111,8 +113,8 @@ public interface JEGSlimefunGuideImplementation extends SlimefunGuideImplementat
                                                 slimefunItem.getId())));
             } else {
                 String cost = VaultIntegration.isEnabled()
-                        ? String.format("%.2f", research.getCurrencyCost()) + " 游戏币"
-                        : research.getLevelCost() + " 级经验";
+                        ? String.format("%.2f", research.getCurrencyCost()) + " Currency"
+                        : research.getLevelCost() + " Levels";
                 return ItemStackUtil.getCleanItem(
                         slimefunItem.canUse(p, false)
                                 ? item
@@ -126,15 +128,15 @@ public interface JEGSlimefunGuideImplementation extends SlimefunGuideImplementat
                                         "",
                                         lore,
                                         "",
-                                        "&a单击解锁",
+                                        Lang.getGuideMessage("click-to-unlock"),
                                         "",
-                                        "&7需要",
-                                        "&b" + cost),
-                                meta -> meta.getPersistentDataContainer()
+                                        Lang.getGuideMessage("cost", "cost", research.getCost())), meta -> {
+                                meta.getPersistentDataContainer()
                                         .set(
                                                 UNLOCK_ITEM_KEY,
                                                 PersistentDataType.STRING,
-                                                slimefunItem.getId())));
+                                                slimefunItem.getId());
+                                        }));
             }
         } else {
             return item;

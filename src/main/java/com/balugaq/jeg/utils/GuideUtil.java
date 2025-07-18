@@ -76,10 +76,8 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public final class GuideUtil {
     private static final List<ItemGroup> forceHiddens = new ArrayList<>();
-    private static final ItemStack BOOK_MARK_MENU_BUTTON =
-            ItemStackUtil.getCleanItem(Converter.getItem(Material.NETHER_STAR, "&e&l收藏物列表"));
-    private static final ItemStack ITEM_MARK_MENU_BUTTON =
-            ItemStackUtil.getCleanItem(Converter.getItem(Material.WRITABLE_BOOK, "&e&l收藏物品"));
+    private static final ItemStack BOOK_MARK_MENU_BUTTON = Lang.getIcon("book-mark-button", Material.NETHER_STAR);
+    private static final ItemStack ITEM_MARK_MENU_BUTTON = Lang.getIcon("item-mark-button", Material.WRITABLE_BOOK);
 
     /**
      * Open the main menu of the guide for the given player and mode.
@@ -173,7 +171,7 @@ public final class GuideUtil {
             for (int ss : format.getChars('R')) {
                 menu.addItem(
                         ss,
-                        PatchScope.RealTimeSearch.patch(p, Models.RTS_ITEM),
+                        PatchScope.RealTimeSearch.patch(p, Lang.RTS_ITEM),
                         (pl, slot, itemstack, action) -> EventUtil.callEvent(new GuideEvents.RTSButtonClickEvent(
                                         pl, itemstack, slot, action, menu, implementation))
                                 .ifSuccess(() -> {

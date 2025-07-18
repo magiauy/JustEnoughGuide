@@ -45,7 +45,6 @@ import com.balugaq.jeg.utils.Debug;
 import com.balugaq.jeg.utils.EventUtil;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
-import com.balugaq.jeg.utils.Models;
 import com.balugaq.jeg.utils.ReflectionUtil;
 import com.balugaq.jeg.utils.SpecialMenuProvider;
 import com.balugaq.jeg.utils.clickhandler.BeginnerUtils;
@@ -56,6 +55,7 @@ import com.balugaq.jeg.utils.compatibility.Sounds;
 import com.balugaq.jeg.utils.formatter.Format;
 import com.balugaq.jeg.utils.formatter.Formats;
 import com.balugaq.jeg.utils.formatter.RecipeDisplayFormat;
+import com.balugaq.jeg.utils.Lang;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.api.events.PlayerPreResearchEvent;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
@@ -133,13 +133,13 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
     public static final int RTS_SLOT = 6;
 
     @Deprecated
-    public static final ItemStack RTS_ITEM = Models.RTS_ITEM;
+    public static final ItemStack RTS_ITEM = Lang.RTS_ITEM;
 
     @Deprecated
     public static final int SPECIAL_MENU_SLOT = 26;
 
     @Deprecated
-    public static final ItemStack SPECIAL_MENU_ITEM = Models.SPECIAL_MENU_ITEM;
+    public static final ItemStack SPECIAL_MENU_ITEM = Lang.SPECIAL_MENU_ITEM;
 
     @Deprecated
     public static final int[] recipeSlots = Formats.recipe.getChars('r').stream()
@@ -218,11 +218,11 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
                 SlimefunAddon addon = group.getAddon();
 
                 if (addon != null) {
-                    addon.getLogger().log(Level.SEVERE, x, () -> "Could not display item group: " + group);
+                    addon.getLogger().log(Level.SEVERE, x, () -> Lang.getError("could-not-display-item-group", "group", group));
                 } else {
                     JustEnoughGuide.getInstance()
                             .getLogger()
-                            .log(Level.SEVERE, x, () -> "Could not display item group: " + group);
+                            .log(Level.SEVERE, x, () -> Lang.getError("could-not-display-item-group", "group", group));
                 }
             }
         }
@@ -567,10 +567,9 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
                                     "&7" + sfitem.getId(),
                                     "&4&l" + Slimefun.getLocalization().getMessage(p, "guide.locked"),
                                     "",
-                                    "&a> 单击解锁",
+                                    Lang.getGuideMessage("click-to-unlock"),
                                     "",
-                                    "&7需要",
-                                    "&b" + lore)));
+                                    Lang.getGuideMessage("cost", "cost", research.getCost()))));
             menu.addMenuClickHandler(index, (pl, slot, item, action) -> EventUtil.callEvent(
                             new GuideEvents.ResearchItemEvent(pl, item, slot, action, menu, this))
                     .ifSuccess(() -> {
@@ -699,7 +698,8 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
                 null,
                 null,
                 null,
-                ItemStackUtil.getCleanItem(Converter.getItem(Material.BARRIER, "&4我们不知道如何展示该配方 :/")),
+                    ItemStackUtil.getCleanItem(
+                            Converter.getItem(Material.BARRIER, Lang.getError("unknown-recipe"))),
                 null,
                 null,
                 null,
@@ -868,7 +868,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
             for (int s : format.getChars('E')) {
                 menu.addItem(
                         s,
-                        PatchScope.BigRecipe.patch(p, Models.SPECIAL_MENU_ITEM),
+                        PatchScope.BigRecipe.patch(p, Lang.SPECIAL_MENU_ITEM),
                         (pl, slot, itemstack, action) -> EventUtil.callEvent(new GuideEvents.BigRecipeButtonClickEvent(
                                         pl, itemstack, slot, action, menu, this))
                                 .ifSuccess(() -> {
@@ -1283,9 +1283,9 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
     @Override
     @ParametersAreNonnullByDefault
     public void printErrorMessage0(Player p, Throwable x) {
-        p.sendMessage(ChatColor.DARK_RED + "服务器发生了一个内部错误. 请联系管理员处理.");
-        JustEnoughGuide.getInstance().getLogger().log(Level.SEVERE, "在打开指南书里的 Slimefun 物品时发生了意外!", x);
-        JustEnoughGuide.getInstance().getLogger().warning("我们正在尝试恢复玩家 \"" + p.getName() + "\" 的指南...");
+        p.sendMessage(Lang.getError("internal-error"));
+        JustEnoughGuide.getInstance().getLogger().log(Level.SEVERE, Lang.getError("error-occurred"), x);
+        JustEnoughGuide.getInstance().getLogger().warning(Lang.getError("trying-fix-guide", "player_name", p.getName()));
         PlayerProfile profile = PlayerProfile.find(p).orElse(null);
         if (profile == null) {
             return;
@@ -1296,14 +1296,9 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
     @Override
     @ParametersAreNonnullByDefault
     public void printErrorMessage0(Player p, SlimefunItem item, Throwable x) {
-        p.sendMessage(ChatColor.DARK_RED
-                + "An internal server error has occurred. Please inform an admin, check the console for"
-                + " further info.");
-        item.error(
-                "This item has caused an error message to be thrown while viewing it in the Slimefun" + " guide.", x);
-        JustEnoughGuide.getInstance()
-                .getLogger()
-                .warning("We are trying to recover the player \"" + p.getName() + "\"'s guide...");
+        p.sendMessage(Lang.getError("internal-error"));
+        item.error(Lang.getError("item-error"), x);
+        JustEnoughGuide.getInstance().getLogger().warning(Lang.getError("trying-fix-guide", "player_name", p.getName()));
         PlayerProfile profile = PlayerProfile.find(p).orElse(null);
         if (profile == null) {
             return;

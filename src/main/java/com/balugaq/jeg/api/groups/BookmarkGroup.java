@@ -38,6 +38,7 @@ import com.balugaq.jeg.utils.EventUtil;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
 import com.balugaq.jeg.utils.JEGVersionedItemFlag;
+import com.balugaq.jeg.utils.Lang;
 import com.balugaq.jeg.utils.LocalHelper;
 import com.balugaq.jeg.utils.compatibility.Converter;
 import com.balugaq.jeg.utils.compatibility.Sounds;
@@ -211,7 +212,7 @@ public class BookmarkGroup extends FlexItemGroup {
             final @NotNull Player player,
             final @NotNull PlayerProfile playerProfile,
             final @NotNull SlimefunGuideMode slimefunGuideMode) {
-        ChestMenu chestMenu = new ChestMenu("收藏页 - JEG");
+        ChestMenu chestMenu = new ChestMenu("Favorites - JEG");
 
         chestMenu.setEmptySlotsClickable(false);
         chestMenu.addMenuOpeningHandler(pl -> pl.playSound(pl.getLocation(), Sounds.GUIDE_BUTTON_CLICK_SOUND, 1, 1));
@@ -318,9 +319,9 @@ public class BookmarkGroup extends FlexItemGroup {
                     String lore;
 
                     if (VaultIntegration.isEnabled()) {
-                        lore = String.format("%.2f", research.getCurrencyCost()) + " 游戏币";
+                        lore = String.format("%.2f", research.getCurrencyCost()) + " Currency";
                     } else {
-                        lore = research.getLevelCost() + " 级经验";
+                        lore = research.getLevelCost() + " Levels";
                     }
 
                     itemstack = ItemStackUtil.getCleanItem(Converter.getItem(
@@ -329,10 +330,9 @@ public class BookmarkGroup extends FlexItemGroup {
                             "&7" + slimefunItem.getId(),
                             "&4&l" + Slimefun.getLocalization().getMessage(player, "guide.locked"),
                             "",
-                            "&a> 单击解锁",
+                            Lang.getGuideMessage("click-to-unlock"),
                             "",
-                            "&7需要 &b",
-                            lore));
+                            Lang.getGuideMessage("cost", "cost", research.getCost())));
                     handler = (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.ResearchItemEvent(
                                     pl, item, slot, action, chestMenu, implementation))
                             .ifSuccess(() -> {
@@ -350,11 +350,8 @@ public class BookmarkGroup extends FlexItemGroup {
                         ItemGroup itemGroup = slimefunItem.getItemGroup();
                         List<String> additionLore = List.of(
                                 "",
-                                ChatColor.DARK_GRAY + "\u21E8 " + ChatColor.WHITE
-                                        + (LocalHelper.getAddonName(itemGroup, slimefunItem.getId())) + ChatColor.WHITE
-                                        + " - "
-                                        + LocalHelper.getDisplayName(itemGroup, player),
-                                ChatColor.YELLOW + "右键以取消收藏物品");
+                                Lang.getGuideMessage("addon", "symbol_block", "\u21E8", "addon_name", LocalHelper.getAddonName(itemGroup, slimefunItem.getId()), "category_name", itemGroup.getDisplayName(player)),
+                                Lang.getGuideMessage("unmark"));
                         if (meta.hasLore() && meta.getLore() != null) {
                             List<String> lore = meta.getLore();
                             lore.addAll(additionLore);
@@ -454,32 +451,29 @@ public class BookmarkGroup extends FlexItemGroup {
         return Slimefun.getConfigManager().isShowHiddenItemGroupsInSearch()
                 || slimefunItem.getItemGroup().isAccessible(p);
     }
-
-    /**
-     * Prints an error message to the player.
-     *
-     * @param p The player.
-     * @param x The exception.
-     */
     @ParametersAreNonnullByDefault
-    private void printErrorMessage(@NotNull Player p, @NotNull Throwable x) {
-        p.sendMessage("&4服务器发生了一个内部错误. 请联系管理员处理.");
-        JAVA_PLUGIN.getLogger().log(Level.SEVERE, "在打开指南书里的 Slimefun 物品时发生了意外!", x);
+    private void printErrorMessage(Player p, Throwable x) {
+        p.sendMessage(Lang.getError("internal-error"));
+        JustEnoughGuide.getInstance().getLogger().log(Level.SEVERE, Lang.getError("error-occurred"), x);
+        JustEnoughGuide.getInstance().getLogger().warning(Lang.getError("trying-fix-guide", "player_name", p.getName()));
+        PlayerProfile profile = PlayerProfile.find(p).orElse(null);
+        if (profile == null) {
+            return;
+        }
+        GuideUtil.removeLastEntry(profile.getGuideHistory());
     }
 
-    /**
-     * Prints an error message to the player.
-     *
-     * @param p    The player.
-     * @param item The Slimefun item.
-     * @param x    The exception.
-     */
     @ParametersAreNonnullByDefault
-    private void printErrorMessage(@NotNull Player p, @NotNull SlimefunItem item, @NotNull Throwable x) {
-        p.sendMessage(ChatColor.DARK_RED
-                + "An internal server error has occurred. Please inform an admin, check the console for"
-                + " further info.");
-        item.error(
-                "This item has caused an error message to be thrown while viewing it in the Slimefun" + " guide.", x);
+    private void printErrorMessage(Player p, SlimefunItem item, Throwable x) {
+        p.sendMessage(Lang.getError("internal-error"));
+        item.error(Lang.getError("item-error"), x);
+        JustEnoughGuide.getInstance()
+                .getLogger()
+                .warning(Lang.getError("trying-fix-guide", "player_name", p.getName()));
+        PlayerProfile profile = PlayerProfile.find(p).orElse(null);
+        if (profile == null) {
+            return;
+        }
+        GuideUtil.removeLastEntry(profile.getGuideHistory());
     }
 }

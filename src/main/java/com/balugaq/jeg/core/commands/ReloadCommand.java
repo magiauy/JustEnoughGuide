@@ -30,6 +30,7 @@ package com.balugaq.jeg.core.commands;
 import com.balugaq.jeg.api.groups.SearchGroup;
 import com.balugaq.jeg.api.interfaces.JEGCommand;
 import com.balugaq.jeg.utils.Debug;
+import com.balugaq.jeg.utils.Lang;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -92,10 +93,10 @@ public class ReloadCommand implements JEGCommand {
     }
 
     private void onReload(@NotNull CommandSender sender) {
-        sender.sendMessage(ChatColor.GREEN + "Reloading plugin...");
+        sender.sendMessage(Lang.getCommandMessage("reload", "start"));
         try {
             if (plugin == null) {
-                sender.sendMessage(ChatColor.RED + "Failed to reload plugin.");
+                sender.sendMessage(Lang.getCommandMessage("reload", "precheck-failed"));
                 return;
             }
 
@@ -105,9 +106,9 @@ public class ReloadCommand implements JEGCommand {
             SearchGroup.LOADED = false;
             SearchGroup.init();
             plugin.reloadConfig(); // 2nd reload
-            sender.sendMessage(ChatColor.GREEN + "plugin has been reloaded.");
+            sender.sendMessage(Lang.getCommandMessage("reload", "success"));
         } catch (Exception e) {
-            sender.sendMessage(ChatColor.RED + "Failed to reload plugin.");
+            sender.sendMessage(Lang.getCommandMessage("reload", "failed"));
             Debug.trace(e);
         }
     }

@@ -37,6 +37,7 @@ import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.EventUtil;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.ItemStackUtil;
+import com.balugaq.jeg.utils.Lang;
 import com.balugaq.jeg.utils.compatibility.Converter;
 import com.balugaq.jeg.utils.compatibility.Sounds;
 import com.balugaq.jeg.utils.formatter.Formats;
@@ -256,9 +257,9 @@ public class CustomGroup extends FlexItemGroup {
                         String lore;
 
                         if (VaultIntegration.isEnabled()) {
-                            lore = String.format("%.2f", research.getCurrencyCost()) + " 游戏币";
+                            lore = String.format("%.2f", research.getCurrencyCost()) + " Currency";
                         } else {
-                            lore = research.getLevelCost() + " 级经验";
+                            lore = research.getLevelCost() + " Levels";
                         }
 
                         itemstack = ItemStackUtil.getCleanItem(Converter.getItem(
@@ -267,10 +268,9 @@ public class CustomGroup extends FlexItemGroup {
                                 "&7" + slimefunItem.getId(),
                                 "&4&l" + Slimefun.getLocalization().getMessage(player, "guide.locked"),
                                 "",
-                                "&a> 单击解锁",
+                                Lang.getGuideMessage("click-to-unlock"),
                                 "",
-                                "&7需要 &b",
-                                lore));
+                                Lang.getGuideMessage("cost", "cost", research.getCost())));
                         handler = (pl, slot, item, action) -> EventUtil.callEvent(new GuideEvents.ResearchItemEvent(
                                         pl, item, slot, action, chestMenu, implementation))
                                 .ifSuccess(() -> {

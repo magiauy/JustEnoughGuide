@@ -49,8 +49,9 @@ import com.balugaq.jeg.utils.clickhandler.NamePrinter;
 import com.balugaq.jeg.utils.compatibility.Converter;
 import com.balugaq.jeg.utils.compatibility.Sounds;
 import com.balugaq.jeg.utils.formatter.Formats;
+import com.balugaq.jeg.utils.Lang;
+
 import com.github.houbb.pinyin.constant.enums.PinyinStyleEnum;
-import com.github.houbb.pinyin.util.PinyinHelper;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
@@ -287,21 +288,7 @@ public class SearchGroup extends FlexItemGroup {
         if (result) {
             return true;
         }
-
-        if (pinyin) {
-            final String pinyinFirstLetter = getPinyin(itemName);
-            return pinyinFirstLetter.contains(searchTerm);
-        }
-
         return false;
-    }
-
-    public static String getPinyin(String string) {
-        return getPinyin(string, PinyinStyleEnum.FIRST_LETTER);
-    }
-
-    public static String getPinyin(String string, PinyinStyleEnum style) {
-        return PinyinHelper.toPinyin(string, style, "");
     }
 
     /**
@@ -754,26 +741,6 @@ public class SearchGroup extends FlexItemGroup {
                                             }
                                         }
 
-                                        if (JustEnoughGuide.getConfigManager().isPinyinSearch()) {
-                                            final String pinyinFirstLetter =
-                                                    PinyinHelper.toPinyin(name, PinyinStyleEnum.FIRST_LETTER, "");
-                                            for (char c : pinyinFirstLetter.toCharArray()) {
-                                                char d = Character.toLowerCase(c);
-                                                CACHE.putIfAbsent(d, new SoftReference<>(new HashSet<>()));
-                                                Reference<Set<SlimefunItem>> ref = CACHE.get(d);
-                                                if (ref != null) {
-                                                    Set<SlimefunItem> set = ref.get();
-                                                    if (set == null) {
-                                                        set = new HashSet<>();
-                                                        CACHE.put(d, new SoftReference<>(set));
-                                                    }
-                                                    if (!inBanlist(slimefunItem)) {
-                                                        set.add(slimefunItem);
-                                                    }
-                                                }
-                                            }
-                                        }
-
                                         List<ItemStack> displayRecipes = null;
                                         if (slimefunItem instanceof AContainer ac) {
                                             displayRecipes = ac.getDisplayRecipes();
@@ -1086,15 +1053,6 @@ public class SearchGroup extends FlexItemGroup {
                 .toList();
     }
 
-    public static @NotNull List<SlimefunItem> sortByPinyinContinuity(
-            @NotNull Set<SlimefunItem> origin, @NotNull String searchTerm) {
-        return origin.stream()
-                .sorted(Comparator.comparingInt(item ->
-                        /* Intentionally negative */
-                        -nameFit(getPinyin(ChatColor.stripColor(item.getItemName())), searchTerm)))
-                .toList();
-    }
-
     /**
      * Always returns false.
      *
@@ -1156,7 +1114,7 @@ public class SearchGroup extends FlexItemGroup {
             final @NotNull PlayerProfile playerProfile,
             final @NotNull SlimefunGuideMode slimefunGuideMode) {
         ChestMenu chestMenu =
-                new ChestMenu("你正在搜索: %item%".replace("%item%", ChatUtils.crop(ChatColor.WHITE, searchTerm)));
+                new ChestMenu(Lang.getGuideMessage("searching", "item_name", ChatUtils.crop(ChatColor.WHITE, searchTerm)));
 
         chestMenu.setEmptySlotsClickable(false);
         chestMenu.addMenuOpeningHandler(pl -> pl.playSound(pl.getLocation(), Sounds.GUIDE_BUTTON_CLICK_SOUND, 1, 1));
@@ -1166,7 +1124,7 @@ public class SearchGroup extends FlexItemGroup {
                     ss,
                     PatchScope.Back.patch(
                             player,
-                            ChestMenuUtils.getBackButton(player, "", "&f左键: &7返回上一页", "&fShift + 左键: &7返回主菜单")));
+                            ChestMenuUtils.getBackButton(player, "", "&fLeft click: &7Return to previous page", "&fShift + Left click: &7Return to main menu")));
             chestMenu.addMenuClickHandler(ss, (pl, s, is, action) -> EventUtil.callEvent(
                             new GuideEvents.BackButtonClickEvent(pl, is, s, action, chestMenu, implementation))
                     .ifSuccess(() -> {
@@ -1356,33 +1314,32 @@ public class SearchGroup extends FlexItemGroup {
         return filterItems(p, searchTerm, pinyin);
     }
 
-    /**
-     * Prints an error message.
-     *
-     * @param p The player.
-     * @param x The exception.
-     */
     @ParametersAreNonnullByDefault
     private void printErrorMessage(Player p, Throwable x) {
-        p.sendMessage("&4服务器发生了一个内部错误. 请联系管理员处理.");
-        JAVA_PLUGIN.getLogger().log(Level.SEVERE, "在打开指南书里的 Slimefun 物品时发生了意外!", x);
+        p.sendMessage(Lang.getError("internal-error"));
+        JustEnoughGuide.getInstance().getLogger().log(Level.SEVERE, Lang.getError("error-occurred"), x);
+        JustEnoughGuide.getInstance().getLogger().warning(Lang.getError("trying-fix-guide", "player_name", p.getName()));
+        PlayerProfile profile = PlayerProfile.find(p).orElse(null);
+        if (profile == null) {
+            return;
+        }
+        GuideUtil.removeLastEntry(profile.getGuideHistory());
     }
 
-    /**
-     * Prints an error message.
-     *
-     * @param p    The player.
-     * @param item The Slimefun item.
-     * @param x    The exception.
-     */
     @ParametersAreNonnullByDefault
     private void printErrorMessage(Player p, SlimefunItem item, Throwable x) {
-        p.sendMessage(ChatColor.DARK_RED
-                + "An internal server error has occurred. Please inform an admin, check the console for"
-                + " further info.");
-        item.error(
-                "This item has caused an error message to be thrown while viewing it in the Slimefun" + " guide.", x);
+        p.sendMessage(Lang.getError("internal-error"));
+        item.error(Lang.getError("item-error"), x);
+        JustEnoughGuide.getInstance()
+                .getLogger()
+                .warning(Lang.getError("trying-fix-guide", "player_name", p.getName()));
+        PlayerProfile profile = PlayerProfile.find(p).orElse(null);
+        if (profile == null) {
+            return;
+        }
+        GuideUtil.removeLastEntry(profile.getGuideHistory());
     }
+
 
     /**
      * Filters items based on the search term and pinyin flag.
@@ -1500,11 +1457,8 @@ public class SearchGroup extends FlexItemGroup {
             merge.addAll(items);
         }
 
-        if (pinyin && onlyAscii(searchTerm)) {
-            return sortByPinyinContinuity(merge, actualSearchTerm);
-        } else {
-            return sortByNameFit(merge, actualSearchTerm);
-        }
+        return sortByNameFit(merge, actualSearchTerm);
+
     }
 
     /**

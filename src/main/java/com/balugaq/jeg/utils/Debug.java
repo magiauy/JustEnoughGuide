@@ -52,7 +52,7 @@ import org.jetbrains.annotations.Nullable;
 public class Debug {
     public static final File errorsFolder =
             new File(JustEnoughGuide.getInstance().getDataFolder(), "error-reports");
-    private static final String debugPrefix = "[Debug] ";
+    private static final String debugPrefix = Lang.getDebug("debug-prefix");
     private static @Nullable JavaPlugin plugin = null;
 
     static {

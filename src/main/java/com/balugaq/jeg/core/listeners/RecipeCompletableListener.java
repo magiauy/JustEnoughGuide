@@ -36,13 +36,16 @@ import com.balugaq.jeg.api.recipe_complete.source.base.SlimefunSource;
 import com.balugaq.jeg.api.recipe_complete.source.base.VanillaSource;
 import com.balugaq.jeg.implementation.items.ItemsSetup;
 import com.balugaq.jeg.utils.KeyUtil;
-import com.balugaq.jeg.utils.Models;
 import com.balugaq.jeg.utils.ReflectionUtil;
 import com.balugaq.jeg.utils.StackUtils;
+import com.balugaq.jeg.utils.Lang;
+
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.core.guide.GuideHistory;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.common.ChatColors;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.items.ItemUtils;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -57,7 +60,6 @@ import lombok.SneakyThrows;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
-import net.guizhanss.guizhanlib.minecraft.helper.inventory.ItemStackHelper;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -320,9 +322,9 @@ public class RecipeCompletableListener implements Listener {
                     }
                 }
 
-                String itemName = ItemStackHelper.getDisplayName(clickedItemStack);
+                String itemName = ItemUtils.getItemName(clickedItemStack);
                 lore.add("");
-                lore.add(ChatColors.color("&6上次补全物品: " + itemName));
+                lore.add(ChatColors.color(Lang.getMessage("guide.recipe-complete-last-completed") + itemName));
 
                 if (!applied) {
                     meta.getPersistentDataContainer().set(LAST_RECIPE_COMPLETE_KEY, PersistentDataType.BOOLEAN, true);
@@ -486,8 +488,8 @@ public class RecipeCompletableListener implements Listener {
 
             // Patch start
             lore.add("");
-            lore.add(ChatColors.color(Models.RECIPE_COMPLETE_GUI_MECHANISM_1));
-            lore.add(ChatColors.color(Models.RECIPE_COMPLETE_GUI_MECHANISM_2));
+            lore.add(ChatColors.color(Lang.getMessage("guide.recipe-complete-left-click")));
+            lore.add(ChatColors.color(Lang.getMessage("guide.recipe-complete-right-click")));
             // Patch end
 
             meta.setLore(lore);
