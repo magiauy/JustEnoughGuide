@@ -316,6 +316,8 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
 
         SearchGroup.init();
 
+        ThirdPartyWarnings.check();
+
         getLogger().info("成功启用此附属");
     }
 
