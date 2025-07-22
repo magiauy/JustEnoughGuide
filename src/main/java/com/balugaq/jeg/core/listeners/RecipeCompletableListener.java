@@ -310,12 +310,12 @@ public class RecipeCompletableListener implements Listener {
 
                 // Patch start
                 boolean applied = meta.getPersistentDataContainer().has(LAST_RECIPE_COMPLETE_KEY);
-                if (lore.size() >= 2 && applied) {
+                if (lore.size() >= 7 && applied) {
                     // Remove last two lines
-                    if (lore.size() >= 2) {
+                    if (lore.size() >= 7) {
                         lore.remove(lore.size() - 1);
                     }
-                    if (lore.size() >= 1) {
+                    if (lore.size() >= 6) {
                         lore.remove(lore.size() - 1);
                     }
                 }
