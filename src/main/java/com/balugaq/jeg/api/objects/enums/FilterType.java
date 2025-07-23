@@ -132,7 +132,40 @@ public enum FilterType {
         SlimefunAddon addon = item.getAddon();
         String localAddonName = LocalHelper.getAddonName(addon, item.getId()).toLowerCase();
         String originModName = (addon == null ? "Slimefun" : addon.getName()).toLowerCase();
-        return localAddonName.contains(lowerFilterValue) || originModName.contains(lowerFilterValue);
+        
+        // More precise matching to avoid false positives
+        // 1. Exact match
+        if (localAddonName.equals(lowerFilterValue) || originModName.equals(lowerFilterValue)) {
+            return true;
+        }
+        
+        // 2. Starts with match (for partial addon names)
+        if (localAddonName.startsWith(lowerFilterValue) || originModName.startsWith(lowerFilterValue)) {
+            return true;
+        }
+        
+        // 3. Word boundary match (separated by spaces, hyphens, or underscores)
+        String[] localWords = localAddonName.split("[\\s\\-_]+");
+        String[] originWords = originModName.split("[\\s\\-_]+");
+        
+        for (String word : localWords) {
+            if (word.equals(lowerFilterValue) || word.startsWith(lowerFilterValue)) {
+                return true;
+            }
+        }
+        
+        for (String word : originWords) {
+            if (word.equals(lowerFilterValue) || word.startsWith(lowerFilterValue)) {
+                return true;
+            }
+        }
+        
+        // 4. Contains match only for longer filter values (minimum 4 characters to avoid false positives)
+        if (lowerFilterValue.length() >= 4) {
+            return localAddonName.contains(lowerFilterValue) || originModName.contains(lowerFilterValue);
+        }
+        
+        return false;
     }),
     BY_ITEM_NAME(
             "!",

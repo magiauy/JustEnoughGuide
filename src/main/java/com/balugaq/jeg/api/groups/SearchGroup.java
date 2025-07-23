@@ -135,6 +135,7 @@ public class SearchGroup extends FlexItemGroup {
     public static final Integer DEFAULT_HASH_SIZE = 5000;
     public static final Map<SlimefunItem, Integer> ENABLED_ITEMS = new HashMap<>(DEFAULT_HASH_SIZE);
     public static final Set<SlimefunItem> AVAILABLE_ITEMS = new HashSet<>(DEFAULT_HASH_SIZE);
+    public static final Map<SlimefunItem, String> CLEANED_NAMES_CACHE = new HashMap<>(DEFAULT_HASH_SIZE);
 
     @Deprecated
     public static final Integer[] BORDER = new Integer[]{0, 2, 3, 4, 5, 6, 8, 45, 47, 48, 49, 50, 51, 53};
@@ -165,7 +166,7 @@ public class SearchGroup extends FlexItemGroup {
     public final SlimefunGuideImplementation implementation;
     public final Player player;
     public final String searchTerm;
-    public final Boolean pinyin;
+    // public final Boolean pinyin;
     public final @NotNull Integer page;
     public final List<SlimefunItem> slimefunItemList;
     public final boolean re_search_when_cache_failed;
@@ -208,7 +209,6 @@ public class SearchGroup extends FlexItemGroup {
         }
         this.page = 1;
         this.searchTerm = searchTerm;
-        this.pinyin = pinyin;
         this.player = player;
         this.re_search_when_cache_failed = re_search_when_cache_failed;
         this.implementation = implementation;
@@ -226,7 +226,6 @@ public class SearchGroup extends FlexItemGroup {
         super(searchGroup.key, new ItemStack(Material.BARRIER));
         this.page = page;
         this.searchTerm = searchGroup.searchTerm;
-        this.pinyin = searchGroup.pinyin;
         this.player = searchGroup.player;
         this.re_search_when_cache_failed = searchGroup.re_search_when_cache_failed;
         this.implementation = searchGroup.implementation;
@@ -279,16 +278,16 @@ public class SearchGroup extends FlexItemGroup {
      */
     @ParametersAreNonnullByDefault
     public static boolean isSearchFilterApplicable(String itemName, String searchTerm, boolean pinyin) {
-        if (itemName.isEmpty()) {
+        if (itemName.isEmpty() || searchTerm.isEmpty()) {
             return false;
         }
-
-        // Quick escape for common cases
-        boolean result = itemName.contains(searchTerm);
-        if (result) {
-            return true;
-        }
-        return false;
+        
+        // Use the enhanced name fit scoring system
+        int score = nameFit(itemName, searchTerm);
+        
+        // Only accept items with a reasonable score
+        // This eliminates very weak matches while keeping relevant ones
+        return score >= 50; // Minimum threshold for relevance
     }
 
     /**
@@ -727,6 +726,11 @@ public class SearchGroup extends FlexItemGroup {
                                             continue;
                                         }
                                         String name = ChatColor.stripColor(slimefunItem.getItemName());
+                                        
+                                        // Pre-cache cleaned names for performance
+                                        String cleanedName = name.toLowerCase(Locale.ROOT).trim();
+                                        CLEANED_NAMES_CACHE.put(slimefunItem, cleanedName);
+                                        
                                         for (char c : name.toCharArray()) {
                                             char d = Character.toLowerCase(c);
                                             CACHE.putIfAbsent(d, new SoftReference<>(new HashSet<>()));
@@ -922,6 +926,7 @@ public class SearchGroup extends FlexItemGroup {
                                 Debug.debug("Search Group initialized.");
                                 Debug.debug("Enabled items: " + ENABLED_ITEMS.size());
                                 Debug.debug("Available items: " + AVAILABLE_ITEMS.size());
+                                Debug.debug("Cleaned names cache: " + CLEANED_NAMES_CACHE.size());
                                 Debug.debug("Machine blocks cache: " + SPECIAL_CACHE.size());
                                 Debug.debug("Shared cache: "
                                         + JustEnoughGuide.getConfigManager()
@@ -1025,31 +1030,75 @@ public class SearchGroup extends FlexItemGroup {
 
     /**
      * Calculates the name fit score between two strings.
+     * Higher scores indicate better matches with priority given to exact matches.
+     * Only accepts items that contain the complete search term as a substring.
      *
      * @param name       The name to calculate the name fit score for.
      * @param searchTerm The search term
      * @return The name fit score. Non-negative integer.
      */
     public static int nameFit(@NotNull String name, @NotNull String searchTerm) {
-        int distance = levenshteinDistance(searchTerm.toLowerCase(Locale.ROOT), name.toLowerCase(Locale.ROOT));
-        int maxLen = Math.max(searchTerm.length(), name.length());
-
-        int matchScore;
-        if (maxLen == 0) {
-            matchScore = 100;
-        } else {
-            matchScore = (int) (100 * (1 - (double) distance / maxLen));
+        String nameClean = name.toLowerCase(Locale.ROOT).trim(); // Assume already cleaned
+        String termClean = searchTerm.toLowerCase(Locale.ROOT).trim();
+        
+        if (termClean.isEmpty() || nameClean.isEmpty()) {
+            return 0;
         }
+        
+        // Quick length check for performance
+        if (termClean.length() > nameClean.length()) {
+            return 0;
+        }
+        
+        // Single indexOf call instead of multiple contains/startsWith
+        int containsIndex = nameClean.indexOf(termClean);
+        if (containsIndex == -1) {
+            return 0; // Reject if doesn't contain the complete search term
+        }
+        
+        // Fast scoring without expensive operations
+        if (nameClean.equals(termClean)) {
+            return 1000;
+        }
+        
+        if (containsIndex == 0) { // More efficient than startsWith
+            return 800 + (100 - Math.min(100, termClean.length()));
+        }
+        
+        // Quick word boundary check
+        if (containsIndex > 0) {
+            char prevChar = nameClean.charAt(containsIndex - 1);
+            if (prevChar == ' ' || prevChar == '-' || prevChar == '_') {
+                return 700;
+            }
+        }
+        
+        // Contains match with position bonus (we already have the index)
+        int positionBonus = Math.max(0, 100 - containsIndex * 2);
+        return 400 + positionBonus;
+    }
 
-        return matchScore;
+    /**
+     * Optimized version for SlimefunItems using cached names
+     */
+    public static int nameFit(@NotNull SlimefunItem item, @NotNull String searchTerm) {
+        String cachedName = CLEANED_NAMES_CACHE.get(item);
+        if (cachedName != null) {
+            return nameFit(cachedName, searchTerm.toLowerCase(Locale.ROOT).trim());
+        }
+        // Fallback to expensive operation if not cached
+        return nameFit(ChatColor.stripColor(item.getItemName()), searchTerm);
     }
 
     public static @NotNull List<SlimefunItem> sortByNameFit(
             @NotNull Set<SlimefunItem> origin, @NotNull String searchTerm) {
+        
+        String lowerSearchTerm = searchTerm.toLowerCase(Locale.ROOT).trim();
+        
+        // Use optimized nameFit for SlimefunItems
         return origin.stream()
-                .sorted(Comparator.comparingInt(item ->
-                        /* Intentionally negative */
-                        -nameFit(ChatColor.stripColor(item.getItemName()), searchTerm)))
+                .sorted(Comparator.comparingInt((SlimefunItem item) -> 
+                        -nameFit(item, lowerSearchTerm))) // Use optimized cached version
                 .toList();
     }
 
@@ -1382,82 +1431,95 @@ public class SearchGroup extends FlexItemGroup {
                 .filter(item -> item.getItemGroup().isAccessible(player))
                 .toList());
 
-        if (!actualSearchTerm.isBlank()) {
+        // Apply addon filter FIRST to narrow down search scope
+        if (filters.containsKey(FilterType.BY_ADDON_NAME)) {
+            String addonFilter = filters.get(FilterType.BY_ADDON_NAME);
+            Debug.debug("Applying addon filter first: " + addonFilter);
+            items = items.stream()
+                    .filter(item -> FilterType.BY_ADDON_NAME.getFilter().apply(player, item, addonFilter, pinyin))
+                    .collect(Collectors.toSet());
+            Debug.debug("Items after addon filter: " + items.size());
+        }
+
+        if (!actualSearchTerm.isBlank() && actualSearchTerm.length() >= 2) { // Minimum 2 characters for performance
+            // Use optimized cache-based search with substring validation
+            Debug.debug("Searching with optimized cache for term: " + actualSearchTerm);
+            
             Set<SlimefunItem> nameMatched = new HashSet<>();
-            Set<SlimefunItem> allMatched = null;
-            for (char c : actualSearchTerm.toCharArray()) {
-                Set<SlimefunItem> cache;
-                Reference<Set<SlimefunItem>> ref = CACHE.get(c);
-                if (ref == null) {
-                    cache = new HashSet<>();
-                } else {
-                    cache = ref.get();
+            Set<SlimefunItem> candidates = null;
+            String lowerSearchTerm = actualSearchTerm.toLowerCase(Locale.ROOT);
+            
+            // Optimized intersection: find smallest cache first for maximum selectivity
+            char[] searchChars = actualSearchTerm.toCharArray();
+            if (searchChars.length > 0) {
+                // Find the character with smallest cache (most selective)
+                char mostSelectiveChar = searchChars[0];
+                int smallestCacheSize = Integer.MAX_VALUE;
+                
+                for (char c : searchChars) {
+                    Reference<Set<SlimefunItem>> ref = CACHE.get(c);
+                    if (ref != null) {
+                        Set<SlimefunItem> cache = ref.get();
+                        if (cache != null && cache.size() < smallestCacheSize) {
+                            smallestCacheSize = cache.size();
+                            mostSelectiveChar = c;
+                        }
+                    }
                 }
-                if (cache == null) {
-                    cache = new HashSet<>();
-                }
-                if (allMatched == null) {
-                    allMatched = new HashSet<>(cache);
-                } else {
-                    allMatched.retainAll(new HashSet<>(cache));
+                
+                // Start with the most selective cache to minimize work
+                Reference<Set<SlimefunItem>> firstRef = CACHE.get(mostSelectiveChar);
+                if (firstRef != null) {
+                    Set<SlimefunItem> firstCache = firstRef.get();
+                    if (firstCache != null) {
+                        candidates = new HashSet<>(firstCache);
+                        
+                        // Only validate substring on the smallest set - much faster
+                        for (SlimefunItem item : candidates) {
+                            if (items.contains(item)) { // Check addon filter first (O(1) with HashSet)
+                                String cleanedName = CLEANED_NAMES_CACHE.get(item); // O(1) lookup instead of expensive stripColor
+                                if (cleanedName != null && cleanedName.contains(lowerSearchTerm)) {
+                                    nameMatched.add(item);
+                                }
+                            }
+                        }
+                    }
                 }
             }
-            if (allMatched != null) {
-                nameMatched.addAll(allMatched);
-            }
-            Set<SlimefunItem> machineMatched = new HashSet<>();
-            Set<SlimefunItem> allMatched2 = null;
-            for (char c : actualSearchTerm.toCharArray()) {
-                Set<SlimefunItem> cache;
-                Reference<Set<SlimefunItem>> ref = CACHE2.get(c);
-                if (ref == null) {
-                    cache = new HashSet<>();
-                } else {
-                    cache = ref.get();
-                }
-                if (cache == null) {
-                    cache = new HashSet<>();
-                }
-                if (allMatched2 == null) {
-                    allMatched2 = new HashSet<>(cache);
-                } else {
-                    allMatched2.retainAll(new HashSet<>(cache));
-                }
-            }
-            if (allMatched2 != null) {
-                machineMatched.addAll(allMatched2);
-            }
+            
             Debug.debug("Name matched: " + nameMatched.size());
-            Debug.debug("Machine matched: " + machineMatched.size());
             merge.addAll(nameMatched);
-            merge.addAll(machineMatched);
-            if (this.re_search_when_cache_failed) {
-                if (nameMatched.isEmpty()) {
-                    Debug.debug("Re-searching item name by filters (Normal search)");
-                    Set<SlimefunItem> clone = new HashSet<>(items);
-                    Set<SlimefunItem> result = filterItems(FilterType.BY_ITEM_NAME, actualSearchTerm, pinyin, clone);
-                    merge.addAll(result);
-                }
-                if (machineMatched.isEmpty()) {
-                    Debug.debug("Re-searching display item name by filters (Normal search)");
-                    Set<SlimefunItem> clone = new HashSet<>(items);
-                    Set<SlimefunItem> result =
-                            filterItems(FilterType.BY_DISPLAY_ITEM_NAME, actualSearchTerm, pinyin, clone);
-                    merge.addAll(result);
-                }
+            
+            // Fallback to direct search only if cache returned no results
+            if (nameMatched.isEmpty() && this.re_search_when_cache_failed) {
+                Debug.debug("Re-searching item name by filters (Normal search)");
+                Set<SlimefunItem> clone = new HashSet<>(items);
+                Set<SlimefunItem> result = filterItems(FilterType.BY_ITEM_NAME, actualSearchTerm, pinyin, clone);
+                merge.addAll(result);
             }
         }
 
-        // Filter items
+        // Filter items (skip addon filter since it was already applied)
         if (!filters.isEmpty()) {
             for (Map.Entry<FilterType, String> entry : filters.entrySet()) {
+                // Skip addon filter since it was already applied at the beginning
+                if (entry.getKey() == FilterType.BY_ADDON_NAME) {
+                    continue;
+                }
                 items = filterItems(entry.getKey(), entry.getValue(), pinyin, items);
             }
 
             merge.addAll(items);
         }
 
-        return sortByNameFit(merge, actualSearchTerm);
+        // Limit results for performance - return top 500 items max
+        List<SlimefunItem> sortedResults = sortByNameFit(merge, actualSearchTerm);
+        if (sortedResults.size() > 500) {
+            Debug.debug("Limiting results to 500 items for performance");
+            return sortedResults.subList(0, 500);
+        }
+        
+        return sortedResults;
 
     }
 

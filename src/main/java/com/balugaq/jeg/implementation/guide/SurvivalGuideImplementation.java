@@ -552,9 +552,9 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
             String lore;
 
             if (VaultIntegration.isEnabled()) {
-                lore = String.format("%.2f", research.getCurrencyCost()) + " 游戏币";
+                lore = String.format("%.2f", research.getCurrencyCost()) + " Currency";
             } else {
-                lore = research.getLevelCost() + " 级经验";
+                lore = research.getLevelCost() + " Levels";
             }
 
             menu.addItem(
@@ -1146,7 +1146,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
             menu.addItem(
                     slot,
                     PatchScope.Back.patch(
-                            p, ChestMenuUtils.getBackButton(p, "", "&f左键: &7返回上一页", "&fShift + 左键: &7返回主菜单")));
+                            p, ChestMenuUtils.getBackButton(p, "", "&fLeft Click: &7Go back", "&fShift + Left Click: &7Back to main menu")));
 
             menu.addMenuClickHandler(slot, (pl, s, is, action) -> EventUtil.callEvent(
                             new GuideEvents.BackButtonClickEvent(pl, is, s, action, menu, this))

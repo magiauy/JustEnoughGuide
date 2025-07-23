@@ -145,9 +145,9 @@ icon:
         - "&bIntroduction: You can press Q on any item in the guide to share the item."
         - "&bClick to try!"
   book-mark-button:
-    name: "&e&lCollected"
+    name: "&eFavorites"
   item-mark-button:
-    name: "&e&lCollecting"
+    name: "&e&lAdd to Favorites"
   nexcavate-items-group:
     name: "&bNexcavate Items"
     lore:
@@ -168,7 +168,8 @@ icon:
         - "&fClick to complete recipe"
         - "&aLeft-click&e on the Recipe Complete Book to open it."
         - "&aRight-click&e on the Recipe Complete Book to complete recipe again."
-        - "&aShift+Right-click&e on the Recipe Complete Book to complete the recipe 64 times after you completed a recipe"
+        - "&aShift+Right-click&e on the Recipe Complete Book to complete the recipe"
+        - "&e64 times after you completed a recipe"
     recipe-complete-usage-info:
       name: "&aUsage"
       lore:
