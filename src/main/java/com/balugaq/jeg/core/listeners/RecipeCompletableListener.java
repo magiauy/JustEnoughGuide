@@ -294,7 +294,7 @@ public class RecipeCompletableListener implements Listener {
         ReflectionUtil.setValue(profile, "guideHistory", originHistory);
     }
 
-    @SuppressWarnings({"deprecation", "DuplicateCondition", "ConstantValue", "SizeReplaceableByIsEmpty"})
+    @SuppressWarnings({"deprecation", "DuplicateCondition", "ConstantValue"})
     private static void tryPatchRecipeCompleteBook(@NotNull Player player, @NotNull ItemStack clickedItemStack) {
         for (ItemStack itemStack : player.getInventory()) {
             if (StackUtils.itemsMatch(itemStack, getRecipeCompletableBookItem(), false, false, false, false)) {

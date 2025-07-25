@@ -35,30 +35,38 @@ import org.jetbrains.annotations.NotNull;
  * @author balugaq
  * @since 1.9
  */
+@SuppressWarnings("unused")
 @AllArgsConstructor
 @Data
-public class Pair<F, S> implements Cloneable {
+public class Triplet<A, B, C> implements Cloneable{
     public @NotNull
-    final F first;
+    final A first;
     public @NotNull
-    final S second;
+    final B second;
+    public @NotNull
+    final C third;
 
     @NotNull
-    public F first() {
+    public A first() {
         return first;
     }
 
     @NotNull
-    public S second() {
+    public B second() {
         return second;
+    }
+
+    @NotNull
+    public C third() {
+        return third;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     @NotNull
-    public Pair<F, S> clone() {
+    public Triplet<A, B, C> clone() {
         try {
-            return (Pair<F, S>) super.clone();
+            return (Triplet<A, B, C>) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }

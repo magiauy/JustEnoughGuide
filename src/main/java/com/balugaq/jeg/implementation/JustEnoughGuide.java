@@ -31,7 +31,6 @@ import com.balugaq.jeg.api.CustomGroupConfigurations;
 import com.balugaq.jeg.api.editor.GroupResorter;
 import com.balugaq.jeg.api.groups.SearchGroup;
 import com.balugaq.jeg.api.groups.VanillaItemsGroup;
-import com.balugaq.jeg.api.patches.JEGGuideSettings;
 import com.balugaq.jeg.api.recipe_complete.source.base.RecipeCompleteProvider;
 import com.balugaq.jeg.core.integrations.finaltechs.finalTECHCommon.FinalTECHValueDisplayOption;
 import com.balugaq.jeg.core.managers.BookmarkManager;
@@ -87,7 +86,7 @@ import org.jetbrains.annotations.Nullable;
  * @author balugaq
  * @since 1.0
  */
-@SuppressWarnings({"unused", "Lombok", "deprecation", "ResultOfMethodCallIgnored", "DataFlowIssue"})
+@SuppressWarnings({"unused", "Lombok", "deprecation", "ResultOfMethodCallIgnored"})
 @Getter
 public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
     public static final int RECOMMENDED_JAVA_VERSION = 17;
