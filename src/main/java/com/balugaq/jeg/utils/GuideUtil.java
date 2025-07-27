@@ -246,7 +246,7 @@ public final class GuideUtil {
                                                 },
                                                 null);
                                     } catch (Exception ignored) {
-                                        p.sendMessage(ChatColor.RED + "不兼容的版本! 无法使用实时搜索");
+                                        p.sendMessage(ChatColor.RED + "Incompatible version! Real-time search cannot be used.");
                                     }
                                     return false;
                                 }));
