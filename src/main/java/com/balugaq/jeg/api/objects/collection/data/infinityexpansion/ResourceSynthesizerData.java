@@ -62,6 +62,7 @@ public class ResourceSynthesizerData extends MachineData {
      * @author balugaq
      * @since 1.9
      */
+    @SuppressWarnings("ClassCanBeRecord")
     @Data
     public static class Recipe {
         private final SlimefunItemStack input1;

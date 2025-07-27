@@ -84,7 +84,7 @@ import java.util.regex.Pattern;
 @SuppressWarnings({"unused", "JavaExistingMethodCanBeUsed", "deprecation", "ConstantValue"})
 public class CERCalculator {
     public static final Map<SlimefunItem, MachineData> machines = new HashMap<>();
-    public static Pattern trimp = Pattern.compile("[&§]k[&§]");
+    public static final Pattern trimp = Pattern.compile("[&§]k[&§]");
 
     public static void load() {
         IntegrationManager.scheduleRun(CERCalculator::loadInternal);

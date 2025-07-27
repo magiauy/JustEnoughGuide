@@ -37,6 +37,7 @@ import java.util.Set;
  * @author balugaq
  * @since 1.9
  */
+@SuppressWarnings("ClassCanBeRecord")
 @Data
 public class RSCCustomLinkedMachineRecipe {
     private final int ticks;

@@ -44,6 +44,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author balugaq
+ * @since 1.9
+ */
+@SuppressWarnings("deprecation")
 public class CerPatchListener implements Listener {
     @EventHandler
     public void onSearch(PatchEvent event) {

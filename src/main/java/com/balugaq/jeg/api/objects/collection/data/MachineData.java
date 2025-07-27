@@ -53,6 +53,7 @@ import com.balugaq.jeg.api.objects.collection.data.rsc.RSCMachineTemplate;
 import com.balugaq.jeg.api.objects.collection.data.sc.SCCustomMaterialGeneratorData;
 import com.balugaq.jeg.api.objects.collection.data.sf.AContainerData;
 import com.balugaq.jeg.api.objects.collection.data.sf.AbstractEnergyProviderData;
+import com.balugaq.jeg.utils.Debug;
 import com.balugaq.jeg.utils.ReflectionUtil;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
@@ -61,6 +62,7 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.collections.Randomized
 import it.unimi.dsi.fastutil.ints.IntList;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.AContainer;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.abstractItems.MachineRecipe;
+import net.guizhanss.guizhanlib.minecraft.helper.inventory.ItemStackHelper;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -82,6 +84,7 @@ public abstract class MachineData {
     public static MachineData get(SlimefunItem sf) {
         String className = sf.getClass().getName();
         if (sf instanceof AContainer ac) {
+            Debug.debug(ItemStackHelper.getDisplayName(sf.getItem()) + " - " + className);
             if (className.equals("org.lins.mmmjjkx.rykenslimefuncustomizer.objects.customs.machine.CustomRecipeMachine")) {
                 // RykenSlimefunCustomizer - CustomRecipeMachine
                 // vals:

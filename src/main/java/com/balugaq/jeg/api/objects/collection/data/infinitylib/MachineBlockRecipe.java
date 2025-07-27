@@ -34,6 +34,7 @@ import org.bukkit.inventory.ItemStack;
  * @author balugaq
  * @since 1.9
  */
+@SuppressWarnings("ClassCanBeRecord")
 @Data
 public class MachineBlockRecipe {
     private final ItemStack[] inputs;

@@ -72,7 +72,7 @@ import java.util.function.Function;
  * @author balugaq
  * @since 1.3
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "UnusedAssignment"})
 @NotDisplayInSurvivalMode
 @NotDisplayInCheatMode
 @Getter

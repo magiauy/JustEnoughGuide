@@ -32,6 +32,7 @@ import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.compatibility.Converter;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.core.guide.options.SlimefunGuideOption;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.chat.ChatInput;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.data.persistent.PersistentDataAPI;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -41,12 +42,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
+// todo
 /**
- * This class is used to represent the option to show the beginner's guide.
- * which is editable in the settings menu.
- *
  * @author balugaq
- * @since 1.5
+ * @since 1.9
  */
 @SuppressWarnings({"UnnecessaryUnicodeEscape", "SameReturnValue"})
 public class RecursiveRecipeFillingGuideOption implements SlimefunGuideOption<Integer> {
@@ -60,12 +59,8 @@ public class RecursiveRecipeFillingGuideOption implements SlimefunGuideOption<In
         return new NamespacedKey(JustEnoughGuide.getInstance(), "recursive_recipe_filling");
     }
 
-    public static int getSettings(@NotNull Player p) {
-        return getSelectedOption(p);
-    }
-
     public static int getSelectedOption(@NotNull Player p) {
-        return PersistentDataAPI.getInt(p, key0());
+        return PersistentDataAPI.getInt(p, key0(), 1);
     }
 
     @Override
@@ -95,8 +90,20 @@ public class RecursiveRecipeFillingGuideOption implements SlimefunGuideOption<In
 
     @Override
     public void onClick(@NotNull Player p, @NotNull ItemStack guide) {
-        setSelectedOption(p, guide, getSelectedOption(p, guide).orElse(1));
-        JEGGuideSettings.openSettings(p, guide);
+        ChatInput.waitForPlayer(JustEnoughGuide.getInstance(), p, s -> {
+            try {
+                int value = Integer.parseInt(s);
+                if (value < 1 || value > 16) {
+                    p.sendMessage("请输入 1 ~ 16 之间的正整数");
+                    return;
+                }
+
+                setSelectedOption(p, guide, value);
+                JEGGuideSettings.openSettings(p, guide);
+            } catch (NumberFormatException ignored) {
+                p.sendMessage("请输入 1 ~ 16 之间的正整数");
+            }
+        });
     }
 
     @Override
