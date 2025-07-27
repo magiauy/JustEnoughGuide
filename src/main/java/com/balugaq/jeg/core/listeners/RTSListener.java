@@ -414,7 +414,10 @@ public class RTSListener implements Listener {
     @SuppressWarnings("DataFlowIssue")
     @EventHandler
     public void onLookup(@NotNull InventoryClickEvent event) {
-        Player player = (Player) event.getView().getPlayer();
+        // Use getWhoClicked() instead of getView().getPlayer() to avoid InventoryView compatibility issues
+        if (!(event.getWhoClicked() instanceof Player player)) {
+            return;
+        }
         if (isRTSPlayer(player)) {
             InventoryAction action = event.getAction();
             if (action == InventoryAction.PICKUP_ONE
