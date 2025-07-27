@@ -50,9 +50,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.AnvilInventory;
-import org.bukkit.inventory.view.AnvilView;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -113,33 +111,46 @@ public class RTSSearchGroup extends FlexItemGroup {
                                 if (inventory == null) {
                                     return;
                                 }
-                                InventoryView view = player.getOpenInventory();
-                                Inventory openingInventory = view.getTopInventory();
+                                // Use reflection to avoid InventoryView compatibility issues
+                                Object view = player.getOpenInventory();
+                                Inventory openingInventory;
+                                try {
+                                    // Get top inventory using reflection to avoid casting InventoryView
+                                    java.lang.reflect.Method getTopInventoryMethod = view.getClass().getMethod("getTopInventory");
+                                    openingInventory = (Inventory) getTopInventoryMethod.invoke(view);
+                                } catch (Exception e) {
+                                    Debug.debug("Failed to get top inventory: " + e.getMessage());
+                                    return;
+                                }
                                 if (openingInventory instanceof AnvilInventory anvilInventory
                                         && openingInventory.equals(inventory)) {
                                     String oldSearchTerm = searchTermCopy.get(player);
                                     try {
-                                        // `AnvilInventory.getRenameText()` have been deprecated since 1.21 in Paper
                                         String newSearchTerm = null;
                                         
-                                        // Try Paper 1.21+ AnvilView method first
+                                        // Try Paper 1.21+ AnvilView method first using reflection
                                         try {
-                                            if (view instanceof AnvilView anvilView) {
-                                                newSearchTerm = anvilView.getRenameText();
+                                            Class<?> anvilViewClass = Class.forName("org.bukkit.inventory.view.AnvilView");
+                                            if (anvilViewClass.isInstance(view)) {
+                                                java.lang.reflect.Method getRenameTextMethod = anvilViewClass.getMethod("getRenameText");
+                                                newSearchTerm = (String) getRenameTextMethod.invoke(view);
                                             }
-                                        } catch (NoClassDefFoundError | NoSuchMethodError e) {
-                                            // AnvilView not available on this server version
+                                        } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | 
+                                                java.lang.reflect.InvocationTargetException | NoClassDefFoundError e) {
+                                            // AnvilView not available or method failed, will use fallback
                                         }
                                         
                                         // Fallback to legacy AnvilInventory method if AnvilView failed
                                         if (newSearchTerm == null) {
                                             try {
-                                                newSearchTerm = anvilInventory.getRenameText();
-                                            } catch (NoSuchMethodError e) {
+                                                // Use reflection to avoid compile-time dependency
+                                                java.lang.reflect.Method getRenameTextMethod = anvilInventory.getClass().getMethod("getRenameText");
+                                                newSearchTerm = (String) getRenameTextMethod.invoke(anvilInventory);
+                                            } catch (NoSuchMethodException | IllegalAccessException | java.lang.reflect.InvocationTargetException e) {
                                                 Debug.debug("Both AnvilView and AnvilInventory getRenameText() methods are unavailable");
                                                 return;
                                             }
-                                        }                                        
+                                        }
                                         
                                         if (oldSearchTerm == null || newSearchTerm == null) {
                                             writes.put(player, newSearchTerm);
