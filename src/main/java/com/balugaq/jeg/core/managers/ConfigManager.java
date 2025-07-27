@@ -91,27 +91,30 @@ public class ConfigManager extends AbstractManager {
     private final boolean EMC_VALUE_DISPLAY;
     private final boolean FinalTech_VALUE_DISPLAY;
     private final boolean FinalTECH_VALUE_DISPLAY;
+    private final boolean ITEM_SHAREABLE;
 
     public ConfigManager(@NotNull JavaPlugin plugin) {
         this.plugin = plugin;
         setupDefaultConfig();
-        this.AUTO_UPDATE = plugin.getConfig().getBoolean("auto-update", false);
-        this.DEBUG = plugin.getConfig().getBoolean("debug", false);
-        this.SURVIVAL_IMPROVEMENTS = plugin.getConfig().getBoolean("guide.survival-improvements", true);
-        this.CHEAT_IMPROVEMENTS = plugin.getConfig().getBoolean("guide.cheat-improvements", true);
-        this.RECIPE_COMPLETE = plugin.getConfig().getBoolean("guide.recipe-complete", true);
-        this.PINYIN_SEARCH = plugin.getConfig().getBoolean("improvements.pinyin-search", true);
-        this.BOOKMARK = plugin.getConfig().getBoolean("improvements.bookmark", true);
-        this.SURVIVAL_GUIDE_TITLE = plugin.getConfig()
-                .getString("guide.survival-guide-title", "&2&lSlimefun 指南 (生存模式)         &e&l爱来自 JustEnoughGuide");
-        this.CHEAT_GUIDE_TITLE = plugin.getConfig()
-                .getString("guide.cheat-guide-title", "&c&lSlimefun 指南 (作弊模式)         &e&l爱来自 JustEnoughGuide");
-        this.SETTINGS_GUIDE_TITLE = plugin.getConfig().getString("guide.settings-guide-title", "设置 & 详情");
-        this.CREDITS_GUIDE_TITLE = plugin.getConfig().getString("guide.credits-guide-title", "Slimefun4 贡献者");
-        this.RTS_SEARCH = plugin.getConfig().getBoolean("improvements.rts-search", true);
+        FileConfiguration cfg = plugin.getConfig();
 
-        this.BEGINNER_OPTION = plugin.getConfig().getBoolean("improvements.beginner-option", true);
-        List<String> rawBlacklist = plugin.getConfig().getStringList("blacklist");
+        this.AUTO_UPDATE = cfg.getBoolean("auto-update", false);
+        this.DEBUG = cfg.getBoolean("debug", false);
+        this.SURVIVAL_IMPROVEMENTS = cfg.getBoolean("guide.survival-improvements", true);
+        this.CHEAT_IMPROVEMENTS = cfg.getBoolean("guide.cheat-improvements", true);
+        this.RECIPE_COMPLETE = cfg.getBoolean("guide.recipe-complete", true);
+        this.PINYIN_SEARCH = cfg.getBoolean("improvements.pinyin-search", true);
+        this.BOOKMARK = cfg.getBoolean("improvements.bookmark", true);
+        this.SURVIVAL_GUIDE_TITLE = cfg
+                .getString("guide.survival-guide-title", "&2&lSlimefun 指南 (生存模式)         &e&l爱来自 JustEnoughGuide");
+        this.CHEAT_GUIDE_TITLE = cfg
+                .getString("guide.cheat-guide-title", "&c&lSlimefun 指南 (作弊模式)         &e&l爱来自 JustEnoughGuide");
+        this.SETTINGS_GUIDE_TITLE = cfg.getString("guide.settings-guide-title", "设置 & 详情");
+        this.CREDITS_GUIDE_TITLE = cfg.getString("guide.credits-guide-title", "Slimefun4 贡献者");
+        this.RTS_SEARCH = cfg.getBoolean("improvements.rts-search", true);
+
+        this.BEGINNER_OPTION = cfg.getBoolean("improvements.beginner-option", true);
+        List<String> rawBlacklist = cfg.getStringList("blacklist");
         if (rawBlacklist == null || rawBlacklist.isEmpty()) {
             this.BLACKLIST = new ArrayList<>();
             this.BLACKLIST.add("快捷");
@@ -119,7 +122,7 @@ public class ConfigManager extends AbstractManager {
             this.BLACKLIST = rawBlacklist;
         }
 
-        List<String> rawSharedChars = plugin.getConfig().getStringList("shared-chars");
+        List<String> rawSharedChars = cfg.getStringList("shared-chars");
         if (rawSharedChars == null || rawSharedChars.isEmpty()) {
             this.SHARED_CHARS = new ArrayList<>();
             this.SHARED_CHARS.add("粘黏");
@@ -133,7 +136,7 @@ public class ConfigManager extends AbstractManager {
             this.SHARED_CHARS = rawSharedChars;
         }
 
-        List<String> rawMainFormat = plugin.getConfig().getStringList("custom-format.main");
+        List<String> rawMainFormat = cfg.getStringList("custom-format.main");
         if (rawMainFormat == null || rawMainFormat.isEmpty()) {
             this.MAIN_FORMAT = new ArrayList<>();
             this.MAIN_FORMAT.add("BTBBBBRSB");
@@ -146,7 +149,7 @@ public class ConfigManager extends AbstractManager {
             this.MAIN_FORMAT = rawMainFormat;
         }
 
-        List<String> rawNestedGroupFormat = plugin.getConfig().getStringList("custom-format.nested-group");
+        List<String> rawNestedGroupFormat = cfg.getStringList("custom-format.nested-group");
         if (rawNestedGroupFormat == null || rawNestedGroupFormat.isEmpty()) {
             this.NESTED_GROUP_FORMAT = new ArrayList<>();
             this.NESTED_GROUP_FORMAT.add("BbBBBBRSB");
@@ -159,7 +162,7 @@ public class ConfigManager extends AbstractManager {
             this.NESTED_GROUP_FORMAT = rawNestedGroupFormat;
         }
 
-        List<String> rawSubGroupFormat = plugin.getConfig().getStringList("custom-format.sub-group");
+        List<String> rawSubGroupFormat = cfg.getStringList("custom-format.sub-group");
         if (rawSubGroupFormat == null || rawSubGroupFormat.isEmpty()) {
             this.SUB_GROUP_FORMAT = new ArrayList<>();
             this.SUB_GROUP_FORMAT.add("BbBBBBRSB");
@@ -172,7 +175,7 @@ public class ConfigManager extends AbstractManager {
             this.SUB_GROUP_FORMAT = rawSubGroupFormat;
         }
 
-        List<String> rawRecipeFormat = plugin.getConfig().getStringList("custom-format.recipe");
+        List<String> rawRecipeFormat = cfg.getStringList("custom-format.recipe");
         if (rawRecipeFormat == null || rawRecipeFormat.isEmpty()) {
             this.RECIPE_FORMAT = new ArrayList<>();
             this.RECIPE_FORMAT.add("b  rrr  w");
@@ -188,14 +191,14 @@ public class ConfigManager extends AbstractManager {
             n.add(" t rrr i ");
             n.add("m  rrr  E");
             if (rawRecipeFormat.equals(old)) {
-                plugin.getConfig().set("custom-format.recipe", n);
+                cfg.set("custom-format.recipe", n);
                 this.RECIPE_FORMAT = n;
             } else {
                 this.RECIPE_FORMAT = rawRecipeFormat;
             }
         }
 
-        List<String> rawHelperFormat = plugin.getConfig().getStringList("custom-format.helper");
+        List<String> rawHelperFormat = cfg.getStringList("custom-format.helper");
         if (rawHelperFormat == null || rawHelperFormat.isEmpty()) {
             this.HELPER_FORMAT = new ArrayList<>();
             this.HELPER_FORMAT.add("BbBBBBRSB");
@@ -208,7 +211,7 @@ public class ConfigManager extends AbstractManager {
             this.HELPER_FORMAT = rawHelperFormat;
         }
 
-        List<String> rawRecipeVanillaFormat = plugin.getConfig().getStringList("custom-format.recipe-vanilla");
+        List<String> rawRecipeVanillaFormat = cfg.getStringList("custom-format.recipe-vanilla");
         if (rawRecipeVanillaFormat == null || rawRecipeVanillaFormat.isEmpty()) {
             this.RECIPE_VANILLA_FORMAT = new ArrayList<>();
             this.RECIPE_VANILLA_FORMAT.add("b  rrr  w");
@@ -219,7 +222,7 @@ public class ConfigManager extends AbstractManager {
             this.RECIPE_VANILLA_FORMAT = rawRecipeVanillaFormat;
         }
 
-        List<String> rawRecipeDisplayFormat = plugin.getConfig().getStringList("custom-format.recipe-display");
+        List<String> rawRecipeDisplayFormat = cfg.getStringList("custom-format.recipe-display");
         if (rawRecipeDisplayFormat == null || rawRecipeDisplayFormat.isEmpty()) {
             this.RECIPE_DISPLAY_FORMAT = new ArrayList<>();
             this.RECIPE_DISPLAY_FORMAT.add("b  rrr  w");
@@ -244,14 +247,14 @@ public class ConfigManager extends AbstractManager {
             n.add("ddddddddd");
             n.add("ddddddddd");
             if (rawRecipeDisplayFormat.equals(old)) {
-                plugin.getConfig().set("custom-format.recipe-display", n);
+                cfg.set("custom-format.recipe-display", n);
                 this.RECIPE_DISPLAY_FORMAT = n;
             } else {
                 this.RECIPE_DISPLAY_FORMAT = rawRecipeDisplayFormat;
             }
         }
 
-        List<String> rawSettingsFormat = plugin.getConfig().getStringList("custom-format.settings");
+        List<String> rawSettingsFormat = cfg.getStringList("custom-format.settings");
         if (rawSettingsFormat == null || rawSettingsFormat.isEmpty()) {
             this.SETTINGS_FORMAT = new ArrayList<>();
             this.SETTINGS_FORMAT.add("bBsBvBuBW");
@@ -264,7 +267,7 @@ public class ConfigManager extends AbstractManager {
             this.SETTINGS_FORMAT = rawSettingsFormat;
         }
 
-        List<String> rawContributorsFormat = plugin.getConfig().getStringList("custom-format.contributors");
+        List<String> rawContributorsFormat = cfg.getStringList("custom-format.contributors");
         if (rawContributorsFormat == null || rawContributorsFormat.isEmpty()) {
             this.CONTRIBUTORS_FORMAT = new ArrayList<>();
             this.CONTRIBUTORS_FORMAT.add("BbBBBBBBB");
@@ -278,17 +281,18 @@ public class ConfigManager extends AbstractManager {
         }
 
         this.LOCAL_TRANSLATE = new HashMap<>();
-        ConfigurationSection c = plugin.getConfig().getConfigurationSection("local-translate");
+        ConfigurationSection c = cfg.getConfigurationSection("local-translate");
         if (c != null) {
             for (String k : c.getKeys(false)) {
                 this.LOCAL_TRANSLATE.put(k, c.getString(k));
             }
         }
 
-        this.BANLIST = plugin.getConfig().getStringList("banlist");
-        this.EMC_VALUE_DISPLAY = plugin.getConfig().getBoolean("improvements.emc-display-option", true);
-        this.FinalTech_VALUE_DISPLAY = plugin.getConfig().getBoolean("improvements.finaltech-emc-display-option", true);
-        this.FinalTECH_VALUE_DISPLAY = plugin.getConfig().getBoolean("improvements.finalTECH-emc-display-option", true);
+        this.BANLIST = cfg.getStringList("banlist");
+        this.EMC_VALUE_DISPLAY = cfg.getBoolean("improvements.emc-display-option", true);
+        this.FinalTech_VALUE_DISPLAY = cfg.getBoolean("improvements.finaltech-emc-display-option", true);
+        this.FinalTECH_VALUE_DISPLAY = cfg.getBoolean("improvements.finalTECH-emc-display-option", true);
+        this.ITEM_SHAREABLE = cfg.getBoolean("improvements.item-shareable", true);
     }
 
     private void setupDefaultConfig() {
@@ -442,5 +446,9 @@ public class ConfigManager extends AbstractManager {
 
     public boolean isFinalTECHValueDisplay() {
         return FinalTECH_VALUE_DISPLAY;
+    }
+
+    public boolean isItemShareable() {
+        return ITEM_SHAREABLE;
     }
 }

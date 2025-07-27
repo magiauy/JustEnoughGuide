@@ -30,6 +30,7 @@ package com.balugaq.jeg.utils.clickhandler;
 import com.balugaq.jeg.api.clickhandler.JEGClickHandler;
 import com.balugaq.jeg.api.clickhandler.Processor;
 import com.balugaq.jeg.api.objects.collection.cooldown.FrequencyWatcher;
+import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.implementation.option.ShareInGuideOption;
 import com.balugaq.jeg.implementation.option.ShareOutGuideOption;
 import com.balugaq.jeg.utils.ClipboardUtil;
@@ -75,7 +76,9 @@ public class NamePrinter implements Applier {
     }
 
     public static void applyWith(@NotNull SlimefunGuideImplementation guide, @NotNull ChestMenu menu, int slot) {
-        instance.apply(guide, menu, slot);
+        if (JustEnoughGuide.getConfigManager().isItemShareable()) {
+            instance.apply(guide, menu, slot);
+        }
     }
 
     @ParametersAreNonnullByDefault
