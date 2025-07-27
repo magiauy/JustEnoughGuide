@@ -44,19 +44,9 @@ import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.core.guide.GuideHistory;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.common.ChatColors;
+import lombok.SneakyThrows;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.ItemUtils;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.BiConsumer;
-import javax.annotation.ParametersAreNonnullByDefault;
-import lombok.SneakyThrows;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
@@ -80,13 +70,24 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiConsumer;
+
 /**
  * @author balugaq
  * @since 1.9
  */
 @SuppressWarnings("unused")
 public class RecipeCompletableListener implements Listener {
-    public static final int[] DISPENSER_SLOTS = new int[] {0, 1, 2, 3, 4, 5, 6, 7, 8};
+    public static final int[] DISPENSER_SLOTS = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8};
     public static final Map<UUID, GuideEvents.ItemButtonClickEvent> LAST_EVENTS = new ConcurrentHashMap<>();
     public static final Map<UUID, GuideHistory> GUIDE_HISTORY = new ConcurrentHashMap<>();
     public static final Map<UUID, BiConsumer<GuideEvents.ItemButtonClickEvent, PlayerProfile>> PROFILE_CALLBACKS =
@@ -231,7 +232,8 @@ public class RecipeCompletableListener implements Listener {
     }
 
     @SneakyThrows
-    @NotNull public static PlayerProfile getPlayerProfile(@NotNull OfflinePlayer player) {
+    @NotNull
+    public static PlayerProfile getPlayerProfile(@NotNull OfflinePlayer player) {
         // Shouldn't be null;
         return PlayerProfile.find(player).orElseThrow(() -> new RuntimeException("PlayerProfile not found"));
     }
@@ -259,7 +261,8 @@ public class RecipeCompletableListener implements Listener {
         ReflectionUtil.setValue(profile, "guideHistory", new GuideHistory(profile));
     }
 
-    @Nullable public static GuideEvents.ItemButtonClickEvent getLastEvent(@NotNull UUID playerUUID) {
+    @Nullable
+    public static GuideEvents.ItemButtonClickEvent getLastEvent(@NotNull UUID playerUUID) {
         return LAST_EVENTS.get(playerUUID);
     }
 
@@ -503,13 +506,15 @@ public class RecipeCompletableListener implements Listener {
      * @see RecipeCompletableListener#addNotApplicableItem(SlimefunItem)
      * @since 1.9
      */
-    public interface NotApplicable {}
+    public interface NotApplicable {
+    }
 
     /**
      * @author balugaq
      * @since 1.9
      */
-    public interface TaggedRecipeCompletable {}
+    public interface TaggedRecipeCompletable {
+    }
 
     /**
      * @author balugaq
@@ -517,5 +522,6 @@ public class RecipeCompletableListener implements Listener {
      */
     @SuppressWarnings("deprecation")
     @FunctionalInterface
-    public interface RecipeCompletableClickHandler extends ChestMenu.MenuClickHandler, TaggedRecipeCompletable {}
+    public interface RecipeCompletableClickHandler extends ChestMenu.MenuClickHandler, TaggedRecipeCompletable {
+    }
 }

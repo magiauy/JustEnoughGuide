@@ -31,22 +31,23 @@ import com.balugaq.jeg.api.recipe_complete.RecipeCompletableRegistry;
 import com.balugaq.jeg.api.recipe_complete.source.base.RecipeCompleteProvider;
 import com.balugaq.jeg.core.integrations.Integration;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
-import java.util.ArrayList;
-import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author balugaq
  * @since 1.9
  */
 public class NetworksExpansionIntegrationMain implements Integration {
-    public static final int[] ENCODER_RECIPE_SLOTS = new int[] {12, 13, 14, 21, 22, 23, 30, 31, 32};
-    public static final int[] CRAFTING_GRID_NEW_STYLE_RECIPE_SLOTS = new int[] {6, 7, 8, 15, 16, 17, 24, 25, 26};
-    public static final int[] EXPANSION_WORKBENCH_RECIPE_SLOTS = new int[] {10, 11, 12, 19, 20, 21, 28, 29, 30};
-    public static final int[] EXPANSION_WORKBENCH_6X6_RECIPE_SLOTS = new int[] {
+    public static final int[] ENCODER_RECIPE_SLOTS = new int[]{12, 13, 14, 21, 22, 23, 30, 31, 32};
+    public static final int[] CRAFTING_GRID_NEW_STYLE_RECIPE_SLOTS = new int[]{6, 7, 8, 15, 16, 17, 24, 25, 26};
+    public static final int[] EXPANSION_WORKBENCH_RECIPE_SLOTS = new int[]{10, 11, 12, 19, 20, 21, 28, 29, 30};
+    public static final int[] EXPANSION_WORKBENCH_6X6_RECIPE_SLOTS = new int[]{
             0, 1, 2, 3, 4, 5,
             9, 10, 11, 12, 13, 14,
             18, 19, 20, 21, 22, 23,
@@ -54,7 +55,7 @@ public class NetworksExpansionIntegrationMain implements Integration {
             36, 37, 38, 39, 40, 41,
             45, 46, 47, 48, 49, 50
     };
-    public static final int[] STORAGE_UPGRADE_TABLE_RECIPE_SLOTS = new int[] {
+    public static final int[] STORAGE_UPGRADE_TABLE_RECIPE_SLOTS = new int[]{
             2, 3, 4,
             11, 12, 13,
             20, 21, 22

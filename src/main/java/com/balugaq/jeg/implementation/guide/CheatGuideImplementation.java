@@ -89,15 +89,6 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.recipes.MinecraftRecip
 import io.github.thebusybiscuit.slimefun4.utils.ChatUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import io.github.thebusybiscuit.slimefun4.utils.itemstack.SlimefunGuideItem;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.annotation.ParametersAreNonnullByDefault;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu.MenuClickHandler;
 import org.bukkit.ChatColor;
@@ -110,6 +101,16 @@ import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.RecipeChoice.MaterialChoice;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This is JEG's implementation of the Cheat Guide.
@@ -195,11 +196,11 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                     slimefunItem.canUse(p, false)
                             ? item
                             : Converter.getItem(
-                                    Material.BARRIER,
-                                    ItemUtils.getItemName(item),
-                                    "&4&l" + Slimefun.getLocalization().getMessage(p, "guide.locked"),
-                                    "",
-                                    lore));
+                            Material.BARRIER,
+                            ItemUtils.getItemName(item),
+                            "&4&l" + Slimefun.getLocalization().getMessage(p, "guide.locked"),
+                            "",
+                            lore));
         } else {
             return item;
         }
@@ -756,6 +757,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
         }
 
         String searchTerm = ChatColor.stripColor(input.toLowerCase(Locale.ROOT));
+        SearchGroup.searchTerms.put(p.getUniqueId(), searchTerm);
         SearchGroup group = new SearchGroup(
                 this, p, searchTerm, JustEnoughGuide.getConfigManager().isPinyinSearch(), true);
         group.open(p, profile, getMode());
@@ -953,7 +955,7 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                                                 + "\u21E8 "
                                                 + ChatColor.GREEN
                                                 + Slimefun.getLocalization()
-                                                        .getMessage(p, "guide.tooltips.open-itemgroup"))));
+                                                .getMessage(p, "guide.tooltips.open-itemgroup"))));
                 menu.addMenuClickHandler(s, (pl, slot, itemstack, action) -> EventUtil.callEvent(
                                 new GuideEvents.WikiButtonClickEvent(pl, itemstack, slot, action, menu, this))
                         .ifSuccess(() -> {
@@ -991,8 +993,8 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
                                     try {
                                         SpecialMenuProvider.open(profile.getPlayer(), profile, getMode(), item);
                                     } catch (InstantiationException
-                                            | IllegalAccessException
-                                            | InvocationTargetException e) {
+                                             | IllegalAccessException
+                                             | InvocationTargetException e) {
                                         Debug.trace(e);
                                     }
                                     return false;
@@ -1001,6 +1003,8 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
         }
 
         format.renderCustom(menu);
+
+        GuideUtil.addCerButton(menu, p, profile, item, this, format);
 
         menu.open(p);
 
@@ -1330,7 +1334,8 @@ public class CheatGuideImplementation extends CheatSheetSlimefunGuide implements
     }
 
     @Override
-    @NotNull public ChestMenu create0(@NotNull Player p) {
+    @NotNull
+    public ChestMenu create0(@NotNull Player p) {
         ChestMenu menu = new ChestMenu(JustEnoughGuide.getConfigManager().getCheatGuideTitle());
 
         menu.setEmptySlotsClickable(false);

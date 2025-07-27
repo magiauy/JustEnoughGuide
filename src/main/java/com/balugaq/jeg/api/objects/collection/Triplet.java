@@ -38,7 +38,7 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("unused")
 @AllArgsConstructor
 @Data
-public class Triplet<A, B, C> implements Cloneable{
+public class Triplet<A, B, C> implements Cloneable {
     public @NotNull
     final A first;
     public @NotNull

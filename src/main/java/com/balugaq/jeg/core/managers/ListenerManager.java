@@ -28,6 +28,7 @@
 package com.balugaq.jeg.core.managers;
 
 import com.balugaq.jeg.api.managers.AbstractManager;
+import com.balugaq.jeg.core.listeners.CerPatchListener;
 import com.balugaq.jeg.core.listeners.GroupTierEditorListener;
 import com.balugaq.jeg.core.listeners.GuideGUIFixListener;
 import com.balugaq.jeg.core.listeners.GuideListener;
@@ -35,14 +36,15 @@ import com.balugaq.jeg.core.listeners.RTSListener;
 import com.balugaq.jeg.core.listeners.RecipeCompletableListener;
 import com.balugaq.jeg.core.listeners.SpecialMenuFixListener;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is responsible for managing the listeners of the plugin.
@@ -63,6 +65,7 @@ public class ListenerManager extends AbstractManager {
         listeners.add(new RTSListener());
         listeners.add(new GroupTierEditorListener());
         listeners.add(new GuideGUIFixListener());
+        listeners.add(new CerPatchListener());
         if (JustEnoughGuide.getConfigManager().isRecipeComplete()) {
             listeners.add(new RecipeCompletableListener());
         }

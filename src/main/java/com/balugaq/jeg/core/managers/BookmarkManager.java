@@ -36,11 +36,6 @@ import io.github.thebusybiscuit.slimefun4.api.player.PlayerBackpack;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.core.config.SlimefunDatabaseManager;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -52,6 +47,12 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * This class is responsible for managing bookmarks.
@@ -110,7 +111,8 @@ public class BookmarkManager extends AbstractManager {
         });
     }
 
-    @Nullable public List<SlimefunItem> getBookmarkedItems(@NotNull Player player) {
+    @Nullable
+    public List<SlimefunItem> getBookmarkedItems(@NotNull Player player) {
         PlayerBackpack backpack = getBookmarkBackpack(player);
         if (backpack == null) {
             return null;
@@ -198,7 +200,8 @@ public class BookmarkManager extends AbstractManager {
         });
     }
 
-    @Nullable public PlayerBackpack getOrCreateBookmarkBackpack(@NotNull Player player) {
+    @Nullable
+    public PlayerBackpack getOrCreateBookmarkBackpack(@NotNull Player player) {
         PlayerBackpack backpack = getBookmarkBackpack(player);
         if (backpack == null) {
             backpack = createBackpack(player);
@@ -207,7 +210,8 @@ public class BookmarkManager extends AbstractManager {
         return backpack;
     }
 
-    @Nullable public PlayerBackpack createBackpack(@NotNull Player player) {
+    @Nullable
+    public PlayerBackpack createBackpack(@NotNull Player player) {
         PlayerProfile profile = operateController(controller -> {
             return controller.getProfile(player);
         });
@@ -229,7 +233,8 @@ public class BookmarkManager extends AbstractManager {
         return backpack;
     }
 
-    @Nullable public PlayerBackpack getBookmarkBackpack(@NotNull Player player) {
+    @Nullable
+    public PlayerBackpack getBookmarkBackpack(@NotNull Player player) {
         PlayerProfile profile = operateController(controller -> {
             return controller.getProfile(player);
         });
@@ -271,7 +276,8 @@ public class BookmarkManager extends AbstractManager {
         return null;
     }
 
-    @NotNull public ItemStack markItemAsBookmarksItem(@NotNull ItemStack itemStack, @NotNull Player player) {
+    @NotNull
+    public ItemStack markItemAsBookmarksItem(@NotNull ItemStack itemStack, @NotNull Player player) {
         return ItemStackUtil.getCleanItem(Converter.getItem(itemStack, itemMeta -> itemMeta.getPersistentDataContainer()
                 .set(
                         BOOKMARKS_KEY,

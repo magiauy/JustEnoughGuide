@@ -32,16 +32,17 @@ import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.common.ChatColors;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author balugaq
@@ -329,56 +330,68 @@ public class LocalHelper {
         addonLocals.put("InfinityExpansion2", "无尽贪婪2");
     }
 
-    @NotNull public static String getOfficialAddonName(@NotNull ItemGroup itemGroup, @NotNull String itemId) {
+    @NotNull
+    public static String getOfficialAddonName(@NotNull ItemGroup itemGroup, @NotNull String itemId) {
         return getOfficialAddonName(itemGroup.getAddon(), itemId, def);
     }
 
-    @NotNull public static String getOfficialAddonName(
+    @NotNull
+    public static String getOfficialAddonName(
             @NotNull ItemGroup itemGroup, @NotNull String itemId, @NotNull String callback) {
         return itemGroup.getAddon() == null ? def : getOfficialAddonName(itemGroup.getAddon(), itemId, callback);
     }
 
-    @NotNull public static String getOfficialAddonName(@Nullable SlimefunAddon addon, @NotNull String itemId) {
+    @NotNull
+    public static String getOfficialAddonName(@Nullable SlimefunAddon addon, @NotNull String itemId) {
         return getOfficialAddonName(addon, itemId, def);
     }
 
-    @NotNull public static String getOfficialAddonName(
+    @NotNull
+    public static String getOfficialAddonName(
             @Nullable SlimefunAddon addon, @NotNull String itemId, @NotNull String callback) {
         return getOfficialAddonName(addon == null ? "Slimefun" : addon.getName(), itemId, callback);
     }
 
-    @NotNull public static String getOfficialAddonName(@NotNull String addonName, @NotNull String itemId) {
+    @NotNull
+    public static String getOfficialAddonName(@NotNull String addonName, @NotNull String itemId) {
         return getOfficialAddonName(addonName, itemId, def);
     }
 
-    @NotNull public static String getOfficialAddonName(
+    @NotNull
+    public static String getOfficialAddonName(
             @NotNull String addonName, @NotNull String itemId, @NotNull String callback) {
         return getAddonName(addonName, itemId, callback) + " (" + addonName + ")";
     }
 
-    @NotNull public static String getAddonName(@NotNull ItemGroup itemGroup, @NotNull String itemId) {
+    @NotNull
+    public static String getAddonName(@NotNull ItemGroup itemGroup, @NotNull String itemId) {
         return getAddonName(itemGroup, itemId, def);
     }
 
-    @NotNull public static String getAddonName(@NotNull ItemGroup itemGroup, @NotNull String itemId, @NotNull String callback) {
+    @NotNull
+    public static String getAddonName(@NotNull ItemGroup itemGroup, @NotNull String itemId, @NotNull String callback) {
         return itemGroup.getAddon() == null
                 ? def
                 : getAddonName(itemGroup.getAddon().getName(), itemId, callback);
     }
 
-    @NotNull public static String getAddonName(@Nullable SlimefunAddon addon, @NotNull String itemId) {
+    @NotNull
+    public static String getAddonName(@Nullable SlimefunAddon addon, @NotNull String itemId) {
         return getAddonName(addon, itemId, def);
     }
 
-    @NotNull public static String getAddonName(@Nullable SlimefunAddon addon, @NotNull String itemId, @NotNull String callback) {
+    @NotNull
+    public static String getAddonName(@Nullable SlimefunAddon addon, @NotNull String itemId, @NotNull String callback) {
         return getAddonName(addon == null ? addonLocals.get("Slimefun") : addon.getName(), itemId, callback);
     }
 
-    @NotNull public static String getAddonName(@NotNull String addonName, @NotNull String itemId) {
+    @NotNull
+    public static String getAddonName(@NotNull String addonName, @NotNull String itemId) {
         return getAddonName(addonName, itemId, def);
     }
 
-    @NotNull public static String getAddonName(@NotNull String addonName, @NotNull String itemId, @NotNull String callback) {
+    @NotNull
+    public static String getAddonName(@NotNull String addonName, @NotNull String itemId, @NotNull String callback) {
         if (addonName == null) {
             return callback;
         }
@@ -467,7 +480,8 @@ public class LocalHelper {
         return def;
     }
 
-    @NotNull public static String getDisplayName(@NotNull ItemGroup itemGroup, @NotNull Player player) {
+    @NotNull
+    public static String getDisplayName(@NotNull ItemGroup itemGroup, @NotNull Player player) {
         ItemMeta meta = itemGroup.getItem(player).getItemMeta();
         if (meta == null) {
             return def;
