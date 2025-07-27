@@ -293,6 +293,7 @@ public class ConfigManager extends AbstractManager {
         this.EMC_VALUE_DISPLAY = plugin.getConfig().getBoolean("improvements.emc-display-option", true);
         this.FinalTech_VALUE_DISPLAY = plugin.getConfig().getBoolean("improvements.finaltech-emc-display-option", true);
         this.FinalTECH_VALUE_DISPLAY = plugin.getConfig().getBoolean("improvements.finalTECH-emc-display-option", true);
+        this.ITEM_SHAREABLE = cfg.getBoolean("improvements.item-shareable", true);
         this.LANGUAGE = plugin.getConfig().getString("language", "en-US");
 
 }

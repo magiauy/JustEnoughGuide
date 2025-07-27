@@ -86,15 +86,22 @@ public class BeginnersGuideOption implements SlimefunGuideOption<Boolean> {
     @Override
     public @NotNull Optional<ItemStack> getDisplayItem(@NotNull Player p, ItemStack guide) {
         boolean enabled = getSelectedOption(p, guide).orElse(true);
+        
+        // Use language manager instead of hardcoded Chinese text
+        String nameKey = "icon.options.beginners-guide.name-1";
+        String statusKey = "icon.options.beginners-guide.name-" + (enabled ? "enabled" : "disabled");
+        List<String> loreBase = Lang.getStringList("icon.options.beginners-guide.lore-1");
+        String actionKey = "icon.options.beginners-guide.last-lore-1";
+        String toggleKey = "icon.options.beginners-guide.last-lore-" + (enabled ? "disable" : "enable");
+        String endKey = "icon.options.beginners-guide.last-lore-last";
+        
+        List<String> lore = new ArrayList<>(loreBase);
+        lore.add(Lang.getString(actionKey) + Lang.getString(toggleKey) + Lang.getString(endKey));
+        
         ItemStack item = Converter.getItem(
                 isEnabled(p) ? Material.KNOWLEDGE_BOOK : Material.BOOK,
-                "&b新手指引: &" + (enabled ? "a启用" : "4禁用"),
-                "",
-                "&7你现在可以选择是否",
-                "&7在查阅一个物品的时候",
-                "&7Shift+右键点击搜索这个物品的名字.",
-                "",
-                "&7\u21E8 &e点击 " + (enabled ? "禁用" : "启用") + " 新手指引");
+                Lang.getString(nameKey) + Lang.getString(statusKey),
+                lore);
         return Optional.of(item);
     }
 

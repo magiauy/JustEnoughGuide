@@ -63,20 +63,20 @@ public class ItemsSetup {
                 // @formatter:on
         );
 
-        USAGE_INFO = new SlimefunItem(GroupSetup.jegItemsGroup, Models.USAGE_INFO, RecipeType.NULL, new ItemStack[]{
+        USAGE_INFO = new SlimefunItem(GroupSetup.jegItemsGroup, Lang.USAGE_INFO, RecipeType.NULL, new ItemStack[]{
                 null, null, null,
                 null, null, null,
                 null, null, null
         });
 
-        MECHANISM = new SlimefunItem(GroupSetup.jegItemsGroup, Models.MECHANISM, RecipeType.NULL, new ItemStack[]{
+        MECHANISM = new SlimefunItem(GroupSetup.jegItemsGroup, Lang.MECHANISM, RecipeType.NULL, new ItemStack[]{
                 null, null, null,
                 null, null, null,
                 null, null, null
         });
 
         SUPPORTED_ADDONS_INFO = new SlimefunItem(
-                GroupSetup.jegItemsGroup, Models.SUPPORTED_ADDONS_INFO, RecipeType.NULL, new ItemStack[]{
+                GroupSetup.jegItemsGroup, Lang.SUPPORTED_ADDONS_INFO, RecipeType.NULL, new ItemStack[]{
                 null, null, null,
                 null, null, null,
                 null, null, null
