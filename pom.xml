@@ -188,7 +188,7 @@
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.20.6-R0.1-SNAPSHOT</version> <!-- DO NOT USE 1.21+ , otherwise RTS will be broken by API breaking change about turning InventoryView from `class` into `interface` -->
+            <version>1.21.7-R0.1-SNAPSHOT</version> <!-- DO NOT USE 1.21+ , otherwise RTS will be broken by API breaking change about turning InventoryView from `class` into `interface` -->
             <scope>provided</scope>
         </dependency>
         <dependency>

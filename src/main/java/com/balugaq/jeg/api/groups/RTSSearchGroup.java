@@ -50,6 +50,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.AnvilInventory;
+import org.bukkit.inventory.view.AnvilView;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
@@ -118,8 +119,27 @@ public class RTSSearchGroup extends FlexItemGroup {
                                         && openingInventory.equals(inventory)) {
                                     String oldSearchTerm = searchTermCopy.get(player);
                                     try {
-                                        // `AnvilInventory.getRenameText()` have been deprecated since 1.21 in Paper
-                                        String newSearchTerm = anvilInventory.getRenameText();
+                                        String newSearchTerm = null;
+                                        
+                                        // Try Paper 1.21+ AnvilView method first
+                                        try {
+                                            if (view instanceof AnvilView anvilView) {
+                                                newSearchTerm = anvilView.getRenameText();
+                                            }
+                                        } catch (NoClassDefFoundError | NoSuchMethodError e) {
+                                            // AnvilView not available on this server version
+                                        }
+                                        
+                                        // Fallback to legacy AnvilInventory method if AnvilView failed
+                                        if (newSearchTerm == null) {
+                                            try {
+                                                newSearchTerm = anvilInventory.getRenameText();
+                                            } catch (NoSuchMethodError e) {
+                                                Debug.debug("Both AnvilView and AnvilInventory getRenameText() methods are unavailable");
+                                                return;
+                                            }
+                                        }
+                                        
                                         if (oldSearchTerm == null || newSearchTerm == null) {
                                             writes.put(player, newSearchTerm);
                                             return;
