@@ -33,12 +33,13 @@ import com.balugaq.jeg.utils.compatibility.Converter;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.core.guide.options.SlimefunGuideOption;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.data.persistent.PersistentDataAPI;
-import java.util.Optional;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
 
 /**
  * This class is used to represent the option to show the beginner's guide.
@@ -85,8 +86,8 @@ public class BeginnersGuideOption implements SlimefunGuideOption<Boolean> {
                 "&b新手指引: &" + (enabled ? "a启用" : "4禁用"),
                 "",
                 "&7你现在可以选择是否",
-                "&7在查阅一个新物品的时候",
-                "&7Shift+右键点击详细查看介绍.",
+                "&7在查阅一个物品的时候",
+                "&7Shift+右键点击搜索这个物品的名字.",
                 "",
                 "&7\u21E8 &e点击 " + (enabled ? "禁用" : "启用") + " 新手指引");
         return Optional.of(item);

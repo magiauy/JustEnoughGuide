@@ -61,10 +61,9 @@ public interface Source {
             List<RecipeChoice> raw = new ArrayList<>(Arrays.stream(sf.getRecipe())
                     .map(item -> item == null ? null : new SimpleRecipeChoice(item))
                     .toList());
-            if (raw.size() < 9) {
-                for (int i = raw.size(); i < 9; i++) {
-                    raw.add(null);
-                }
+
+            for (int i = raw.size(); i < 9; i++) {
+                raw.add(null);
             }
 
             return raw;
@@ -86,19 +85,16 @@ public interface Source {
                         }
                     }
 
-                    if (choices.size() < 9) {
-                        for (int i = choices.size(); i < 9; i++) {
-                            choices.add(null);
-                        }
+                    for (int i = choices.size(); i < 9; i++) {
+                        choices.add(null);
                     }
 
                     return choices;
                 } else if (recipe instanceof ShapelessRecipe shapelessRecipe) {
                     List<RecipeChoice> raw = new ArrayList<>(shapelessRecipe.getChoiceList());
-                    if (raw.size() < 9) {
-                        for (int i = raw.size(); i < 9; i++) {
-                            raw.add(null);
-                        }
+
+                    for (int i = raw.size(); i < 9; i++) {
+                        raw.add(null);
                     }
 
                     return raw;

@@ -29,6 +29,13 @@ package com.balugaq.jeg.core.managers;
 
 import com.balugaq.jeg.api.managers.AbstractManager;
 import com.balugaq.jeg.utils.Debug;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,12 +45,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.annotation.ParametersAreNonnullByDefault;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * This class is responsible for managing the configuration of the plugin.
@@ -176,9 +177,22 @@ public class ConfigManager extends AbstractManager {
             this.RECIPE_FORMAT = new ArrayList<>();
             this.RECIPE_FORMAT.add("b  rrr  w");
             this.RECIPE_FORMAT.add(" t rrr i ");
-            this.RECIPE_FORMAT.add("   rrr  E");
+            this.RECIPE_FORMAT.add("m  rrr  E");
         } else {
-            this.RECIPE_FORMAT = rawRecipeFormat;
+            List<String> old = new ArrayList<>();
+            old.add("b  rrr  w");
+            old.add(" t rrr i ");
+            old.add("   rrr  E");
+            List<String> n = new ArrayList<>();
+            n.add("b  rrr  w");
+            n.add(" t rrr i ");
+            n.add("m  rrr  E");
+            if (rawRecipeFormat.equals(old)) {
+                plugin.getConfig().set("custom-format.recipe", n);
+                this.RECIPE_FORMAT = n;
+            } else {
+                this.RECIPE_FORMAT = rawRecipeFormat;
+            }
         }
 
         List<String> rawHelperFormat = plugin.getConfig().getStringList("custom-format.helper");
@@ -210,12 +224,31 @@ public class ConfigManager extends AbstractManager {
             this.RECIPE_DISPLAY_FORMAT = new ArrayList<>();
             this.RECIPE_DISPLAY_FORMAT.add("b  rrr  w");
             this.RECIPE_DISPLAY_FORMAT.add(" t rrr i ");
-            this.RECIPE_DISPLAY_FORMAT.add("   rrr  E");
+            this.RECIPE_DISPLAY_FORMAT.add("m  rrr  E");
             this.RECIPE_DISPLAY_FORMAT.add("BPBBBBBNB");
             this.RECIPE_DISPLAY_FORMAT.add("ddddddddd");
             this.RECIPE_DISPLAY_FORMAT.add("ddddddddd");
         } else {
-            this.RECIPE_DISPLAY_FORMAT = rawRecipeDisplayFormat;
+            List<String> old = new ArrayList<>();
+            old.add("b  rrr  w");
+            old.add(" t rrr i ");
+            old.add("   rrr  E");
+            old.add("BPBBBBBNB");
+            old.add("ddddddddd");
+            old.add("ddddddddd");
+            List<String> n = new ArrayList<>();
+            n.add("b  rrr  w");
+            n.add(" t rrr i ");
+            n.add("m  rrr  E");
+            n.add("BPBBBBBNB");
+            n.add("ddddddddd");
+            n.add("ddddddddd");
+            if (rawRecipeDisplayFormat.equals(old)) {
+                plugin.getConfig().set("custom-format.recipe-display", n);
+                this.RECIPE_DISPLAY_FORMAT = n;
+            } else {
+                this.RECIPE_DISPLAY_FORMAT = rawRecipeDisplayFormat;
+            }
         }
 
         List<String> rawSettingsFormat = plugin.getConfig().getStringList("custom-format.settings");

@@ -84,14 +84,6 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.recipes.MinecraftRecip
 import io.github.thebusybiscuit.slimefun4.utils.ChatUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import io.github.thebusybiscuit.slimefun4.utils.itemstack.SlimefunGuideItem;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.logging.Level;
-import javax.annotation.ParametersAreNonnullByDefault;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu.MenuClickHandler;
 import org.bukkit.Bukkit;
@@ -108,6 +100,15 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.logging.Level;
 
 /**
  * This is JEG's implementation of the Survival Guide.
@@ -636,6 +637,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
         }
 
         String searchTerm = ChatColor.stripColor(input.toLowerCase(Locale.ROOT));
+        SearchGroup.searchTerms.put(p.getUniqueId(), searchTerm);
         SearchGroup group = new SearchGroup(
                 this, p, searchTerm, JustEnoughGuide.getConfigManager().isPinyinSearch(), true);
         group.open(p, profile, getMode());
@@ -694,16 +696,16 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
             recipeType = new RecipeType(optional.get());
             result = recipe.getResult();
         } else {
-            recipeItems = new ItemStack[] {
-                null,
-                null,
-                null,
-                null,
-                ItemStackUtil.getCleanItem(Converter.getItem(Material.BARRIER, "&4我们不知道如何展示该配方 :/")),
-                null,
-                null,
-                null,
-                null
+            recipeItems = new ItemStack[]{
+                    null,
+                    null,
+                    null,
+                    null,
+                    ItemStackUtil.getCleanItem(Converter.getItem(Material.BARRIER, "&4我们不知道如何展示该配方 :/")),
+                    null,
+                    null,
+                    null,
+                    null
             };
         }
 
@@ -837,7 +839,7 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
                                                 + "\u21E8 "
                                                 + ChatColor.GREEN
                                                 + Slimefun.getLocalization()
-                                                        .getMessage(p, "guide.tooltips.open-itemgroup"))));
+                                                .getMessage(p, "guide.tooltips.open-itemgroup"))));
                 menu.addMenuClickHandler(s, (pl, slot, itemstack, action) -> EventUtil.callEvent(
                                 new GuideEvents.WikiButtonClickEvent(pl, itemstack, slot, action, menu, this))
                         .ifSuccess(() -> {
@@ -875,14 +877,16 @@ public class SurvivalGuideImplementation extends SurvivalSlimefunGuide implement
                                     try {
                                         SpecialMenuProvider.open(profile.getPlayer(), profile, getMode(), item);
                                     } catch (InstantiationException
-                                            | IllegalAccessException
-                                            | InvocationTargetException e) {
+                                             | IllegalAccessException
+                                             | InvocationTargetException e) {
                                         Debug.trace(e);
                                     }
                                     return false;
                                 }));
             }
         }
+
+        GuideUtil.addCerButton(menu, p, profile, item, this, format);
 
         format.renderCustom(menu);
 

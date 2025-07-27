@@ -154,17 +154,12 @@ public class DefaultPlayerInventoryRecipeCompleteSlimefunSource implements Slime
             return false;
         }
 
-        // choices.size() must be 9
         List<RecipeChoice> choices = getRecipe(clickedItem);
         if (choices == null) {
             return false;
         }
 
-        for (int i = 0; i < 9; i++) {
-            if (i >= choices.size()) {
-                break;
-            }
-
+        for (int i = 0; i < choices.size(); i++) {
             if (i >= ingredientSlots.length) {
                 break;
             }

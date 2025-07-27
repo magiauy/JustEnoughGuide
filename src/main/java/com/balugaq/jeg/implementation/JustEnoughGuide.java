@@ -28,6 +28,7 @@
 package com.balugaq.jeg.implementation;
 
 import com.balugaq.jeg.api.CustomGroupConfigurations;
+import com.balugaq.jeg.api.cost.CERCalculator;
 import com.balugaq.jeg.api.editor.GroupResorter;
 import com.balugaq.jeg.api.groups.SearchGroup;
 import com.balugaq.jeg.api.groups.VanillaItemsGroup;
@@ -44,6 +45,9 @@ import com.balugaq.jeg.implementation.guide.SurvivalGuideImplementation;
 import com.balugaq.jeg.implementation.items.GroupSetup;
 import com.balugaq.jeg.implementation.items.ItemsSetup;
 import com.balugaq.jeg.implementation.option.BeginnersGuideOption;
+import com.balugaq.jeg.implementation.option.CerPatchGuideOption;
+import com.balugaq.jeg.implementation.option.ShareInGuideOption;
+import com.balugaq.jeg.implementation.option.ShareOutGuideOption;
 import com.balugaq.jeg.utils.Debug;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.balugaq.jeg.utils.MinecraftVersion;
@@ -60,6 +64,14 @@ import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.implementation.guide.CheatSheetSlimefunGuide;
 import io.github.thebusybiscuit.slimefun4.implementation.guide.SurvivalSlimefunGuide;
 import io.github.thebusybiscuit.slimefun4.utils.NumberUtils;
+import lombok.Getter;
+import net.guizhanss.guizhanlibplugin.updater.GuizhanUpdater;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -71,13 +83,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
-import lombok.Getter;
-import net.guizhanss.guizhanlibplugin.updater.GuizhanUpdater;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * This is the main class of the JustEnoughGuide plugin.
@@ -285,10 +290,15 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
             getLogger().info("物品组加载完毕！");
 
             if (getConfigManager().isBeginnerOption()) {
-                getLogger().info("正在加载新手指南选项...");
+                getLogger().info("正在加载指南选项...");
                 SlimefunGuideSettings.addOption(BeginnersGuideOption.instance());
-                getLogger().info("新手指南选项加载完毕！");
+                SlimefunGuideSettings.addOption(CerPatchGuideOption.instance());
+                SlimefunGuideSettings.addOption(ShareInGuideOption.instance());
+                SlimefunGuideSettings.addOption(ShareOutGuideOption.instance());
+                getLogger().info("指南选项加载完毕！");
             }
+
+            CERCalculator.load();
         }
 
         ItemsSetup.setup(this);
@@ -424,7 +434,8 @@ public class JustEnoughGuide extends JavaPlugin implements SlimefunAddon {
      *
      * @return the bug tracker URL
      */
-    @Nullable @Override
+    @Nullable
+    @Override
     public String getBugTrackerURL() {
         return MessageFormat.format("https://github.com/{0}/{1}/issues/", this.username, this.repo);
     }

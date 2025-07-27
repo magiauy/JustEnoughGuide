@@ -34,7 +34,6 @@ import com.balugaq.jeg.utils.BlockMenuUtil;
 import com.balugaq.jeg.utils.GuideUtil;
 import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
-import java.util.List;
 import me.ddggdd135.guguslimefunlib.items.ItemKey;
 import me.ddggdd135.slimeae.api.interfaces.IStorage;
 import me.ddggdd135.slimeae.api.items.ItemRequest;
@@ -47,6 +46,8 @@ import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 /**
  * @author balugaq
@@ -159,17 +160,12 @@ public class SlimeAEPluginRecipeCompleteSlimefunSource implements SlimefunSource
             return false;
         }
 
-        // choices.size() must be 9
         List<RecipeChoice> choices = getRecipe(clickedItem);
         if (choices == null) {
             return false;
         }
 
-        for (int i = 0; i < 9; i++) {
-            if (i >= choices.size()) {
-                break;
-            }
-
+        for (int i = 0; i < choices.size(); i++) {
             if (i >= ingredientSlots.length) {
                 break;
             }
@@ -223,7 +219,8 @@ public class SlimeAEPluginRecipeCompleteSlimefunSource implements SlimefunSource
         return true;
     }
 
-    @Nullable private ItemStack getItemStack(
+    @Nullable
+    private ItemStack getItemStack(
             @NotNull IStorage networkStorage, @NotNull Player player, @NotNull ItemStack itemStack) {
         ItemStack i1 = getItemStackFromPlayerInventory(player, itemStack);
         if (i1 != null) {

@@ -98,6 +98,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -114,6 +115,7 @@ import java.util.stream.Collectors;
 @NotDisplayInSurvivalMode
 @NotDisplayInCheatMode
 public class SearchGroup extends FlexItemGroup {
+    public static final ConcurrentHashMap<UUID, String> searchTerms = new ConcurrentHashMap<>();
     @Deprecated
     public static final Integer ACONTAINER_OFFSET = 50000;
 

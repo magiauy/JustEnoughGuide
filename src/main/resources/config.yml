@@ -102,7 +102,7 @@ custom-format:
   recipe:
     - "b  rrr  w"
     - " t rrr i "
-    - "   rrr  E"
+    - "m  rrr  E"
   # 配方展示 - 原版物品
   # B = 背景板
   # b = 返回
@@ -115,6 +115,7 @@ custom-format:
   # i = 输出物品
   # P = 上一页
   # N = 下一页
+  # m = 性价比（无性价比信息则为空气显示）
   recipe-vanilla:
     - "b  rrr  w"
     - " t rrr i "
@@ -134,10 +135,11 @@ custom-format:
   # P = 上一页
   # N = 下一页
   # d = 配方展示
+  # m = 性价比（无性价比信息则为空气显示）
   recipe-display:
     - "b  rrr  w"
     - " t rrr i "
-    - "   rrr  E"
+    - "m  rrr  E"
     - "BPBBBBBNB"
     - "ddddddddd"
     - "ddddddddd"

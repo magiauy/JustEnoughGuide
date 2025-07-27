@@ -61,26 +61,26 @@ public class ItemsSetup {
                     craftingTable, craftingTable, craftingTable
                 }
                 // @formatter:on
-                );
+        );
 
-        USAGE_INFO = new SlimefunItem(GroupSetup.jegItemsGroup, Models.USAGE_INFO, RecipeType.NULL, new ItemStack[] {
-            null, null, null,
-            null, null, null,
-            null, null, null
+        USAGE_INFO = new SlimefunItem(GroupSetup.jegItemsGroup, Models.USAGE_INFO, RecipeType.NULL, new ItemStack[]{
+                null, null, null,
+                null, null, null,
+                null, null, null
         });
 
-        MECHANISM = new SlimefunItem(GroupSetup.jegItemsGroup, Models.MECHANISM, RecipeType.NULL, new ItemStack[] {
-            null, null, null,
-            null, null, null,
-            null, null, null
+        MECHANISM = new SlimefunItem(GroupSetup.jegItemsGroup, Models.MECHANISM, RecipeType.NULL, new ItemStack[]{
+                null, null, null,
+                null, null, null,
+                null, null, null
         });
 
         SUPPORTED_ADDONS_INFO = new SlimefunItem(
-                GroupSetup.jegItemsGroup, Models.SUPPORTED_ADDONS_INFO, RecipeType.NULL, new ItemStack[] {
-                    null, null, null,
-                    null, null, null,
-                    null, null, null
-                });
+                GroupSetup.jegItemsGroup, Models.SUPPORTED_ADDONS_INFO, RecipeType.NULL, new ItemStack[]{
+                null, null, null,
+                null, null, null,
+                null, null, null
+        });
     }
 
     public static void setup(@NotNull SlimefunAddon addon) {

@@ -37,7 +37,6 @@ import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
 import io.github.sefiraat.networks.network.NetworkRoot;
 import io.github.sefiraat.networks.network.stackcaches.ItemRequest;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
-import java.util.List;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ClickAction;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import org.bukkit.Material;
@@ -47,6 +46,8 @@ import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 /**
  * @author balugaq
@@ -160,17 +161,12 @@ public class NetworksExpansionRecipeCompleteSlimefunSource implements SlimefunSo
             return false;
         }
 
-        // choices.size() must be 9
         List<RecipeChoice> choices = getRecipe(clickedItem);
         if (choices == null) {
             return false;
         }
 
-        for (int i = 0; i < 9; i++) {
-            if (i >= choices.size()) {
-                break;
-            }
-
+        for (int i = 0; i < choices.size(); i++) {
             if (i >= ingredientSlots.length) {
                 break;
             }
@@ -224,7 +220,8 @@ public class NetworksExpansionRecipeCompleteSlimefunSource implements SlimefunSo
         return true;
     }
 
-    @Nullable private ItemStack getItemStack(@NotNull NetworkRoot root, @NotNull Player player, @NotNull ItemStack itemStack) {
+    @Nullable
+    private ItemStack getItemStack(@NotNull NetworkRoot root, @NotNull Player player, @NotNull ItemStack itemStack) {
         ItemStack i1 = getItemStackFromPlayerInventory(player, itemStack);
         if (i1 != null) {
             return i1;
