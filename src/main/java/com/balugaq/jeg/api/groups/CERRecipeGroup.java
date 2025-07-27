@@ -175,7 +175,7 @@ public class CERRecipeGroup extends FlexItemGroup {
                     ));
                 }
 
-                if (out.length > 0) {
+                if (out != null && out.length > 0) {
                     list.add(new Pair<>(
                             Converter.getItem(
                                     Material.ORANGE_STAINED_GLASS_PANE,
@@ -186,7 +186,7 @@ public class CERRecipeGroup extends FlexItemGroup {
                     ));
                 }
             } else {
-                if (out.length > 0) {
+                if (out != null && out.length > 0) {
                     list.add(new Pair<>(
                             Converter.getItem(
                                     Material.ORANGE_STAINED_GLASS_PANE,
@@ -197,23 +197,25 @@ public class CERRecipeGroup extends FlexItemGroup {
                 }
             }
 
-            for (ItemStack output : out) {
-                ItemStack display = output.clone();
-                ItemMeta meta = display.getItemMeta();
+            if (out != null) {
+                for (ItemStack output : out) {
+                    ItemStack display = output.clone();
+                    ItemMeta meta = display.getItemMeta();
 
-                List<String> lore = new ArrayList<>();
-                List<String> o = meta.getLore();
-                if (o != null) lore.addAll(o);
+                    List<String> lore = new ArrayList<>();
+                    List<String> o = meta.getLore();
+                    if (o != null) lore.addAll(o);
 
-                double cer = CERCalculator.getCER(machine, ItemStackHelper.getDisplayName(output));
-                lore.add(" ");
-                lore.add(ChatColors.color("&a性价比: " + format.format(cer)));
-                meta.setLore(lore);
-                display.setItemMeta(meta);
-                list.add(new Pair<>(
-                        display,
-                        subMenuOpen
-                ));
+                    double cer = CERCalculator.getCER(machine, ItemStackHelper.getDisplayName(output));
+                    lore.add(" ");
+                    lore.add(ChatColors.color("&a性价比: " + format.format(cer)));
+                    meta.setLore(lore);
+                    display.setItemMeta(meta);
+                    list.add(new Pair<>(
+                            display,
+                            subMenuOpen
+                    ));
+                }
             }
         }
 
@@ -465,6 +467,7 @@ public class CERRecipeGroup extends FlexItemGroup {
      * @author balugaq
      * @since 1.9
      */
+    @SuppressWarnings("ClassCanBeRecord")
     @Data
     public static class RecipeWrapper {
         private final @Nullable ItemStack[] input;

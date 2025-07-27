@@ -545,6 +545,7 @@ public class ValueTable {
         }
     }
 
+    @SuppressWarnings("ConstantValue")
     private static double handleRecipeSlimefun(@NotNull ItemStack[] recipe, int outputAmount, int depth) {
         double value = 0.0D;
 
