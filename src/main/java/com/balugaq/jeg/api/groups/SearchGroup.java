@@ -111,7 +111,7 @@ import java.util.stream.Collectors;
  * @author balugaq
  * @since 1.0
  */
-@SuppressWarnings({"deprecation", "unused", "UnnecessaryUnicodeEscape", "ConstantValue"})
+@SuppressWarnings({"deprecation", "unused", "UnnecessaryUnicodeEscape", "ConstantValue", "JavaExistingMethodCanBeUsed"})
 @NotDisplayInSurvivalMode
 @NotDisplayInCheatMode
 public class SearchGroup extends FlexItemGroup {

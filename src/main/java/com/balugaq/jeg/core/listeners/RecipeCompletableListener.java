@@ -296,7 +296,7 @@ public class RecipeCompletableListener implements Listener {
         ReflectionUtil.setValue(profile, "guideHistory", originHistory);
     }
 
-    @SuppressWarnings({"deprecation", "DuplicateCondition", "ConstantValue", "SizeReplaceableByIsEmpty"})
+    @SuppressWarnings({"deprecation", "DuplicateCondition", "ConstantValue"})
     private static void tryPatchRecipeCompleteBook(@NotNull Player player, @NotNull ItemStack clickedItemStack) {
         for (ItemStack itemStack : player.getInventory()) {
             if (StackUtils.itemsMatch(itemStack, getRecipeCompletableBookItem(), false, false, false, false)) {
@@ -312,12 +312,12 @@ public class RecipeCompletableListener implements Listener {
 
                 // Patch start
                 boolean applied = meta.getPersistentDataContainer().has(LAST_RECIPE_COMPLETE_KEY);
-                if (lore.size() >= 2 && applied) {
+                if (lore.size() >= 7 && applied) {
                     // Remove last two lines
-                    if (lore.size() >= 2) {
+                    if (lore.size() >= 7) {
                         lore.remove(lore.size() - 1);
                     }
-                    if (lore.size() >= 1) {
+                    if (lore.size() >= 6) {
                         lore.remove(lore.size() - 1);
                     }
                 }

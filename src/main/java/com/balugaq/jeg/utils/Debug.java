@@ -48,7 +48,7 @@ import org.jetbrains.annotations.Nullable;
  * @author balugaq
  * @since 1.0
  */
-@SuppressWarnings({"unused", "deprecation", "CallToPrintStackTrace", "ResultOfMethodCallIgnored"})
+@SuppressWarnings({"unused", "deprecation", "CallToPrintStackTrace", "ResultOfMethodCallIgnored", "JavaExistingMethodCanBeUsed"})
 public class Debug {
     public static final File errorsFolder =
             new File(JustEnoughGuide.getInstance().getDataFolder(), "error-reports");

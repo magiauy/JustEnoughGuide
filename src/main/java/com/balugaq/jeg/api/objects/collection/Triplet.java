@@ -25,57 +25,50 @@
  *
  */
 
-package com.balugaq.jeg.core.integrations.emctech;
+package com.balugaq.jeg.api.objects.collection;
 
-import com.balugaq.jeg.core.integrations.Integration;
-import com.balugaq.jeg.implementation.JustEnoughGuide;
-import io.github.sefiraat.emctech.utils.EmcUtils;
-import io.github.thebusybiscuit.slimefun4.core.guide.options.SlimefunGuideSettings;
-import org.bukkit.inventory.ItemStack;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Range;
 
 /**
  * @author balugaq
  * @since 1.9
  */
-public class EMCTechIntegrationMain implements Integration {
-    /**
-     * Get EMC value of itemStack
-     *
-     * @param itemStack The itemStack
-     * @return 0.0D if no EMC value, or EMC value
-     */
-    @Range(from = 0, to = Long.MAX_VALUE)
-    public static double getEMCInDematerializer(@NotNull ItemStack itemStack) {
-        return EmcUtils.getEmcValue(itemStack);
+@SuppressWarnings("unused")
+@AllArgsConstructor
+@Data
+public class Triplet<A, B, C> implements Cloneable{
+    public @NotNull
+    final A first;
+    public @NotNull
+    final B second;
+    public @NotNull
+    final C third;
+
+    @NotNull
+    public A first() {
+        return first;
     }
 
-    /**
-     * Get EMC value of itemStack
-     *
-     * @param itemStack The itemStack
-     * @return 0.0D if no EMC value, or EMC value
-     */
-    @Range(from = 0, to = Long.MAX_VALUE)
-    public static double getEMCInMaterializer(@NotNull ItemStack itemStack) {
-        return EmcUtils.getEmcValueMultiplied(itemStack);
+    @NotNull
+    public B second() {
+        return second;
     }
 
+    @NotNull
+    public C third() {
+        return third;
+    }
+
+    @SuppressWarnings("unchecked")
     @Override
-    public @NotNull String getHookPlugin() {
-        return "EMCTech";
-    }
-
-    @Override
-    public void onEnable() {
-        if (JustEnoughGuide.getConfigManager().isEMCValueDisplay()) {
-            SlimefunGuideSettings.addOption(EMCValueDisplayOption.instance());
-            JustEnoughGuide.getListenerManager().registerListener(new EMCItemPatchListener());
+    @NotNull
+    public Triplet<A, B, C> clone() {
+        try {
+            return (Triplet<A, B, C>) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
         }
-    }
-
-    @Override
-    public void onDisable() {
     }
 }

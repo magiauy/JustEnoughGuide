@@ -25,42 +25,4 @@
  *
  */
 
-package com.balugaq.jeg.api.objects.collection;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import org.jetbrains.annotations.NotNull;
-
-/**
- * @author balugaq
- * @since 1.9
- */
-@AllArgsConstructor
-@Data
-public class Pair<F, S> implements Cloneable {
-    public @NotNull
-    final F first;
-    public @NotNull
-    final S second;
-
-    @NotNull
-    public F first() {
-        return first;
-    }
-
-    @NotNull
-    public S second() {
-        return second;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    @NotNull
-    public Pair<F, S> clone() {
-        try {
-            return (Pair<F, S>) super.clone();
-        } catch (CloneNotSupportedException e) {
-            throw new AssertionError();
-        }
-    }
-}
+package com.balugaq.jeg.api.cost;
