@@ -30,6 +30,7 @@ package com.balugaq.jeg.implementation.option;
 import com.balugaq.jeg.api.patches.JEGGuideSettings;
 import com.balugaq.jeg.implementation.JustEnoughGuide;
 import com.balugaq.jeg.utils.compatibility.Converter;
+import com.balugaq.jeg.utils.Lang;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.core.guide.options.SlimefunGuideOption;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.chat.ChatInput;
@@ -40,6 +41,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Optional;
 
 // todo
@@ -76,15 +78,17 @@ public class RecursiveRecipeFillingGuideOption implements SlimefunGuideOption<In
     @Override
     public @NotNull Optional<ItemStack> getDisplayItem(@NotNull Player p, ItemStack guide) {
         int value = getSelectedOption(p, guide).orElse(1);
-        ItemStack item = Converter.getItem(
-                Material.FURNACE,
-                "&a配方补全深度",
-                "&7配方补全深度越大，需要的时间越长",
-                "&7如果遇到一个材料不存在，会尝试补全",
-                "&7这个材料的材料，以此类推，此过程视为一层深度",
-                "",
-                "&7当前深度: " + value + " (限制范围: 1~16)"
-        );
+        
+        // Use language manager instead of hardcoded Chinese text
+        String name = Lang.getString("icon.options.recursive-recipe-filling.name");
+        List<String> lore = Lang.getStringList("icon.options.recursive-recipe-filling.lore");
+        
+        // Replace {0} placeholder with current depth value
+        for (int i = 0; i < lore.size(); i++) {
+            lore.set(i, lore.get(i).replace("{0}", String.valueOf(value)));
+        }
+        
+        ItemStack item = Converter.getItem(Material.FURNACE, name, lore);
         return Optional.of(item);
     }
 
@@ -94,14 +98,16 @@ public class RecursiveRecipeFillingGuideOption implements SlimefunGuideOption<In
             try {
                 int value = Integer.parseInt(s);
                 if (value < 1 || value > 16) {
-                    p.sendMessage("请输入 1 ~ 16 之间的正整数");
+                    String errorMessage = Lang.getString("icon.options.recursive-recipe-filling.input-error");
+                    p.sendMessage(errorMessage);
                     return;
                 }
 
                 setSelectedOption(p, guide, value);
                 JEGGuideSettings.openSettings(p, guide);
             } catch (NumberFormatException ignored) {
-                p.sendMessage("请输入 1 ~ 16 之间的正整数");
+                String errorMessage = Lang.getString("icon.options.recursive-recipe-filling.input-error");
+                p.sendMessage(errorMessage);
             }
         });
     }

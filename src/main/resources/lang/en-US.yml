@@ -13,6 +13,15 @@ icon:
       last-lore-disable: "disable"
       last-lore-enable: "enable"
       last-lore-last: " Beginner's Guide"
+    recursive-recipe-filling:
+      name: "&aRecursive Recipe Filling Depth"
+      lore:
+        - "&7The greater the recipe filling depth, the longer it takes"
+        - "&7If a material does not exist, it will try to fill"
+        - "&7the materials of this material, and so on, this process is considered as one layer of depth"
+        - ""
+        - "&7Current depth: {0} (Range limit: 1~16)"
+      input-error: "Please enter a positive integer between 1 and 16"
   # RTS
   input-text:
     name: "&fReal Time Search: &7Type text above"
